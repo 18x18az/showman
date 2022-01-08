@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ControlPanel } from "./pages/ControlPanel";
 import { NoPage } from './pages/NoPage';
+import { Score } from "./pages/Score";
 import { Websocket } from "@18x18az/ouija";
 import './App.css';
 import { Component } from "react";
@@ -15,6 +16,8 @@ interface IProps {
 
 interface IState {
   teams: Teams
+  lastMessagePath: IPath | null
+  lastMessagePayload: any
 }
 
 class App extends Component<IProps, IState> {
@@ -22,7 +25,9 @@ class App extends Component<IProps, IState> {
     super(props);
     const emptyTeams: Teams = {};
     this.state = {
-      teams: emptyTeams
+      teams: emptyTeams,
+      lastMessagePath: null,
+      lastMessagePayload: null
     }
 
     talos.postCb = this.messageHandler.bind(this);
@@ -31,13 +36,20 @@ class App extends Component<IProps, IState> {
   }
 
   messageHandler(path: IPath, payload: any) {
+    console.log(path);
+    console.log(payload);
     const route = path[0];
-    if(route === "teams") {
+    if (route === "teams") {
       this.setState({
         teams: payload
-      })
+      });
+    } else {
+      this.setState({
+        lastMessagePath: path,
+        lastMessagePayload: payload
+      });
     }
-    
+
     return null
   }
 
@@ -46,9 +58,9 @@ class App extends Component<IProps, IState> {
       <div className="App">
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<ControlPanel teams={this.state.teams}/>}>
+            <Route path="/" element={<ControlPanel teams={this.state.teams} />} />
+              <Route path="score" element={<Score teams={this.state.teams} lastMessagePath={this.state.lastMessagePath} lastMessageBody={this.state.lastMessagePayload} />} />
               <Route path="*" element={<NoPage />} />
-            </Route>
           </Routes>
         </BrowserRouter>
       </div>
