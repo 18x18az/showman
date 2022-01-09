@@ -1,9 +1,9 @@
-import { Teams } from "@18x18az/rosetta";
+import { IMatchList } from "@18x18az/rosetta";
 
 interface ControlPanelProps {
-    teams: Teams | null
+    matches: IMatchList | null
 }
 
 export function ControlPanel(props: ControlPanelProps) {
-    return <h1>{JSON.stringify(props.teams)}</h1>;
+    return <h1>{JSON.stringify(props.matches)}</h1>;
 };

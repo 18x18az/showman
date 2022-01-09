@@ -3,9 +3,9 @@
 
 
 "@18x18az/ouija@^1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@18x18az/ouija/-/ouija-1.0.5.tgz#df9da8490b2abe8f608bfa58b39e7e3ab74dab3b"
-  integrity sha512-Wis7K3LwjQJidR8rjrJ9tLl4+7bL7HEnMylujpjLUbS60ZJzYz4VwlxKCXdECwPGTR3gCDa/xW1+FVaQ6dqPfw==
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@18x18az/ouija/-/ouija-1.1.0.tgz#f473c5b64bf23c031e41c45bd483ba46a5fa06a7"
+  integrity sha512-1a9F4Vh4shYUyN4NMZRPUJcbOBYhwsQrcVmEKQrrO9QFKn2BCYtEAUTqQ/3TjZUTgjQzCQ6QyiymUXlp97ieFg==
   dependencies:
     "@types/node" "^16.11.12"
     "@types/ws" "^8.2.2"
@@ -15,9 +15,9 @@
     ws "^8.3.0"
 
 "@18x18az/rosetta@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@18x18az/rosetta/-/rosetta-1.1.1.tgz#0827e6fb9293f13afc286d9ba28d5e7aedd5d12a"
-  integrity sha512-eLopJDlFrHzjusGXZLTFHW11ivlzGfGVPwx3TV8i76AgooBqAAbrfj4AP5L7t7O3139aAHnxV7Aywqs3i26wVQ==
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/@18x18az/rosetta/-/rosetta-1.1.5.tgz#ae2662f31c94016ce53e93b8de93f5f84821f49d"
+  integrity sha512-dU0UmbbizUVcQNSn2I/EBrIPavzyEGL3yrFa68ET0sS1ENj6vYd9eqgohT6HQ9j3cLMxrHtq4CxyBNKYCngFQg==
 
 "@apideck/better-ajv-errors@^0.3.1":
   version "0.3.2"
