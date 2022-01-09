@@ -92,9 +92,7 @@ export class Timer extends Component<TimerProps, TimerState> {
         if (this.state.field && this.props.teams && this.props.matches) {
             const state = this.state.field;
             const match = this.props.matches[state.match];
-
             const matchName = makeMatchName(match);
-
 
             return <div>
                 <div className="top">
@@ -104,7 +102,7 @@ export class Timer extends Component<TimerProps, TimerState> {
                 </div>
                 <div className="bottom">
                     <Alliance color="red" alliance={match.red} teams={this.props.teams} />
-                    <Alliance color="blue" alliance={match.blue} teams={this.props.teams}/>
+                    <Alliance color="blue" alliance={match.blue} teams={this.props.teams} />
                 </div>
             </div>
         } else {
