@@ -2,7 +2,8 @@
     --main-bg-color: #fbfbfd;
     --primary-text-color: rgb(0, 0, 0);
     --secondary-text-color: rgb(63, 63, 63);
-    --primary-accent-background: rgba(39, 39, 39, 0.60);
+    --primary-stream-background: rgba(39, 39, 39, 0.60);
+    --darker-stream-background: rgba(31, 31, 31, 0.8);
     --secondary-accent-background: rgb(63, 63, 63);
     --accent-text-color: white;
     --data-font: 'Orbitron', sans-serif;
@@ -74,23 +75,24 @@ body {
     display: flex;
     align-self: center;
     align-content: center;
-    background: var(--primary-accent-background);
     justify-content: space-between;
     flex-direction: row;
     width: 90%;
 }
 
 .detachedTop {
-    margin-top: 1%;
+    margin-top: 3%;
     border-radius: 0.3em 0.3em .75em .3em;
+    background: var(--darker-stream-background);
 }
 
 .top {
     border-radius: 0em 0em .75em .5em;
+    background: var(--primary-stream-background);
 }
 
 .blue {
-    background: var(--primary-accent-background);
+    background: var(--primary-stream-background);
     border-radius: .25em 0 0 0.5em;
     text-align: right;
     padding-left: 1.2em;
@@ -102,7 +104,7 @@ body {
     display: flex;
     justify-content: flex-start;
     flex-direction: row-reverse;
-    background: var(--primary-accent-background);
+    background: var(--primary-stream-background);
     border-radius: 0 .25em 0.5em 0;
     padding-right: 1.2em;
     fill: var(--vex-red);
@@ -111,11 +113,11 @@ body {
 .scoreInfoBlue,
 .scoreInfoRed {
     position: fixed;
-    background: var(--primary-accent-background);
+    background: var(--darker-stream-background);
     font-family: var(--data-font);
     font-size: 10vmin;
     color: var(--accent-text-color);
-    bottom: 18%;
+    top: 75%;
     width: 20%;
     display: flex;
 }
@@ -135,17 +137,17 @@ body {
 }
 
 .actualScore {
-    padding-left: 1.5vmin;
-    padding-right: 1.5vmin;
+    padding-left: 1.6vmin;
+    padding-right: 1.6vmin;
 }
 
 .allianceInfoBlue,
 .allianceInfoRed {
     position: fixed;
-    background: var(--primary-accent-background);
+    background: var(--darker-stream-background);
     display: flex;
     color: var(--accent-text-color);
-    bottom: 35%;
+    top: 24%;
     width: 40%;
     height: 42%;
 }

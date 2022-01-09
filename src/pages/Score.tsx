@@ -58,9 +58,9 @@ const AllianceResults = (props: AllianceProps) => {
         </div>
         <div className={scoreClass}>
             <svg width="10" height="100%" className="stripe">
-                <rect x="0" y="2%" width="10" height="96%" />
+                <rect x="0" y="5%" width="10" height="90%" />
             </svg>
-            <div>
+            <div className="actualScore">
                 {alliance.score}
             </div>
         </div>
