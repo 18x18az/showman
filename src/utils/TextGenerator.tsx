@@ -28,7 +28,7 @@ export function makeMatchName(match: IMatchInfo): string {
 export function makeControlText(control: FieldControl): string {
     let text = ""
     if (control === FieldControl.AUTONOMOUS) {
-        text = "Autonomous";
+        text = "Auto";
     } else if (control === FieldControl.DRIVER) {
         text = "Driver";
     }
