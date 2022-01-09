@@ -1,10 +1,12 @@
-import { IPath, SimpleAllianceResults, SimpleMatchResult, TeamId, Teams } from "@18x18az/rosetta";
+import { IMatchList, IPath, SimpleAllianceResults, SimpleMatchResult, TeamId, Teams } from "@18x18az/rosetta";
 import { Component } from "react";
+import { makeMatchName } from "../utils/TextGenerator";
 import {talos} from '../ws'
 
 
 interface ScoreProps {
     teams: Teams | null
+    matches: IMatchList | null
     lastMessagePath: IPath | null
     lastMessageBody: any
 }
@@ -61,16 +63,17 @@ export class Score extends Component<ScoreProps, ScoreState> {
     }
 
     render(){ 
-        if(this.state.score && this.props.teams){
+        if(this.state.score && this.props.teams && this.props.matches){
             const score = this.state.score;
-            const match = score.name;
-            return <div>
-                <div>{match}</div>
+            const match = this.props.matches[score.name]
+            const matchName = makeMatchName(match);
+            return <div className="score">
+                <div className="detachedTop"><div className="matchName">{matchName}</div></div>
                 <AllianceResults alliance={score.red} teams={this.props.teams}/>
                 <AllianceResults alliance={score.blue} teams={this.props.teams}/>
             </div>
         } else {
-            return <h1>Nothing yet</h1>;
+            return <h1></h1>;
         }
     }
 };

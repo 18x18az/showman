@@ -1,116 +1,131 @@
 :root {
-  --main-bg-color: #fbfbfd;
-  --primary-text-color: rgb(0, 0, 0);
-  --secondary-text-color: rgb(63, 63, 63);
-  --primary-accent-background: rgba(39, 39, 39, 0.60);
-  --secondary-accent-background: rgb(63, 63, 63);
-  --accent-text-color: white;
-  --data-font: 'Orbitron', sans-serif;
-  --text-font: 'Electrolize', sans-serif;
-  --vex-blue: rgb(0, 119, 200);
-  --vex-red: rgb(210, 38, 48);
+    --main-bg-color: #fbfbfd;
+    --primary-text-color: rgb(0, 0, 0);
+    --secondary-text-color: rgb(63, 63, 63);
+    --primary-accent-background: rgba(39, 39, 39, 0.60);
+    --secondary-accent-background: rgb(63, 63, 63);
+    --accent-text-color: white;
+    --data-font: 'Orbitron', sans-serif;
+    --text-font: 'Electrolize', sans-serif;
+    --vex-blue: rgb(0, 119, 200);
+    --vex-red: rgb(210, 38, 48);
 }
 
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: var(--main-bg-color);
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--main-bg-color);
 }
 
 .teamNumber {
-  font-size: 6vmin;
-  font-family: var(--data-font);
-  color: var(--accent-text-color);
-  flex-grow: 1;
-  padding-left:0.35em;
-  padding-right: 0.35em;
+    font-size: 6vmin;
+    font-family: var(--data-font);
+    color: var(--accent-text-color);
+    flex-grow: 1;
+    padding-left: 0.35em;
+    padding-right: 0.35em;
 }
 
 .matchName {
-  justify-self: center;
-  font-size: 7vmin;
-  font-family: var(--data-font);
-  color: var(--accent-text-color);
-  text-align: center;
+    justify-self: center;
+    font-size: 7vmin;
+    font-family: var(--data-font);
+    color: var(--accent-text-color);
+    text-align: center;
+    flex-grow: 1;
 }
 
 .mode {
-  text-align: center;
-  width: 17%;
-  font-size: 5vmin;
-  font-family: var(--data-font);
-  color: var(--accent-text-color);
-  padding-top: .2em;
+    text-align: center;
+    width: 17%;
+    font-size: 5vmin;
+    font-family: var(--data-font);
+    color: var(--accent-text-color);
+    padding-top: .2em;
 }
 
 .clock {
-  text-align: center;
-  width: 17%;
-  font-size: 6vmin;
-  font-family: var(--data-font);
-  color: var(--accent-text-color);
-  padding-top: .12em;
+    text-align: center;
+    width: 17%;
+    font-size: 6vmin;
+    font-family: var(--data-font);
+    color: var(--accent-text-color);
+    padding-top: .12em;
 }
 
 .app {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.timer {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height:100%;
+.timer,
+.score {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
 }
 
-.top{
-  align-self: center;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-content: center;
-  background: var(--primary-accent-background);
-  width: 90%;
-  border-radius: 0em 0em .75em .5em;
+.top,
+.detachedTop {
+    display: flex;
+    align-self: center;
+    align-content: center;
+    background: var(--primary-accent-background);
+    justify-content: space-between;
+    flex-direction: row;
+    width: 90%;
 }
 
-.blue{
-  background: var(--primary-accent-background);
-  border-radius: .25em 0 0 0.5em;
-  text-align: right;
-  padding-left: 1.2em;
-  fill: var(--vex-blue);
-  display: flex;
+.detachedTop {
+    margin-top: 1%;
+    border-radius: 0.3em 0.3em .75em .3em;
 }
 
-.red{
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: row-reverse;
-  background: var(--primary-accent-background);
-  border-radius: 0 .25em 0.5em 0;
-  padding-right: 1.2em;
-  fill:var(--vex-red);
+.top {
+    border-radius: 0em 0em .75em .5em;
+}
+
+.blue {
+    background: var(--primary-accent-background);
+    border-radius: .25em 0 0 0.5em;
+    text-align: right;
+    padding-left: 1.2em;
+    fill: var(--vex-blue);
+    display: flex;
+}
+
+.red {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row-reverse;
+    background: var(--primary-accent-background);
+    border-radius: 0 .25em 0.5em 0;
+    padding-right: 1.2em;
+    fill: var(--vex-red);
 }
 
 .stripe {
-  margin-top: 1em;
-  margin-left: .5em;
-  margin-right: .5em;
+    margin-top: 1em;
+    margin-left: .5em;
+    margin-right: .5em;
 }
 
 .bottom {
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: 1.2%;
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 1.2%;
 }
 
-html, body, #root, .wrapper, .app {
-  height:100%;
+html,
+body,
+#root,
+.wrapper,
+.app,
+.timer,
+.score {
+    height: 100%;
 }

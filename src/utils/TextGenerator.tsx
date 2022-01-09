@@ -18,8 +18,8 @@ export function makeMatchName(match: IMatchInfo): string {
     const matchNumber = match.number;
 
     let subNumber = ""
-    if (match.subNumber) {
-        subNumber = `-${subNumber}`
+    if (match.subNumber && match.subNumber > 1) {
+        subNumber = `-${match.subNumber}`
     }
 
     return `${matchTypeText} Match ${matchNumber}${subNumber}`

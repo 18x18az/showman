@@ -69,6 +69,7 @@ class App extends Component<IProps, IState> {
             />} />
             <Route path="score" element={<Score
               teams={this.state.teams}
+              matches={this.state.matches}
               lastMessagePath={this.state.lastMessagePath}
               lastMessageBody={this.state.lastMessagePayload}
             />} />
