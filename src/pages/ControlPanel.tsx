@@ -1,7 +1,7 @@
 import { Teams } from "@18x18az/rosetta";
 
 interface ControlPanelProps {
-    teams: Teams
+    teams: Teams | null
 }
 
 export function ControlPanel(props: ControlPanelProps) {

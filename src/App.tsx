@@ -2,20 +2,16 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ControlPanel } from "./pages/ControlPanel";
 import { NoPage } from './pages/NoPage';
 import { Score } from "./pages/Score";
-import { Websocket } from "@18x18az/ouija";
 import './App.css';
 import { Component } from "react";
 import { IPath, Teams } from "@18x18az/rosetta";
-
-const talos_url = "ws://localhost:1270"
-
-const talos = new Websocket(talos_url);
+import {talos} from './ws'
 
 interface IProps {
 }
 
 interface IState {
-  teams: Teams
+  teams: Teams | null
   lastMessagePath: IPath | null
   lastMessagePayload: any
 }
@@ -23,15 +19,13 @@ interface IState {
 class App extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
-    const emptyTeams: Teams = {};
     this.state = {
-      teams: emptyTeams,
+      teams: null,
       lastMessagePath: null,
       lastMessagePayload: null
     }
 
     talos.postCb = this.messageHandler.bind(this);
-
     talos.get(['teams']);
   }
 
@@ -59,8 +53,12 @@ class App extends Component<IProps, IState> {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<ControlPanel teams={this.state.teams} />} />
-              <Route path="score" element={<Score teams={this.state.teams} lastMessagePath={this.state.lastMessagePath} lastMessageBody={this.state.lastMessagePayload} />} />
-              <Route path="*" element={<NoPage />} />
+            <Route path="score" element={<Score
+              teams={this.state.teams}
+              lastMessagePath={this.state.lastMessagePath}
+              lastMessageBody={this.state.lastMessagePayload}
+            />} />
+            <Route path="*" element={<NoPage />} />
           </Routes>
         </BrowserRouter>
       </div>
