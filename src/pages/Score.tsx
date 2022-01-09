@@ -27,7 +27,7 @@ const TeamInfo = (props: TeamProps) => {
     const team = props.teams[props.team];
     console.log(team);
     console.log(props.teams);
-    return <div>{team.number}</div>
+    return <div>{team.number} - {team.name}</div>
 }
 
 const AllianceResults = (props: AllianceProps) => {
