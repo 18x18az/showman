@@ -94,7 +94,7 @@ export class Timer extends Component<TimerProps, TimerState> {
             const match = this.props.matches[state.match];
             const matchName = makeMatchName(match);
 
-            return <div>
+            return <div className="timer">
                 <div className="top">
                     <Mode mode={state.control} />
                     <MatchLabel matchName={matchName} />

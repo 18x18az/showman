@@ -57,7 +57,7 @@ class App extends Component<IProps, IState> {
 
   render() {
     return (
-      <div className="App">
+      <div className="app">
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<ControlPanel matches={this.state.matches} />} />
