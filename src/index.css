@@ -108,10 +108,88 @@ body {
     fill: var(--vex-red);
 }
 
+.scoreInfoBlue,
+.scoreInfoRed {
+    position: fixed;
+    background: var(--primary-accent-background);
+    font-family: var(--data-font);
+    font-size: 10vmin;
+    color: var(--accent-text-color);
+    bottom: 18%;
+    width: 20%;
+    display: flex;
+}
+
+.scoreInfoBlue {
+    left: 52%;
+    fill: var(--vex-blue);
+    border-radius: 0 .1em 0.25em 0;
+}
+
+.scoreInfoRed {
+    right: 52%;
+    fill: var(--vex-red);
+    text-align: right;
+    flex-direction: row-reverse;
+    border-radius: 0.1em 0 0 0.25em;
+}
+
+.actualScore {
+    padding-left: 1.5vmin;
+    padding-right: 1.5vmin;
+}
+
+.allianceInfoBlue,
+.allianceInfoRed {
+    position: fixed;
+    background: var(--primary-accent-background);
+    display: flex;
+    color: var(--accent-text-color);
+    bottom: 35%;
+    width: 40%;
+    height: 42%;
+}
+
+.allianceInfoRed {
+    text-align: right;
+    fill: var(--vex-red);
+    flex-direction: row-reverse;
+    right: 52%;
+    border-radius: .5em 0 0 1.3em;
+}
+
+.allianceInfoBlue {
+    fill: var(--vex-blue);
+    left: 52%;
+    border-radius: 0 .5em 1.3em 0;
+}
+
+.teamInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2vmin;
+}
+
+.teamInfoNumber {
+    font-family: var(--data-font);
+    font-size: 10vmin;
+}
+
+.teamInfoName {
+    font-family: var(--text-font);
+    font-size: 3vmin;
+}
+
+.allianceInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 .stripe {
-    margin-top: 1em;
-    margin-left: .5em;
-    margin-right: .5em;
+    margin-left: 1vmin;
+    margin-right: 1vmin;
 }
 
 .bottom {

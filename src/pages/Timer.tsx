@@ -18,8 +18,8 @@ function Alliance(props: IAllianceProps) {
             <div className='teamNumber'>{team1.number}</div>
             <div className='teamNumber'>{team2.number}</div>
         </div>
-        <svg width="10" height="130" className="stripe">
-            <rect x="0" y="0" width="10" height="130" />
+        <svg width="10" height="100%" className="stripe">
+            <rect x="0" y="10%" width="10" height="80%" />
         </svg>
     </div>
 }

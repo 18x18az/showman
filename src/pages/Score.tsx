@@ -1,7 +1,7 @@
 import { IMatchList, IPath, SimpleAllianceResults, SimpleMatchResult, TeamId, Teams } from "@18x18az/rosetta";
 import { Component } from "react";
 import { makeMatchName } from "../utils/TextGenerator";
-import {talos} from '../ws'
+import { talos } from '../ws'
 
 
 interface ScoreProps {
@@ -18,6 +18,7 @@ interface ScoreState {
 interface AllianceProps {
     alliance: SimpleAllianceResults
     teams: Teams
+    color: string
 }
 
 interface TeamProps {
@@ -27,23 +28,43 @@ interface TeamProps {
 
 const TeamInfo = (props: TeamProps) => {
     const team = props.teams[props.team];
-    return <div>{team.number} - {team.name}</div>
+    return <div className="teamInfo">
+        <div className="teamInfoNumber">{team.number}</div>
+        <div className="teamInfoName">{team.name}</div>
+    </div>
 }
 
 const AllianceResults = (props: AllianceProps) => {
     const teams = props.teams;
     const alliance = props.alliance;
 
+    const allianceClass = `allianceInfo${props.color}`
+    const scoreClass = `scoreInfo${props.color}`
+
     return <div>
-        <TeamInfo team={alliance.team1} teams={teams}/>
-        <TeamInfo team={alliance.team2} teams={teams}/>
-        <div>{alliance.score}</div>
+        <div className={allianceClass}>
+            <svg width="10" height="100%" className="stripe">
+                <rect x="0" y="2%" width="10" height="96%" />
+            </svg>
+            <div className="allianceInfo">
+                <TeamInfo team={alliance.team1} teams={teams} />
+                <TeamInfo team={alliance.team2} teams={teams} />
+            </div>
+        </div>
+        <div className={scoreClass}>
+            <svg width="10" height="100%" className="stripe">
+                <rect x="0" y="2%" width="10" height="96%" />
+            </svg>
+            <div>
+                {alliance.score}
+            </div>
+        </div>
     </div>;
 };
 
 
 export class Score extends Component<ScoreProps, ScoreState> {
-    constructor(props: ScoreProps){
+    constructor(props: ScoreProps) {
         super(props);
         talos.get(["score"])
         this.state = {
@@ -51,10 +72,10 @@ export class Score extends Component<ScoreProps, ScoreState> {
         }
     }
 
-    componentWillReceiveProps(props: ScoreProps){
-        if(props.lastMessagePath) {
+    componentWillReceiveProps(props: ScoreProps) {
+        if (props.lastMessagePath) {
             const route = props.lastMessagePath[0];
-            if(route === "score"){
+            if (route === "score") {
                 this.setState({
                     score: props.lastMessageBody
                 })
@@ -62,15 +83,15 @@ export class Score extends Component<ScoreProps, ScoreState> {
         }
     }
 
-    render(){ 
-        if(this.state.score && this.props.teams && this.props.matches){
+    render() {
+        if (this.state.score && this.props.teams && this.props.matches) {
             const score = this.state.score;
             const match = this.props.matches[score.name]
             const matchName = makeMatchName(match);
             return <div className="score">
-                <div className="detachedTop"><div className="matchName">{matchName}</div></div>
-                <AllianceResults alliance={score.red} teams={this.props.teams}/>
-                <AllianceResults alliance={score.blue} teams={this.props.teams}/>
+                <div className="detachedTop"><div className="matchName">{matchName} Results</div></div>
+                <AllianceResults alliance={score.red} teams={this.props.teams} color="Red" />
+                <AllianceResults alliance={score.blue} teams={this.props.teams} color="Blue" />
             </div>
         } else {
             return <h1></h1>;
