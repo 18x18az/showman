@@ -1,5 +1,4 @@
-import { FieldControl, IAllianceTeams, IFieldState, IMatchInfo, IMatchList, IPath, SimpleAllianceResults, SimpleMatchResult, TeamId, Teams } from "@18x18az/rosetta";
-import { time } from "console";
+import { FieldControl, IAllianceTeams, IFieldState, IMatchList, IPath, Teams } from "@18x18az/rosetta";
 import { Component } from "react";
 import { makeClockText, makeControlText, makeMatchName } from "../utils/TextGenerator";
 import { talos } from '../ws'
