@@ -28,9 +28,14 @@ interface TeamProps {
 
 const TeamInfo = (props: TeamProps) => {
     const team = props.teams[props.team];
+    let name = team.name;
+    const max_length = 45;
+    if(name.length > max_length) {
+        name = name.substring(0, max_length)
+    }
     return <div className="teamInfo">
         <div className="teamInfoNumber">{team.number}</div>
-        <div className="teamInfoName">{team.name}</div>
+        <div className="teamInfoName">{name}</div>
     </div>
 }
 
