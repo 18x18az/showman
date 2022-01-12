@@ -60,7 +60,11 @@ class App extends Component<IProps, IState> {
       <div className="app">
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<ControlPanel matches={this.state.matches} />} />
+            <Route path="/" element={<ControlPanel 
+            teams={this.state.teams}
+            lastMessagePath={this.state.lastMessagePath}
+            lastMessageBody={this.state.lastMessagePayload}
+            />} />
             <Route path="timer" element={<Timer 
               teams={this.state.teams}
               matches={this.state.matches}
