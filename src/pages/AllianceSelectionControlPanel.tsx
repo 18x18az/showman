@@ -127,7 +127,7 @@ export class AllianceSelectionControlPanel extends Component<AllianceSelectionCo
             const picked = this.state.status.selected;
             const teams = this.props.teams;
 
-            return <div>
+            return <div className="mobile">
                 <Picking teams={teams} picking={picking} />
                 <Choices teams={teams} choices={remaining} />
                 <div className="footer"><button className="undoButton" onClick={undoCb}>Undo</button></div>
