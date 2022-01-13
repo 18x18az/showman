@@ -7,6 +7,7 @@ import { Component } from "react";
 import { IPath, Teams, IMatchList } from "@18x18az/rosetta";
 import { talos } from './ws'
 import { Timer } from "./pages/Timer";
+import { Audience } from "./pages/Audience";
 
 interface IProps {
 }
@@ -64,6 +65,11 @@ class App extends Component<IProps, IState> {
             teams={this.state.teams}
             lastMessagePath={this.state.lastMessagePath}
             lastMessageBody={this.state.lastMessagePayload}
+            />} />
+            <Route path="audience" element={<Audience 
+              teams={this.state.teams}
+              lastMessagePath={this.state.lastMessagePath}
+              lastMessageBody={this.state.lastMessagePayload}
             />} />
             <Route path="timer" element={<Timer 
               teams={this.state.teams}

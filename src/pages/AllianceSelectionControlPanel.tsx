@@ -102,8 +102,6 @@ export class AllianceSelectionControlPanel extends Component<AllianceSelectionCo
 
         document.title = "Alliance Selection";
 
-        console.log("external load");
-
         this.state = {
             status: this.props.lastMessageBody
         }
