@@ -1,0 +1,166 @@
+.stream {
+    height: 100%;
+    --text-color: white;
+    .score {
+        --background: rgba(31, 31, 31, 0.8);
+    }
+    .timer {
+        --background: rgba(39, 39, 39, 0.60);
+    }
+    .teamNumber {
+        font-size: 6vmin;
+        font-family: var(--data-font);
+        color: var(--text-color);
+        flex-grow: 1;
+        padding-left: 0.35em;
+        padding-right: 0.35em;
+    }
+    .matchName {
+        justify-self: center;
+        font-size: 7vmin;
+        font-family: var(--data-font);
+        color: var(--text-color);
+        text-align: center;
+        flex-grow: 1;
+    }
+    .mode {
+        text-align: center;
+        width: 17%;
+        font-size: 5vmin;
+        font-family: var(--data-font);
+        color: var(--text-color);
+        padding-top: .2em;
+    }
+    .clock {
+        text-align: center;
+        width: 17%;
+        font-size: 6vmin;
+        font-family: var(--data-font);
+        color: var(--text-color);
+        padding-top: .12em;
+    }
+    .app {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .timer,
+    .score {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+    }
+    .top,
+    .detachedTop {
+        display: flex;
+        align-self: center;
+        align-content: center;
+        justify-content: space-between;
+        flex-direction: row;
+        width: 90%;
+    }
+    .detachedTop {
+        margin-top: 3%;
+        border-radius: 0.3em 0.3em .75em .3em;
+        background: var(--background);
+    }
+    .top {
+        border-radius: 0em 0em .75em .5em;
+        background: var(--background);
+    }
+    .blue {
+        background: var(--background);
+        border-radius: .25em 0 0 0.5em;
+        text-align: right;
+        padding-left: 1.2em;
+        fill: var(--vex-blue);
+        display: flex;
+    }
+    .red {
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: row-reverse;
+        background: var(--background);
+        border-radius: 0 .25em 0.5em 0;
+        padding-right: 1.2em;
+        fill: var(--vex-red);
+    }
+    .scoreInfoBlue,
+    .scoreInfoRed {
+        position: fixed;
+        background: var(--background);
+        font-family: var(--data-font);
+        font-size: 10vmin;
+        color: var(--text-color);
+        top: 75%;
+        width: 20%;
+        display: flex;
+    }
+    .scoreInfoBlue {
+        left: 52%;
+        fill: var(--vex-blue);
+        border-radius: 0 .1em 0.25em 0;
+    }
+    .scoreInfoRed {
+        right: 52%;
+        fill: var(--vex-red);
+        text-align: right;
+        flex-direction: row-reverse;
+        border-radius: 0.1em 0 0 0.25em;
+    }
+    .actualScore {
+        padding-left: 1.6vmin;
+        padding-right: 1.6vmin;
+    }
+    .allianceInfoBlue,
+    .allianceInfoRed {
+        position: fixed;
+        background: var(--background);
+        display: flex;
+        color: var(--text-color);
+        top: 24%;
+        width: 40%;
+        height: 42%;
+    }
+    .allianceInfoRed {
+        text-align: right;
+        fill: var(--vex-red);
+        flex-direction: row-reverse;
+        right: 52%;
+        border-radius: .5em 0 0 1.3em;
+    }
+    .allianceInfoBlue {
+        fill: var(--vex-blue);
+        left: 52%;
+        border-radius: 0 .5em 1.3em 0;
+    }
+    .teamInfo {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 2vmin;
+    }
+    .teamInfoNumber {
+        font-family: var(--data-font);
+        font-size: 10vmin;
+    }
+    .teamInfoName {
+        font-family: var(--text-font);
+        font-size: 3vmin;
+    }
+    .allianceInfo {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .stripe {
+        margin-left: 1vmin;
+        margin-right: 1vmin;
+    }
+    .bottom {
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 1.2%;
+    }
+}

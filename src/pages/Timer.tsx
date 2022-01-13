@@ -94,15 +94,17 @@ export class Timer extends Component<TimerProps, TimerState> {
             const match = this.props.matches[state.match];
             const matchName = makeMatchName(match);
 
-            return <div className="timer">
-                <div className="top">
-                    <Mode mode={state.control} />
-                    <MatchLabel matchName={matchName} />
-                    <Clock mode={state.control} time={state.timeRemaining} />
-                </div>
-                <div className="bottom">
-                    <Alliance color="red" alliance={match.red} teams={this.props.teams} />
-                    <Alliance color="blue" alliance={match.blue} teams={this.props.teams} />
+            return <div className="stream">
+                <div className="timer">
+                    <div className="top">
+                        <Mode mode={state.control} />
+                        <MatchLabel matchName={matchName} />
+                        <Clock mode={state.control} time={state.timeRemaining} />
+                    </div>
+                    <div className="bottom">
+                        <Alliance color="red" alliance={match.red} teams={this.props.teams} />
+                        <Alliance color="blue" alliance={match.blue} teams={this.props.teams} />
+                    </div>
                 </div>
             </div>
         } else {

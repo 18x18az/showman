@@ -30,7 +30,7 @@ const TeamInfo = (props: TeamProps) => {
     const team = props.teams[props.team];
     let name = team.name;
     const max_length = 45;
-    if(name.length > max_length) {
+    if (name.length > max_length) {
         name = name.substring(0, max_length)
     }
     return <div className="teamInfo">
@@ -93,10 +93,12 @@ export class Score extends Component<ScoreProps, ScoreState> {
             const score = this.state.score;
             const match = this.props.matches[score.name]
             const matchName = makeMatchName(match);
-            return <div className="score">
-                <div className="detachedTop"><div className="matchName">{matchName} Results</div></div>
-                <AllianceResults alliance={score.red} teams={this.props.teams} color="Red" />
-                <AllianceResults alliance={score.blue} teams={this.props.teams} color="Blue" />
+            return <div className="stream">
+                <div className="score">
+                    <div className="detachedTop"><div className="matchName">{matchName} Results</div></div>
+                    <AllianceResults alliance={score.red} teams={this.props.teams} color="Red" />
+                    <AllianceResults alliance={score.blue} teams={this.props.teams} color="Blue" />
+                </div>
             </div>
         } else {
             return <h1></h1>;
