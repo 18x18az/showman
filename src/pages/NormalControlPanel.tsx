@@ -17,6 +17,8 @@ function startAllianceSelection(){
 export class NormalControlPanel extends Component<NormalControlPanelProps, NormalControlPanelState> {
     constructor(props: NormalControlPanelProps) {
         super(props);
+
+        document.title = "Talos Control"
     }
 
     componentWillReceiveProps(props: NormalControlPanelProps) {

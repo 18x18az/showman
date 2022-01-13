@@ -100,6 +100,8 @@ export class AllianceSelectionControlPanel extends Component<AllianceSelectionCo
     constructor(props: AllianceSelectionControlPanelProps) {
         super(props);
 
+        document.title = "Alliance Selection";
+
         console.log("external load");
 
         this.state = {
