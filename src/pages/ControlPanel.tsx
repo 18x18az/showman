@@ -25,13 +25,15 @@ export class ControlPanel extends Component<ControlPanelProps, ControlPanelState
         }
     }
 
-    componentWillReceiveProps(props: ControlPanelProps) {
-        if (props.lastMessagePath) {
-            const route = props.lastMessagePath[0];
-            if (route === "allianceSelection" && this.state.mode != ControlMode.ALLIANCE_SELECTION && props.lastMessageBody) {
-                this.setState({mode: ControlMode.ALLIANCE_SELECTION});
+    static getDerivedStateFromProps(nextProps: ControlPanelProps, prevState: ControlPanelState) {
+        if (nextProps.lastMessagePath) {
+            const route = nextProps.lastMessagePath[0];
+            if (route === "allianceSelection" && prevState.mode !== ControlMode.ALLIANCE_SELECTION && nextProps.lastMessageBody) {
+                return {mode: ControlMode.ALLIANCE_SELECTION};
             }
         }
+
+        return null;
     }
 
     render() {
