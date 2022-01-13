@@ -18,6 +18,10 @@ function declineCb() {
     talos.post(['allianceSelection', 'decline'], null);
 }
 
+function undoCb() {
+    talos.post(['allianceSelection', 'undo'], null)
+}
+
 interface PopupProps {
     picker: TeamId
     picked: TeamId
@@ -121,13 +125,10 @@ export class AllianceSelectionControlPanel extends Component<AllianceSelectionCo
             const picked = this.state.status.selected;
             const teams = this.props.teams;
 
-            if (picking) {
-                console.log(teams[picking]);
-            }
-
             return <div>
                 <Picking teams={teams} picking={picking} />
                 <Choices teams={teams} choices={remaining} />
+                <div className="footer"><button className="undoButton" onClick={undoCb}>Undo</button></div>
                 {picked && picking ?
                     <Popup
                         teams={teams}
