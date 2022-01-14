@@ -130,7 +130,10 @@ export class AllianceSelectionDisplay extends Component<AllianceSelectionDisplay
 
             return <div className="stream">
                 <div className="allianceSelection">
-                    <Alliances alliances={alliances} teams={teams} />
+                    {alliances.length ?
+                        <Alliances alliances={alliances} teams={teams} />
+                        : null
+                    }
                     <Picking picking={picking} teams={teams} />
                     {picking ?
                         <Remaining remaining={remaining} teams={teams} />
