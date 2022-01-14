@@ -3,6 +3,18 @@ import { Component } from "react";
 import { makeClockText, makeControlText, makeMatchName } from "../utils/TextGenerator";
 import { talos } from '../ws'
 
+
+const startAudio = new Audio("./audio/Start.wav");
+const pauseAudio = new Audio("./audio/Pause.wav");
+const disabledAudio = new Audio("./audio/Stop.wav");
+const warningAudio = new Audio("./audio/Warning.wav");
+
+function play(audio: HTMLAudioElement) {
+    if (audio.paused || !audio.currentTime) {
+        audio.play();
+    }
+}
+
 interface IAllianceProps {
     color: string
     alliance: IAllianceTeams
@@ -75,17 +87,42 @@ export class Timer extends Component<TimerProps, TimerState> {
         this.state = {
             field: null,
         }
+
     }
 
-    componentWillReceiveProps(props: TimerProps) {
-        if (props.lastMessagePath) {
-            const route = props.lastMessagePath[0];
+    static getDerivedStateFromProps(nextProps: TimerProps, prevState: TimerState) {
+        if (nextProps.lastMessagePath) {
+            const route = nextProps.lastMessagePath[0];
             if (route === "field") {
-                this.setState({
-                    field: props.lastMessageBody
+                const current = prevState.field;
+
+                if (current) {
+                    const newField = nextProps.lastMessageBody as IFieldState;
+
+                    if (current.control !== FieldControl.AUTONOMOUS && current.control !== FieldControl.DRIVER) {
+                        if (newField.control === FieldControl.AUTONOMOUS || newField.control === FieldControl.DRIVER) {
+                            play(startAudio);
+                        }
+                    } else {
+                        if (newField.control === FieldControl.PAUSED) {
+                            play(pauseAudio);
+                        } else if (newField.control === FieldControl.DISABLED) {
+                            play(disabledAudio);
+                        }
+                        else if (newField.timeRemaining === 30 && current.timeRemaining === 31) {
+                            play(warningAudio);
+                        }
+                    }
+
+                }
+
+                return ({
+                    field: nextProps.lastMessageBody
                 })
             }
         }
+
+        return null;
     }
 
     render() {
