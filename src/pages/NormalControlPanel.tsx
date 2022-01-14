@@ -14,6 +14,10 @@ function startAllianceSelection(){
     talos.post(['allianceSelection'], null);
 }
 
+function startAwards(){
+    talos.post(['awards'], null);
+}
+
 export class NormalControlPanel extends Component<NormalControlPanelProps, NormalControlPanelState> {
     constructor(props: NormalControlPanelProps) {
         super(props);
@@ -31,6 +35,9 @@ export class NormalControlPanel extends Component<NormalControlPanelProps, Norma
         return <div>
             <button onClick={startAllianceSelection}>
                 Start Alliance Selection
+            </button>
+            <button onClick={startAwards}>
+                Start Awards
             </button>
         </div>
     }
