@@ -6,53 +6,53 @@ interface IRemainingTeamProps {
     teams: Teams
 }
 
-function RemainingTeam(props: IRemainingTeamProps){
+function RemainingTeam(props: IRemainingTeamProps) {
     const teamNumber = props.teams[props.team].number;
     return <div className="rTeam">
-      {teamNumber}
+        {teamNumber}
     </div>
-  }
+}
 
-interface IRemainingProps{
+interface IRemainingProps {
     remaining: Array<TeamId>
     teams: Teams
 }
 
 function Remaining(props: IRemainingProps) {
     const remaining = props.remaining;
-    if(!remaining){
-      return <div></div>
+    if (!remaining) {
+        return <div></div>
     }
-  
+
     let remainingItems = [];
-  
-    for(let i=0; i<remaining.length && i<15; i++){
-      const remainingTeam = remaining[i];
-      const remainingItem = <RemainingTeam team={remainingTeam} teams={props.teams} />
-      remainingItems.push(remainingItem);
+
+    for (let i = 0; i < remaining.length && i < 15; i++) {
+        const remainingTeam = remaining[i];
+        const remainingItem = <RemainingTeam team={remainingTeam} teams={props.teams} />
+        remainingItems.push(remainingItem);
     }
-  
+
     return <div className="remaining">{remainingItems}</div>
-  }
+}
 
 interface IPickingProps {
     picking: TeamId | null
     teams: Teams
 }
 
-function Picking(props: IPickingProps){
+function Picking(props: IPickingProps) {
     const picking = props.picking;
-    if(!picking){
-      return <div></div>
+    if (!picking) {
+        return <div></div>
     }
 
     const pickingNumber = props.teams[picking].number;
 
     return <div className="picking">
-      <div className="title">Currently Picking</div>
-      {pickingNumber}
+        <div className="title">Currently Picking</div>
+        {pickingNumber}
     </div>
-  }
+}
 
 interface IAllianceProps {
     alliance: IAllianceTeams
@@ -66,7 +66,7 @@ function Alliance(props: IAllianceProps) {
     const captain = teams[alliance.team1].number;
     const picked = teams[alliance.team2].number;
     return <div className="alliance"><div className="number">{props.number}</div><div className="captain">{captain}</div>-<div className="picked">{picked}</div></div>
-  }
+}
 
 interface IAlliancesProps {
     alliances: Array<IAllianceTeams>
@@ -76,18 +76,18 @@ interface IAlliancesProps {
 function Alliances(props: IAlliancesProps) {
     const alliances = props.alliances;
     if (!alliances) {
-      return <div></div>
+        return <div></div>
     }
     let allianceItems = [];
-  
+
     for (let i = 0; i < alliances.length; i++) {
-      const alliance = alliances[i];
-      const allianceItem = <Alliance alliance={alliance} teams={props.teams} number={i + 1} />
-      allianceItems.push(allianceItem);
+        const alliance = alliances[i];
+        const allianceItem = <Alliance alliance={alliance} teams={props.teams} number={i + 1} />
+        allianceItems.push(allianceItem);
     }
-  
+
     return <div className="alliances">{allianceItems}</div>
-  }
+}
 
 interface AllianceSelectionDisplayProps {
     teams: Teams | null
@@ -130,9 +130,12 @@ export class AllianceSelectionDisplay extends Component<AllianceSelectionDisplay
 
             return <div className="stream">
                 <div className="allianceSelection">
-                    <Alliances alliances={alliances} teams={teams}/>
-                    <Picking picking={picking} teams={teams}/>
-                    <Remaining remaining={remaining} teams={teams}/>
+                    <Alliances alliances={alliances} teams={teams} />
+                    <Picking picking={picking} teams={teams} />
+                    {picking ?
+                        <Remaining remaining={remaining} teams={teams} />
+                        : null
+                    }
                 </div>
             </div>
         } else {
