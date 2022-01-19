@@ -4,10 +4,10 @@ import { makeClockText, makeControlText, makeMatchName } from "../utils/TextGene
 import { talos } from '../ws'
 
 
-const startAudio = new Audio("./audio/Start.wav");
-const pauseAudio = new Audio("./audio/Pause.wav");
-const disabledAudio = new Audio("./audio/Stop.wav");
-const warningAudio = new Audio("./audio/Warning.wav");
+const startAudio = new Audio("./audio/start.wav");
+const pauseAudio = new Audio("./audio/pause.wav");
+const disabledAudio = new Audio("./audio/stop.wav");
+const warningAudio = new Audio("./audio/warning.wav");
 
 function play(audio: HTMLAudioElement) {
     if (audio.paused || !audio.currentTime) {
