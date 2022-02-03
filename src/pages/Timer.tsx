@@ -43,7 +43,7 @@ interface IClockProps {
 
 function Clock(props: IClockProps) {
     const mode = (props.mode);
-    if (mode === FieldControl.AUTONOMOUS || mode === FieldControl.DRIVER) {
+    if (mode === FieldControl.AUTONOMOUS || mode === FieldControl.DRIVER || mode === FieldControl.TIMEOUT) {
         const timeText = makeClockText(props.time);
         return <div className="clock">{timeText}</div>
     } else {
@@ -128,8 +128,14 @@ export class Timer extends Component<TimerProps, TimerState> {
     render() {
         if (this.state.field && this.props.teams && this.props.matches) {
             const state = this.state.field;
-            const match = this.props.matches[state.match];
-            const matchName = makeMatchName(match);
+            let matchName = "";
+            let match;
+            if(state.match === "TO") {
+                matchName = "Timeout"
+            } else {
+                match = this.props.matches[state.match];
+                matchName = makeMatchName(match);
+            }
 
             return <div className="stream">
                 <div className="timer">
@@ -138,10 +144,12 @@ export class Timer extends Component<TimerProps, TimerState> {
                         <MatchLabel matchName={matchName} />
                         <Clock mode={state.control} time={state.timeRemaining} />
                     </div>
+                    { match &&
                     <div className="bottom">
                         <Alliance color="red" alliance={match.red} teams={this.props.teams} />
                         <Alliance color="blue" alliance={match.blue} teams={this.props.teams} />
                     </div>
+        }
                 </div>
             </div>
         } else {
