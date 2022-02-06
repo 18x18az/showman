@@ -1,5 +1,6 @@
 import { IAllianceTeams, IFieldState, IMatchInfo, IMatchList, IPath, MatchType, Teams } from "@18x18az/rosetta";
 import { Component } from "react";
+import { getNextMatches } from "../utils/Match";
 import { makeShortMatchName } from "../utils/TextGenerator";
 import { talos } from "../ws";
 
@@ -55,77 +56,6 @@ interface UpcomingProps {
 
 interface UpcomingState {
     field: IFieldState | null
-}
-
-function getNextMatches(matches: IMatchList, match: IMatchInfo, depth: number): Array<IMatchInfo> | null {
-    const nextMatch = getNextMatch(matches, match);
-    if (!nextMatch) {
-        return null
-    }
-
-    let nextMatches;
-    if (depth > 1) {
-        nextMatches = getNextMatches(matches, nextMatch, depth - 1);
-    }
-
-    if (!nextMatches) {
-        nextMatches = [nextMatch];
-    } else {
-        nextMatches.unshift(nextMatch);
-    }
-
-    return nextMatches;
-}
-
-function getNextR16(matches: IMatchList, match: IMatchInfo): IMatchInfo | undefined {
-    let number = parseInt(match.number as unknown as string);
-
-    for (let i = number + 1; i < 9; i++) {
-        const key = `R16 ${i}-1`;
-        if (matches[key]) {
-            return matches[key];
-        }
-    }
-
-    return undefined;
-}
-
-function getNextElimMatch(matches: IMatchList, match: IMatchInfo): IMatchInfo | undefined {
-    let type = match.type;
-    let number = parseInt(match.number as unknown as string) + 1;
-
-    if (type === MatchType.R16) {
-        if (number === 9) {
-            type = MatchType.QF;
-            number = 1;
-        } else {
-            return getNextR16(matches, match);
-        }
-    } else if (type === MatchType.QF && number === 5) {
-        type = MatchType.SF;
-        number = 1;
-    } else if (type === MatchType.SF && number === 3) {
-        type = MatchType.F;
-        number = 1;
-    }
-
-    const matchKey = `${type} ${number}-1`;
-    return matches[matchKey];
-}
-
-function getNextQualMatch(matches: IMatchList, match: IMatchInfo): IMatchInfo {
-    const nextNumber = parseInt(match.number as unknown as string) + 1;
-    const fullKey = `Q${nextNumber}`;
-    const nextMatch = matches[fullKey];
-    return nextMatch
-}
-
-function getNextMatch(matches: IMatchList, match: IMatchInfo): IMatchInfo | undefined {
-    if (match.type === "QUAL") {
-        return getNextQualMatch(matches, match);
-    } else {
-        return getNextElimMatch(matches, match);
-    }
 }
 
 export class Upcoming extends Component<UpcomingProps, UpcomingState> {

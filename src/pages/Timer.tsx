@@ -1,5 +1,7 @@
-import { FieldControl, IAllianceTeams, IFieldState, IMatchList, IPath, Teams } from "@18x18az/rosetta";
+import { FieldControl, IAllianceTeams, IFieldInfo, IFieldState, IMatchList, IPath, Teams } from "@18x18az/rosetta";
 import { Component } from "react";
+import { useParams } from "react-router-dom";
+import { determineMatch } from "../utils/Field";
 import { makeClockText, makeControlText, makeMatchName } from "../utils/TextGenerator";
 import { talos } from '../ws'
 
@@ -76,16 +78,23 @@ interface TimerProps {
     lastMessageBody: any
 }
 
-interface TimerState {
-    field: IFieldState | null
+interface ExtendedTimerProps extends TimerProps{
+    field: string
 }
 
-export class Timer extends Component<TimerProps, TimerState> {
-    constructor(props: TimerProps) {
+interface TimerState {
+    field: IFieldState | null
+    fields: Array<IFieldInfo> | null
+}
+
+class TimerClass extends Component<ExtendedTimerProps, TimerState> {
+    constructor(props: ExtendedTimerProps) {
         super(props);
         talos.get(["field"])
+        talos.get(["fields"])
         this.state = {
             field: null,
+            fields: null
         }
 
     }
@@ -119,6 +128,11 @@ export class Timer extends Component<TimerProps, TimerState> {
                 return ({
                     field: nextProps.lastMessageBody
                 })
+            } else if (route === "fields") {
+                console.log(nextProps.lastMessageBody);
+                return({
+                    fields: nextProps.lastMessageBody
+                })
             }
         }
 
@@ -126,15 +140,22 @@ export class Timer extends Component<TimerProps, TimerState> {
     }
 
     render() {
-        if (this.state.field && this.props.teams && this.props.matches) {
+        if (this.state.field && this.props.teams && this.props.matches && this.state.fields) {
             const state = this.state.field;
+            const currentField = state.field;
+            const displayedField = this.props.field || currentField;
+
+            determineMatch(displayedField, currentField, this.state.fields, state.match, this.props.matches);
+
             let matchName = "";
             let match;
             if(state.match === "TO") {
                 matchName = "Timeout"
             } else {
-                match = this.props.matches[state.match];
-                matchName = makeMatchName(match);
+                match = determineMatch(displayedField, currentField, this.state.fields, state.match, this.props.matches)
+                if(match){
+                    matchName = makeMatchName(match);
+                }
             }
 
             return <div className="stream">
@@ -157,3 +178,14 @@ export class Timer extends Component<TimerProps, TimerState> {
         }
     }
 };
+
+interface TimerPathParms {
+    field: string
+}
+
+export function Timer(props: TimerProps){
+    const {field} = useParams<TimerPathParms>();
+    return(
+    <TimerClass field={field} teams={props.teams} matches={props.matches} lastMessageBody={props.lastMessageBody} lastMessagePath={props.lastMessagePath}/>
+    )
+}

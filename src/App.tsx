@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { ControlPanel } from "./pages/ControlPanel";
 import { NoPage } from './pages/NoPage';
 import { Score } from "./pages/Score";
@@ -61,37 +61,48 @@ class App extends Component<IProps, IState> {
     return (
       <div className="app">
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<ControlPanel 
-            teams={this.state.teams}
-            lastMessagePath={this.state.lastMessagePath}
-            lastMessageBody={this.state.lastMessagePayload}
-            />} />
-            <Route path="audience" element={<Audience 
-              teams={this.state.teams}
-              lastMessagePath={this.state.lastMessagePath}
-              lastMessageBody={this.state.lastMessagePayload}
-            />} />
-            <Route path="timer" element={<Timer 
-              teams={this.state.teams}
-              matches={this.state.matches}
-              lastMessagePath={this.state.lastMessagePath}
-              lastMessageBody={this.state.lastMessagePayload}
-            />} />
-            <Route path="upcoming" element={<Upcoming
-              teams={this.state.teams}
-              matches={this.state.matches}
-              lastMessagePath={this.state.lastMessagePath}
-              lastMessageBody={this.state.lastMessagePayload}
-            />} />
-            <Route path="score" element={<Score
-              teams={this.state.teams}
-              matches={this.state.matches}
-              lastMessagePath={this.state.lastMessagePath}
-              lastMessageBody={this.state.lastMessagePayload}
-            />} />
-            <Route path="*" element={<NoPage />} />
-          </Routes>
+          <Switch>
+            <Route exact path="/">
+              <ControlPanel
+                teams={this.state.teams}
+                lastMessagePath={this.state.lastMessagePath}
+                lastMessageBody={this.state.lastMessagePayload}
+              />
+            </Route>
+            <Route path="/audience">
+              <Audience
+                teams={this.state.teams}
+                lastMessagePath={this.state.lastMessagePath}
+                lastMessageBody={this.state.lastMessagePayload}
+              />
+            </Route>
+            <Route path="/timer/:field?">
+              <Timer
+                teams={this.state.teams}
+                matches={this.state.matches}
+                lastMessagePath={this.state.lastMessagePath}
+                lastMessageBody={this.state.lastMessagePayload}
+              />
+            </Route>
+            <Route path="/upcoming">
+              <Upcoming
+                teams={this.state.teams}
+                matches={this.state.matches}
+                lastMessagePath={this.state.lastMessagePath}
+                lastMessageBody={this.state.lastMessagePayload}
+              />
+            </Route>
+            <Route path="/score">
+              <Score
+                teams={this.state.teams}
+                matches={this.state.matches}
+                lastMessagePath={this.state.lastMessagePath}
+                lastMessageBody={this.state.lastMessagePayload} />
+            </Route>
+            <Route path="*">
+              <NoPage />
+            </Route>
+          </Switch>
         </BrowserRouter>
       </div>
     );
