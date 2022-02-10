@@ -1,6 +1,6 @@
 import { FieldControl, IAllianceTeams, IFieldInfo, IFieldState, IMatchList, IPath, Teams } from "@18x18az/rosetta";
 import { Component } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { determineMatch } from "../utils/Field";
 import { makeClockText, makeControlText, makeMatchName } from "../utils/TextGenerator";
 import { talos } from '../ws'
@@ -80,11 +80,30 @@ interface TimerProps {
 
 interface ExtendedTimerProps extends TimerProps{
     field: string
+    mute: boolean
 }
 
 interface TimerState {
     field: IFieldState | null
     fields: Array<IFieldInfo> | null
+}
+
+
+function handleAudio(current: IFieldState, newField: IFieldState) {
+    if (current.control !== FieldControl.AUTONOMOUS && current.control !== FieldControl.DRIVER) {
+        if (newField.control === FieldControl.AUTONOMOUS || newField.control === FieldControl.DRIVER) {
+            play(startAudio);
+        }
+    } else {
+        if (newField.control === FieldControl.PAUSED) {
+            play(pauseAudio);
+        } else if (newField.control === FieldControl.DISABLED) {
+            play(disabledAudio);
+        }
+        else if (newField.timeRemaining === 30 && current.timeRemaining === 31) {
+            play(warningAudio);
+        }
+    }
 }
 
 class TimerClass extends Component<ExtendedTimerProps, TimerState> {
@@ -99,7 +118,7 @@ class TimerClass extends Component<ExtendedTimerProps, TimerState> {
 
     }
 
-    static getDerivedStateFromProps(nextProps: TimerProps, prevState: TimerState) {
+    static getDerivedStateFromProps(nextProps: ExtendedTimerProps, prevState: TimerState) {
         if (nextProps.lastMessagePath) {
             const route = nextProps.lastMessagePath[0];
             if (route === "field") {
@@ -108,19 +127,8 @@ class TimerClass extends Component<ExtendedTimerProps, TimerState> {
                 if (current) {
                     const newField = nextProps.lastMessageBody as IFieldState;
 
-                    if (current.control !== FieldControl.AUTONOMOUS && current.control !== FieldControl.DRIVER) {
-                        if (newField.control === FieldControl.AUTONOMOUS || newField.control === FieldControl.DRIVER) {
-                            play(startAudio);
-                        }
-                    } else {
-                        if (newField.control === FieldControl.PAUSED) {
-                            play(pauseAudio);
-                        } else if (newField.control === FieldControl.DISABLED) {
-                            play(disabledAudio);
-                        }
-                        else if (newField.timeRemaining === 30 && current.timeRemaining === 31) {
-                            play(warningAudio);
-                        }
+                    if(!nextProps.mute){   
+                        handleAudio(current, newField);
                     }
 
                 }
@@ -185,7 +193,10 @@ interface TimerPathParms {
 
 export function Timer(props: TimerProps){
     const {field} = useParams<TimerPathParms>();
+    const {search} = useLocation();
+    const params = new URLSearchParams(search);
+    const mute = params.get('mute') === "true";
     return(
-    <TimerClass field={field} teams={props.teams} matches={props.matches} lastMessageBody={props.lastMessageBody} lastMessagePath={props.lastMessagePath}/>
+    <TimerClass mute={mute} field={field} teams={props.teams} matches={props.matches} lastMessageBody={props.lastMessageBody} lastMessagePath={props.lastMessagePath}/>
     )
 }
