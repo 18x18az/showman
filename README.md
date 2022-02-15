@@ -1,3 +1,14 @@
+## Branch info
+shows recent cycle times in control panel page
+
+minimum functionality:
+- [ ] get cycle time message from talos
+- [ ] display recent cycle times
+
+optional:
+- [ ] set what the cycle time should be
+- [ ] calculate the delta for each cycle time (if we are going faster or slower than what the cycle time should be)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
