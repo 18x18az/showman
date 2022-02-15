@@ -12,11 +12,18 @@ interface CycleTimePanelState {
 }
 
 function CycleTime(match_: string, time: number){
-    return <div>{match_} {time} </div>
+    return match_ + ": " + time.toFixed(2) + " minutes";
 }
 
 function CycleTimes(state: CycleTimePanelState){
-    return CycleTime(state.recentMatches[0], state.recentCycleTimes[0])
+    let matches = [];
+    for(let i = 0; i < state.recentCycleTimes.length; i++){
+        matches.push(CycleTime(state.recentMatches[i], state.recentCycleTimes[i]));
+    }
+    let listItems = matches.map(
+        (match) => <li>{match}</li>
+    );
+    return <div className="cycleTimes">Recent cycle times:<ul>{listItems}</ul></div>
 }
 
 export class CycleTimePanel extends Component<CycleTimePanelProps, CycleTimePanelState> {

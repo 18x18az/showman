@@ -3,7 +3,7 @@ shows recent cycle times in control panel page
 
 minimum functionality:
 - [x] get cycle time message from talos
-- [ ] display recent cycle times
+- [x] display recent cycle times
 
 optional:
 - [x] move cycle time stuff to own file which will get called by `NormalControlPanel`
