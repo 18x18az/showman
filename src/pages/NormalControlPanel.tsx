@@ -18,6 +18,17 @@ function startAwards(){
     talos.post(['awards'], null);
 }
 
+// returns match and time it took to start
+function CycleTime(match: any, timeToStart: any){
+    return <div>{match} {timeToStart} </div>
+}
+
+// returns list of cycle times
+function CycleTimes(props: NormalControlPanelProps){
+    
+    return <div>hello</div>
+}
+
 export class NormalControlPanel extends Component<NormalControlPanelProps, NormalControlPanelState> {
     constructor(props: NormalControlPanelProps) {
         super(props);
@@ -39,6 +50,7 @@ export class NormalControlPanel extends Component<NormalControlPanelProps, Norma
             <button onClick={startAwards}>
                 Start Awards
             </button>
+            <CycleTimes lastMessageBody={this.props.lastMessageBody} lastMessagePath={this.props.lastMessagePath}></CycleTimes>
         </div>
     }
 };

@@ -2,10 +2,11 @@
 shows recent cycle times in control panel page
 
 minimum functionality:
-- [ ] get cycle time message from talos
+- [x] get cycle time message from talos
 - [ ] display recent cycle times
 
 optional:
+- [ ] move cycle time stuff to own file which will get called by `NormalControlPanel`
 - [ ] set what the cycle time should be
 - [ ] calculate the delta for each cycle time (if we are going faster or slower than what the cycle time should be)
 
