@@ -1,9 +1,9 @@
 .mobile {
-    --main-bg-color: #000000;
+    --main-bg-color: #ffffff;
     --primary-text-color: rgb(0, 0, 0);
     --secondary-text-color: rgb(63, 63, 63);
     --primary-accent-background: rgb(126, 126, 126);
-    --secondary-accent-background: rgb(63, 63, 63);
+    --secondary-accent-background: rgb(160, 160, 160);
     background-color: var(--main-bg-color);
     .teams {
         display: flex;
@@ -63,6 +63,7 @@
         height: 10vmin;
         font: var(--text-font) !important
     }
+    .noShowButton,
     .undoButton {
         background-color: var(--secondary-accent-background);
         text-align: center;

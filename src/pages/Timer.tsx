@@ -1,13 +1,15 @@
-import { FieldControl, IAllianceTeams, IFieldState, IMatchList, IPath, Teams } from "@18x18az/rosetta";
+import { FieldControl, IAllianceTeams, IFieldInfo, IFieldState, IMatchList, IPath, Teams } from "@18x18az/rosetta";
 import { Component } from "react";
+import { useParams } from "react-router-dom";
+import { determineMatch } from "../utils/Field";
 import { makeClockText, makeControlText, makeMatchName } from "../utils/TextGenerator";
 import { talos } from '../ws'
 
 
-const startAudio = new Audio("./audio/Start.wav");
-const pauseAudio = new Audio("./audio/Pause.wav");
-const disabledAudio = new Audio("./audio/Stop.wav");
-const warningAudio = new Audio("./audio/Warning.wav");
+const startAudio = new Audio("./audio/start.wav");
+const pauseAudio = new Audio("./audio/pause.wav");
+const disabledAudio = new Audio("./audio/stop.wav");
+const warningAudio = new Audio("./audio/warning.wav");
 
 function play(audio: HTMLAudioElement) {
     if (audio.paused || !audio.currentTime) {
@@ -43,7 +45,7 @@ interface IClockProps {
 
 function Clock(props: IClockProps) {
     const mode = (props.mode);
-    if (mode === FieldControl.AUTONOMOUS || mode === FieldControl.DRIVER) {
+    if (mode === FieldControl.AUTONOMOUS || mode === FieldControl.DRIVER || mode === FieldControl.TIMEOUT) {
         const timeText = makeClockText(props.time);
         return <div className="clock">{timeText}</div>
     } else {
@@ -76,16 +78,23 @@ interface TimerProps {
     lastMessageBody: any
 }
 
-interface TimerState {
-    field: IFieldState | null
+interface ExtendedTimerProps extends TimerProps{
+    field: string
 }
 
-export class Timer extends Component<TimerProps, TimerState> {
-    constructor(props: TimerProps) {
+interface TimerState {
+    field: IFieldState | null
+    fields: Array<IFieldInfo> | null
+}
+
+class TimerClass extends Component<ExtendedTimerProps, TimerState> {
+    constructor(props: ExtendedTimerProps) {
         super(props);
         talos.get(["field"])
+        talos.get(["fields"])
         this.state = {
             field: null,
+            fields: null
         }
 
     }
@@ -119,6 +128,11 @@ export class Timer extends Component<TimerProps, TimerState> {
                 return ({
                     field: nextProps.lastMessageBody
                 })
+            } else if (route === "fields") {
+                console.log(nextProps.lastMessageBody);
+                return({
+                    fields: nextProps.lastMessageBody
+                })
             }
         }
 
@@ -126,10 +140,23 @@ export class Timer extends Component<TimerProps, TimerState> {
     }
 
     render() {
-        if (this.state.field && this.props.teams && this.props.matches) {
+        if (this.state.field && this.props.teams && this.props.matches && this.state.fields) {
             const state = this.state.field;
-            const match = this.props.matches[state.match];
-            const matchName = makeMatchName(match);
+            const currentField = state.field;
+            const displayedField = this.props.field || currentField;
+
+            determineMatch(displayedField, currentField, this.state.fields, state.match, this.props.matches);
+
+            let matchName = "";
+            let match;
+            if(state.match === "TO") {
+                matchName = "Timeout"
+            } else {
+                match = determineMatch(displayedField, currentField, this.state.fields, state.match, this.props.matches)
+                if(match){
+                    matchName = makeMatchName(match);
+                }
+            }
 
             return <div className="stream">
                 <div className="timer">
@@ -138,10 +165,12 @@ export class Timer extends Component<TimerProps, TimerState> {
                         <MatchLabel matchName={matchName} />
                         <Clock mode={state.control} time={state.timeRemaining} />
                     </div>
+                    { match &&
                     <div className="bottom">
                         <Alliance color="red" alliance={match.red} teams={this.props.teams} />
                         <Alliance color="blue" alliance={match.blue} teams={this.props.teams} />
                     </div>
+        }
                 </div>
             </div>
         } else {
@@ -149,3 +178,14 @@ export class Timer extends Component<TimerProps, TimerState> {
         }
     }
 };
+
+interface TimerPathParms {
+    field: string
+}
+
+export function Timer(props: TimerProps){
+    const {field} = useParams<TimerPathParms>();
+    return(
+    <TimerClass field={field} teams={props.teams} matches={props.matches} lastMessageBody={props.lastMessageBody} lastMessagePath={props.lastMessagePath}/>
+    )
+}
