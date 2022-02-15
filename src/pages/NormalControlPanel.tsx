@@ -1,6 +1,7 @@
 import { IPath, Teams } from "@18x18az/rosetta";
 import { Component } from "react";
 import { talos } from "../ws";
+import { CycleTimePanel } from "./CycleTimePanel";
 
 interface NormalControlPanelProps {
     lastMessagePath: IPath | null
@@ -16,17 +17,6 @@ function startAllianceSelection(){
 
 function startAwards(){
     talos.post(['awards'], null);
-}
-
-// returns match and time it took to start
-function CycleTime(match: any, timeToStart: any){
-    return <div>{match} {timeToStart} </div>
-}
-
-// returns list of cycle times
-function CycleTimes(props: NormalControlPanelProps){
-    
-    return <div>hello</div>
 }
 
 export class NormalControlPanel extends Component<NormalControlPanelProps, NormalControlPanelState> {
@@ -50,7 +40,7 @@ export class NormalControlPanel extends Component<NormalControlPanelProps, Norma
             <button onClick={startAwards}>
                 Start Awards
             </button>
-            <CycleTimes lastMessageBody={this.props.lastMessageBody} lastMessagePath={this.props.lastMessagePath}></CycleTimes>
+            <CycleTimePanel lastMessageBody={this.props.lastMessageBody} lastMessagePath={this.props.lastMessagePath}></CycleTimePanel>
         </div>
     }
 };
