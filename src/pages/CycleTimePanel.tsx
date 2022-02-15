@@ -7,8 +7,16 @@ interface CycleTimePanelProps {
     lastMessageBody: any
 }
 interface CycleTimePanelState {
-    recentMatches: string[]
-    recentCycleTimes: number[]
+    recentMatches: Array<string>
+    recentCycleTimes: Array<number>
+}
+
+function CycleTime(match_: string, time: number){
+    return <div>{match_} {time} </div>
+}
+
+function CycleTimes(state: CycleTimePanelState){
+    return CycleTime(state.recentMatches[0], state.recentCycleTimes[0])
 }
 
 export class CycleTimePanel extends Component<CycleTimePanelProps, CycleTimePanelState> {
@@ -18,22 +26,25 @@ export class CycleTimePanel extends Component<CycleTimePanelProps, CycleTimePane
             recentMatches: [],
             recentCycleTimes: []
         };
-        console.log("brrr");
     }
 
     static getDerivedStateFromProps(props: CycleTimePanelProps) {
         if (props.lastMessagePath) {
             const route = props.lastMessagePath[0];
-            if(route == "cycleTimes"){ // if this is the case, update state
-                console.log("need to update state");
+            if(route === "cycleTime"){ // if this is the case, update state
+                return {
+                    recentMatches: props.lastMessageBody.recentMatches,
+                    recentCycleTimes: props.lastMessageBody.recentCycleTimes
+                }
             }
         }
         return null
     }
 
     render() {
+        
         return <div>
-            hello ther
+            {CycleTimes(this.state)}
         </div>
     }
 };
