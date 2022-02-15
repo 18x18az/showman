@@ -18,11 +18,15 @@ export class CycleTimePanel extends Component<CycleTimePanelProps, CycleTimePane
             recentMatches: [],
             recentCycleTimes: []
         };
+        console.log("brrr");
     }
 
     static getDerivedStateFromProps(props: CycleTimePanelProps) {
         if (props.lastMessagePath) {
             const route = props.lastMessagePath[0];
+            if(route == "cycleTimes"){ // if this is the case, update state
+                console.log("need to update state");
+            }
         }
         return null
     }
