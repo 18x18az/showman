@@ -7,8 +7,8 @@ minimum functionality:
 
 optional:
 - [x] move cycle time stuff to own file which will get called by `NormalControlPanel`
-- [ ] set what the cycle time should be
-- [ ] calculate the delta for each cycle time (if we are going faster or slower than what the cycle time should be)
+- [x] set what the cycle time should be
+- [x] calculate the delta for each cycle time (if we are going faster or slower than what the cycle time should be)
 
 # Getting Started with Create React App
 
