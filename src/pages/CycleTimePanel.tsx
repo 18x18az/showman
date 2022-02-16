@@ -32,18 +32,19 @@ export class CycleTimePanel extends Component<CycleTimePanelProps, CycleTimePane
     }
 
     CycleTime(match_: string, time: number){
+        // FIXME: the math works, having issues with displaying the actual cycle time
         let sec = Math.floor((time - Math.floor(time)) * 60);
-        let leadingSec = (sec < 10 ? "0" : "")
+        let leadingSec = (sec < 10 ? "0" : "");
         let diff = Math.abs(time - (this.state.sctMin + this.state.sctSec/60))
-        let deltaMin = Math.floor(diff)
+        let deltaMin = Math.floor(diff);
         let deltaSec = Math.round((diff - Math.floor(diff)) * 60);
-        let leadingDSec = (deltaSec < 10 ? "0" : "")
-        let delta = (this.state.sctMin + this.state.sctSec/60 < time ? " slower" : " faster")
+        let leadingDSec = (deltaSec < 10 ? "0" : "");
+        let delta = (this.state.sctMin + this.state.sctSec/60 < time ? " slower" : " faster");
         if(match_ !== "rolling average")
-            return match_ + ": took " + time.toFixed(0) + ":" + leadingSec + sec.toString() + " to begin match; " + deltaMin.toFixed(0) + ":" + leadingDSec + deltaSec.toString() + delta;
+            return match_ + ": took " + Math.floor(time) + ":" + leadingSec + sec.toString() + " to begin match; " + Math.floor(deltaMin) + ":" + leadingDSec + deltaSec.toString() + delta;
         else
-            return "Taking " + time.toFixed(0) + ":" + leadingSec + sec.toString() + " on average to begin match; " + deltaMin.toFixed(0) + ":" + leadingDSec + deltaSec.toString() + delta;
-        }
+            return "Taking " + Math.floor(time) + ":" + leadingSec + sec.toString() + " on average to begin match; " + Math.floor(deltaMin) + ":" + leadingDSec + deltaSec.toString() + delta;
+    }
 
     CycleTimes(state: CycleTimePanelState){
         let matches = [];
