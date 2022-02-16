@@ -32,7 +32,6 @@ export class CycleTimePanel extends Component<CycleTimePanelProps, CycleTimePane
     }
 
     CycleTime(match_: string, time: number){
-        // FIXME: the math works, having issues with displaying the actual cycle time
         let sec = Math.floor((time - Math.floor(time)) * 60);
         let leadingSec = (sec < 10 ? "0" : "");
         let diff = Math.abs(time - (this.state.sctMin + this.state.sctSec/60))
