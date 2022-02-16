@@ -12,7 +12,8 @@ interface CycleTimePanelState {
 }
 
 function CycleTime(match_: string, time: number){
-    return match_ + ": " + time.toFixed(2) + " minutes";
+    let seconds = (time - Math.floor(time)) * 60;
+    return match_ + ": " + time.toFixed(0) + ":" + seconds.toFixed(0);
 }
 
 function CycleTimes(state: CycleTimePanelState){
