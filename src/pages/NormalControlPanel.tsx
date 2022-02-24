@@ -1,4 +1,4 @@
-import { IPath, Teams } from "@18x18az/rosetta";
+import { DisplayState, IPath, Teams } from "@18x18az/rosetta";
 import { Component } from "react";
 import { talos } from "../ws";
 import { CycleTimePanel } from "./CycleTimePanel";
@@ -19,6 +19,10 @@ function refreshAwards(){
     talos.post(['awards'], null);
 }
 
+function showScores(){
+    talos.post(['display'], DisplayState.SCORE);
+}
+
 export class NormalControlPanel extends Component<NormalControlPanelProps, NormalControlPanelState> {
     constructor(props: NormalControlPanelProps) {
         super(props);
@@ -36,6 +40,9 @@ export class NormalControlPanel extends Component<NormalControlPanelProps, Norma
         return <div>
             <button onClick={startAllianceSelection}>
                 Start Alliance Selection
+            </button>
+            <button onClick={showScores}>
+                Show Scores
             </button>
             <button onClick={refreshAwards}>
                 Refresh Awards

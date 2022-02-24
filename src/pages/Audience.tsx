@@ -31,9 +31,10 @@ export class Audience extends Component<AudienceProps, AudienceState> {
         if (nextProps.lastMessagePath) {
             const route = nextProps.lastMessagePath[0];
             if (route === "display") {
-                console.log(`Display mode changed to ${nextProps.lastMessageBody}`)
+                const display = nextProps.lastMessageBody;
+                console.log(`Display mode changed to ${display}`)
 
-                if(nextProps.lastMessageBody === DisplayState.ALLIANCE){
+                if(display === DisplayState.ALLIANCE){
                     talos.get(['allianceSelection']);
                 }
 
@@ -61,7 +62,7 @@ export class Audience extends Component<AudienceProps, AudienceState> {
                 lastMessagePath={this.props.lastMessagePath}
             />
         } else if (mode === DisplayState.SCORE) {
-            <Score
+            return <Score
                 teams={this.props.teams}
                 matches={this.props.matches}
                 lastMessageBody={this.props.lastMessageBody}
