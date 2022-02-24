@@ -101,7 +101,7 @@ interface AllianceSelectionControlPanelProps {
     lastMessageBody: any
 }
 interface AllianceSelectionControlPanelState {
-    status: IAllianceSelectionStatus
+    status: IAllianceSelectionStatus | null
 }
 
 export class AllianceSelectionControlPanel extends Component<AllianceSelectionControlPanelProps, AllianceSelectionControlPanelState> {
@@ -111,7 +111,7 @@ export class AllianceSelectionControlPanel extends Component<AllianceSelectionCo
         document.title = "Alliance Selection";
 
         this.state = {
-            status: this.props.lastMessageBody
+            status: null
         }
     }
 
@@ -127,7 +127,7 @@ export class AllianceSelectionControlPanel extends Component<AllianceSelectionCo
     }
 
     render() {
-        if (this.props.teams) {
+        if (this.props.teams && this.state.status) {
             const picking = this.state.status.picking;
             const remaining = this.state.status.eligible;
             const picked = this.state.status.selected;
