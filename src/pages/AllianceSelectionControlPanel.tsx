@@ -1,4 +1,4 @@
-import { IAllianceSelectionStatus, IPath, TeamId, Teams } from "@18x18az/rosetta";
+import { DisplayState, IAllianceSelectionStatus, IPath, TeamId, Teams } from "@18x18az/rosetta";
 import { Component } from "react";
 import { talos } from "../ws";
 
@@ -24,6 +24,10 @@ function undoCb() {
 
 function noShowCb() {
     talos.post(['allianceSelection', 'noShow'], null);
+}
+
+function finalizeCb() {
+    talos.post(['display'], DisplayState.UPCOMING);
 }
 
 interface PopupProps {
@@ -135,6 +139,7 @@ export class AllianceSelectionControlPanel extends Component<AllianceSelectionCo
                 <div className="footer">
                     <button className="undoButton" onClick={undoCb}>Undo</button>
                     <button className="noShowButton" onClick={noShowCb}>No Show</button>
+                    <button className="finalizeButton" onClick={finalizeCb}>Finalize</button>
                 </div>
                 {picked && picking ?
                     <Popup

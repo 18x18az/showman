@@ -64,7 +64,8 @@
         font: var(--text-font) !important
     }
     .noShowButton,
-    .undoButton {
+    .undoButton,
+    .finalizeButton {
         background-color: var(--secondary-accent-background);
         text-align: center;
         margin: 2vmin;
