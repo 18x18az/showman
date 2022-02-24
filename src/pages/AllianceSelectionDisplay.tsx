@@ -95,7 +95,7 @@ interface AllianceSelectionDisplayProps {
     lastMessageBody: any
 }
 interface AllianceSelectionDisplayState {
-    status: IAllianceSelectionStatus
+    status: IAllianceSelectionStatus | null
 }
 
 export class AllianceSelectionDisplay extends Component<AllianceSelectionDisplayProps, AllianceSelectionDisplayState> {
@@ -105,7 +105,7 @@ export class AllianceSelectionDisplay extends Component<AllianceSelectionDisplay
         document.title = "Alliance Selection";
 
         this.state = {
-            status: this.props.lastMessageBody
+            status: null
         }
     }
 
@@ -121,7 +121,7 @@ export class AllianceSelectionDisplay extends Component<AllianceSelectionDisplay
     }
 
     render() {
-        if (this.props.teams) {
+        if (this.props.teams && this.state.status) {
             const status = this.state.status;
             const alliances = status.alliances;
             const picking = status.picking;
