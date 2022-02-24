@@ -23,6 +23,10 @@ function showScores(){
     talos.post(['display'], DisplayState.SCORE);
 }
 
+function showUpcoming(){
+    talos.post(['display'], DisplayState.UPCOMING);
+}
+
 export class NormalControlPanel extends Component<NormalControlPanelProps, NormalControlPanelState> {
     constructor(props: NormalControlPanelProps) {
         super(props);
@@ -42,7 +46,10 @@ export class NormalControlPanel extends Component<NormalControlPanelProps, Norma
                 Start Alliance Selection
             </button>
             <button onClick={showScores}>
-                Show Scores
+                Scores
+            </button>
+            <button onClick={showUpcoming}>
+                Upcoming
             </button>
             <button onClick={refreshAwards}>
                 Refresh Awards
