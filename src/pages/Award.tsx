@@ -1,5 +1,6 @@
 import { IAward, IPath, TeamId, Teams } from "@18x18az/rosetta";
 import { Component } from "react";
+import { talos } from "../ws";
 
 interface IWinnerProps {
     teams: Teams
@@ -7,7 +8,7 @@ interface IWinnerProps {
 }
 
 function Winner(props: IWinnerProps) {
-    if(!props.winner){
+    if (!props.winner) {
         return <div></div>
     }
 
@@ -38,6 +39,7 @@ interface AwardState {
 export class Award extends Component<AwardProps, AwardState> {
     constructor(props: AwardProps) {
         super(props);
+        talos.get(["awards", "selected"]);
         this.state = {
             award: null
         }
@@ -57,9 +59,11 @@ export class Award extends Component<AwardProps, AwardState> {
     render() {
         if (this.props.teams && this.state.award) {
             const award = this.state.award;
-            return <div className="award">
-                {award.name}
-                <Winner teams={this.props.teams} winner={award.winner}/>
+            return <div className="stream">
+                <div className="award">
+                    {award.name}
+                    <Winner teams={this.props.teams} winner={award.winner} />
+                </div>
             </div>
         } else {
             return <div></div>;
