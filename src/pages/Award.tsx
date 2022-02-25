@@ -13,8 +13,14 @@ function Winner(props: IWinnerProps) {
 
     const winner = props.teams[props.winner];
 
+    let name = winner.name;
+    const max_length = 45;
+    if (name.length > max_length) {
+        name = name.substring(0, max_length)
+    }
+
     return <div>
-        <div>{winner.number} - {winner.name}</div>
+        <div>{winner.number} - {name}</div>
         <div>{winner.school}, {winner.location}</div>
     </div>
 }
