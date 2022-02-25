@@ -1,0 +1,32 @@
+.stream .award {
+    height: 100%;
+    --background: rgba(0, 0, 0, 0.9);
+    --accent-background: white;
+    --text-color: white;
+    --accent-text-color: rgb(0, 0, 0);
+    --number-font: 'Orbitron', 'sans-serif';
+    --text-font: 'Electrolize', sans-serif;
+    .title {
+        font-family: var(--text-font);
+        font-size: 6vh;
+        position: fixed;
+        top: 3vh;
+        width: 80%;
+        left: 10%;
+        text-align: center;
+        background: var(--background);
+        color: var(--text-color);
+        padding: 1vh;
+        border-radius: 0.2vh 0.4vh 3vh 0.2vh;
+    }
+    .winner {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        font-family: var(--text-font);
+        color: var(--text-color);
+        background: var(--background);
+        padding: 1.5vh;
+        font-size: 3vh;
+    }
+}

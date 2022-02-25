@@ -20,7 +20,7 @@ function Winner(props: IWinnerProps) {
         name = name.substring(0, max_length)
     }
 
-    return <div>
+    return <div className="winner">
         <div>{winner.number} - {name}</div>
         <div>{winner.school}, {winner.location}</div>
     </div>
@@ -61,7 +61,7 @@ export class Award extends Component<AwardProps, AwardState> {
             const award = this.state.award;
             return <div className="stream">
                 <div className="award">
-                    {award.name}
+                    <div className="title">{award.name}</div>
                     <Winner teams={this.props.teams} winner={award.winner} />
                 </div>
             </div>
