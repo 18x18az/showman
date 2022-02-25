@@ -27,6 +27,9 @@ interface AwardPanelProps {
     lastMessageBody: any
 }
 
+function pushAward(){
+    talos.post(['awards', 'push'], null)
+}
 interface AwardPanelState {
     awards: IAwards | null
     selected: IAward | null
@@ -49,6 +52,7 @@ class AwardPanel extends Component<AwardPanelProps, AwardPanelState> {
                 } else {
                     return {
                         awards: nextProps.lastMessageBody
+                        
                     }
                 }
             }
@@ -70,6 +74,7 @@ class AwardPanel extends Component<AwardPanelProps, AwardPanelState> {
 
             return <div>
                 {awardItems}
+                <button onClick={pushAward}>Push</button>
             </div>
         } else {
             return <div>
