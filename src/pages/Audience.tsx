@@ -2,6 +2,7 @@ import { DisplayState, IMatchList, IMessage, IPath, Teams } from "@18x18az/roset
 import { Component } from "react";
 import { talos } from "../ws";
 import { AllianceSelectionDisplay } from "./AllianceSelectionDisplay";
+import { Award } from "./Award";
 import { Score } from "./Score";
 import { Upcoming } from "./Upcoming";
 
@@ -34,7 +35,7 @@ export class Audience extends Component<AudienceProps, AudienceState> {
                 const display = nextProps.lastMessageBody;
                 console.log(`Display mode changed to ${display}`)
 
-                if(display === DisplayState.ALLIANCE){
+                if (display === DisplayState.ALLIANCE) {
                     talos.get(['allianceSelection']);
                 }
 
@@ -68,6 +69,16 @@ export class Audience extends Component<AudienceProps, AudienceState> {
                 lastMessageBody={this.props.lastMessageBody}
                 lastMessagePath={this.props.lastMessagePath}
             />
+        } else if (mode === DisplayState.AWARD) {
+            return <Award
+            teams={this.props.teams}
+            lastMessageBody={this.props.lastMessageBody}
+            lastMessagePath={this.props.lastMessagePath}
+            />
+        } else {
+            return <div>
+                Test
+            </div>
         }
     }
 };

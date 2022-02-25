@@ -8,10 +8,15 @@ interface IAwardProps {
     award: IAward
 }
 
+function selectAward(index: number) {
+    console.log(index);
+    talos.post(['awards', 'selected'], index);
+}
+
 function Award(props: IAwardProps) {
     const disabled = props.award.winner === null
     return <div key={props.index} className="awardSelector">
-        <button disabled={disabled}>
+        <button disabled={disabled} onClick={() => selectAward(props.index)}>
             {props.award.name}
         </button>
     </div>
@@ -24,11 +29,13 @@ interface AwardPanelProps {
 
 interface AwardPanelState {
     awards: IAwards | null
+    selected: IAward | null
 }
 class AwardPanel extends Component<AwardPanelProps, AwardPanelState> {
     constructor(props: NormalControlPanelProps) {
         super(props);
         this.state = {
+            selected: null,
             awards: null
         }
     }
@@ -37,8 +44,12 @@ class AwardPanel extends Component<AwardPanelProps, AwardPanelState> {
         if (nextProps.lastMessagePath) {
             const route = nextProps.lastMessagePath[0];
             if (route === "awards" && nextProps.lastMessageBody) {
-                return {
-                    awards: nextProps.lastMessageBody
+                if (nextProps.lastMessagePath[1] === "selected") {
+
+                } else {
+                    return {
+                        awards: nextProps.lastMessageBody
+                    }
                 }
             }
         }
