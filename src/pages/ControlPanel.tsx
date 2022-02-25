@@ -46,6 +46,7 @@ export class ControlPanel extends Component<ControlPanelProps, ControlPanelState
 
         if (mode === ControlMode.NORMAL) {
             return <NormalControlPanel
+                teams={this.props.teams}
                 lastMessageBody={this.props.lastMessageBody}
                 lastMessagePath={this.props.lastMessagePath}
             />

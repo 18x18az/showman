@@ -1,9 +1,75 @@
-import { DisplayState, IPath, Teams } from "@18x18az/rosetta";
+import { DisplayState, IAward, IAwards, IPath, Teams } from "@18x18az/rosetta";
 import { Component } from "react";
 import { talos } from "../ws";
 import { CycleTimePanel } from "./CycleTimePanel";
 
+interface IAwardProps {
+    index: number
+    award: IAward
+}
+
+function Award(props: IAwardProps) {
+    const disabled = props.award.winner === null
+    return <div key={props.index} className="awardSelector">
+        <button disabled={disabled}>
+            {props.award.name}
+        </button>
+    </div>
+}
+interface AwardPanelProps {
+    teams: Teams | null
+    lastMessagePath: IPath | null
+    lastMessageBody: any
+}
+
+interface AwardPanelState {
+    awards: IAwards | null
+}
+class AwardPanel extends Component<AwardPanelProps, AwardPanelState> {
+    constructor(props: NormalControlPanelProps) {
+        super(props);
+        this.state = {
+            awards: null
+        }
+    }
+
+    static getDerivedStateFromProps(nextProps: AwardPanelProps, prevState: AwardPanelState) {
+        if (nextProps.lastMessagePath) {
+            const route = nextProps.lastMessagePath[0];
+            if (route === "awards" && nextProps.lastMessageBody) {
+                return {
+                    awards: nextProps.lastMessageBody
+                }
+            }
+        }
+
+        return null;
+    }
+
+    render() {
+        if (this.state.awards && this.props.teams) {
+            const awards = this.state.awards
+            let awardItems = [];
+
+            for (let i = 0; i < awards.length; i++) {
+                const award = awards[i];
+                const awardItem = <Award index={i} award={award} />
+                awardItems.push(awardItem);
+            }
+
+            return <div>
+                {awardItems}
+            </div>
+        } else {
+            return <div>
+
+            </div>
+        }
+    }
+}
+
 interface NormalControlPanelProps {
+    teams: Teams | null
     lastMessagePath: IPath | null
     lastMessageBody: any
 }
@@ -11,19 +77,19 @@ interface NormalControlPanelState {
 
 }
 
-function startAllianceSelection(){
+function startAllianceSelection() {
     talos.post(['allianceSelection'], null);
 }
 
-function refreshAwards(){
+function refreshAwards() {
     talos.post(['awards'], null);
 }
 
-function showScores(){
+function showScores() {
     talos.post(['display'], DisplayState.SCORE);
 }
 
-function showUpcoming(){
+function showUpcoming() {
     talos.post(['display'], DisplayState.UPCOMING);
 }
 
@@ -32,12 +98,6 @@ export class NormalControlPanel extends Component<NormalControlPanelProps, Norma
         super(props);
 
         document.title = "Talos Control"
-    }
-
-    componentWillReceiveProps(props: NormalControlPanelProps) {
-        if (props.lastMessagePath) {
-            const route = props.lastMessagePath[0];
-        }
     }
 
     render() {
@@ -54,6 +114,7 @@ export class NormalControlPanel extends Component<NormalControlPanelProps, Norma
             <button onClick={refreshAwards}>
                 Refresh Awards
             </button>
+            <AwardPanel teams={this.props.teams} lastMessageBody={this.props.lastMessageBody} lastMessagePath={this.props.lastMessagePath} />
             <CycleTimePanel lastMessageBody={this.props.lastMessageBody} lastMessagePath={this.props.lastMessagePath}></CycleTimePanel>
         </div>
     }
