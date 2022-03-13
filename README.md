@@ -1,4 +1,4 @@
-# showman
+# Showman
 A collection of audience displays for VRC Tournaments built using React and TypeScript.
 
 
