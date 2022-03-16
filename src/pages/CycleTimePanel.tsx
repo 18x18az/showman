@@ -46,16 +46,14 @@ export class CycleTimePanel extends Component<CycleTimePanelProps, CycleTimePane
 
     CycleTime(match_: string, time: number){
         let sec = Math.floor((time - Math.floor(time)) * 60);
-        let leadingSec = (sec < 10 ? "0" : "");
         let diff = Math.abs(time - (this.state.sctMin + this.state.sctSec/60))
         let deltaMin = Math.floor(diff);
         let deltaSec = Math.round((diff - Math.floor(diff)) * 60);
-        let leadingDSec = (deltaSec < 10 ? "0" : "");
         let delta = (this.state.sctMin + this.state.sctSec/60 < time ? " slower" : " faster");
         if(match_ !== "rolling average")
-            return match_ + ": took " + Math.floor(time) + ":" + leadingSec + sec.toString() + " to begin match; " + Math.floor(deltaMin) + ":" + leadingDSec + deltaSec.toString() + delta;
+            return match_ + ": took " + displayTime(Math.floor(time), sec) + " to begin match; " + displayTime(Math.floor(deltaMin), deltaSec) + delta;
         else
-            return "Taking " + Math.floor(time) + ":" + leadingSec + sec.toString() + " on average to begin match; " + Math.floor(deltaMin) + ":" + leadingDSec + deltaSec.toString() + delta;
+            return "Taking " + displayTime(Math.floor(time), sec) + " on average to begin match; " + displayTime(Math.floor(deltaMin), deltaSec) + delta;
     }
 
     CycleTimes(state: CycleTimePanelState){
