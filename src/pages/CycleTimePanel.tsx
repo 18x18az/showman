@@ -16,7 +16,20 @@ interface CycleTimePanelState {
 
 let scheduledTime: string = "";
 
-
+function displayTime(min: number, sec: number){
+    if(sec < 10){
+        return min + ":0" + sec;
+    }
+    else if(sec >= 60){
+        let bonus = Math.floor(sec/60);
+        let surplus = sec % 60;
+        if(surplus < 10)
+            return min+bonus + ":0" + surplus;
+        else
+            return min+bonus + ":" + surplus;
+    }
+    else return min + ":" + sec;
+}
 export class CycleTimePanel extends Component<CycleTimePanelProps, CycleTimePanelState> {
     constructor(props: CycleTimePanelProps) {
         super(props);
@@ -105,7 +118,7 @@ export class CycleTimePanel extends Component<CycleTimePanelProps, CycleTimePane
             </label>
             <input type="submit" value="Submit" />
             </form>
-            Scheduled Cycle Time: {this.state.sctMin}:{this.state.sctSec}
+            Scheduled Cycle Time: {displayTime(this.state.sctMin, this.state.sctSec)}
         </div>
     }
 };
