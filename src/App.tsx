@@ -9,6 +9,7 @@ import { talos } from './ws'
 import { Timer } from "./pages/Timer";
 import { Audience } from "./pages/Audience";
 import { Upcoming } from "./pages/Upcoming";
+import { RefereePanel } from "./pages/RefereePanel";
 
 interface IProps {
 }
@@ -99,6 +100,9 @@ class App extends Component<IProps, IState> {
                 matches={this.state.matches}
                 lastMessagePath={this.state.lastMessagePath}
                 lastMessageBody={this.state.lastMessagePayload} />
+            </Route>
+            <Route path="/referee">
+              <RefereePanel></RefereePanel>
             </Route>
             <Route path="*">
               <NoPage />

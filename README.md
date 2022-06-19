@@ -13,11 +13,11 @@ $ git clone git@github.com:18x18az/showman.git
 $ cd showman
 
 # setup project 
-$ 
+$ yarn install
 
 # run showman, will be on http://localhost:3000
 $ yarn start
 ```
 
 ## Support
-Feel free to create an issue on this repository.
+Create an issue on this repository.
