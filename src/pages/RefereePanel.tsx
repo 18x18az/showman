@@ -1,3 +1,4 @@
+import { DisplayState, IPath, TeamId, Teams } from "@18x18az/rosetta";
 import { Component } from "react";
 import { talos } from "../ws";
 
@@ -13,7 +14,32 @@ import { talos } from "../ws";
  * spin boxes for scoring
  * assign auto bonus, assign auto WP
  * mark a team as dq, or no show
+ * 
+ * 
+ * notes on autonomous: since it can either be 10 (win) or 5 (tie)
+ * autonomous should be set to 10 or 5, ie not a boolean
  */
+interface IVRCSpinUpScore {
+    highGoals: number
+    lowGoals: number
+    rollers: number
+    tiles: number
+    autonomous: number
+}
+
+interface IVRCSpinUpMatch {
+    name: string
+    teamsBlue: Teams
+    teamsRed: Teams
+
+    scoreBlue: IVRCSpinUpScore
+    scoreRed: IVRCSpinUpScore
+
+    autoBonus: number // 0 if none, 1 if red only, 2 if blue only, 3 if both
+    teamStatus: number // bit arithmetic for this. this is for stuff like DQ, no show, etc
+
+}
+
 interface ISpinBoxProps {
     gameObj: string
     team: string
