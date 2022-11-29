@@ -100,7 +100,8 @@ function handleAudio(current: IFieldState, newField: IFieldState) {
         } else if (newField.control === FieldControl.DISABLED) {
             play(disabledAudio);
         }
-        else if (newField.timeRemaining === 30 && current.timeRemaining === 31) {
+        else if (newField.timeRemaining === 10 && current.timeRemaining === 11 && current.control == FieldControl.DRIVER) {
+            // TODO: fix after spin up
             play(warningAudio);
         }
     }
