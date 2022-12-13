@@ -1,29 +1,29 @@
-import { IMatchList, IPath, SimpleAllianceResults, SimpleMatchResult, TeamId, Teams } from "@18x18az/rosetta";
+import { IMatchList, IPath, ISimpleAllianceResults, ISimpleMatchResult, TeamId, ITeams } from "@18x18az/rosetta";
 import { Component } from "react";
 import { makeMatchName } from "../utils/TextGenerator";
 import { talos } from '../ws'
 
 
 interface ScoreProps {
-    teams: Teams | null
+    teams: ITeams | null
     matches: IMatchList | null
     lastMessagePath: IPath | null
     lastMessageBody: any
 }
 
 interface ScoreState {
-    score: SimpleMatchResult | null
+    score: ISimpleMatchResult | null
 }
 
 interface AllianceProps {
-    alliance: SimpleAllianceResults
-    teams: Teams
+    alliance: ISimpleAllianceResults
+    teams: ITeams
     color: string
 }
 
 interface TeamProps {
     team: TeamId
-    teams: Teams
+    teams: ITeams
 }
 
 const TeamInfo = (props: TeamProps) => {

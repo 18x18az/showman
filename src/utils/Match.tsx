@@ -1,4 +1,4 @@
-import { IMatchInfo, IMatchList, MatchType } from "@18x18az/rosetta";
+import { IMatchInfo, IMatchList, MATCH_TYPE } from "@18x18az/rosetta";
 
 export function getNextMatches(matches: IMatchList, match: IMatchInfo, depth: number): Array<IMatchInfo> | null {
     const nextMatch = getNextMatch(matches, match);
@@ -50,18 +50,18 @@ function getNextElimMatch(matches: IMatchList, match: IMatchInfo): IMatchInfo | 
     let type = match.type;
     let number = parseInt(match.number as unknown as string) + 1;
 
-    if (type === MatchType.R16) {
+    if (type === MATCH_TYPE.R16) {
         if (number === 9) {
-            type = MatchType.QF;
+            type = MATCH_TYPE.QF;
             number = 1;
         } else {
             return getNextR16(matches, match);
         }
-    } else if (type === MatchType.QF && number === 5) {
-        type = MatchType.SF;
+    } else if (type === MATCH_TYPE.QF && number === 5) {
+        type = MATCH_TYPE.SF;
         number = 1;
-    } else if (type === MatchType.SF && number === 3) {
-        type = MatchType.F;
+    } else if (type === MATCH_TYPE.SF && number === 3) {
+        type = MATCH_TYPE.F;
         number = 1;
     }
 

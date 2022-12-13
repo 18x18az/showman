@@ -1,4 +1,4 @@
-import { DisplayState, IPath, Teams } from "@18x18az/rosetta";
+import { DISPLAY_STATE, IPath, ITeams } from "@18x18az/rosetta";
 import { Component } from "react";
 import { talos } from "../ws";
 import { AllianceSelectionControlPanel } from "./AllianceSelectionControlPanel";
@@ -9,7 +9,7 @@ enum ControlMode {
     ALLIANCE_SELECTION
 }
 interface ControlPanelProps {
-    teams: Teams | null
+    teams: ITeams | null
     lastMessagePath: IPath | null
     lastMessageBody: any
 }
@@ -29,7 +29,7 @@ export class ControlPanel extends Component<ControlPanelProps, ControlPanelState
         if (nextProps.lastMessagePath) {
             const route = nextProps.lastMessagePath[0];
             if (route === "display") {
-                if(nextProps.lastMessageBody === DisplayState.ALLIANCE){
+                if(nextProps.lastMessageBody === DISPLAY_STATE.ALLIANCE){
                     talos.get(['allianceSelection']);
                     return {mode: ControlMode.ALLIANCE_SELECTION};
                 } else {

@@ -1,17 +1,17 @@
-import { FieldControl, IMatchInfo, MatchType } from "@18x18az/rosetta";
+import { FIELD_CONTROL, IMatchInfo, MATCH_TYPE } from "@18x18az/rosetta";
 
 export function makeMatchName(match: IMatchInfo): string {
     const matchType = match.type;
     let matchTypeText = ""
-    if (matchType === MatchType.QUAL) {
+    if (matchType === MATCH_TYPE.QUAL) {
         matchTypeText = "Qualification"
-    } else if (matchType === MatchType.R16) {
+    } else if (matchType === MATCH_TYPE.R16) {
         matchTypeText = "Round of 16"
-    } else if (matchType === MatchType.QF) {
+    } else if (matchType === MATCH_TYPE.QF) {
         matchTypeText = "Quarterfinals"
-    } else if (matchType === MatchType.SF) {
+    } else if (matchType === MATCH_TYPE.SF) {
         matchTypeText = "Semifinals"
-    } else if (matchType === MatchType.F) {
+    } else if (matchType === MATCH_TYPE.F) {
         matchTypeText = "Finals"
     }
 
@@ -28,15 +28,15 @@ export function makeMatchName(match: IMatchInfo): string {
 export function makeShortMatchName(match: IMatchInfo): string {
     const matchType = match.type;
     let matchTypeText = ""
-    if (matchType === MatchType.QUAL) {
+    if (matchType === MATCH_TYPE.QUAL) {
         matchTypeText = "Q"
-    } else if (matchType === MatchType.R16) {
+    } else if (matchType === MATCH_TYPE.R16) {
         matchTypeText = "R16"
-    } else if (matchType === MatchType.QF) {
+    } else if (matchType === MATCH_TYPE.QF) {
         matchTypeText = "QF"
-    } else if (matchType === MatchType.SF) {
+    } else if (matchType === MATCH_TYPE.SF) {
         matchTypeText = "SF"
-    } else if (matchType === MatchType.F) {
+    } else if (matchType === MATCH_TYPE.F) {
         matchTypeText = "F"
     }
 
@@ -50,11 +50,11 @@ export function makeShortMatchName(match: IMatchInfo): string {
     return `${matchTypeText} ${matchNumber}${subNumber}`
 }
 
-export function makeControlText(control: FieldControl): string {
+export function makeControlText(control: FIELD_CONTROL): string {
     let text = ""
-    if (control === FieldControl.AUTONOMOUS) {
+    if (control === FIELD_CONTROL.AUTONOMOUS) {
         text = "Auto";
-    } else if (control === FieldControl.DRIVER) {
+    } else if (control === FIELD_CONTROL.DRIVER) {
         text = "Driver";
     }
 

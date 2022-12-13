@@ -1,9 +1,9 @@
-import { IAllianceSelectionStatus, IAllianceTeams, IPath, TeamId, Teams } from "@18x18az/rosetta";
+import { IAllianceSelectionStatus, IAllianceTeams, IPath, TeamId, ITeams } from "@18x18az/rosetta";
 import { Component } from "react";
 
 interface IRemainingTeamProps {
     team: TeamId
-    teams: Teams
+    teams: ITeams
 }
 
 function RemainingTeam(props: IRemainingTeamProps) {
@@ -15,7 +15,7 @@ function RemainingTeam(props: IRemainingTeamProps) {
 
 interface IRemainingProps {
     remaining: Array<TeamId>
-    teams: Teams
+    teams: ITeams
 }
 
 function Remaining(props: IRemainingProps) {
@@ -37,7 +37,7 @@ function Remaining(props: IRemainingProps) {
 
 interface IPickingProps {
     picking: TeamId | null
-    teams: Teams
+    teams: ITeams
 }
 
 function Picking(props: IPickingProps) {
@@ -57,7 +57,7 @@ function Picking(props: IPickingProps) {
 interface IAllianceProps {
     alliance: IAllianceTeams
     number: number
-    teams: Teams
+    teams: ITeams
 }
 
 function Alliance(props: IAllianceProps) {
@@ -70,7 +70,7 @@ function Alliance(props: IAllianceProps) {
 
 interface IAlliancesProps {
     alliances: Array<IAllianceTeams>
-    teams: Teams
+    teams: ITeams
 }
 
 function Alliances(props: IAlliancesProps) {
@@ -90,7 +90,7 @@ function Alliances(props: IAlliancesProps) {
 }
 
 interface AllianceSelectionDisplayProps {
-    teams: Teams | null
+    teams: ITeams | null
     lastMessagePath: IPath | null
     lastMessageBody: any
 }

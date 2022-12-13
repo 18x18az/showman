@@ -1,4 +1,4 @@
-import { DisplayState, IAward, IAwards, IPath, Teams } from "@18x18az/rosetta";
+import { DISPLAY_STATE, IAward, IAwards, IPath, ITeams } from "@18x18az/rosetta";
 import { Component } from "react";
 import { talos } from "../ws";
 import { CycleTimePanel } from "./CycleTimePanel";
@@ -22,7 +22,7 @@ function Award(props: IAwardProps) {
     </div>
 }
 interface AwardPanelProps {
-    teams: Teams | null
+    teams: ITeams | null
     lastMessagePath: IPath | null
     lastMessageBody: any
 }
@@ -85,7 +85,7 @@ class AwardPanel extends Component<AwardPanelProps, AwardPanelState> {
 }
 
 interface NormalControlPanelProps {
-    teams: Teams | null
+    teams: ITeams | null
     lastMessagePath: IPath | null
     lastMessageBody: any
 }
@@ -102,11 +102,11 @@ function refreshAwards() {
 }
 
 function showScores() {
-    talos.post(['display'], DisplayState.SCORE);
+    talos.post(['display'], DISPLAY_STATE.SCORE);
 }
 
 function showUpcoming() {
-    talos.post(['display'], DisplayState.UPCOMING);
+    talos.post(['display'], DISPLAY_STATE.UPCOMING);
 }
 
 export class NormalControlPanel extends Component<NormalControlPanelProps, NormalControlPanelState> {

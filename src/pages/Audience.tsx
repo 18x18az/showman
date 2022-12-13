@@ -1,4 +1,4 @@
-import { DisplayState, IMatchList, IMessage, IPath, Teams } from "@18x18az/rosetta";
+import { DISPLAY_STATE, IMatchList, IMessage, IPath, ITeams } from "@18x18az/rosetta";
 import { Component } from "react";
 import { talos } from "../ws";
 import { AllianceSelectionDisplay } from "./AllianceSelectionDisplay";
@@ -11,20 +11,20 @@ enum AudienceMode {
     ALLIANCE_SELECTION
 }
 interface AudienceProps {
-    teams: Teams | null
+    teams: ITeams | null
     matches: IMatchList | null
     lastMessagePath: IPath | null
     lastMessageBody: any
 }
 interface AudienceState {
-    mode: DisplayState
+    mode: DISPLAY_STATE
 }
 export class Audience extends Component<AudienceProps, AudienceState> {
     constructor(props: AudienceProps) {
         super(props);
         talos.get(['display']);
         this.state = {
-            mode: DisplayState.UPCOMING
+            mode: DISPLAY_STATE.UPCOMING
         }
     }
 
@@ -35,7 +35,7 @@ export class Audience extends Component<AudienceProps, AudienceState> {
                 const display = nextProps.lastMessageBody;
                 console.log(`Display mode changed to ${display}`)
 
-                if (display === DisplayState.ALLIANCE) {
+                if (display === DISPLAY_STATE.ALLIANCE) {
                     talos.get(['allianceSelection']);
                 }
 
@@ -49,27 +49,27 @@ export class Audience extends Component<AudienceProps, AudienceState> {
     render() {
         const mode = this.state.mode;
 
-        if (mode === DisplayState.UPCOMING) {
+        if (mode === DISPLAY_STATE.UPCOMING) {
             return <Upcoming
                 teams={this.props.teams}
                 matches={this.props.matches}
                 lastMessageBody={this.props.lastMessageBody}
                 lastMessagePath={this.props.lastMessagePath}
             />
-        } else if (mode === DisplayState.ALLIANCE) {
+        } else if (mode === DISPLAY_STATE.ALLIANCE) {
             return <AllianceSelectionDisplay
                 teams={this.props.teams}
                 lastMessageBody={this.props.lastMessageBody}
                 lastMessagePath={this.props.lastMessagePath}
             />
-        } else if (mode === DisplayState.SCORE) {
+        } else if (mode === DISPLAY_STATE.SCORE) {
             return <Score
                 teams={this.props.teams}
                 matches={this.props.matches}
                 lastMessageBody={this.props.lastMessageBody}
                 lastMessagePath={this.props.lastMessagePath}
             />
-        } else if (mode === DisplayState.AWARD) {
+        } else if (mode === DISPLAY_STATE.AWARD) {
             return <Award
             teams={this.props.teams}
             lastMessageBody={this.props.lastMessageBody}

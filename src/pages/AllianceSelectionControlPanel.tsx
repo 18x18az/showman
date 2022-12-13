@@ -1,4 +1,4 @@
-import { DisplayState, IAllianceSelectionStatus, IPath, TeamId, Teams } from "@18x18az/rosetta";
+import { DISPLAY_STATE, IAllianceSelectionStatus, IPath, TeamId, ITeams } from "@18x18az/rosetta";
 import { Component } from "react";
 import { talos } from "../ws";
 
@@ -27,13 +27,13 @@ function noShowCb() {
 }
 
 function finalizeCb() {
-    talos.post(['display'], DisplayState.UPCOMING);
+    talos.post(['display'], DISPLAY_STATE.UPCOMING);
 }
 
 interface PopupProps {
     picker: TeamId
     picked: TeamId
-    teams: Teams
+    teams: ITeams
 }
 
 function Popup(props: PopupProps) {
@@ -53,7 +53,7 @@ function Popup(props: PopupProps) {
     );
 }
 interface IChoiceProps {
-    teams: Teams
+    teams: ITeams
     choice: TeamId
 }
 
@@ -63,7 +63,7 @@ function Choice(props: IChoiceProps) {
     return <button onClick={() => chooseCb(choice)} key={choice} className="team">{choiceName}</button>
 }
 interface IChoicesProps {
-    teams: Teams
+    teams: ITeams
     choices: Array<TeamId>
 }
 
@@ -84,7 +84,7 @@ function Choices(props: IChoicesProps) {
 }
 interface IPickingProps {
     picking: TeamId | null
-    teams: Teams
+    teams: ITeams
 }
 
 function Picking(props: IPickingProps) {
@@ -96,7 +96,7 @@ function Picking(props: IPickingProps) {
     }
 }
 interface AllianceSelectionControlPanelProps {
-    teams: Teams | null
+    teams: ITeams | null
     lastMessagePath: IPath | null
     lastMessageBody: any
 }
