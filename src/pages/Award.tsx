@@ -1,9 +1,9 @@
-import { IAward, IPath, TeamId, Teams } from "@18x18az/rosetta";
+import { IAward, IPath, TeamId, ITeams } from "@18x18az/rosetta";
 import { Component } from "react";
 import { talos } from "../ws";
 
 interface IWinnerProps {
-    teams: Teams
+    teams: ITeams
     winner: TeamId | null
 }
 
@@ -27,7 +27,7 @@ function Winner(props: IWinnerProps) {
 }
 
 interface AwardProps {
-    teams: Teams | null
+    teams: ITeams | null
     lastMessagePath: IPath | null
     lastMessageBody: any
 }
@@ -62,7 +62,7 @@ export class Award extends Component<AwardProps, AwardState> {
             return <div className="stream">
                 <div className="award">
                     <div className="title">{award.name}</div>
-                    <Winner teams={this.props.teams} winner={award.winner} />
+                    <Winner teams={this.props.teams} winner={award.winner as TeamId} />
                 </div>
             </div>
         } else {

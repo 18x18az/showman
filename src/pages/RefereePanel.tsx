@@ -1,4 +1,4 @@
-import { DisplayState, IPath, TeamId, Teams } from "@18x18az/rosetta";
+import { DISPLAY_STATE, IPath, TeamId, ITeams } from "@18x18az/rosetta";
 import { Component } from "react";
 import { talos } from "../ws";
 
@@ -29,8 +29,8 @@ interface IVRCSpinUpScore {
 
 interface IVRCSpinUpMatch {
     name: string
-    teamsBlue: Teams
-    teamsRed: Teams
+    teamsBlue: ITeams
+    teamsRed: ITeams
 
     scoreBlue: IVRCSpinUpScore
     scoreRed: IVRCSpinUpScore

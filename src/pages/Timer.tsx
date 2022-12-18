@@ -1,4 +1,4 @@
-import { FieldControl, IAllianceTeams, IFieldInfo, IFieldState, IMatchList, IPath, Teams } from "@18x18az/rosetta";
+import { FIELD_CONTROL, IAllianceTeams, IFieldInfo, IFieldState, IMatchList, IPath, ITeams } from "@18x18az/rosetta";
 import { Component } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { determineMatch } from "../utils/Field";
@@ -20,7 +20,7 @@ function play(audio: HTMLAudioElement) {
 interface IAllianceProps {
     color: string
     alliance: IAllianceTeams
-    teams: Teams
+    teams: ITeams
 }
 
 function Alliance(props: IAllianceProps) {
@@ -39,13 +39,13 @@ function Alliance(props: IAllianceProps) {
 }
 
 interface IClockProps {
-    mode: FieldControl,
+    mode: FIELD_CONTROL,
     time: number
 }
 
 function Clock(props: IClockProps) {
     const mode = (props.mode);
-    if (mode === FieldControl.AUTONOMOUS || mode === FieldControl.DRIVER || mode === FieldControl.TIMEOUT) {
+    if (mode === FIELD_CONTROL.AUTONOMOUS || mode === FIELD_CONTROL.DRIVER || mode === FIELD_CONTROL.TIMEOUT) {
         const timeText = makeClockText(props.time);
         return <div className="clock">{timeText}</div>
     } else {
@@ -63,7 +63,7 @@ function MatchLabel(props: IMatchLabelProps) {
 }
 
 interface IModeProps {
-    mode: FieldControl
+    mode: FIELD_CONTROL
 }
 
 function Mode(props: IModeProps) {
@@ -72,7 +72,7 @@ function Mode(props: IModeProps) {
 }
 
 interface TimerProps {
-    teams: Teams | null
+    teams: ITeams | null
     matches: IMatchList | null
     lastMessagePath: IPath | null
     lastMessageBody: any
@@ -90,17 +90,17 @@ interface TimerState {
 
 
 function handleAudio(current: IFieldState, newField: IFieldState) {
-    if (current.control !== FieldControl.AUTONOMOUS && current.control !== FieldControl.DRIVER) {
-        if (newField.control === FieldControl.AUTONOMOUS || newField.control === FieldControl.DRIVER) {
+    if (current.control !== FIELD_CONTROL.AUTONOMOUS && current.control !== FIELD_CONTROL.DRIVER) {
+        if (newField.control === FIELD_CONTROL.AUTONOMOUS || newField.control === FIELD_CONTROL.DRIVER) {
             play(startAudio);
         }
     } else {
-        if (newField.control === FieldControl.PAUSED) {
+        if (newField.control === FIELD_CONTROL.PAUSED) {
             play(pauseAudio);
-        } else if (newField.control === FieldControl.DISABLED) {
+        } else if (newField.control === FIELD_CONTROL.DISABLED) {
             play(disabledAudio);
         }
-        else if (newField.timeRemaining === 10 && current.timeRemaining === 11 && current.control == FieldControl.DRIVER) {
+        else if (newField.timeRemaining === 10 && current.timeRemaining === 11 && current.control == FIELD_CONTROL.DRIVER) {
             // TODO: fix after spin up
             play(warningAudio);
         }
@@ -176,8 +176,8 @@ class TimerClass extends Component<ExtendedTimerProps, TimerState> {
                     </div>
                     { match &&
                     <div className="bottom">
-                        <Alliance color="red" alliance={match.red} teams={this.props.teams} />
-                        <Alliance color="blue" alliance={match.blue} teams={this.props.teams} />
+                        <Alliance color="red" alliance={match.red as IAllianceTeams} teams={this.props.teams} />
+                        <Alliance color="blue" alliance={match.blue as IAllianceTeams} teams={this.props.teams} />
                     </div>
         }
                 </div>

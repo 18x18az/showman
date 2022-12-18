@@ -1,4 +1,4 @@
-import { IAllianceTeams, IFieldState, IMatchInfo, IMatchList, IPath, MatchType, Teams } from "@18x18az/rosetta";
+import { IAllianceTeams, IFieldState, IMatchInfo, IMatchList, IPath, MATCH_TYPE, ITeams } from "@18x18az/rosetta";
 import { Component } from "react";
 import { getNextMatches } from "../utils/Match";
 import { makeShortMatchName } from "../utils/TextGenerator";
@@ -7,7 +7,7 @@ import { talos } from "../ws";
 interface IMatchTeamProps {
     alliance: IAllianceTeams
     color: "redMatch" | "blueMatch"
-    teams: Teams
+    teams: ITeams
 }
 
 function MatchTeam(props: IMatchTeamProps) {
@@ -28,12 +28,7 @@ function MatchTeam(props: IMatchTeamProps) {
 
 interface IMatchProps {
     match: IMatchInfo
-    teams: Teams
-}
-
-interface IMatchProps {
-    match: IMatchInfo
-    teams: Teams
+    teams: ITeams
 }
 
 function Match(props: IMatchProps) {
@@ -42,13 +37,13 @@ function Match(props: IMatchProps) {
     const red = props.match.red;
     return <div key={props.match.matchId} className="match">
         <div className="name">{matchName}</div>
-        <MatchTeam alliance={red} color="redMatch" teams={props.teams} />
-        <MatchTeam alliance={blue} color="blueMatch" teams={props.teams} />
+        <MatchTeam alliance={red as IAllianceTeams} color="redMatch" teams={props.teams} />
+        <MatchTeam alliance={blue as IAllianceTeams} color="blueMatch" teams={props.teams} />
     </div>
 }
 
 interface UpcomingProps {
-    teams: Teams | null
+    teams: ITeams | null
     matches: IMatchList | null
     lastMessagePath: IPath | null
     lastMessageBody: any

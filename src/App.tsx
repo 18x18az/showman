@@ -4,7 +4,7 @@ import { NoPage } from './pages/NoPage';
 import { Score } from "./pages/Score";
 import './App.css';
 import { Component } from "react";
-import { IPath, Teams, IMatchList } from "@18x18az/rosetta";
+import { IPath, ITeams, IMatchList } from "@18x18az/rosetta";
 import { talos } from './ws'
 import { Timer } from "./pages/Timer";
 import { Audience } from "./pages/Audience";
@@ -15,7 +15,7 @@ interface IProps {
 }
 
 interface IState {
-  teams: Teams | null
+  teams: ITeams | null
   matches: IMatchList | null
   lastMessagePath: IPath | null
   lastMessagePayload: any
