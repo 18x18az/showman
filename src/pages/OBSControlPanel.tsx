@@ -1,16 +1,10 @@
 import { talos } from "../ws";
 import { useEffect, useState } from 'react';
-import { IPath } from '@18x18az/rosetta';
+import { IPath, IOBSConfig } from '@18x18az/rosetta';
 
 interface ScenePanelProps {
     lastMessagePath: IPath | null
     lastMessageBody: IOBSConfig
-}
-
-interface IOBSConfig {
-    setManual: boolean,
-    isConnected: boolean,
-    attemptReconnect: boolean
 }
 
 const OBSControlPanel = (props: ScenePanelProps) => {
