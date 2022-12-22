@@ -1,15 +1,29 @@
-import { DISPLAY_STATE, IPath, TeamId, ITeams } from "@18x18az/rosetta";
-import { Component, useEffect } from "react";
+import { FIELD_CONTROL, IAllianceTeams, IFieldInfo, IFieldState, IMatchList, IPath, ITeams } from "@18x18az/rosetta";
+import { useEffect } from "react";
 import { talos } from "../ws";
+import { determineMatch } from "../utils/Field";
+import { makeClockText, makeControlText, makeMatchName } from "../utils/TextGenerator";
 
 export const RefereePanel = () => {
+    talos.get(['field']);
+
+    useEffect(() => {
+        
+    });
+
     return (
         <div className="referee">
             <h1 className="matchtitle">match name - field name</h1>
-            <h2>field timer</h2>
+            <h2>mode - field timer</h2>
             <button className="bigbutton">QUEUE NEXT MATCH</button>
-            <h3>red teams</h3>
-            <h3>blue teams</h3>
+            <div className="redteams">
+                <p>2114Z</p>
+                <p>8800X</p>
+            </div>
+            <div className="blueteams">
+                <p>6030J</p>
+                <p>127C</p>
+            </div>
         </div>
     )
 }
