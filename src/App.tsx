@@ -102,7 +102,11 @@ class App extends Component<IProps, IState> {
                 lastMessageBody={this.state.lastMessagePayload} />
             </Route>
             <Route path="/referee">
-              <RefereePanel></RefereePanel>
+              <RefereePanel
+                teams={this.state.teams}
+                matches={this.state.matches}
+                lastMessagePath={this.state.lastMessagePath}
+                lastMessageBody={this.state.lastMessagePayload} />
             </Route>
             <Route path="*">
               <NoPage />
