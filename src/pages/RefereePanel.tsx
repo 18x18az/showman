@@ -21,9 +21,21 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
         super(props);
         talos.get(['field'])
         talos.get(['fields'])
+
+        this.onStartClick = this.onStartClick.bind(this);
     }
-    onClick() {
-        talos.post(["fieldcontrol"], {"type": "QUEUE", "action": "NextMatch"})
+    onQueueClick() {
+        talos.post(["fieldcontrol"], {"type": "QUEUE", "action": "NextMatch", "fieldID": "brrr"})
+        talos.get(['field'])
+        talos.get(['fields'])
+    }
+
+    onStartClick() {
+        if (this.state.field) {
+            console.log("asdfasdfasdfasdf")
+            let fieldID = this.state.field.field;
+            talos.post(["fieldcontrol"], {"type": "MATCH", "action": "start", "fieldID": fieldID});
+        }
         talos.get(['field'])
         talos.get(['fields'])
     }
@@ -52,6 +64,7 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
         let control = "mode";
         let time = "time";
         let redTeam1 = "RED1", redTeam2 = "RED2", blueTeam1 = "BLUE1", blueTeam2 = "BLUE2";
+        let controlButtonName = "ABORT MATCH";
         if (this.state && this.state.fields && this.state.field && this.props.teams && this.props.matches) {
 
             // get field name
@@ -64,10 +77,15 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
             // get field state
             control = this.state.field.control;
             time = makeClockText(this.state.field.timeRemaining);
+            if (control === "DISABLED") {
+                controlButtonName = "START MATCH";
+            }
+            else if (control === "PAUSED") {
+                controlButtonName = "RESUME MATCH";
+            }
 
             // get match name + teams
             let match = determineMatch(this.state.field.field, this.state.field.field, this.state.fields, this.state.field.match, this.props.matches)
-
             if (match) {
                 matchName = makeMatchName(match);
                 redTeam1 = this.props.teams[(match.red as IAllianceTeams).team1].number;
@@ -81,7 +99,8 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
             <div className="referee">
                 <h1 className="matchtitle">{matchName} - {fieldName}</h1>
                 <h2>{control} - {time}</h2>
-                <button className="bigbutton" onClick={this.onClick}>QUEUE NEXT MATCH</button>
+                <button className="button" onClick={this.onQueueClick}>QUEUE NEXT MATCH</button>
+                <button className="button" onClick={this.onStartClick}>{controlButtonName}</button>
                 <div className="redteams">
                     <p>{redTeam1}</p>
                     <p>{redTeam2}</p>
