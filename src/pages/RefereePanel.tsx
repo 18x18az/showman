@@ -5,17 +5,19 @@ import { determineMatch } from "../utils/Field";
 import { makeClockText, makeControlText, makeMatchName } from "../utils/TextGenerator";
 
 export const RefereePanel = () => {
-    talos.get(['field']);
-
     useEffect(() => {
         
     });
+
+    function onClick() {
+        talos.post(["fieldcontrol"], {"type": "QUEUE", "action": "NextMatch"})
+    }
 
     return (
         <div className="referee">
             <h1 className="matchtitle">match name - field name</h1>
             <h2>mode - field timer</h2>
-            <button className="bigbutton">QUEUE NEXT MATCH</button>
+            <button className="bigbutton" onClick={onClick}>QUEUE NEXT MATCH</button>
             <div className="redteams">
                 <p>2114Z</p>
                 <p>8800X</p>
