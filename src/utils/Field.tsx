@@ -1,4 +1,4 @@
-import { IFieldInfo, IMatchInfo, IMatchList } from "@18x18az/rosetta";
+import { IFieldInfo, IMatchInfo, IMatchList, IFieldState } from "@18x18az/rosetta";
 import { getMatchByOffset, getMatchByString } from "./Match";
 
 function getFieldPosition(field: string, fields: Array<IFieldInfo>): number{
@@ -25,4 +25,45 @@ export function determineMatch(relevantField: string, activeField: string, field
     }
 
     return getMatchByOffset(matches, currentMatch, difference);
+}
+
+export function isPreMatch(state: IFieldState): boolean {
+    if (!state) {
+        return false;
+    }
+    else if (state.control === "DISABLED" && state.timeRemaining !== 0) {
+        return true;
+    }
+    return false;
+}
+
+export function isInMatch(state: IFieldState): boolean {
+    // check if null
+    if (!state) {
+        return false;
+    }
+    // in match
+    else if (state.control === "AUTO" ||
+            state.control === "DRIVER") {
+        return true;
+    }
+    return false;
+}
+
+export function isMatchPaused(state: IFieldState): boolean {
+    if (state && state.control === "PAUSED") {
+        return true;
+    }
+    else return false;
+}
+
+export function isMatchEnded(state: IFieldState): boolean {
+    if (!state) {
+        return false;
+    }
+    else if (state.timeRemaining === 0 &&
+            state.control === "DISABLED") {
+        return true;
+    }
+    return false;
 }

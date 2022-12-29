@@ -1,7 +1,7 @@
 import { IFieldInfo, IFieldState, IMatchList, IPath, ITeams, IAllianceTeams } from "@18x18az/rosetta";
 import { Component } from "react";
 import { talos } from "../ws";
-import { determineMatch } from "../utils/Field";
+import { determineMatch, isPreMatch, isInMatch, isMatchPaused, isMatchEnded} from "../utils/Field";
 import { makeClockText, makeMatchName } from "../utils/TextGenerator";
 
 interface RefereeProps {
@@ -14,7 +14,11 @@ interface RefereeProps {
 interface RefereeState {
     field: IFieldState | null
     fields: Array<IFieldInfo> | null
+    disableQueue: boolean
+    disableStart: boolean
 }
+
+
 
 export class RefereePanel extends Component<RefereeProps, RefereeState> {
     constructor(props: RefereeProps) {
@@ -23,16 +27,30 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
         talos.get(['fields'])
 
         this.onStartClick = this.onStartClick.bind(this);
+        this.onQueueClick = this.onQueueClick.bind(this);
+
+        this.state = {
+            disableQueue: false,
+            disableStart: false,
+            field: null,
+            fields: null
+        }
     }
+
     onQueueClick() {
+        // lock out queue button after queuing the next match
+        this.setState({ disableQueue: true });
+        setTimeout(() => this.setState({ disableQueue: false }), 1000);
+
+        // send queue action
         talos.post(["fieldcontrol"], {"type": "QUEUE", "action": "NextMatch", "fieldID": "brrr"})
         talos.get(['field'])
         talos.get(['fields'])
     }
 
     onStartClick() {
-        if (this.state.field) {
-            console.log("asdfasdfasdfasdf")
+        // TODO: since we lock the button in the HTML, is this if statement needed?
+        if (this.state.field && (this.state.field.timeRemaining !== 0 || this.state.field.control === "PAUSED")) {
             let fieldID = this.state.field.field;
             talos.post(["fieldcontrol"], {"type": "MATCH", "action": "start", "fieldID": fieldID});
         }
@@ -45,7 +63,8 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
             const route = nextProps.lastMessagePath[0];
             if (route === "field") {
                 return ({
-                    field: nextProps.lastMessageBody
+                    field: nextProps.lastMessageBody,
+                    disableStart: isInMatch(nextProps.lastMessageBody) || isMatchEnded(nextProps.lastMessageBody)
                 })
             }
             else if (route === "fields") {
@@ -64,7 +83,8 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
         let control = "mode";
         let time = "time";
         let redTeam1 = "RED1", redTeam2 = "RED2", blueTeam1 = "BLUE1", blueTeam2 = "BLUE2";
-        let controlButtonName = "ABORT MATCH";
+        let queueButtonName = this.state.disableQueue ? "LOCKED" : "QUEUE NEXT MATCH";
+        let controlButtonName = this.state.disableStart ? "LOCKED" : "START MATCH";
         if (this.state && this.state.fields && this.state.field && this.props.teams && this.props.matches) {
 
             // get field name
@@ -77,10 +97,7 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
             // get field state
             control = this.state.field.control;
             time = makeClockText(this.state.field.timeRemaining);
-            if (control === "DISABLED") {
-                controlButtonName = "START MATCH";
-            }
-            else if (control === "PAUSED") {
+            if (control === "PAUSED") {
                 controlButtonName = "RESUME MATCH";
             }
 
@@ -99,8 +116,11 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
             <div className="referee">
                 <h1 className="matchtitle">{matchName} - {fieldName}</h1>
                 <h2>{control} - {time}</h2>
-                <button className="button" onClick={this.onQueueClick}>QUEUE NEXT MATCH</button>
-                <button className="button" onClick={this.onStartClick}>{controlButtonName}</button>
+                <button className="button" onClick={this.onQueueClick} disabled={this.state.disableQueue}>
+                    {queueButtonName}</button>
+                <br></br>
+                <button className="button" onClick={this.onStartClick} disabled={this.state.disableStart}>
+                    {controlButtonName}</button>
                 <div className="redteams">
                     <p>{redTeam1}</p>
                     <p>{redTeam2}</p>
