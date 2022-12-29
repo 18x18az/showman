@@ -43,9 +43,9 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
         setTimeout(() => this.setState({ disableQueue: false }), 1000);
 
         // send queue action
-        talos.post(["fieldcontrol"], {"type": "QUEUE", "action": "NextMatch", "fieldID": "brrr"})
-        talos.get(['field'])
-        talos.get(['fields'])
+        talos.post(["fieldcontrol"], {"type": "QUEUE", "action": "NextMatch", "fieldID": "brrr"});
+        talos.get(['field']);
+        talos.get(['fields']);
     }
 
     onStartClick() {
@@ -54,8 +54,8 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
             let fieldID = this.state.field.field;
             talos.post(["fieldcontrol"], {"type": "MATCH", "action": "start", "fieldID": fieldID});
         }
-        talos.get(['field'])
-        talos.get(['fields'])
+        talos.get(['field']);
+        talos.get(['fields']);
     }
 
     static getDerivedStateFromProps(nextProps: RefereeProps, prevState: RefereeState) {
@@ -64,7 +64,8 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
             if (route === "field") {
                 return ({
                     field: nextProps.lastMessageBody,
-                    disableStart: isInMatch(nextProps.lastMessageBody) || isMatchEnded(nextProps.lastMessageBody)
+                    disableStart: isInMatch(nextProps.lastMessageBody) || isMatchEnded(nextProps.lastMessageBody),
+                    disableQueue: !isMatchEnded(nextProps.lastMessageBody)
                 })
             }
             else if (route === "fields") {
@@ -83,7 +84,7 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
         let control = "mode";
         let time = "time";
         let redTeam1 = "RED1", redTeam2 = "RED2", blueTeam1 = "BLUE1", blueTeam2 = "BLUE2";
-        let queueButtonName = this.state.disableQueue || !isMatchEnded(this.state.field) ? "LOCKED" : "QUEUE NEXT MATCH";
+        let queueButtonName = this.state.disableQueue ? "LOCKED" : "QUEUE NEXT MATCH";
         let controlButtonName = this.state.disableStart ? "LOCKED" : "START MATCH";
         if (this.state && this.state.fields && this.state.field && this.props.teams && this.props.matches) {
 
@@ -116,12 +117,10 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
             <div className="referee">
                 <h1 className="matchtitle">{matchName} - {fieldName}</h1>
                 <h2>{control} - {time}</h2>
-                <button className="button" onClick={this.onQueueClick}
-                    disabled={this.state.disableQueue || !isMatchEnded(this.state.field)}>
+                <button className="button" onClick={this.onQueueClick} disabled={this.state.disableQueue}>
                     {queueButtonName}</button>
                 <br></br>
-                <button className="button" onClick={this.onStartClick}
-                    disabled={this.state.disableStart}>
+                <button className="button" onClick={this.onStartClick} disabled={this.state.disableStart}>
                     {controlButtonName}</button>
                 <div className="redteams">
                     <p>{redTeam1}</p>
