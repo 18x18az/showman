@@ -83,7 +83,7 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
         let control = "mode";
         let time = "time";
         let redTeam1 = "RED1", redTeam2 = "RED2", blueTeam1 = "BLUE1", blueTeam2 = "BLUE2";
-        let queueButtonName = this.state.disableQueue ? "LOCKED" : "QUEUE NEXT MATCH";
+        let queueButtonName = this.state.disableQueue || !isMatchEnded(this.state.field) ? "LOCKED" : "QUEUE NEXT MATCH";
         let controlButtonName = this.state.disableStart ? "LOCKED" : "START MATCH";
         if (this.state && this.state.fields && this.state.field && this.props.teams && this.props.matches) {
 
@@ -116,10 +116,12 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
             <div className="referee">
                 <h1 className="matchtitle">{matchName} - {fieldName}</h1>
                 <h2>{control} - {time}</h2>
-                <button className="button" onClick={this.onQueueClick} disabled={this.state.disableQueue}>
+                <button className="button" onClick={this.onQueueClick}
+                    disabled={this.state.disableQueue || !isMatchEnded(this.state.field)}>
                     {queueButtonName}</button>
                 <br></br>
-                <button className="button" onClick={this.onStartClick} disabled={this.state.disableStart}>
+                <button className="button" onClick={this.onStartClick}
+                    disabled={this.state.disableStart}>
                     {controlButtonName}</button>
                 <div className="redteams">
                     <p>{redTeam1}</p>

@@ -27,7 +27,7 @@ export function determineMatch(relevantField: string, activeField: string, field
     return getMatchByOffset(matches, currentMatch, difference);
 }
 
-export function isPreMatch(state: IFieldState): boolean {
+export function isPreMatch(state: IFieldState | null): boolean {
     if (!state) {
         return false;
     }
@@ -37,7 +37,7 @@ export function isPreMatch(state: IFieldState): boolean {
     return false;
 }
 
-export function isInMatch(state: IFieldState): boolean {
+export function isInMatch(state: IFieldState | null): boolean {
     // check if null
     if (!state) {
         return false;
@@ -50,14 +50,14 @@ export function isInMatch(state: IFieldState): boolean {
     return false;
 }
 
-export function isMatchPaused(state: IFieldState): boolean {
+export function isMatchPaused(state: IFieldState | null): boolean {
     if (state && state.control === "PAUSED") {
         return true;
     }
     else return false;
 }
 
-export function isMatchEnded(state: IFieldState): boolean {
+export function isMatchEnded(state: IFieldState | null): boolean {
     if (!state) {
         return false;
     }
