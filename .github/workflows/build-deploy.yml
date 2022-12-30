@@ -8,6 +8,9 @@ on:
     branches:
       - beta
 
+env:
+  CI: false
+
 jobs:
   build:
     name: Build
@@ -23,13 +26,13 @@ jobs:
         node-version: 13.x
     
     - name: Install NPM packages
-      run: npm ci
+      run: yarn install
     
     - name: Build project
-      run: npm run build
+      run: yarn build
     
     - name: Run tests
-      run: npm run test
+      run: yarn test
 
     - name: Upload production-ready build files
       uses: actions/upload-artifact@v2
@@ -41,7 +44,7 @@ jobs:
     name: Deploy
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/beta'
     
     steps:
     - name: Download artifact
