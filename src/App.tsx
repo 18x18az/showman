@@ -1,15 +1,16 @@
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { ControlPanel } from "./pages/ControlPanel";
+import { ControlPanel } from "./pages/admin/Admin";
 import { NoPage } from './pages/NoPage';
-import { Score } from "./pages/Score";
+import { Score } from "./pages/audience/Score";
 import './App.css';
 import { Component } from "react";
 import { IPath, ITeams, IMatchList } from "@18x18az/rosetta";
 import { talos } from './ws'
-import { Timer } from "./pages/Timer";
-import { Audience } from "./pages/Audience";
-import { Upcoming } from "./pages/Upcoming";
-import { RefereePanel } from "./pages/RefereePanel";
+import { Timer } from "./pages/timer/Timer";
+import { Audience } from "./pages/audience/Audience";
+import { Upcoming } from "./pages/audience/Upcoming";
+import { RefereePanel } from "./pages/tablet/RefereePanel";
+import { Pit } from "./pages/pit/Pit";
 
 interface IProps {
 }
@@ -64,6 +65,13 @@ class App extends Component<IProps, IState> {
         <BrowserRouter>
           <Switch>
             <Route exact path="/">
+              <Pit
+                teams={this.state.teams}
+                lastMessagePath={this.state.lastMessagePath}
+                lastMessageBody={this.state.lastMessagePayload}
+              />
+            </Route>
+            <Route exact path="/admin">
               <ControlPanel
                 teams={this.state.teams}
                 lastMessagePath={this.state.lastMessagePath}
@@ -78,28 +86,13 @@ class App extends Component<IProps, IState> {
                 lastMessageBody={this.state.lastMessagePayload}
               />
             </Route>
-            <Route path="/timer/:field?">
+            <Route path="/timer">
               <Timer
                 teams={this.state.teams}
                 matches={this.state.matches}
                 lastMessagePath={this.state.lastMessagePath}
                 lastMessageBody={this.state.lastMessagePayload}
               />
-            </Route>
-            <Route path="/upcoming">
-              <Upcoming
-                teams={this.state.teams}
-                matches={this.state.matches}
-                lastMessagePath={this.state.lastMessagePath}
-                lastMessageBody={this.state.lastMessagePayload}
-              />
-            </Route>
-            <Route path="/score">
-              <Score
-                teams={this.state.teams}
-                matches={this.state.matches}
-                lastMessagePath={this.state.lastMessagePath}
-                lastMessageBody={this.state.lastMessagePayload} />
             </Route>
             <Route path="/referee">
               <RefereePanel></RefereePanel>

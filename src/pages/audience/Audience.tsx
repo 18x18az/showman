@@ -1,6 +1,6 @@
 import { DISPLAY_STATE, IMatchList, IMessage, IPath, ITeams } from "@18x18az/rosetta";
 import { Component } from "react";
-import { talos } from "../ws";
+import { talos } from "../../ws";
 import { AllianceSelectionDisplay } from "./AllianceSelectionDisplay";
 import { Award } from "./Award";
 import { Score } from "./Score";
