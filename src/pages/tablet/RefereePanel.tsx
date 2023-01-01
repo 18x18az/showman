@@ -1,6 +1,6 @@
 import { DISPLAY_STATE, IPath, TeamId, ITeams } from "@18x18az/rosetta";
 import { Component } from "react";
-import { talos } from "../ws";
+import { talos } from "../../ws";
 
 /**
  * info we need from talos:

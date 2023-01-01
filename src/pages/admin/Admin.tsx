@@ -1,7 +1,7 @@
 import { DISPLAY_STATE, IPath, ITeams } from "@18x18az/rosetta";
 import { Component } from "react";
-import { talos } from "../ws";
-import { AllianceSelectionControlPanel } from "./AllianceSelectionControlPanel";
+import { talos } from "../../ws";
+import { AllianceSelectionControlPanel } from "../tablet/AllianceSelectionControlPanel";
 import { NormalControlPanel } from "./NormalControlPanel";
 
 enum ControlMode {
