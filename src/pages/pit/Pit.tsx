@@ -1,5 +1,6 @@
 import { IPath, ITeams } from "@18x18az/rosetta";
 import { Component } from "react";
+import { Default } from "./Default";
 
 interface PitProps {
     teams: ITeams | null
@@ -23,6 +24,6 @@ export class Pit extends Component<PitProps, PitState> {
     }
 
     render() {
-        return <div>Hi</div>
+        return <Default/>
     }
 };
