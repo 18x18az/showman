@@ -11,6 +11,7 @@ import { Audience } from "./pages/audience/Audience";
 import { Upcoming } from "./pages/audience/Upcoming";
 import { RefereePanel } from "./pages/tablet/RefereePanel";
 import { Pit } from "./pages/pit/Pit";
+import { DebugPanel } from "./pages/Debug";
 
 interface IProps {
 }
@@ -77,6 +78,9 @@ class App extends Component<IProps, IState> {
                 lastMessagePath={this.state.lastMessagePath}
                 lastMessageBody={this.state.lastMessagePayload}
               />
+            </Route>
+            <Route exact path="/debug">
+              <DebugPanel/>
             </Route>
             <Route path="/audience">
               <Audience
