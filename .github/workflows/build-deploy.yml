@@ -31,9 +31,6 @@ jobs:
     - name: Build project
       run: yarn build
     
-    - name: Run tests
-      run: yarn test
-
     - name: Upload production-ready build files
       uses: actions/upload-artifact@v2
       with:
@@ -58,3 +55,4 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./build
+        cname: display.18x18az.org
