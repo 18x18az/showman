@@ -8,12 +8,9 @@ interface InspectionProps {
 }
 
 export const Inspection = (props: InspectionProps) => {
-    console.log("Inspection")
     if(props.inspectionState === null){
         return <Fragment/>
     }
-
-    console.log("has state");
 
     return(
         <div className="inspection">

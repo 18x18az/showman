@@ -48,6 +48,7 @@ export class Pit extends Component<PitProps, PitState> {
     }
 
     render() {
+        document.title = "Pit Display"
         let content = <Default />
 
         if (this.props.teams) {
