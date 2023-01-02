@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { ControlPanel } from "./pages/admin/Admin";
+import { ControlPanel } from "./pages/admin/Index";
 import { NoPage } from './pages/NoPage';
 import { Score } from "./pages/audience/Score";
 import './App.css';
