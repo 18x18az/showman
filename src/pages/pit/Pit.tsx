@@ -20,7 +20,7 @@ export class Pit extends Component<PitProps, PitState> {
         talos.get(['stage']);
         talos.get(['inspection']);
         this.state = {
-            stage: COMPETITION_STAGE.INSPECTION,
+            stage: COMPETITION_STAGE.IDLE,
             inspectionStatus: null
         }
     }
