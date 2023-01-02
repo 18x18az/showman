@@ -1,0 +1,17 @@
+.admin {
+    .nav {
+        background-color: var(--lift-color);
+        height: 5vh;
+        display: flex;
+        button {
+            background: none;
+            border: none;
+            color: var(--text-emphasis);
+            font-size: 2.5vh;
+            padding: 0px 0.5em;
+        }
+        button:hover {
+            background-color: var(--lift-color);
+        }
+    }
+}
