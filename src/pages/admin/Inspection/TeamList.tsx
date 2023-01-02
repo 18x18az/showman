@@ -19,16 +19,19 @@ interface TeamListProps {
 
 export const TeamList = (props: TeamListProps) => {
     const number = props.teams.length;
-    if(number === 0){
-        return <Fragment/>
+    if (number === 0) {
+        return <Fragment />
     }
-    const barComponents = props.teams.map((team) => 
-        <TeamInfo key={team} team={team} teamData={props.teamData}/>
+    const barComponents = props.teams.map((team) =>
+        <TeamInfo key={team} team={team} teamData={props.teamData} />
     );
-    return(
+    return (
         <div className="teamList">
-            <h2>{props.title} - {number}</h2>
-            {barComponents}
+            <h2>{props.title}</h2>
+            <div className="teams">
+                {barComponents}
+            </div>
+
         </div>
     );
 }
