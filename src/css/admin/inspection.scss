@@ -2,7 +2,38 @@
     .inspectionContainer {
         margin-left: 1em;
         display: flex;
-        gap: 3em;
+        gap: 1.5em;
+        margin-top: 1em;
         margin-bottom: 1em;
+        .teamList {
+            h2 {
+                color: var(--text-emphasis);
+                margin-top: 0;
+                margin-bottom: 0.5em;
+            }
+            background-color: var(--lift-color);
+            padding: 0.5em;
+            color: var(--text-medium);
+            border-radius: 0.2em;
+            font-size: 2vh;
+        }
+    }
+    .contents {
+        button {
+            color: var(--text-emphasis);
+            font-size: 2vh;
+            background-color: var(--lift-color);
+            border-color: var(--color-lift);
+            border-style: solid;
+            padding: 1vh;
+            position: absolute;
+            left: 50%;
+            bottom: 1vh;
+            transform: translate(-50%, 0);
+        }
+        button:hover {
+            background-color: var(--color-lift);
+            border-color: var(--lift-color);
+        }
     }
 }
