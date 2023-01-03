@@ -1,29 +1,39 @@
-import { IAward, IPath, TeamId, ITeams } from "@18x18az/rosetta";
+import { IAward, IPath, TeamId, ITeams, IAllianceTeams } from "@18x18az/rosetta";
 import { Component } from "react";
 import { talos } from "../../ws";
 
-interface IWinnerProps {
+interface IWinnersProps {
     teams: ITeams
-    winner: TeamId | null
+    winner: TeamId | null | IAllianceTeams
 }
 
-function Winner(props: IWinnerProps) {
+function Winners(props: IWinnersProps) {
     if (!props.winner) {
         return <div></div>
     }
 
-    const winner = props.teams[props.winner];
+    if (typeof props.winner !== 'string') {
+        const winner1 = props.teams[props.winner.team1];
+        const winner2 = props.teams[props.winner.team2];
 
-    let name = winner.name;
-    const max_length = 45;
-    if (name.length > max_length) {
-        name = name.substring(0, max_length)
+        return <div className="winner">
+            <div>{winner1.number} - {winner1.name}</div>
+            <div>{winner2.number} - {winner2.name}</div>
+        </div>
+    } else {
+        const winner = props.teams[props.winner];
+
+        let name = winner.name;
+        const max_length = 45;
+        if (name.length > max_length) {
+            name = name.substring(0, max_length)
+        }
+
+        return <div className="winner">
+            <div>{winner.number} - {name}</div>
+            <div>{winner.school}, {winner.location}</div>
+        </div>
     }
-
-    return <div className="winner">
-        <div>{winner.number} - {name}</div>
-        <div>{winner.school}, {winner.location}</div>
-    </div>
 }
 
 interface AwardProps {
@@ -62,7 +72,7 @@ export class Award extends Component<AwardProps, AwardState> {
             return <div className="stream">
                 <div className="award">
                     <div className="title">{award.name}</div>
-                    <Winner teams={this.props.teams} winner={award.winner as TeamId} />
+                    <Winners teams={this.props.teams} winner={award.winner as TeamId} />
                 </div>
             </div>
         } else {
