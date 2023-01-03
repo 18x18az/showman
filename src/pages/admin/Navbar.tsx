@@ -5,7 +5,8 @@ export enum ControlMode {
     INSPECTION = "Inspection",
     DISPLAY = "Display",
     MATCH = "Match",
-    ALLIANCE = "Alliance Selection"
+    ALLIANCE = "Alliance Selection",
+    AWARDS = "Awards"
 }
 
 const bars = new Map();
@@ -14,6 +15,7 @@ bars.set(COMPETITION_STAGE.INSPECTION, [ControlMode.INSPECTION, ControlMode.DISP
 bars.set(COMPETITION_STAGE.QUALS, [ControlMode.MATCH, ControlMode.DISPLAY, ControlMode.ALLIANCE])
 bars.set(COMPETITION_STAGE.IDLE, [ControlMode.DISPLAY])
 bars.set(COMPETITION_STAGE.ALLIANCE, [ControlMode.MATCH, ControlMode.DISPLAY, ControlMode.ALLIANCE])
+bars.set(COMPETITION_STAGE.ELIMS, [ControlMode.MATCH, ControlMode.DISPLAY, ControlMode.AWARDS])
 
 interface NavbarProps {
     stage: COMPETITION_STAGE

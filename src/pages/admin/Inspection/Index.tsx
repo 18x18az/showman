@@ -28,7 +28,7 @@ export const Inspection = (props: InspectionProps) => {
                 <TeamList title="Partial" teams={props.inspectionState.partial} teamData={props.teams}/>
                 <TeamList title="Complete" teams={props.inspectionState.inspected} teamData={props.teams}/>
             </div>
-            <button onClick={endInspection}>End Inspection</button>
+            <button className="endInspection" onClick={endInspection}>End Inspection</button>
         </Fragment>
     );
 }

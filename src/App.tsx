@@ -12,6 +12,7 @@ import { Upcoming } from "./pages/audience/Upcoming";
 import { RefereePanel } from "./pages/tablet/RefereePanel";
 import { Pit } from "./pages/pit/Pit";
 import { DebugPanel } from "./pages/Debug";
+import { Tablet } from "./pages/tablet/Tablet";
 
 interface IProps {
 }
@@ -89,7 +90,7 @@ class App extends Component<IProps, IState> {
               />
             </Route>
             <Route exact path="/debug">
-              <DebugPanel stage={this.state.stage}/>
+              <DebugPanel stage={this.state.stage} />
             </Route>
             <Route path="/audience">
               <Audience
@@ -108,7 +109,10 @@ class App extends Component<IProps, IState> {
               />
             </Route>
             <Route path="/referee">
-              <RefereePanel></RefereePanel>
+              <Tablet
+                teams={this.state.teams}
+                lastMessagePath={this.state.lastMessagePath}
+                lastMessageBody={this.state.lastMessagePayload} />
             </Route>
             <Route path="*">
               <NoPage />
