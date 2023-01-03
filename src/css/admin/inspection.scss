@@ -29,7 +29,7 @@
         }
     }
     .contents {
-        button {
+        .endInspection {
             color: var(--text-emphasis);
             font-size: 2vh;
             background-color: var(--lift-color);
@@ -40,7 +40,7 @@
             right: 1vw;
             top: 7vh;
         }
-        button:hover {
+        .endInspection:hover {
             background-color: var(--color-lift);
             border-color: var(--lift-color);
         }
