@@ -1,10 +1,12 @@
-import { COMPETITION_STAGE, IAllianceSelectionStatus, IInspectionStatus, IPath, ITeams } from "@18x18az/rosetta";
+import { COMPETITION_STAGE, IAllianceSelectionStatus, IInspectionStatus, IPath, ITeams, IMatchList } from "@18x18az/rosetta";
 import { Component, Fragment } from "react";
 import { talos } from "../../ws";
 import { AllianceSelection } from "./AllianceSelectionControlPanel";
+import { RefereePanel } from "./RefereePanel";
 
 interface TabletProps {
     teams: ITeams | null
+    matches: IMatchList | null
     lastMessagePath: IPath | null
     lastMessageBody: any
 }
@@ -56,6 +58,19 @@ export class Tablet extends Component<TabletProps, TabletState> {
                 case COMPETITION_STAGE.ALLIANCE: {
                     console.log("Have alliance")
                     content = <AllianceSelection teams={this.props.teams} status={this.state.allianceSelection}/>
+                    break;
+                }
+                case COMPETITION_STAGE.QUALS: {
+                    console.log("have matches")
+                    content = <RefereePanel teams={this.props.teams} matches={this.props.matches}
+                            lastMessageBody={this.props.lastMessageBody} lastMessagePath={this.props.lastMessagePath} />
+                    break;
+                }
+                case COMPETITION_STAGE.ELIMS: {
+                    console.log("have matches")
+                    content = <RefereePanel teams={this.props.teams} matches={this.props.matches}
+                            lastMessageBody={this.props.lastMessageBody} lastMessagePath={this.props.lastMessagePath} />
+                    break;
                 }
             }
         }
