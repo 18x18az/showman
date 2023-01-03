@@ -1,5 +1,5 @@
 import { COMPETITION_STAGE, DISPLAY_STATE, IMatchList, IMessage, IPath, ITeams } from "@18x18az/rosetta";
-import { Component } from "react";
+import { Component, Fragment } from "react";
 import { talos } from "../../ws";
 import { AllianceSelectionDisplay } from "./AllianceSelectionDisplay";
 import { Award } from "./Award";
@@ -53,36 +53,46 @@ export class Audience extends Component<AudienceProps, AudienceState> {
         const mode = this.state.mode;
         const stage = this.state.stage;
 
-        if (mode === DISPLAY_STATE.UPCOMING) {
-            return <Upcoming
-                teams={this.props.teams}
-                matches={this.props.matches}
-                lastMessageBody={this.props.lastMessageBody}
-                lastMessagePath={this.props.lastMessagePath}
-            />
-        } else if (stage === COMPETITION_STAGE.ALLIANCE) {
+        if (mode === DISPLAY_STATE.NONE) {
+            return <Fragment />
+        }
+
+        if (stage === COMPETITION_STAGE.QUALS || stage === COMPETITION_STAGE.ELIMS) {
+            if (mode === DISPLAY_STATE.UPCOMING) {
+                return <Upcoming
+                    teams={this.props.teams}
+                    matches={this.props.matches}
+                    lastMessageBody={this.props.lastMessageBody}
+                    lastMessagePath={this.props.lastMessagePath}
+                />
+            }
+
+            if (mode === DISPLAY_STATE.SCORE) {
+                return <Score
+                    teams={this.props.teams}
+                    matches={this.props.matches}
+                    lastMessageBody={this.props.lastMessageBody}
+                    lastMessagePath={this.props.lastMessagePath}
+                />
+            }
+        }
+
+        if (stage === COMPETITION_STAGE.ALLIANCE) {
             return <AllianceSelectionDisplay
                 teams={this.props.teams}
                 lastMessageBody={this.props.lastMessageBody}
                 lastMessagePath={this.props.lastMessagePath}
             />
-        } else if (mode === DISPLAY_STATE.SCORE) {
-            return <Score
+        }
+
+        if (stage === COMPETITION_STAGE.AWARDS) {
+            return <Award
                 teams={this.props.teams}
-                matches={this.props.matches}
                 lastMessageBody={this.props.lastMessageBody}
                 lastMessagePath={this.props.lastMessagePath}
             />
-        } else if (stage === COMPETITION_STAGE.AWARDS) {
-            return <Award
-            teams={this.props.teams}
-            lastMessageBody={this.props.lastMessageBody}
-            lastMessagePath={this.props.lastMessagePath}
-            />
-        } else {
-            return <div>
-                Test
-            </div>
         }
+
+        return <Fragment />
     }
 };
