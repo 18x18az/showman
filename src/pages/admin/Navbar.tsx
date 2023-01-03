@@ -16,6 +16,7 @@ bars.set(COMPETITION_STAGE.QUALS, [ControlMode.MATCH, ControlMode.DISPLAY, Contr
 bars.set(COMPETITION_STAGE.IDLE, [ControlMode.DISPLAY])
 bars.set(COMPETITION_STAGE.ALLIANCE, [ControlMode.MATCH, ControlMode.DISPLAY, ControlMode.ALLIANCE])
 bars.set(COMPETITION_STAGE.ELIMS, [ControlMode.MATCH, ControlMode.DISPLAY, ControlMode.AWARDS])
+bars.set(COMPETITION_STAGE.AWARDS, [ControlMode.MATCH, ControlMode.DISPLAY, ControlMode.AWARDS])
 
 interface NavbarProps {
     stage: COMPETITION_STAGE

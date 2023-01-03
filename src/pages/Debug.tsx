@@ -18,6 +18,7 @@ interface DebugPanelProps {
 }
 
 export const DebugPanel = (props: DebugPanelProps) => {
+    document.title = "Debug Menu"
     return <div>
         <h1>{props.stage}</h1>
         <StageChanger value={COMPETITION_STAGE.IDLE}/>

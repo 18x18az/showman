@@ -52,6 +52,7 @@ export class Audience extends Component<AudienceProps, AudienceState> {
     render() {
         const mode = this.state.mode;
         const stage = this.state.stage;
+        document.title = "Audience Display"
 
         if (mode === DISPLAY_STATE.NONE) {
             return <Fragment />
