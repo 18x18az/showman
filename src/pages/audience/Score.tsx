@@ -1,7 +1,7 @@
 import { IMatchList, IPath, ISimpleAllianceResults, ISimpleMatchResult, TeamId, ITeams } from "@18x18az/rosetta";
 import { Component } from "react";
-import { makeMatchName } from "../utils/TextGenerator";
-import { talos } from '../ws'
+import { makeMatchName } from "../../utils/TextGenerator";
+import { talos } from '../../ws'
 
 
 interface ScoreProps {

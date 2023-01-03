@@ -1,6 +1,5 @@
-@import "stream.scss";
 @import "common.scss";
-@import "mobile.scss";
-@import "upcoming.scss";
-@import "award.scss";
-@import "referee.scss";
+@import "stream/index.scss";
+@import "mobile/index.scss";
+@import "pit/index.scss";
+@import "admin/index.scss";

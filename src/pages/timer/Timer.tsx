@@ -1,9 +1,9 @@
 import { FIELD_CONTROL, IAllianceTeams, IFieldInfo, IFieldState, IMatchList, IPath, ITeams } from "@18x18az/rosetta";
 import { Component } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { determineMatch } from "../utils/Field";
-import { makeClockText, makeControlText, makeMatchName } from "../utils/TextGenerator";
-import { talos } from '../ws'
+import { determineMatch } from "../../utils/Field";
+import { makeClockText, makeControlText, makeMatchName } from "../../utils/TextGenerator";
+import { talos } from '../../ws'
 
 
 const startAudio = new Audio("./audio/start.wav");
@@ -79,7 +79,6 @@ interface TimerProps {
 }
 
 interface ExtendedTimerProps extends TimerProps{
-    field: string
     mute: boolean
 }
 
@@ -152,7 +151,7 @@ class TimerClass extends Component<ExtendedTimerProps, TimerState> {
         if (this.state.field && this.props.teams && this.props.matches && this.state.fields) {
             const state = this.state.field;
             const currentField = state.field;
-            const displayedField = this.props.field || currentField;
+            const displayedField = currentField;
 
             determineMatch(displayedField, currentField, this.state.fields, state.match, this.props.matches);
 
@@ -183,21 +182,32 @@ class TimerClass extends Component<ExtendedTimerProps, TimerState> {
                 </div>
             </div>
         } else {
+            console.log("Failed to render");
+            if(!this.state.field){
+                console.log("No field state info");
+            }
+
+            if(!this.props.teams){
+                console.log("No team info");
+            }
+
+            if(!this.props.matches){
+                console.log("No match list info");
+            }
+
+            if(!this.state.fields){
+                console.log("No field info")
+            }
             return <h1></h1>;
         }
     }
 };
 
-interface TimerPathParms {
-    field: string
-}
-
 export function Timer(props: TimerProps){
-    const {field} = useParams<TimerPathParms>();
     const {search} = useLocation();
     const params = new URLSearchParams(search);
     const mute = params.get('mute') === "true";
     return(
-    <TimerClass mute={mute} field={field} teams={props.teams} matches={props.matches} lastMessageBody={props.lastMessageBody} lastMessagePath={props.lastMessagePath}/>
+    <TimerClass mute={mute} teams={props.teams} matches={props.matches} lastMessageBody={props.lastMessageBody} lastMessagePath={props.lastMessagePath}/>
     )
 }

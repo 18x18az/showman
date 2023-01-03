@@ -1,8 +1,12 @@
 import { IFieldInfo, IFieldState, IMatchList, IPath, ITeams, IAllianceTeams } from "@18x18az/rosetta";
 import { Component } from "react";
+<<<<<<< HEAD:src/pages/RefereePanel.tsx
 import { talos } from "../ws";
 import { determineMatch, isPreMatch, isInMatch, isMatchPaused, isMatchEnded} from "../utils/Field";
 import { makeClockText, makeMatchName } from "../utils/TextGenerator";
+=======
+import { talos } from "../../ws";
+>>>>>>> beta:src/pages/tablet/RefereePanel.tsx
 
 interface RefereeProps {
     teams: ITeams | null

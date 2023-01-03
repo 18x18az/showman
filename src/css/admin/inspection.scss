@@ -1,0 +1,48 @@
+.admin {
+    .inspectionContainer {
+        margin-left: 1em;
+        display: flex;
+        gap: 1.5em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        height: 89vh;
+        .teamList {
+            h2 {
+                color: var(--text-emphasis);
+                margin-top: 0;
+                margin-bottom: 0.5em;
+                text-align: center;
+            }
+            background-color: var(--lift-color);
+            padding: 0.5em;
+            color: var(--text-medium);
+            border-radius: 0.2em;
+            width: 10%;
+            max-height: 90%;
+            .teams {
+                display: flex;
+                flex-direction: column;
+                font-size: 2vh;
+                flex-wrap: wrap;
+                max-height: 100%;
+            }
+        }
+    }
+    .contents {
+        .endInspection {
+            color: var(--text-emphasis);
+            font-size: 2vh;
+            background-color: var(--lift-color);
+            border-color: var(--color-lift);
+            border-style: solid;
+            padding: 1vh;
+            position: absolute;
+            right: 1vw;
+            top: 7vh;
+        }
+        .endInspection:hover {
+            background-color: var(--color-lift);
+            border-color: var(--lift-color);
+        }
+    }
+}
