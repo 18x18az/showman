@@ -1,5 +1,6 @@
 import { IAllianceSelectionStatus, IAllianceTeams, IPath, TeamId, ITeams } from "@18x18az/rosetta";
 import { Component } from "react";
+import { talos } from "../../ws";
 
 interface IRemainingTeamProps {
     team: TeamId
@@ -101,9 +102,7 @@ interface AllianceSelectionDisplayState {
 export class AllianceSelectionDisplay extends Component<AllianceSelectionDisplayProps, AllianceSelectionDisplayState> {
     constructor(props: AllianceSelectionDisplayProps) {
         super(props);
-
-        document.title = "Alliance Selection";
-
+        talos.get(['allianceSelection']);
         this.state = {
             status: null
         }

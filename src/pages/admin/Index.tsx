@@ -1,4 +1,4 @@
-import { COMPETITION_STAGE, IAllianceSelectionStatus, IInspectionStatus, IPath, ITeams } from "@18x18az/rosetta";
+import { COMPETITION_STAGE, DISPLAY_STATE, IAllianceSelectionStatus, IAward, IAwards, IInspectionStatus, IPath, ITeams } from "@18x18az/rosetta";
 import { Component } from "react";
 import { talos } from "../../ws";
 import { Body } from "./Body";
@@ -14,6 +14,9 @@ interface ControlPanelState {
     stage: COMPETITION_STAGE
     inspection: IInspectionStatus | null
     allianceSelection: IAllianceSelectionStatus | null
+    awards: IAwards | null
+    currentAward: IAward | null
+    displayState: DISPLAY_STATE
 }
 export class ControlPanel extends Component<ControlPanelProps, ControlPanelState> {
     constructor(props: ControlPanelProps) {
@@ -21,11 +24,16 @@ export class ControlPanel extends Component<ControlPanelProps, ControlPanelState
         talos.get(['stage']);
         talos.get(['inspection']);
         talos.get(['allianceSelection']);
+        talos.get(['display']);
+        talos.post(['awards'], null);
         this.state = {
             mode: ControlMode.IDLE,
             stage: COMPETITION_STAGE.IDLE,
             inspection: null,
-            allianceSelection: null
+            allianceSelection: null,
+            awards: null,
+            currentAward: null,
+            displayState: DISPLAY_STATE.NONE
         }
     }
 
@@ -47,6 +55,22 @@ export class ControlPanel extends Component<ControlPanelProps, ControlPanelState
                 return ({
                     inspection: nextProps.lastMessageBody
                 })
+            }
+            if (route === "display") {
+                return ({
+                    displayState: nextProps.lastMessageBody
+                })
+            }
+            if (route === "awards") {
+                if (nextProps?.lastMessagePath[1] === "selected") {
+                    return({
+                        currentAward: nextProps.lastMessageBody
+                    })
+                } else {
+                    return ({
+                        awards: nextProps.lastMessageBody
+                    })
+                }
             }
             if (route === "allianceSelection") {
                 return ({
@@ -70,7 +94,7 @@ export class ControlPanel extends Component<ControlPanelProps, ControlPanelState
             <div className="admin">
                 <Navbar stage={this.state.stage} onSelect={this.changeMode.bind(this)} />
                 <div className="contents">
-                    <Body mode={this.state.mode} teams={this.props.teams} inspectionState={this.state.inspection} stage={this.state.stage} selectionStatus={this.state.allianceSelection} />
+                    <Body displayState={this.state.displayState} selectedAward={this.state.currentAward} awards={this.state.awards} mode={this.state.mode} teams={this.props.teams} inspectionState={this.state.inspection} stage={this.state.stage} selectionStatus={this.state.allianceSelection} />
                 </div>
             </div>
         )
