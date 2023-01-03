@@ -62,7 +62,7 @@ export class ControlPanel extends Component<ControlPanelProps, ControlPanelState
             <div className="admin">
                 <Navbar stage={this.state.stage} onSelect={this.changeMode.bind(this)} />
                 <div className="contents">
-                    <Body mode={this.state.mode} teams={this.props.teams} inspectionState={this.state.inspection} />
+                    <Body mode={this.state.mode} teams={this.props.teams} inspectionState={this.state.inspection} stage={this.state.stage} />
                 </div>
             </div>
         )
