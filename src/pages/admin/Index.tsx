@@ -2,7 +2,7 @@ import { COMPETITION_STAGE, DISPLAY_STATE, IAllianceSelectionStatus, IAward, IAw
 import { Component } from "react";
 import { talos } from "../../ws";
 import { Body } from "./Body";
-import { ControlMode, Navbar } from "./Navbar";
+import { bars, ControlMode, Navbar } from "./Navbar";
 
 interface ControlPanelProps {
     teams: ITeams | null
@@ -45,9 +45,14 @@ export class ControlPanel extends Component<ControlPanelProps, ControlPanelState
                 const lastStage = prevState.stage;
 
                 if (newStage !== lastStage) {
+                    const possible = bars.get(newStage);
+                    let targetMode = prevState.mode;
+                    if(!possible.includes(targetMode)){
+                        targetMode = possible[0];
+                    }
                     return ({
                         stage: newStage,
-                        mode: ControlMode.IDLE
+                        mode: targetMode
                     });
                 }
             }
@@ -92,7 +97,7 @@ export class ControlPanel extends Component<ControlPanelProps, ControlPanelState
     render() {
         return (
             <div className="admin">
-                <Navbar stage={this.state.stage} onSelect={this.changeMode.bind(this)} />
+                <Navbar stage={this.state.stage} onSelect={this.changeMode.bind(this)} selected={this.state.mode} />
                 <div className="contents">
                     <Body displayState={this.state.displayState} selectedAward={this.state.currentAward} awards={this.state.awards} mode={this.state.mode} teams={this.props.teams} inspectionState={this.state.inspection} stage={this.state.stage} selectionStatus={this.state.allianceSelection} />
                 </div>

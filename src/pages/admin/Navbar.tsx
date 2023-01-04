@@ -9,7 +9,7 @@ export enum ControlMode {
     AWARDS = "Awards"
 }
 
-const bars = new Map();
+export const bars = new Map();
 
 bars.set(COMPETITION_STAGE.INSPECTION, [ControlMode.INSPECTION, ControlMode.DISPLAY])
 bars.set(COMPETITION_STAGE.QUALS, [ControlMode.MATCH, ControlMode.DISPLAY, ControlMode.ALLIANCE])
@@ -20,13 +20,14 @@ bars.set(COMPETITION_STAGE.AWARDS, [ControlMode.MATCH, ControlMode.DISPLAY, Cont
 
 interface NavbarProps {
     stage: COMPETITION_STAGE
+    selected: ControlMode
     onSelect: (selected: ControlMode) => void
 }
 
 export const Navbar = (props: NavbarProps) => {
     const barItems = bars.get(props.stage);
     const barComponents = barItems.map((item: ControlMode) => 
-        <button key={item} onClick={() => props.onSelect(item)}>{item}</button>
+        <button className={String(item==props.selected)} key={item} onClick={() => props.onSelect(item)}>{item}</button>
     );
     return(
         <div className="nav">{barComponents}</div>

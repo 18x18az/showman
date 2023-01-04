@@ -11,10 +11,6 @@ function selectAward(index: number) {
     talos.post(['awards', 'selected'], index);
 }
 
-function pushAward(){
-    talos.post(['awards', 'push'], null)
-}
-
 interface IndividualAwardProps {
     award: IAward
     index: number
@@ -36,6 +32,7 @@ interface AwardsProps {
 export const Awards = (props: AwardsProps) => {
     document.title = "Awards";
     if (!props.awards) {
+        refreshAwards();
         return <Fragment />
     }
 
