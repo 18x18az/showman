@@ -45,7 +45,6 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
         // send queue action
         talos.post(["fieldcontrol"], {"type": "QUEUE", "action": "NextMatch", "fieldID": "brrr"});
         talos.get(['field']);
-        talos.get(['fields']);
     }
 
     onStartClick() {
@@ -55,7 +54,6 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
             talos.post(["fieldcontrol"], {"type": "MATCH", "action": "start", "fieldID": fieldID});
         }
         talos.get(['field']);
-        talos.get(['fields']);
     }
 
     static getDerivedStateFromProps(nextProps: RefereeProps, prevState: RefereeState) {
