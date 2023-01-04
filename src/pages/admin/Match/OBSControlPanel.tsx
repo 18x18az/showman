@@ -4,7 +4,7 @@ import { IPath, IOBSConfig } from '@18x18az/rosetta';
 
 interface ScenePanelProps {
     lastMessagePath: IPath | null
-    lastMessageBody: IOBSConfig
+    lastMessageBody: any
 }
 
 const OBSControlPanel = (props: ScenePanelProps) => {

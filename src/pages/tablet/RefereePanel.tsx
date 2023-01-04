@@ -18,8 +18,6 @@ interface RefereeState {
     disableStart: boolean
 }
 
-
-
 export class RefereePanel extends Component<RefereeProps, RefereeState> {
     constructor(props: RefereeProps) {
         super(props);
@@ -44,7 +42,6 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
 
         // send queue action
         talos.post(["fieldcontrol"], {"type": "QUEUE", "action": "NextMatch", "fieldID": "brrr"});
-        talos.get(['field']);
         talos.get(['fields']);
     }
 
@@ -54,7 +51,6 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
             let fieldID = this.state.field.field;
             talos.post(["fieldcontrol"], {"type": "MATCH", "action": "start", "fieldID": fieldID});
         }
-        talos.get(['field']);
         talos.get(['fields']);
     }
 
@@ -76,6 +72,29 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
         }
 
         return null;
+    }
+    
+    componentDidUpdate(prevProps: Readonly<RefereeProps>, prevState: Readonly<RefereeState>, snapshot?: any): void {
+        if (this.state.field) {
+            // FIXME: doesn't work
+            if (isMatchEnded(this.state.field) && prevState.disableQueue) {
+                console.log("no need to disable queue bc already disabled")
+                return;
+            }
+            if (isMatchEnded(this.state.field)) {
+                console.log("match ended!");
+                setTimeout(() => {
+                    this.setState({
+                        disableQueue: true
+                    })
+                }, 500);
+                setTimeout(() => {
+                    this.setState({
+                        disableQueue: false
+                    });
+                }, 10000);
+            }
+        }
     }
 
     render() {
