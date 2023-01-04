@@ -1,17 +1,20 @@
-import { COMPETITION_STAGE, IInspectionStatus, IPath, ITeams } from "@18x18az/rosetta";
+import { COMPETITION_STAGE, IInspectionStatus, IFieldState, IMatchList, IPath, ITeams } from "@18x18az/rosetta";
 import { Component } from "react";
 import { talos } from "../../ws";
 import { Default } from "./Default";
 import { Inspection } from "./Inspection/Inspection";
+import { Qualification } from "./Qualification/Qualifcation";
 
 interface PitProps {
     teams: ITeams | null
+    matches: IMatchList | null
     lastMessagePath: IPath | null
     lastMessageBody: any
 }
 interface PitState {
     stage: COMPETITION_STAGE
     inspectionStatus: IInspectionStatus | null
+    field: IFieldState | null
 }
 
 export class Pit extends Component<PitProps, PitState> {
@@ -19,9 +22,11 @@ export class Pit extends Component<PitProps, PitState> {
         super(props);
         talos.get(['stage']);
         talos.get(['inspection']);
+        talos.get(['field']);
         this.state = {
             stage: COMPETITION_STAGE.IDLE,
-            inspectionStatus: null
+            inspectionStatus: null,
+            field: null
         }
     }
 
@@ -43,6 +48,12 @@ export class Pit extends Component<PitProps, PitState> {
                     inspectionStatus: nextProps.lastMessageBody
                 })
             }
+
+            if (route === "field") {
+                return ({
+                    field: nextProps.lastMessageBody
+                })
+            }
         }
         return null;
     }
@@ -55,6 +66,22 @@ export class Pit extends Component<PitProps, PitState> {
             switch (this.state.stage) {
                 case COMPETITION_STAGE.INSPECTION: {
                     content = <Inspection teams={this.props.teams} inspectionState={this.state.inspectionStatus} />
+                    break;
+                }
+
+                case COMPETITION_STAGE.QUALS: {
+                    content = <Qualification teams={this.props.teams} matches={this.props.matches} field={this.state.field} />
+                    break;
+                }
+
+                case COMPETITION_STAGE.ELIMS: {
+                    content = <Qualification teams={this.props.teams} matches={this.props.matches} field={this.state.field} />
+                    break;
+                }
+
+                case COMPETITION_STAGE.AWARDS: {
+                    content = <Qualification teams={this.props.teams} matches={this.props.matches} field={this.state.field} />
+                    break;
                 }
             }
         }

@@ -48,7 +48,6 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
 
         // send queue action
         talos.post(["fieldcontrol"], {"type": "QUEUE", "action": "NextMatch", "fieldID": "brrr"});
-        talos.get(['fields']);
     }
 
     onStartClick() {
@@ -57,7 +56,6 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
             let fieldID = this.state.field.field;
             talos.post(["fieldcontrol"], {"type": "MATCH", "action": "start", "fieldID": fieldID});
         }
-        talos.get(['fields']);
     }
 
     static getDerivedStateFromProps(nextProps: RefereeProps, prevState: RefereeState) {
@@ -90,7 +88,6 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
     
     componentDidUpdate(prevProps: Readonly<RefereeProps>, prevState: Readonly<RefereeState>, snapshot?: any): void {
         if (this.state.field) {
-            // FIXME: doesn't work
             if (isMatchEnded(this.state.field) && prevState.disableQueue !== QUEUE_LOCK_STATUS.LOCKED) {
                 console.log("no need to disable queue bc already disabled")
                 return;

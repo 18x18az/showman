@@ -78,6 +78,7 @@ class App extends Component<IProps, IState> {
             <Route exact path="/">
               <Pit
                 teams={this.state.teams}
+                matches={this.state.matches}
                 lastMessagePath={this.state.lastMessagePath}
                 lastMessageBody={this.state.lastMessagePayload}
               />

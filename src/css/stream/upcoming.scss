@@ -30,7 +30,7 @@
     .blueMatch {
         display: flex;
         color: var(--text-color);
-        font-family: (--data-font);
+        font-family: var(--data-font);
         font-size: 6vmin;
         flex-grow: 1;
         flex-basis: 0;

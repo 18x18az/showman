@@ -7,6 +7,7 @@ interface MatchControlProps {
 }
 
 export const MatchControl = (props: MatchControlProps) => {
+    document.title = "Match Control"
     return(
         <div>
             <OBSControlPanel
