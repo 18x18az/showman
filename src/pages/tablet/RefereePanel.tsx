@@ -14,11 +14,15 @@ interface RefereeProps {
 interface RefereeState {
     field: IFieldState | null
     fields: Array<IFieldInfo> | null
-    disableQueue: boolean
+    disableQueue: number // 0: unlocked; 1: locked; 2: passed locked phase
     disableStart: boolean
 }
 
-
+enum QUEUE_LOCK_STATUS { 
+    UNLOCKED = 0,
+    LOCKED = 1,
+    POSTLOCKED = 2
+}
 
 export class RefereePanel extends Component<RefereeProps, RefereeState> {
     constructor(props: RefereeProps) {
@@ -30,7 +34,7 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
         this.onQueueClick = this.onQueueClick.bind(this);
 
         this.state = {
-            disableQueue: false,
+            disableQueue: QUEUE_LOCK_STATUS.UNLOCKED,
             disableStart: false,
             field: null,
             fields: null
@@ -39,12 +43,11 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
 
     onQueueClick() {
         // lock out queue button after queuing the next match
-        this.setState({ disableQueue: true });
-        setTimeout(() => this.setState({ disableQueue: false }), 1000);
+        this.setState({ disableQueue: QUEUE_LOCK_STATUS.LOCKED });
+        setTimeout(() => this.setState({ disableQueue: QUEUE_LOCK_STATUS.UNLOCKED }), 1000);
 
         // send queue action
         talos.post(["fieldcontrol"], {"type": "QUEUE", "action": "NextMatch", "fieldID": "brrr"});
-        talos.get(['field']);
     }
 
     onStartClick() {
@@ -53,17 +56,24 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
             let fieldID = this.state.field.field;
             talos.post(["fieldcontrol"], {"type": "MATCH", "action": "start", "fieldID": fieldID});
         }
-        talos.get(['field']);
     }
 
     static getDerivedStateFromProps(nextProps: RefereeProps, prevState: RefereeState) {
         if (nextProps.lastMessagePath) {
             const route = nextProps.lastMessagePath[0];
             if (route === "field") {
+                let queueLock: number = QUEUE_LOCK_STATUS.UNLOCKED;
+                if (!isMatchEnded(nextProps.lastMessageBody)) {
+                    queueLock = QUEUE_LOCK_STATUS.LOCKED;
+                }
+
+                if (prevState.disableQueue === QUEUE_LOCK_STATUS.POSTLOCKED) {
+                    queueLock = QUEUE_LOCK_STATUS.POSTLOCKED;
+                }
                 return ({
                     field: nextProps.lastMessageBody,
                     disableStart: isInMatch(nextProps.lastMessageBody) || isMatchEnded(nextProps.lastMessageBody),
-                    disableQueue: !isMatchEnded(nextProps.lastMessageBody)
+                    disableQueue: queueLock
                 })
             }
             else if (route === "fields") {
@@ -75,6 +85,26 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
 
         return null;
     }
+    
+    componentDidUpdate(prevProps: Readonly<RefereeProps>, prevState: Readonly<RefereeState>, snapshot?: any): void {
+        if (this.state.field) {
+            if (isMatchEnded(this.state.field) && prevState.disableQueue !== QUEUE_LOCK_STATUS.LOCKED) {
+                console.log("no need to disable queue bc already disabled")
+                return;
+            }
+            if (isMatchEnded(this.state.field)) {
+                console.log("match ended!");
+                this.setState({
+                    disableQueue: QUEUE_LOCK_STATUS.POSTLOCKED
+                })
+                setTimeout(() => {
+                    this.setState({
+                        disableQueue: QUEUE_LOCK_STATUS.UNLOCKED
+                    });
+                }, 10000);
+            }
+        }
+    }
 
     render() {
         let fieldName = "field name";
@@ -82,7 +112,8 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
         let control = "mode";
         let time = "time";
         let redTeam1 = "RED1", redTeam2 = "RED2", blueTeam1 = "BLUE1", blueTeam2 = "BLUE2";
-        let queueButtonName = this.state.disableQueue ? "LOCKED" : "QUEUE NEXT MATCH";
+        let queueLock: boolean = this.state.disableQueue !== QUEUE_LOCK_STATUS.UNLOCKED ? true : false;
+        let queueButtonName = queueLock ? "LOCKED" : "QUEUE NEXT MATCH";
         let controlButtonName = this.state.disableStart ? "LOCKED" : "START MATCH";
         if (this.state && this.state.fields && this.state.field && this.props.teams && this.props.matches) {
 
@@ -115,7 +146,7 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
             <div className="referee">
                 <h1 className="matchtitle">{matchName} - {fieldName}</h1>
                 <h2>{control} - {time}</h2>
-                <button className="button" onClick={this.onQueueClick} disabled={this.state.disableQueue}>
+                <button className="button" onClick={this.onQueueClick} disabled={queueLock}>
                     {queueButtonName}</button>
                 <br></br>
                 <button className="button" onClick={this.onStartClick} disabled={this.state.disableStart}>

@@ -131,7 +131,8 @@ export class NormalControlPanel extends Component<NormalControlPanelProps, Norma
                 Refresh Awards
             </button>
             <AwardPanel teams={this.props.teams} lastMessageBody={this.props.lastMessageBody} lastMessagePath={this.props.lastMessagePath} />
-            <CycleTimePanel lastMessageBody={this.props.lastMessageBody} lastMessagePath={this.props.lastMessagePath}></CycleTimePanel>
+            <br></br>
+            <CycleTimePanel lastMessageBody={this.props.lastMessageBody} lastMessagePath={this.props.lastMessagePath}/>
         </div>
     }
 };

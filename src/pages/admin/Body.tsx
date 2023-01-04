@@ -1,4 +1,4 @@
-import { COMPETITION_STAGE, DISPLAY_STATE, IAllianceSelectionStatus, IAward, IAwards, IInspectionStatus, ITeams } from "@18x18az/rosetta"
+import { COMPETITION_STAGE, DISPLAY_STATE, IAllianceSelectionStatus, IAward, IAwards, IInspectionStatus, IPath, ITeams } from "@18x18az/rosetta"
 import { Component, Fragment } from "react";
 import { AllianceSelection } from "./Alliance/Alliance";
 import { Awards } from "./Awards/Awards";
@@ -16,6 +16,8 @@ interface BodyProps {
     awards: IAwards | null
     selectedAward: IAward | null
     displayState: DISPLAY_STATE
+    lastMessagePath: IPath | null
+    lastMessageBody: any
 }
 
 export const Body = (props: BodyProps) => {
@@ -27,7 +29,7 @@ export const Body = (props: BodyProps) => {
             return <Inspection inspectionState={props.inspectionState} teams={props.teams}/>
         }
         case ControlMode.MATCH: {
-            return <MatchControl/>
+            return <MatchControl lastMessagePath={props.lastMessagePath} lastMessageBody={props.lastMessageBody}/>
         }
         case ControlMode.ALLIANCE: {
             return <AllianceSelection teams={props.teams} stage={props.stage} status={props.selectionStatus}/>
