@@ -1,0 +1,41 @@
+.pit {
+    .qualification {
+        font-size: 7vh;
+        text-align: center;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+        margin-inline: 5vh;
+        gap: 1px;
+        --number-font: 'Orbitron', 'sans-serif';
+        --text-font: 'Electrolize', sans-serif;
+        .match {
+            background: gray;
+            display: flex;
+            justify-content: space-evenly;
+            .alliance {
+                font-family: var(--number-font);
+                display: flex;
+                justify-content: space-evenly;
+                flex-grow: 1;
+                flex-basis: 0;
+                .team {
+                    flex-basis: 0;
+                    flex-grow: 1;
+                }
+            }
+            .red {
+                background-color: var(--vex-red);
+            }
+            .blue {
+                background-color: var(--vex-blue);
+            }
+            .name {
+                font-family: var(--text-font);
+                width: 3em;
+            }
+        }
+    }
+}
