@@ -1,6 +1,6 @@
 import { IPath } from "@18x18az/rosetta";
 import { Component } from "react";
-import { talos } from "../ws";
+import { talos } from "../../ws";
 
 interface CycleTimePanelProps {
     lastMessagePath: IPath | null

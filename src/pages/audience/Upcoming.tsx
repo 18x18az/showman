@@ -1,8 +1,8 @@
 import { IAllianceTeams, IFieldState, IMatchInfo, IMatchList, IPath, MATCH_TYPE, ITeams } from "@18x18az/rosetta";
 import { Component } from "react";
-import { getNextMatches } from "../utils/Match";
-import { makeShortMatchName } from "../utils/TextGenerator";
-import { talos } from "../ws";
+import { getNextMatches } from "../../utils/Match";
+import { makeShortMatchName } from "../../utils/TextGenerator";
+import { talos } from "../../ws";
 
 interface IMatchTeamProps {
     alliance: IAllianceTeams

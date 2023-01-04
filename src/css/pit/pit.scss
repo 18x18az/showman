@@ -1,0 +1,39 @@
+.pit {
+    --line-color: rgb(22, 22, 22);
+    --line-width: 0.6vmin;
+    --line-gap: 7vmin;
+    background: repeating-linear-gradient( 90deg, var(--line-color), var(--line-color) var(--line-width), #000 var(--line-width), #000 var(--line-gap));
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    left: 0;
+    right: 0;
+    .l2 {
+        background: repeating-linear-gradient( 0deg, var(--line-color), var(--line-color) var(--line-width), #0000 var(--line-width), #0000 var(--line-gap));
+        height: 100%;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        position: fixed;
+        left: 0;
+        right: 0;
+    }
+    .l3 {
+        box-shadow: inset 0 0 16vmin 20vmin black;
+        width: 100%;
+        height: 100%;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        position: fixed;
+        left: 0;
+        right: 0;
+    }
+    .logo {
+        position: fixed;
+        left: 10vw;
+        top: 10vh;
+        width: 80%;
+        height: 80%;
+    }
+}

@@ -1,4 +1,4 @@
-import { talos } from "../ws";
+import { talos } from "../../../ws";
 import { useEffect, useState } from 'react';
 import { IPath, IOBSConfig } from '@18x18az/rosetta';
 

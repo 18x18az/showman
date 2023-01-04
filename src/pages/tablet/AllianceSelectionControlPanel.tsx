@@ -1,6 +1,5 @@
-import { DISPLAY_STATE, IAllianceSelectionStatus, IPath, TeamId, ITeams } from "@18x18az/rosetta";
-import { Component } from "react";
-import { talos } from "../ws";
+import { DISPLAY_STATE, IAllianceSelectionStatus, TeamId, ITeams } from "@18x18az/rosetta";
+import { talos } from "../../ws";
 
 function chooseCb(team: TeamId) {
     talos.post(['allianceSelection', 'pick'], team);
@@ -96,63 +95,38 @@ function Picking(props: IPickingProps) {
     }
 }
 interface AllianceSelectionControlPanelProps {
-    teams: ITeams | null
-    lastMessagePath: IPath | null
-    lastMessageBody: any
-}
-interface AllianceSelectionControlPanelState {
+    teams: ITeams
     status: IAllianceSelectionStatus | null
 }
 
-export class AllianceSelectionControlPanel extends Component<AllianceSelectionControlPanelProps, AllianceSelectionControlPanelState> {
-    constructor(props: AllianceSelectionControlPanelProps) {
-        super(props);
 
-        document.title = "Alliance Selection";
+export function AllianceSelection(props: AllianceSelectionControlPanelProps) {
+    if (props.status) {
+        const status =  props.status;
+        const picking = status.picking;
+        const remaining = status.eligible;
+        const picked = status.selected;
+        const teams = props.teams;
 
-        this.state = {
-            status: null
-        }
-    }
-
-    static getDerivedStateFromProps(nextProps: AllianceSelectionControlPanelProps) {
-        if (nextProps.lastMessagePath) {
-            const route = nextProps.lastMessagePath[0];
-            if (route === "allianceSelection") {
-                return { status: nextProps.lastMessageBody }
-            }
-        }
-
-        return null;
-    }
-
-    render() {
-        if (this.props.teams && this.state.status) {
-            const picking = this.state.status.picking;
-            const remaining = this.state.status.eligible;
-            const picked = this.state.status.selected;
-            const teams = this.props.teams;
-
-            return <div className="mobile">
-                <Picking teams={teams} picking={picking} />
-                <Choices teams={teams} choices={remaining} />
-                <div className="footer">
-                    <button className="undoButton" onClick={undoCb}>Undo</button>
-                    <button className="noShowButton" onClick={noShowCb}>No Show</button>
-                    <button className="finalizeButton" onClick={finalizeCb}>Finalize</button>
-                </div>
-                {picked && picking ?
-                    <Popup
-                        teams={teams}
-                        picker={picking}
-                        picked={picked}
-                    />
-                    : null
-                }
+        return <div className="mobile">
+            <Picking teams={teams} picking={picking} />
+            <Choices teams={teams} choices={remaining} />
+            <div className="footer">
+                <button className="undoButton" onClick={undoCb}>Undo</button>
+                <button className="noShowButton" onClick={noShowCb}>No Show</button>
+                <button className="finalizeButton" onClick={finalizeCb}>Finalize</button>
             </div>
-        } else {
-            return <div></div>
-        }
-
+            {picked && picking ?
+                <Popup
+                    teams={teams}
+                    picker={picking}
+                    picked={picked}
+                />
+                : null
+            }
+        </div>
+    } else {
+        return <div></div>
     }
-};
+
+}

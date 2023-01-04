@@ -1,8 +1,7 @@
 import { DISPLAY_STATE, IAward, IAwards, IPath, ITeams } from "@18x18az/rosetta";
 import { Component } from "react";
-import { talos } from "../ws";
+import { talos } from "../../ws";
 import { CycleTimePanel } from "./CycleTimePanel";
-import OBSControlPanel from "./OBSControlPanel";
 
 interface IAwardProps {
     index: number
@@ -132,8 +131,6 @@ export class NormalControlPanel extends Component<NormalControlPanelProps, Norma
                 Refresh Awards
             </button>
             <AwardPanel teams={this.props.teams} lastMessageBody={this.props.lastMessageBody} lastMessagePath={this.props.lastMessagePath} />
-            <br></br>
-            <OBSControlPanel lastMessageBody={this.props.lastMessageBody} lastMessagePath={this.props.lastMessagePath}/>
             <br></br>
             <CycleTimePanel lastMessageBody={this.props.lastMessageBody} lastMessagePath={this.props.lastMessagePath}/>
         </div>
