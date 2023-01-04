@@ -37,7 +37,7 @@ const OBSControlPanel = (props: ScenePanelProps) => {
     }, [checked]);
 
     return(
-        <div>
+        <div className="matchAdmin">
             <label>Manual Scene Control </label>
             <input type="checkbox" checked={checked} onChange={handleChange} />
             <br></br>

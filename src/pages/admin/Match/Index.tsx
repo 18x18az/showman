@@ -1,9 +1,18 @@
+import { IPath } from "@18x18az/rosetta";
 import OBSControlPanel from "./OBSControlPanel";
 
-export const MatchControl = () => {
+interface MatchControlProps {
+    lastMessagePath: IPath | null
+    lastMessageBody: any
+}
+
+export const MatchControl = (props: MatchControlProps) => {
     return(
         <div>
-                
+            <OBSControlPanel
+                lastMessageBody={props.lastMessageBody}
+                lastMessagePath={props.lastMessagePath}
+            />
         </div>
     );
 }
