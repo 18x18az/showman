@@ -3,6 +3,7 @@ import { Component } from "react";
 import { talos } from "../../ws";
 import { determineMatch, isInMatch, isMatchEnded } from "../../utils/Field";
 import { makeClockText, makeMatchName } from "../../utils/TextGenerator";
+import { CycleTime } from "../../assets/Cycle";
 
 interface RefereeProps {
     teams: ITeams | null
@@ -15,6 +16,7 @@ interface RefereeState {
     field: IFieldState | null
     fields: Array<IFieldInfo> | null
     matchStage: MATCH_STAGE | null
+    cycleTime: number | null
 }
 
 export class RefereePanel extends Component<RefereeProps, RefereeState> {
@@ -30,7 +32,8 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
         this.state = {
             matchStage: null,
             field: null,
-            fields: null
+            fields: null,
+            cycleTime: null
         }
     }
 
@@ -57,6 +60,11 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
             else if (route === "fields") {
                 return ({
                     fields: nextProps.lastMessageBody
+                })
+            }
+            else if (route === "cycleTime") {
+                return ({
+                    cycleTime: nextProps.lastMessageBody.rollingAvg
                 })
             }
             else if (route === "matchStage") {
@@ -132,6 +140,7 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
                         <p>{blueTeam1}</p>
                         <p>{blueTeam2}</p>
                     </div>
+                    <CycleTime cycleTime={this.state.cycleTime}/>
                 </div>
             )
         } else {

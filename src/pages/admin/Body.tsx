@@ -1,4 +1,4 @@
-import { COMPETITION_STAGE, DISPLAY_STATE, IAllianceSelectionStatus, IAward, IAwards, IInspectionStatus, IPath, ITeams } from "@18x18az/rosetta"
+import { COMPETITION_STAGE, DISPLAY_STATE, IAllianceSelectionStatus, IAward, IAwards, IFieldInfo, IFieldState, IInspectionStatus, IMatchInfo, IMatchList, IPath, ITeams, MATCH_STAGE } from "@18x18az/rosetta"
 import { Component, Fragment } from "react";
 import { AllianceSelection } from "./Alliance/Alliance";
 import { Awards } from "./Awards/Awards";
@@ -18,6 +18,11 @@ interface BodyProps {
     displayState: DISPLAY_STATE
     lastMessagePath: IPath | null
     lastMessageBody: any
+    matches: IMatchList | null
+    field: IFieldState | null
+    fields: Array<IFieldInfo> | null
+    matchStage: MATCH_STAGE | null
+    cycleTime: number | null
 }
 
 export const Body = (props: BodyProps) => {
@@ -29,7 +34,15 @@ export const Body = (props: BodyProps) => {
             return <Inspection inspectionState={props.inspectionState} teams={props.teams}/>
         }
         case ControlMode.MATCH: {
-            return <MatchControl lastMessagePath={props.lastMessagePath} lastMessageBody={props.lastMessageBody}/>
+            return <MatchControl
+            teams={props.teams}
+            matches={props.matches}
+            field={props.field}
+            fields={props.fields}
+            matchStage={props.matchStage}
+            cycleTime={props.cycleTime}
+            lastMessagePath={props.lastMessagePath}
+            lastMessageBody={props.lastMessageBody}/>
         }
         case ControlMode.ALLIANCE: {
             return <AllianceSelection teams={props.teams} stage={props.stage} status={props.selectionStatus}/>

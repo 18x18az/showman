@@ -1,4 +1,4 @@
-import { COMPETITION_STAGE, DISPLAY_STATE, IAllianceSelectionStatus, IAward, IAwards, IInspectionStatus, IPath, ITeams } from "@18x18az/rosetta";
+import { COMPETITION_STAGE, DISPLAY_STATE, IAllianceSelectionStatus, IAward, IAwards, IFieldInfo, IFieldState, IInspectionStatus, MATCH_STAGE, IMatchList, IPath, ITeams } from "@18x18az/rosetta";
 import { Component } from "react";
 import { talos } from "../../ws";
 import { Body } from "./Body";
@@ -6,6 +6,7 @@ import { bars, ControlMode, Navbar } from "./Navbar";
 
 interface ControlPanelProps {
     teams: ITeams | null
+    matches: IMatchList | null
     lastMessagePath: IPath | null
     lastMessageBody: any
 }
@@ -17,6 +18,10 @@ interface ControlPanelState {
     awards: IAwards | null
     currentAward: IAward | null
     displayState: DISPLAY_STATE
+    field: IFieldState | null
+    fields: Array<IFieldInfo> | null
+    matchStage: MATCH_STAGE | null
+    cycleTime: number | null
 }
 export class ControlPanel extends Component<ControlPanelProps, ControlPanelState> {
     constructor(props: ControlPanelProps) {
@@ -25,6 +30,9 @@ export class ControlPanel extends Component<ControlPanelProps, ControlPanelState
         talos.get(['inspection']);
         talos.get(['allianceSelection']);
         talos.get(['display']);
+        talos.get(['field']);
+        talos.get(['fields']);
+        talos.get(['matchStage']);
         talos.post(['awards'], null);
         this.state = {
             mode: ControlMode.IDLE,
@@ -33,7 +41,11 @@ export class ControlPanel extends Component<ControlPanelProps, ControlPanelState
             allianceSelection: null,
             awards: null,
             currentAward: null,
-            displayState: DISPLAY_STATE.NONE
+            displayState: DISPLAY_STATE.NONE,
+            field: null,
+            fields: null,
+            matchStage: null,
+            cycleTime: null
         }
     }
 
@@ -47,7 +59,7 @@ export class ControlPanel extends Component<ControlPanelProps, ControlPanelState
                 if (newStage !== lastStage) {
                     const possible = bars.get(newStage);
                     let targetMode = prevState.mode;
-                    if(!possible.includes(targetMode)){
+                    if (!possible.includes(targetMode)) {
                         targetMode = possible[0];
                     }
                     return ({
@@ -68,7 +80,7 @@ export class ControlPanel extends Component<ControlPanelProps, ControlPanelState
             }
             if (route === "awards") {
                 if (nextProps?.lastMessagePath[1] === "selected") {
-                    return({
+                    return ({
                         currentAward: nextProps.lastMessageBody
                     })
                 } else {
@@ -80,6 +92,31 @@ export class ControlPanel extends Component<ControlPanelProps, ControlPanelState
             if (route === "allianceSelection") {
                 return ({
                     allianceSelection: nextProps.lastMessageBody
+                })
+            }
+            if (route === "matches") {
+                return ({
+                    matches: nextProps.lastMessageBody
+                })
+            }
+            if (route === "fields") {
+                return ({
+                    fields: nextProps.lastMessageBody
+                })
+            }
+            if (route === "field") {
+                return ({
+                    field: nextProps.lastMessageBody
+                })
+            }
+            if (route === "matchStage") {
+                return ({
+                    matchStage: nextProps.lastMessageBody
+                })
+            }
+            if (route === "cycleTime") {
+                return ({
+                    cycleTime: nextProps.lastMessageBody.rollingAvg
                 })
             }
         }
@@ -110,6 +147,11 @@ export class ControlPanel extends Component<ControlPanelProps, ControlPanelState
                         selectionStatus={this.state.allianceSelection}
                         lastMessagePath={this.props.lastMessagePath}
                         lastMessageBody={this.props.lastMessageBody}
+                        matches={this.props.matches}
+                        field={this.state.field}
+                        fields={this.state.fields}
+                        matchStage={this.state.matchStage}
+                        cycleTime={this.state.cycleTime}
                     />
                 </div>
             </div>
