@@ -64,7 +64,8 @@ export const Qualification = (props: QualificationProps) => {
 
     const state = props.field;
     const match = props.matches[state.match];
-    const upcoming = getNextMatches(props.matches, match, 9);
+    const upcoming = getNextMatches(props.matches, match, 8);
+    upcoming?.unshift(match);
 
     if (!upcoming) {
         return <Fragment />
