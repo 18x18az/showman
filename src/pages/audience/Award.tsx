@@ -1,10 +1,10 @@
-import { IAward, IPath, TeamId, ITeams, IAllianceTeams } from "@18x18az/rosetta";
+import { IAward, IPath, TeamId, ITeams, IAlliance } from "@18x18az/rosetta";
 import { Component } from "react";
 import { talos } from "../../ws";
 
 interface IWinnersProps {
     teams: ITeams
-    winner: TeamId | null | IAllianceTeams
+    winner: TeamId | null | IAlliance
 }
 
 function Winners(props: IWinnersProps) {
@@ -12,7 +12,7 @@ function Winners(props: IWinnersProps) {
         return <div></div>
     }
 
-    if (typeof props.winner !== 'string') {
+    if (typeof props.winner !== 'string' && props.winner.team2) {
         const winner1 = props.teams[props.winner.team1];
         const winner2 = props.teams[props.winner.team2];
 
@@ -21,7 +21,13 @@ function Winners(props: IWinnersProps) {
             <div>{winner2.number} - {winner2.name}</div>
         </div>
     } else {
-        const winner = props.teams[props.winner];
+        let winnerIndex;
+        if(typeof props.winner === 'string') {
+            winnerIndex = props.winner;
+        } else {
+            winnerIndex = props.winner.team1
+        }
+        const winner = props.teams[winnerIndex];
 
         let name = winner.name;
         const max_length = 45;
@@ -57,7 +63,6 @@ export class Award extends Component<AwardProps, AwardState> {
 
     componentWillReceiveProps(props: AwardProps) {
         if (props.lastMessagePath) {
-            console.log(props.lastMessagePath);
             if (JSON.stringify(props.lastMessagePath) === JSON.stringify(['awards', 'selected'])) {
                 this.setState({
                     award: props.lastMessageBody

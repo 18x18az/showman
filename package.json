@@ -4,7 +4,7 @@
     "private": true,
     "dependencies": {
         "@18x18az/ouija": "^1.0.5",
-        "@18x18az/rosetta": "^3.7.0",
+        "@18x18az/rosetta": "^3.8.0",
         "@testing-library/jest-dom": "^5.14.1",
         "@testing-library/react": "^12.0.0",
         "@testing-library/user-event": "^13.2.1",

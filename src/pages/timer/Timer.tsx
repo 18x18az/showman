@@ -1,6 +1,7 @@
-import { FIELD_CONTROL, IAllianceTeams, IFieldInfo, IFieldState, IMatchList, IPath, ITeams } from "@18x18az/rosetta";
+import { FIELD_CONTROL, IAlliance, IFieldInfo, IFieldState, IMatchList, IPath, ITeams } from "@18x18az/rosetta";
 import { Component } from "react";
 import { useLocation, useParams } from "react-router-dom";
+import { AllianceNumbers } from "../../assets/Alliance";
 import { determineMatch } from "../../utils/Field";
 import { makeClockText, makeControlText, makeMatchName } from "../../utils/TextGenerator";
 import { talos } from '../../ws'
@@ -19,19 +20,15 @@ function play(audio: HTMLAudioElement) {
 
 interface IAllianceProps {
     color: string
-    alliance: IAllianceTeams
+    alliance: IAlliance
     teams: ITeams
 }
 
 function Alliance(props: IAllianceProps) {
-    const team1 = props.teams[props.alliance.team1];
-    const team2 = props.teams[props.alliance.team2];
-
+    console.log("Alliance")
+    console.log(props);
     return <div className={props.color}>
-        <div className='numbers'>
-            <div className='teamNumber'>{team1.number}</div>
-            <div className='teamNumber'>{team2.number}</div>
-        </div>
+        <AllianceNumbers teams={props.teams} alliance={props.alliance}/>
         <svg width="10" height="100%" className="stripe">
             <rect x="0" y="10%" width="10" height="80%" />
         </svg>
@@ -153,6 +150,8 @@ class TimerClass extends Component<ExtendedTimerProps, TimerState> {
             const currentField = state.field;
             const displayedField = currentField;
 
+            console.log(this.props.matches);
+
             determineMatch(displayedField, currentField, this.state.fields, state.match, this.props.matches);
 
             let matchName = "";
@@ -175,8 +174,8 @@ class TimerClass extends Component<ExtendedTimerProps, TimerState> {
                     </div>
                     { match &&
                     <div className="bottom">
-                        <Alliance color="red" alliance={match.red as IAllianceTeams} teams={this.props.teams} />
-                        <Alliance color="blue" alliance={match.blue as IAllianceTeams} teams={this.props.teams} />
+                        <Alliance color="red" alliance={match.red} teams={this.props.teams} />
+                        <Alliance color="blue" alliance={match.blue} teams={this.props.teams} />
                     </div>
         }
                 </div>

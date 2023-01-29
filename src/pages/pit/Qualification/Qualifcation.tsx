@@ -1,10 +1,10 @@
-import { IAllianceTeams, IFieldState, IMatchInfo, IMatchList, ITeams } from "@18x18az/rosetta";
+import { IAlliance, IFieldState, IMatchInfo, IMatchList, ITeams } from "@18x18az/rosetta";
 import { Fragment } from "react"
 import { getNextMatches } from "../../../utils/Match";
 import { makeShortMatchName } from "../../../utils/TextGenerator";
 
 interface AllianceInfoProps {
-    alliance: string | IAllianceTeams
+    alliance: IAlliance
     teamInfo: ITeams
     color: "red" | "blue"
 }
@@ -17,7 +17,11 @@ export const AllianceInfo = (props: AllianceInfoProps) => {
         info = <div>props.teamInfo[alliance].number;</div>
     } else {
         const team1 = props.teamInfo[alliance.team1].number;
-        const team2 = props.teamInfo[alliance.team2].number;
+        let team2;
+        if(alliance.team2){
+            team2 = props.teamInfo[alliance.team2].number;
+        }
+        
         info = <Fragment>
             <div className="team">
                 {team1}

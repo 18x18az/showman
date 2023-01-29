@@ -1,5 +1,5 @@
-import { IAllianceSelectionStatus, IAllianceTeams, IPath, TeamId, ITeams } from "@18x18az/rosetta";
-import { Component } from "react";
+import { IAllianceSelectionStatus, IAlliance, IPath, TeamId, ITeams } from "@18x18az/rosetta";
+import { Component, Fragment } from "react";
 import { talos } from "../../ws";
 
 interface IRemainingTeamProps {
@@ -56,7 +56,7 @@ function Picking(props: IPickingProps) {
 }
 
 interface IAllianceProps {
-    alliance: IAllianceTeams
+    alliance: IAlliance
     number: number
     teams: ITeams
 }
@@ -64,13 +64,18 @@ interface IAllianceProps {
 function Alliance(props: IAllianceProps) {
     const teams = props.teams;
     const alliance = props.alliance;
+
+    if(!alliance?.team2){
+        return <Fragment/>
+    }
+
     const captain = teams[alliance.team1].number;
     const picked = teams[alliance.team2].number;
     return <div className="alliance"><div className="number">{props.number}</div><div className="captain">{captain}</div>-<div className="picked">{picked}</div></div>
 }
 
 interface IAlliancesProps {
-    alliances: Array<IAllianceTeams>
+    alliances: Array<IAlliance>
     teams: ITeams
 }
 

@@ -43,8 +43,6 @@ class App extends Component<IProps, IState> {
   }
 
   messageHandler(path: IPath, payload: any) {
-    console.log(path);
-    console.log(payload);
     const route = path[0];
     if (route === "teams") {
       this.setState({
