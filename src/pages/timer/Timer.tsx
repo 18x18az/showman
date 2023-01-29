@@ -152,8 +152,6 @@ class TimerClass extends Component<ExtendedTimerProps, TimerState> {
 
             console.log(this.props.matches);
 
-            determineMatch(displayedField, currentField, this.state.fields, state.match, this.props.matches);
-
             let matchName = "";
             let match;
             if(state.match === "TO") {
