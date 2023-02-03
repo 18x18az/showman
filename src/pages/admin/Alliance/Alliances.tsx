@@ -1,19 +1,22 @@
-import { IAllianceTeams, ITeams, TeamId } from "@18x18az/rosetta";
+import { IAlliance, ITeams } from "@18x18az/rosetta";
 import { Fragment } from "react";
 
 interface TeamInfoProps {
-    alliance: IAllianceTeams
+    alliance: IAlliance
     teamData: ITeams
 }
 
 const AllianceInfo = (props: TeamInfoProps) => {
+    if(!props.alliance.team2){
+        return <Fragment />
+    }
     const teamNumber1 = props.teamData[props.alliance.team1].number;
     const teamNumber2 = props.teamData[props.alliance.team2].number;
     return <div className="teamSelector">{teamNumber1} - {teamNumber2}</div>
 }
 
 interface EligibleTeamsProps {
-    alliances: IAllianceTeams[] | undefined
+    alliances: IAlliance[] | undefined
     teamData: ITeams
 }
 

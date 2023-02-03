@@ -1,27 +1,23 @@
-import { IAllianceTeams, IFieldState, IMatchInfo, IMatchList, IPath, MATCH_TYPE, ITeams } from "@18x18az/rosetta";
+import { IAlliance, IFieldState, IMatchInfo, IMatchList, IPath, MATCH_TYPE, ITeams } from "@18x18az/rosetta";
 import { Component } from "react";
+import { AllianceNumbers } from "../../assets/Alliance";
 import { getNextMatches } from "../../utils/Match";
 import { makeShortMatchName } from "../../utils/TextGenerator";
 import { talos } from "../../ws";
 
 interface IMatchTeamProps {
-    alliance: IAllianceTeams
+    alliance: IAlliance
     color: "redMatch" | "blueMatch"
     teams: ITeams
 }
 
 function MatchTeam(props: IMatchTeamProps) {
-    const team1 = props.teams[props.alliance.team1];
-    const team2 = props.teams[props.alliance.team2];
     return (
         <div className={props.color}>
             <svg width="10" height="100%" className="stripe">
                 <rect x="0" y="2%" width="5" height="96%" />
             </svg>
-            <div className="numbers">
-                <div>{team1.number}</div>
-                <div>{team2.number}</div>
-            </div>
+            <AllianceNumbers teams={props.teams} alliance={props.alliance}/>
         </div>
     )
 }
@@ -37,8 +33,8 @@ function Match(props: IMatchProps) {
     const red = props.match.red;
     return <div key={props.match.matchId} className="match">
         <div className="name">{matchName}</div>
-        <MatchTeam alliance={red as IAllianceTeams} color="redMatch" teams={props.teams} />
-        <MatchTeam alliance={blue as IAllianceTeams} color="blueMatch" teams={props.teams} />
+        <MatchTeam alliance={red as IAlliance} color="redMatch" teams={props.teams} />
+        <MatchTeam alliance={blue as IAlliance} color="blueMatch" teams={props.teams} />
     </div>
 }
 

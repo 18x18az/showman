@@ -13,6 +13,7 @@ import { RefereePanel } from "./pages/tablet/RefereePanel";
 import { Pit } from "./pages/pit/Pit";
 import { DebugPanel } from "./pages/Debug";
 import { Tablet } from "./pages/tablet/Tablet";
+import { Emcee } from "./pages/emcee/Index";
 
 interface IProps {
 }
@@ -43,8 +44,6 @@ class App extends Component<IProps, IState> {
   }
 
   messageHandler(path: IPath, payload: any) {
-    console.log(path);
-    console.log(payload);
     const route = path[0];
     if (route === "teams") {
       this.setState({
@@ -112,6 +111,13 @@ class App extends Component<IProps, IState> {
             </Route>
             <Route path="/referee">
               <Tablet
+                teams={this.state.teams}
+                matches={this.state.matches}
+                lastMessagePath={this.state.lastMessagePath}
+                lastMessageBody={this.state.lastMessagePayload} />
+            </Route>
+            <Route path="/emcee">
+              <Emcee
                 teams={this.state.teams}
                 matches={this.state.matches}
                 lastMessagePath={this.state.lastMessagePath}

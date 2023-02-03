@@ -1,5 +1,5 @@
 import { IMatchList, IPath, ISimpleAllianceResults, ISimpleMatchResult, TeamId, ITeams } from "@18x18az/rosetta";
-import { Component } from "react";
+import { Component, Fragment } from "react";
 import { makeMatchName } from "../../utils/TextGenerator";
 import { talos } from '../../ws'
 
@@ -22,11 +22,14 @@ interface AllianceProps {
 }
 
 interface TeamProps {
-    team: TeamId
+    team: TeamId | undefined
     teams: ITeams
 }
 
 const TeamInfo = (props: TeamProps) => {
+    if (!props.team) {
+        return <Fragment />
+    }
     const team = props.teams[props.team];
     let name = team.name;
     const max_length = 45;
@@ -52,8 +55,8 @@ const AllianceResults = (props: AllianceProps) => {
                 <rect x="0" y="2%" width="10" height="96%" />
             </svg>
             <div className="allianceInfo">
-                <TeamInfo team={alliance.team1} teams={teams} />
-                <TeamInfo team={alliance.team2} teams={teams} />
+                <TeamInfo team={alliance.alliance.team1} teams={teams} />
+                <TeamInfo team={alliance.alliance.team2} teams={teams} />
             </div>
         </div>
         <div className={scoreClass}>

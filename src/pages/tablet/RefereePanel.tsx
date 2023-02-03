@@ -1,9 +1,10 @@
-import { IFieldInfo, IFieldState, IMatchList, IPath, ITeams, IAllianceTeams, FIELD_COMMAND, FIELD_CONTROL, REF_COMMAND, MATCH_STAGE } from "@18x18az/rosetta";
+import { IFieldInfo, IFieldState, IMatchList, IPath, ITeams, IAlliance, REF_COMMAND, MATCH_STAGE } from "@18x18az/rosetta";
 import { Component } from "react";
 import { talos } from "../../ws";
 import { determineMatch, isInMatch, isMatchEnded } from "../../utils/Field";
 import { makeClockText, makeMatchName } from "../../utils/TextGenerator";
 import { CycleTime } from "../../assets/Cycle";
+import { AllianceNumbers } from "../../assets/Alliance";
 
 interface RefereeProps {
     teams: ITeams | null
@@ -95,7 +96,6 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
             let matchName = "match name";
             let control = "mode";
             let time = "time";
-            let redTeam1 = "RED1", redTeam2 = "RED2", blueTeam1 = "BLUE1", blueTeam2 = "BLUE2";
             let queueButtonName = showMatchLocked ? "LOCKED" : "SHOW NEXT MATCH";
             let controlButtonName = startMatchLocked ? "LOCKED" : "START MATCH";
 
@@ -117,10 +117,10 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
             let match = determineMatch(this.state.field.field, this.state.field.field, this.state.fields, this.state.field.match, this.props.matches)
             if (match) {
                 matchName = makeMatchName(match);
-                redTeam1 = this.props.teams[(match.red as IAllianceTeams).team1].number;
-                redTeam2 = this.props.teams[(match.red as IAllianceTeams).team2].number;
-                blueTeam1 = this.props.teams[(match.blue as IAllianceTeams).team1].number;
-                blueTeam2 = this.props.teams[(match.blue as IAllianceTeams).team2].number;
+            }
+
+            if (!match) {
+                return <div></div>
             }
 
             return (
@@ -133,14 +133,12 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
                     <button className="button" onClick={this.onStartClick} disabled={startMatchLocked}>
                         {controlButtonName}</button>
                     <div className="redteams">
-                        <p>{redTeam1}</p>
-                        <p>{redTeam2}</p>
+                        <AllianceNumbers teams={this.props.teams} alliance={match.red} />
                     </div>
                     <div className="blueteams">
-                        <p>{blueTeam1}</p>
-                        <p>{blueTeam2}</p>
+                        <AllianceNumbers teams={this.props.teams} alliance={match.blue} />
                     </div>
-                    <CycleTime cycleTime={this.state.cycleTime}/>
+                    <CycleTime cycleTime={this.state.cycleTime} />
                 </div>
             )
         } else {
