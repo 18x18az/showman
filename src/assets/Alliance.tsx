@@ -8,7 +8,7 @@ interface IAllianceProps {
 export function AllianceNumbers(props: IAllianceProps) {
     console.log(props);
     const team1 = props.teams[props.alliance.team1];
-    let team2;
+    let team2 = undefined;
     if (props.alliance.team2) {
         team2 = props.teams[props.alliance.team2];
     }
@@ -16,7 +16,7 @@ export function AllianceNumbers(props: IAllianceProps) {
     return (
         <div className='numbers'>
             <div className='teamNumber'>{team1.number}</div>
-            <div className='teamNumber'>{undefined}</div>
+            <div className='teamNumber'>{team2?.number}</div>
         </div>
     );
 }
