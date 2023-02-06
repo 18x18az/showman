@@ -7,13 +7,8 @@ interface CurrentAwardProps {
     displayState: DISPLAY_STATE;
 }
 
-function makeVisible() {
-    console.log("Making display visible")
-    talos.post(['display'], DISPLAY_STATE.OTHER)
-}
-
-function showWinner(){
-    console.log("Show the winner");
+function cue(){
+    console.log("Cuing next step");
     talos.post(['awards', 'push'], null)
 }
 
@@ -26,19 +21,11 @@ export const CurrentAward = (props: CurrentAwardProps) => {
     if(!props.award){
         return <Fragment/>
     }
-
-    let cueCb = showWinner;
-
-    if(props.displayState === DISPLAY_STATE.NONE){
-        cueCb = makeVisible;
-    } else if(props.award.winner) {
-        cueCb = hide;
-    }
     
     return(
         <div>
             <h2>{props.award.name}</h2>
-            <button onClick={cueCb}>Cue</button>
+            <button onClick={cue}>Cue</button>
         </div>
     )
 }
