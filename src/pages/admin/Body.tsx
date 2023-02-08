@@ -36,6 +36,7 @@ export const Body = (props: BodyProps) => {
         case ControlMode.MATCH: {
             return <MatchControl
             teams={props.teams}
+            stage={props.stage}
             matches={props.matches}
             field={props.field}
             fields={props.fields}
@@ -51,7 +52,7 @@ export const Body = (props: BodyProps) => {
             return <Display/>
         }
         case ControlMode.AWARDS: {
-            return <Awards displayState={props.displayState} awards={props.awards} selected={props.selectedAward}/>
+            return <Awards stage={props.stage} displayState={props.displayState} awards={props.awards} selected={props.selectedAward}/>
         }
     }
     return <Fragment>{props.mode}</Fragment>

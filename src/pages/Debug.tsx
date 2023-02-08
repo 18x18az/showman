@@ -1,12 +1,12 @@
 import { COMPETITION_STAGE } from "@18x18az/rosetta";
 import { talos } from "../ws";
 
-function changeStage(stage: string){
+function changeStage(stage: COMPETITION_STAGE){
     talos.post(["stage"], stage);
 }
 
 interface StageChangerProps {
-    value: string
+    value: COMPETITION_STAGE
 }
 
 const StageChanger = (props: StageChangerProps) => {

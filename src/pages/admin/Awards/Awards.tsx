@@ -1,5 +1,6 @@
-import { DISPLAY_STATE, IAward, IAwards } from "@18x18az/rosetta";
+import { DISPLAY_STATE, IAward, IAwards, COMPETITION_STAGE } from "@18x18az/rosetta";
 import { Fragment } from "react";
+import { StartState } from "../../../assets/StartState";
 import { talos } from "../../../ws";
 import { CurrentAward } from "./CurrentAward";
 
@@ -24,6 +25,7 @@ function IndividualAward(props: IndividualAwardProps) {
 }
 
 interface AwardsProps {
+    stage: COMPETITION_STAGE
     awards: IAwards | null
     selected: IAward | null
     displayState: DISPLAY_STATE
@@ -31,6 +33,11 @@ interface AwardsProps {
 
 export const Awards = (props: AwardsProps) => {
     document.title = "Awards";
+    
+    if(props.stage !== COMPETITION_STAGE.AWARDS){
+        return <StartState stage={COMPETITION_STAGE.AWARDS}>Start Awards</StartState>
+    }
+
     if (!props.awards) {
         refreshAwards();
         return <Fragment />
