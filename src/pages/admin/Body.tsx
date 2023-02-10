@@ -1,6 +1,7 @@
 import { COMPETITION_STAGE, DISPLAY_STATE, IAllianceSelectionStatus, IAward, IAwards, IFieldInfo, IFieldState, IInspectionStatus, IMatchInfo, IMatchList, IPath, ITeams, MATCH_STAGE } from "@18x18az/rosetta"
 import { Component, Fragment } from "react";
 import { AllianceSelection } from "./Alliance/Alliance";
+import { Announcements } from "./Announce/Announce";
 import { Awards } from "./Awards/Awards";
 import { Display } from "./Display/Display";
 import { Inspection } from "./Inspection/Index";
@@ -53,6 +54,9 @@ export const Body = (props: BodyProps) => {
         }
         case ControlMode.AWARDS: {
             return <Awards stage={props.stage} displayState={props.displayState} awards={props.awards} selected={props.selectedAward}/>
+        }
+        case ControlMode.ANNOUNCEMENTS: {
+            return <Announcements/>
         }
     }
     return <Fragment>{props.mode}</Fragment>
