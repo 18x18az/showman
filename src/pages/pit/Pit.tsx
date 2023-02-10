@@ -5,6 +5,7 @@ import { Default } from "./Default";
 import { Inspection } from "./Inspection/Inspection";
 import { Qualification } from "./Qualification/Qualifcation";
 
+const voice = window.speechSynthesis;
 interface PitProps {
     teams: ITeams | null
     matches: IMatchList | null
@@ -15,6 +16,7 @@ interface PitState {
     stage: COMPETITION_STAGE
     inspectionStatus: IInspectionStatus | null
     field: IFieldState | null
+    lastAnnouncement: string
 }
 
 export class Pit extends Component<PitProps, PitState> {
@@ -26,7 +28,8 @@ export class Pit extends Component<PitProps, PitState> {
         this.state = {
             stage: COMPETITION_STAGE.IDLE,
             inspectionStatus: null,
-            field: null
+            field: null,
+            lastAnnouncement: ""
         }
     }
 
@@ -42,7 +45,7 @@ export class Pit extends Component<PitProps, PitState> {
                     stage: nextProps.lastMessageBody
                 })
             }
-            
+
             if (route === "inspection") {
                 return ({
                     inspectionStatus: nextProps.lastMessageBody
@@ -54,6 +57,23 @@ export class Pit extends Component<PitProps, PitState> {
                     field: nextProps.lastMessageBody
                 })
             }
+
+            if (route === "announce") {
+                const announcement = nextProps.lastMessageBody;
+                if (announcement !== prevState.lastAnnouncement && !voice.speaking) {
+                    const voices = voice.getVoices();
+                    const desiredIndex = voices.findIndex((option) => option.voiceURI === "Google UK English Male");
+                    const msg = new SpeechSynthesisUtterance();
+                    if(desiredIndex){
+                        msg.voice = voices[desiredIndex];
+                    }
+                    msg.text = announcement;
+                    voice.speak(msg)
+                    return({
+                        lastAnnouncement: announcement
+                    })
+                }
+            }
         }
         return null;
     }
@@ -61,6 +81,10 @@ export class Pit extends Component<PitProps, PitState> {
     render() {
         document.title = "Pit Display"
         let content = <Default />
+
+        const synth = window.speechSynthesis;
+        const textValue = "hello world"
+        const utterance = new SpeechSynthesisUtterance(textValue);
 
         if (this.props.teams) {
             switch (this.state.stage) {

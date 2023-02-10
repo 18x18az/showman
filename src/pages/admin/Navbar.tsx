@@ -6,17 +6,18 @@ export enum ControlMode {
     DISPLAY = "Display",
     MATCH = "Match",
     ALLIANCE = "Alliance Selection",
-    AWARDS = "Awards"
+    AWARDS = "Awards",
+    ANNOUNCEMENTS = "Announce"
 }
 
 export const bars = new Map();
 
-bars.set(COMPETITION_STAGE.INSPECTION, [ControlMode.INSPECTION, ControlMode.DISPLAY])
-bars.set(COMPETITION_STAGE.QUALS, [ControlMode.MATCH, ControlMode.DISPLAY, ControlMode.ALLIANCE])
-bars.set(COMPETITION_STAGE.IDLE, [ControlMode.DISPLAY])
-bars.set(COMPETITION_STAGE.ALLIANCE, [ControlMode.MATCH, ControlMode.DISPLAY, ControlMode.ALLIANCE])
-bars.set(COMPETITION_STAGE.ELIMS, [ControlMode.MATCH, ControlMode.DISPLAY, ControlMode.AWARDS])
-bars.set(COMPETITION_STAGE.AWARDS, [ControlMode.MATCH, ControlMode.DISPLAY, ControlMode.AWARDS])
+bars.set(COMPETITION_STAGE.INSPECTION, [ControlMode.ANNOUNCEMENTS, ControlMode.INSPECTION, ControlMode.DISPLAY])
+bars.set(COMPETITION_STAGE.QUALS, [ControlMode.ANNOUNCEMENTS, ControlMode.MATCH, ControlMode.DISPLAY, ControlMode.ALLIANCE])
+bars.set(COMPETITION_STAGE.IDLE, [ControlMode.ANNOUNCEMENTS, ControlMode.DISPLAY])
+bars.set(COMPETITION_STAGE.ALLIANCE, [ControlMode.ANNOUNCEMENTS, ControlMode.DISPLAY, ControlMode.ALLIANCE])
+bars.set(COMPETITION_STAGE.ELIMS, [ControlMode.ANNOUNCEMENTS, ControlMode.MATCH, ControlMode.DISPLAY, ControlMode.AWARDS])
+bars.set(COMPETITION_STAGE.AWARDS, [ControlMode.ANNOUNCEMENTS, ControlMode.MATCH, ControlMode.DISPLAY, ControlMode.AWARDS])
 
 interface NavbarProps {
     stage: COMPETITION_STAGE
