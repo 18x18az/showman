@@ -86,7 +86,7 @@ export class Emcee extends Component<IEmceeProps, IEmceeState> {
         const matchStage = this.state.matchStage;
 
         if (stage === COMPETITION_STAGE.QUALS || stage === COMPETITION_STAGE.ELIMS) {
-            if(matchStage === MATCH_STAGE.OUTRO || matchStage === MATCH_STAGE.STING_OUT || matchStage === MATCH_STAGE.IDLE){
+            if(matchStage === MATCH_STAGE.OUTRO || matchStage === MATCH_STAGE.STING_OUT || matchStage === MATCH_STAGE.IDLE || matchStage === MATCH_STAGE.HOLD_FOR_SCORE){
                 content = <Score score={this.state.score} matches={this.props.matches} teams={this.props.teams}/>
             } else {
                 content = <Match teams={this.props.teams} fieldState={this.state.fieldState} matches={this.props.matches} />

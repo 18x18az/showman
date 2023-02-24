@@ -10,6 +10,7 @@ interface ScenePanelProps {
 const OBSControlPanel = (props: ScenePanelProps) => {
 
     const [checked, setChecked] = useState(false);
+    const [checked2, setChecked2] = useState(false);
 
     const handleChange = () => {
         setChecked(!checked);
@@ -19,6 +20,12 @@ const OBSControlPanel = (props: ScenePanelProps) => {
             attemptReconnect: false
         };
         talos.post(["obs"], payload);
+    }
+
+    const handleChange2 = () => {
+        setChecked2(!checked2);
+        let payload = !checked2;
+        talos.post(["hold"], payload);
     }
 
     const reconnect = () => {
@@ -36,10 +43,17 @@ const OBSControlPanel = (props: ScenePanelProps) => {
         talos.get(['obs']);
     }, [checked]);
 
+    useEffect( ()=> {
+        talos.get(['hold']);
+    }, [checked2]);
+
     return(
         <div className="matchAdmin">
             <label>Manual Scene Control </label>
             <input type="checkbox" checked={checked} onChange={handleChange} />
+            <br></br>
+            <label>Hold For Score </label>
+            <input type="checkbox" checked={checked2} onChange={handleChange2} />
             <br></br>
             <button onClick={reconnect}>Reconnect to OBS Server</button>
         </div>

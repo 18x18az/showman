@@ -84,7 +84,7 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
         console.log(stage);
         if (this.state && this.state.fields && this.state.field && this.state.matchStage && this.props.teams && this.props.matches) {
             let showMatchLocked = true;
-            if (stage === MATCH_STAGE.IDLE) {
+            if (stage === MATCH_STAGE.IDLE || stage === MATCH_STAGE.HOLD_FOR_SCORE) {
                 showMatchLocked = false;
             }
             let startMatchLocked = true;
@@ -96,7 +96,7 @@ export class RefereePanel extends Component<RefereeProps, RefereeState> {
             let matchName = "match name";
             let control = "mode";
             let time = "time";
-            let queueButtonName = showMatchLocked ? "LOCKED" : "SHOW NEXT MATCH";
+            let queueButtonName = showMatchLocked ? "LOCKED" : "DISPLAY";
             let controlButtonName = startMatchLocked ? "LOCKED" : "START MATCH";
 
             // get field name
