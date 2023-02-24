@@ -1,7 +1,8 @@
-import { COMPETITION_STAGE, DISPLAY_STATE, IFieldState, IMatchList, IPath, ITeams } from "@18x18az/rosetta";
+import { COMPETITION_STAGE, DISPLAY_STATE, MATCH_STAGE, IFieldState, IMatchList, IPath, ITeams, ISimpleMatchResult } from "@18x18az/rosetta";
 import { Component, Fragment } from "react";
 import { talos } from "../../ws";
 import { Match } from "./Match";
+import { Score } from "./Score";
 
 interface IEmceeProps {
     teams: ITeams | null
@@ -14,6 +15,8 @@ interface IEmceeState {
     mode: DISPLAY_STATE
     stage: COMPETITION_STAGE
     fieldState: IFieldState | null
+    matchStage: MATCH_STAGE | null
+    score: ISimpleMatchResult | null
 }
 
 export class Emcee extends Component<IEmceeProps, IEmceeState> {
@@ -22,10 +25,14 @@ export class Emcee extends Component<IEmceeProps, IEmceeState> {
         talos.get(['display']);
         talos.get(['stage']);
         talos.get(['field']);
+        talos.get(['matchStage']);
+        talos.get(['score']);
         this.state = {
             mode: DISPLAY_STATE.UPCOMING,
             stage: COMPETITION_STAGE.IDLE,
-            fieldState: null
+            fieldState: null,
+            matchStage: null,
+            score: null
         }
     }
 
@@ -48,26 +55,48 @@ export class Emcee extends Component<IEmceeProps, IEmceeState> {
                 console.log(`Stage changed to ${stage} `);
                 return { stage: nextProps.lastMessageBody };
             }
+            if (route === "matchStage") {
+                return ({
+                    matchStage: nextProps.lastMessageBody
+                })
+            }
+            if (route === "score") {
+                return({
+                    score: nextProps.lastMessageBody
+                });
+            }
         }
 
         return null;
     }
 
     render() {
+        document.title = 'Emcee'
+        let content = <Fragment />;
+
         if (!this.props.teams) {
-            return <Fragment />
+            return content;
         }
 
-        if(!this.props.matches) {
-            return <Fragment />
+        if (!this.props.matches) {
+            return content;
         }
 
         const stage = this.state.stage;
+        const matchStage = this.state.matchStage;
 
-        if(stage === COMPETITION_STAGE.QUALS || stage === COMPETITION_STAGE.ELIMS){
-            return <Match teams={this.props.teams} fieldState={this.state.fieldState} matches={this.props.matches}/>
+        if (stage === COMPETITION_STAGE.QUALS || stage === COMPETITION_STAGE.ELIMS) {
+            if(matchStage === MATCH_STAGE.OUTRO || matchStage === MATCH_STAGE.STING_OUT || matchStage === MATCH_STAGE.IDLE || matchStage === MATCH_STAGE.HOLD_FOR_SCORE){
+                content = <Score score={this.state.score} matches={this.props.matches} teams={this.props.teams}/>
+            } else {
+                content = <Match teams={this.props.teams} fieldState={this.state.fieldState} matches={this.props.matches} />
+            }  
         }
 
-        return <Fragment />
+        return (
+            <div className="mobile">
+                {content}
+            </div>
+        )
     }
 }

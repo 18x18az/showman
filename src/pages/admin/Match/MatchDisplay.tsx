@@ -74,6 +74,12 @@ export const MatchDisplay = (props: MatchDisplayProps) => {
             cb = onStartClick;
             break;
         }
+        case MATCH_STAGE.HOLD_FOR_SCORE: {
+            buttonDisabled = false;
+            buttonText = "REVEAL";
+            cb = onShowClick;
+            break;
+        }
     }
 
     return (

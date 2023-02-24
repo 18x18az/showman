@@ -10,7 +10,7 @@ interface ITeamInfoProps {
 
 function TeamInfo(props: ITeamInfoProps) {
     const team = props.teams[props.team];
-    return(
+    return (
         <div>
             <h1>{team.number} - {team.name}</h1>
             <h2>{team.school}</h2>
@@ -26,13 +26,16 @@ interface IAllianceInfoProps {
 }
 
 function AllianceInfo(props: IAllianceInfoProps) {
-    const team1 = <TeamInfo teams={props.teams} team={props.alliance.team1}/>
+    const team1 = <TeamInfo teams={props.teams} team={props.alliance.team1} />
     let team2;
-    if(props.alliance.team2){
-        team2 = <TeamInfo teams={props.teams} team={props.alliance.team2}/>
+    if (props.alliance.team2) {
+        team2 = <TeamInfo teams={props.teams} team={props.alliance.team2} />
     }
-    return(
-        <div>
+    return (
+        <div className={props.color}>
+            <h1>
+                {props.color}
+            </h1>
             {team1}
             {team2}
         </div>
@@ -52,18 +55,18 @@ export function Match(props: IMatchInterface) {
 
     const match = getMatchByString(props.fieldState.match, props.matches);
 
-    if (!match){
-        return <Fragment/>
+    if (!match) {
+        return <Fragment />
     }
 
     const matchName = makeMatchName(match);
 
-    return(
+    return (
         <div>
             <h1>{matchName}</h1>
             <h2>Field {props.fieldState.field}</h2>
-            <AllianceInfo teams={props.teams} color="RED" alliance={match.red}/>
-            <AllianceInfo teams={props.teams} color="BLUE" alliance={match.blue}/>
+            <AllianceInfo teams={props.teams} color="RED" alliance={match.red} />
+            <AllianceInfo teams={props.teams} color="BLUE" alliance={match.blue} />
         </div>
     )
 }

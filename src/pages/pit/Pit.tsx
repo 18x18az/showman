@@ -1,4 +1,4 @@
-import { COMPETITION_STAGE, IInspectionStatus, IFieldState, IMatchList, IPath, ITeams } from "@18x18az/rosetta";
+import { COMPETITION_STAGE, IInspectionStatus, IFieldState, IMatchList, IPath, ITeams, IAnnouncement } from "@18x18az/rosetta";
 import { Component } from "react";
 import { talos } from "../../ws";
 import { Default } from "./Default";
@@ -16,7 +16,7 @@ interface PitState {
     stage: COMPETITION_STAGE
     inspectionStatus: IInspectionStatus | null
     field: IFieldState | null
-    lastAnnouncement: string
+    lastAnnouncementId: string
 }
 
 export class Pit extends Component<PitProps, PitState> {
@@ -29,7 +29,7 @@ export class Pit extends Component<PitProps, PitState> {
             stage: COMPETITION_STAGE.IDLE,
             inspectionStatus: null,
             field: null,
-            lastAnnouncement: ""
+            lastAnnouncementId: ""
         }
     }
 
@@ -59,18 +59,18 @@ export class Pit extends Component<PitProps, PitState> {
             }
 
             if (route === "announce") {
-                const announcement = nextProps.lastMessageBody;
-                if (announcement !== prevState.lastAnnouncement && !voice.speaking) {
+                const announcement = nextProps.lastMessageBody as IAnnouncement;
+                if (announcement.uid !== prevState.lastAnnouncementId && !voice.speaking) {
                     const voices = voice.getVoices();
                     const desiredIndex = voices.findIndex((option) => option.voiceURI === "Google UK English Male");
                     const msg = new SpeechSynthesisUtterance();
                     if(desiredIndex){
                         msg.voice = voices[desiredIndex];
                     }
-                    msg.text = announcement;
+                    msg.text = announcement.message;
                     voice.speak(msg)
                     return({
-                        lastAnnouncement: announcement
+                        lastAnnouncementId: announcement.uid
                     })
                 }
             }
