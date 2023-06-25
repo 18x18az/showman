@@ -1,36 +1,28 @@
-import { Component, Fragment } from "react";
-import { handleTopic } from "./utils/talos";
+import { Component } from 'react'
+import { handleTopic } from './utils/talos'
 
-interface Props {
-
-}
-
-interface State {
-
-}
-
-class App extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props)
+class App extends Component {
+  constructor () {
+    super({})
 
     handleTopic('stage', this.messageHandler.bind(this))
-    //client.on("message", this.messageHandler.bind(this))
+    // client.on("message", this.messageHandler.bind(this))
 
     this.state = {
     }
   }
 
-  messageHandler(topic: string, message: string) {
+  messageHandler (topic: string, message: string): void {
     console.log(message)
   }
 
-  render() {
+  render (): JSX.Element {
     return (
-      <Fragment>
+      <>
         Hello world
-      </Fragment>
-    );
+      </>
+    )
   }
 }
 
-export default App;
+export default App
