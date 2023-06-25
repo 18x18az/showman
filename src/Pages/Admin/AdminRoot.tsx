@@ -18,7 +18,7 @@ export function AdminRoot (props: Props): JSX.Element {
       body = loading()
       break
     default:
-      document.title = 'Admin'
+      document.title = props.stage
   }
   return (
     <div className='web admin'>
