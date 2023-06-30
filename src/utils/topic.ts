@@ -2,30 +2,24 @@ import * as mqtt from 'mqtt/dist/mqtt'
 import { useEffect, useState } from 'react'
 
 const host = window.location.hostname // TODO handle Bifrost
-const mqttBroker = `mqtt://${host}:1819`
+const mqttBroker = `mqtt://${host}/mqtt:80`
 
 function BaseTopic (topic: string, initial: string): string {
   const [variable, setVariable] = useState(initial)
-  let client: mqtt.MqttClient
   useEffect(() => {
-    console.log('hello')
-
     const mqttOption = {
       protocol: 'ws' as const,
       clientId: Math.random().toString(16)
     }
 
-    console.log(mqttOption)
-
-    client = mqtt.connect(mqttBroker, mqttOption)
-    client.on('message', (topic, payload): void => (setVariable(payload.toString())))
+    const client = mqtt.connect(mqttBroker, mqttOption)
+    client.on('message', (_t, payload): void => (setVariable(payload.toString())))
     client.subscribe(topic)
 
     return () => {
-      console.log('ended')
       client.end()
     }
-  }, [])
+  }, [topic])
 
   return variable
 }

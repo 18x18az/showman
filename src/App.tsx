@@ -1,23 +1,14 @@
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import { StringTopic } from './utils/talos'
-import { EventStage } from '@18x18az/rosetta'
-import { AdminRoot } from './Pages/Admin/AdminRoot'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 export default function App (): JSX.Element {
-  const stage = StringTopic('stage', EventStage.LOADING)
-
   return (
-    <>
+    <div>
       <BrowserRouter>
-        <Switch>
-          <Route exact path='/'>
-            Test
-          </Route>
-          <Route exact path='/admin'>
-            <AdminRoot stage={stage} />
-          </Route>
-        </Switch>
+        <Routes>
+          <Route path='/' element={<div>Home</div>} />
+          <Route path='/admin' element={<div>Admin</div>} />
+        </Routes>
       </BrowserRouter>
-    </>
+    </div>
   )
 }
