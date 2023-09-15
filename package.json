@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "license": "MIT",
   "scripts": {
+    "chromatic": "chromatic --exit-zero-on-changes",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "ts-standard",
     "prepare": "husky install",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
+    "build-storybook": "env NODE_ENV=test storybook build",
     "test-storybook": "test-storybook",
     "test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook && npx http-server storybook-static --port 6006\" \"wait-on tcp:6006 && yarn test-storybook\""
   },
@@ -37,6 +38,7 @@
     "@storybook/test-runner": "^0.13.0",
     "@storybook/testing-library": "^0.2.0",
     "@testing-library/react": "^14.0.0",
+    "chromatic": "^7.1.0",
     "concurrently": "^8.2.1",
     "http-server": "^14.1.1",
     "husky": "^8.0.0",
