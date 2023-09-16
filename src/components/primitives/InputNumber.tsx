@@ -1,3 +1,4 @@
+'use client'
 import { SyncableResourceState } from './SyncedResource'
 
 export interface InputNumberProps {
@@ -36,6 +37,7 @@ export function InputNumber (props: InputNumberProps): JSX.Element {
 
   return (
     <input
+      className='text-radix-slate12 bg-radix-slate-int border-radix-slate-int border-solid border w-24 p-2 rounded text-base'
       type='number'
       inputMode='decimal'
       id={props.id}
