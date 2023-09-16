@@ -10,7 +10,7 @@ import React from 'react';
 const withTheme: Decorator = (StoryFn, context) => {
   const theme = context.parameters.theme || context.globals.theme
   return (
-    <ThemeProvider forcedTheme={theme}>
+    <ThemeProvider attribute="class" forcedTheme={theme}>
       <StoryFn />
     </ThemeProvider>
   )

@@ -24,6 +24,10 @@ export function SyncableResourceState<ResourceType> (config: SyncableResourceSta
   const [value, setValue] = useState<ResourceState<ResourceType>>({ upstream: undefined, local: config.initial })
 
   const setValueLocal: ResourceUpdater<ResourceType> = (localValue: ResourceType | undefined): void => {
+    if (localValue === value.local) {
+      return
+    }
+
     if (localValue === undefined) {
       localValue = config.initial
     }
@@ -33,11 +37,20 @@ export function SyncableResourceState<ResourceType> (config: SyncableResourceSta
     }
 
     setValue({ upstream: value.upstream, local: localValue })
+    config.onChange?.(localValue)
   }
 
   const setValueUpstream: ResourceUpdater<ResourceType> = (upstreamValue: ResourceType | undefined): void => {
+    if (upstreamValue === undefined) {
+      return
+    }
+
     if (upstreamValue === value.upstream) {
       return
+    }
+
+    if (upstreamValue !== value.local) {
+      config.onChange?.(upstreamValue)
     }
 
     setValue({ upstream: upstreamValue, local: upstreamValue })

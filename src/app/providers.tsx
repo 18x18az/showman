@@ -1,7 +1,7 @@
-"use client"
-import { ThemeProvider } from "next-themes"
+'use client'
+import { ThemeProvider } from 'next-themes'
 
-export default function Providers({ children }: any) {
-  return (<ThemeProvider> {children} </ThemeProvider>
+export default function Providers ({ children }: any): JSX.Element {
+  return (<ThemeProvider attribute='class'> {children} </ThemeProvider>
   )
 }

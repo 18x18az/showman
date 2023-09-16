@@ -26,6 +26,8 @@ function validator (value: number, options: ValidatorOptions): boolean {
   return true
 }
 
+const INPUT_STYLE = 'text-slate-12 bg-slate-3 hover:bg-slate-4 focus:bg-slate-5 active:bg-slate-5 border-slate-7 focus:border-slate-8 border-solid border w-24 p-2 rounded text-slate-12 focus:outline-none'
+
 export function InputNumber (props: InputNumberProps): JSX.Element {
   const { value, setValueLocal, setValueUpstream } = SyncableResourceState({
     initial: 0,
@@ -37,7 +39,7 @@ export function InputNumber (props: InputNumberProps): JSX.Element {
 
   return (
     <input
-      className='text-radix-slate12 bg-radix-slate-int border-radix-slate-int border-solid border w-24 p-2 rounded text-base'
+      className={INPUT_STYLE}
       type='number'
       inputMode='decimal'
       id={props.id}
