@@ -1,3 +1,6 @@
+import { set } from "lodash"
+import { useEffect, useState } from "react"
+
 export interface InputNumberProps {
   value: number
   minimum?: number
@@ -27,10 +30,22 @@ const INPUT_STYLE = 'text-slate-12 bg-slate-3 hover:bg-slate-4 focus:bg-slate-5 
  w-24 p-2 rounded focus:outline-none'
 
 export function InputNumber (props: InputNumberProps): JSX.Element {
+  const [value, setValue] = useState(props.value)
+  const [lastGood, setLastGood] = useState(props.value)
+
+  // Use effect to update the value when the props change
+  useEffect(() => {
+    setValue(props.value)
+    setLastGood(props.value)
+  }, [props.value])
 
   const onChangeEvent = (value: number): void => {
     if(validate(value, props)) {
+      setValue(value)
+      setLastGood(value)
       props.onChange(value)
+    } else {
+      setValue(lastGood)
     }
   }
 
@@ -39,8 +54,9 @@ export function InputNumber (props: InputNumberProps): JSX.Element {
       className={INPUT_STYLE}
       type='number'
       inputMode='decimal'
-      value={props.value}
-      onChange={evt => onChangeEvent(Number(evt.target.value))}
+      value={value.toString()}
+      onBlur={evt => onChangeEvent(Number(evt.target.value))}
+      onChange={evt => setValue(Number(evt.target.value))}
       min={props.minimum}
       max={props.maximum}
     />

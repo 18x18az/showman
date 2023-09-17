@@ -65,8 +65,6 @@ export function Inspection(props: InspectionProps): JSX.Element {
 
     const {output: status, updateFromLocal} = networkSynchronizer<InspectionStatus>(valuesFromNetwork)
 
-    console.log(status['S1'])
-
     const reconciled: InspectionSectionData[] = props.sections.map((section) => {
         return {
             ...section,
@@ -78,8 +76,6 @@ export function Inspection(props: InspectionProps): JSX.Element {
             })
         }
     })
-    
-    console.log(reconciled[0])
 
     return <div className="flex flex-col bg-slate-2">
         {reconciled.flatMap((section) => {

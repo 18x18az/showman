@@ -10,18 +10,14 @@ export default function Home (): JSX.Element | null {
 
   useEffect(() => setMounted(true), [])
 
-  console.log(mounted)
-
   if (!mounted) return null
 
   if (resolvedTheme === undefined) {
     setTheme('dark')
   }
 
-  console.log(resolvedTheme)
   return (
     <div>
-      <InputNumber id='test' value={0} />
     </div>
   )
 }
