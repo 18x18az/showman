@@ -7,12 +7,6 @@ import { InputNumber } from './InputNumber'
 const meta: Meta<typeof InputNumber> = {
   component: InputNumber,
   argTypes: {
-    id: {
-      control: {
-        type: 'text',
-        defaultValue: 'test'
-      }
-    },
     minimum: {
       control: {
         type: 'number'
@@ -36,9 +30,6 @@ export default meta
 type Story = StoryObj<typeof InputNumber>
 
 export const Primary: Story = {
-  args: {
-    id: 'test'
-  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
     const input = canvas.getByRole('spinbutton')

@@ -1,14 +1,13 @@
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
 import * as Select from '@radix-ui/react-select'
 import { ExpandButton } from './ExpandButton'
-import { SyncableResourceState } from './SyncedResource'
 
 interface DropdownProps {
   id: string
   value: string | undefined
   options: string[]
   defaultOption: string
-  onChange?: (value: string) => void
+  onChange: (value: string) => void
 }
 
 const VIEWPORT_STYLE = 'bg-slate-4 rounded-md p-2'
@@ -16,15 +15,8 @@ const ITEM_STYLE = 'relative flex items-center px-8 py-2 rounded-md text-sm text
 const UP_STYLE = 'flex items-center justify-center text-slate-12'
 
 export function Dropdown (props: DropdownProps): JSX.Element {
-  const { value, setValueLocal, setValueUpstream } = SyncableResourceState({
-    initial: props.defaultOption,
-    onChange: props.onChange
-  })
-
-  setValueUpstream(props.value)
-
   return (
-    <Select.Root value={value} onValueChange={value => setValueLocal(value)}>
+    <Select.Root value={props.value} onValueChange={value => props.onChange(value)}>
       <Select.Trigger className='focus:outline-none'>
         <ExpandButton>
           <Select.Value placeholder={props.defaultOption} />

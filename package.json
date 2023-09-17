@@ -10,6 +10,7 @@
     "lint": "ts-standard",
     "prepare": "husky install",
     "storybook": "storybook dev -p 6006",
+    "test": "jest",
     "build-storybook": "env NODE_ENV=test storybook build",
     "test-storybook": "test-storybook",
     "test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook && npx http-server storybook-static --port 6006\" \"wait-on tcp:6006 && yarn test-storybook\""
@@ -23,6 +24,8 @@
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.15",
+    "lodash": "^4.17.21",
+    "lorem-ipsum": "^2.0.8",
     "next": "13.4.19",
     "next-themes": "^0.2.1",
     "postcss": "8.4.29",
@@ -51,6 +54,7 @@
     "http-server": "^14.1.1",
     "husky": "^8.0.0",
     "storybook": "7.4.1",
+    "ts-jest": "^29.1.1",
     "ts-standard": "^12.0.2",
     "wait-on": "^7.0.1"
   },
