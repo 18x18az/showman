@@ -31,7 +31,7 @@ type Story = StoryObj<typeof InputNumber>
 
 export const Primary: Story = {
   args: {
-    value: 0,
+    value: 0
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)

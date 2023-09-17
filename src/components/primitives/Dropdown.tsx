@@ -3,10 +3,8 @@ import * as Select from '@radix-ui/react-select'
 import { ExpandButton } from './ExpandButton'
 
 interface DropdownProps {
-  id: string
-  value: string | undefined
+  value: string
   options: string[]
-  defaultOption: string
   onChange: (value: string) => void
 }
 
@@ -19,7 +17,7 @@ export function Dropdown (props: DropdownProps): JSX.Element {
     <Select.Root value={props.value} onValueChange={value => props.onChange(value)}>
       <Select.Trigger className='focus:outline-none'>
         <ExpandButton>
-          <Select.Value placeholder={props.defaultOption} />
+          <Select.Value placeholder={props.value} />
           <Select.Icon className='ml-2'>
             <ChevronDownIcon />
           </Select.Icon>

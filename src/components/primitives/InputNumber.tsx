@@ -1,5 +1,4 @@
-import { set } from "lodash"
-import { useEffect, useState } from "react"
+import { useEffect, useState } from 'react'
 
 export interface InputNumberProps {
   value: number
@@ -25,9 +24,9 @@ function validate (value: number, options: ValidatorOptions): boolean {
   return true
 }
 
-const INPUT_STYLE = 'text-slate-12 bg-slate-3 hover:bg-slate-4 focus:bg-slate-5 active:bg-slate-5 \
- border-slate-7 focus:border-slate-8 border-solid border \
- w-24 p-2 rounded focus:outline-none'
+const INPUT_STYLE = 'text-slate-12 bg-slate-3 hover:bg-slate-4 focus:bg-slate-5 active:bg-slate-5 ' +
+ 'border-slate-7 focus:border-slate-8 border-solid border ' +
+ 'w-24 p-2 rounded focus:outline-none'
 
 export function InputNumber (props: InputNumberProps): JSX.Element {
   const [value, setValue] = useState(props.value)
@@ -40,12 +39,20 @@ export function InputNumber (props: InputNumberProps): JSX.Element {
   }, [props.value])
 
   const onChangeEvent = (value: number): void => {
-    if(validate(value, props)) {
+    if (validate(value, props)) {
       setValue(value)
       setLastGood(value)
       props.onChange(value)
     } else {
       setValue(lastGood)
+    }
+  }
+
+  const onSmallUpdate = (value: number): void => {
+    setValue(value)
+    if (validate(value, props)) {
+      setLastGood(value)
+      props.onChange(value)
     }
   }
 
@@ -56,7 +63,7 @@ export function InputNumber (props: InputNumberProps): JSX.Element {
       inputMode='decimal'
       value={value.toString()}
       onBlur={evt => onChangeEvent(Number(evt.target.value))}
-      onChange={evt => setValue(Number(evt.target.value))}
+      onChange={evt => onSmallUpdate(Number(evt.target.value))}
       min={props.minimum}
       max={props.maximum}
     />

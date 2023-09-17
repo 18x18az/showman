@@ -1,5 +1,4 @@
 'use client'
-import { InputNumber } from '@/components/primitives/InputNumber'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 
@@ -17,7 +16,6 @@ export default function Home (): JSX.Element | null {
   }
 
   return (
-    <div>
-    </div>
+    <div />
   )
 }
