@@ -1,11 +1,32 @@
-import type { Decorator, DecoratorFn, Preview } from '@storybook/react';
-
-import { withThemeByClassName } from '@storybook/addon-styling';
-
+import type { Decorator, Preview } from '@storybook/react';
 /* TODO: update import to your tailwind styles file. If you're using Angular, inject this through your angular.json config instead */
 import '../src/app/globals.css';
 import { ThemeProvider } from 'next-themes';
 import React from 'react';
+
+const customViewports = {
+  fire7: {
+    name: 'Fire 7',
+    styles: {
+      width: '600px',
+      height: '1024px',
+    },
+  },
+  pixel: {
+    name: 'Pixel 6',
+    styles: {
+      width: '412px',
+      height: '915px',
+    },
+  },
+  stream: {
+    name: 'Stream Output',
+    styles: {
+      width: '1920px',
+      height: '1080px',
+    },
+  },
+};
 
 const withTheme: Decorator = (StoryFn, context) => {
   const theme = context.parameters.theme || context.globals.theme
@@ -41,7 +62,8 @@ const preview: Preview = {
         date: /Date$/,
       },
     },
-    layout: 'fullscreen'
+    layout: 'fullscreen',
+    viewport: { viewports: customViewports },
   },
 
   decorators: [

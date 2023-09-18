@@ -12,6 +12,13 @@ const config: Config = {
     require('tailwindcss-radix')(),
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     require('windy-radix-palette')()
-  ]
+  ],
+  theme: {
+    screens: {
+      tablet: '600px',
+      desktop: '1024px'
+    }
+  }
 }
+
 export default config

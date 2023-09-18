@@ -1,7 +1,9 @@
+import { AutoScore } from './AutoScore'
 import { ScoringInput } from './ScoringInput'
 
 interface AllianceInputProps {
   alliance: 'red' | 'blue'
+  isElim: boolean
 }
 
 export function AllianceInput (props: AllianceInputProps): JSX.Element {
@@ -13,12 +15,13 @@ export function AllianceInput (props: AllianceInputProps): JSX.Element {
   const textColor = `${props.alliance === 'red' ? redText : blueText}`
   const outlineColor = `${props.alliance === 'red' ? redOutline : blueOutline}`
 
-  const teamColor = `${textColor} md:text-slate-12 text-lg flex items-center justify-center pb-2 md:items-start md:justify-start`
+  const teamColor = `${textColor} tablet:text-slate-12 text-lg flex items-center justify-center pb-2 tablet:items-start tablet:justify-start`
   const allianceCapitalized = props.alliance.charAt(0).toUpperCase() + props.alliance.slice(1)
   return (
-    <div className={'m-1 p-2 rounded md:p-8 md:m-4 md:mx-8 md:outline outline-1 lg:outline-2 lg:rounded-lg bg-slate-3 lg:p-4 lg:mx-4 ' + outlineColor}>
+    <div className={'m-1 p-2 rounded tablet:p-8 tablet:m-4 tablet:mx-8 tablet:outline outline-1 desktop:outline-2 desktop:rounded-lg bg-slate-3 desktop:p-4 desktop:mx-4 ' + outlineColor}>
       <div className={teamColor}>{`${allianceCapitalized} Alliance`}</div>
       <ScoringInput alliance={props.alliance} />
+      <AutoScore isElim={props.isElim} />
     </div>
   )
 }
