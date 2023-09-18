@@ -5,11 +5,13 @@ export interface InputNumberProps {
   minimum?: number
   maximum?: number
   onChange: (value: number) => void
+  locked?: boolean
 }
 
 interface ValidatorOptions {
   minimum?: number
   maximum?: number
+  enabled?: boolean
 }
 
 function validate (value: number, options: ValidatorOptions): boolean {
@@ -26,7 +28,7 @@ function validate (value: number, options: ValidatorOptions): boolean {
 
 const INPUT_STYLE = 'text-slate-12 bg-slate-3 hover:bg-slate-4 focus:bg-slate-5 active:bg-slate-5 ' +
  'border-slate-7 focus:border-slate-8 border-solid border ' +
- 'w-16 sm:w-24 p-2 rounded focus:outline-none'
+ 'w-16 sm:w-24 p-2 rounded focus:outline-none disabled:border-slate-6 disabled:bg-slate-4 disabled:hover:bg-slate-4'
 
 export function InputNumber (props: InputNumberProps): JSX.Element {
   const [value, setValue] = useState(props.value)
@@ -66,6 +68,7 @@ export function InputNumber (props: InputNumberProps): JSX.Element {
       onChange={evt => onSmallUpdate(Number(evt.target.value))}
       min={props.minimum}
       max={props.maximum}
+      disabled={props.locked === true}
     />
   )
 }

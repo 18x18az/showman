@@ -6,6 +6,7 @@ interface DropdownProps {
   value: string
   options: string[]
   onChange: (value: string) => void
+  locked?: boolean
 }
 
 const VIEWPORT_STYLE = 'bg-slate-4 rounded-md p-2'
@@ -13,14 +14,20 @@ const ITEM_STYLE = 'relative flex items-center px-8 py-2 rounded-md text-sm text
 const UP_STYLE = 'flex items-center justify-center text-slate-12'
 
 export function Dropdown (props: DropdownProps): JSX.Element {
+  let dropDownIcon
+
+  if(props.locked !== true){
+    dropDownIcon = <Select.Icon className='ml-2'>
+    <ChevronDownIcon />
+  </Select.Icon>
+  }
+
   return (
     <Select.Root value={props.value} onValueChange={value => props.onChange(value)}>
-      <Select.Trigger className='focus:outline-none'>
-        <ExpandButton>
+      <Select.Trigger disabled={props.locked} className='focus:outline-none'>
+        <ExpandButton disabled={props.locked}>
           <Select.Value placeholder={props.value} />
-          <Select.Icon className='ml-2'>
-            <ChevronDownIcon />
-          </Select.Icon>
+          {dropDownIcon}
         </ExpandButton>
       </Select.Trigger>
       <Select.Content>

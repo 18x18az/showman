@@ -4,6 +4,7 @@ import { Label } from '../../primitives/Label'
 
 interface AutoScoreProps {
   isElim: boolean
+  locked: boolean
 }
 
 export function AutoScore (props: AutoScoreProps): JSX.Element {
@@ -12,7 +13,7 @@ export function AutoScore (props: AutoScoreProps): JSX.Element {
   if (!props.isElim) {
     winPoint = (
       <Label title='AWP'>
-        <CheckBox value={false} onChange={() => {}} />
+        <CheckBox locked={props.locked} value={false} onChange={() => {}} />
       </Label>
     )
   }
@@ -22,10 +23,10 @@ export function AutoScore (props: AutoScoreProps): JSX.Element {
       <LabelledSection label='Auto'>
 
         <Label title='Win'>
-          <CheckBox value={false} onChange={() => {}} />
+          <CheckBox locked={props.locked} value={false} onChange={() => {}} />
         </Label>
         <Label title='Tie'>
-          <CheckBox value={false} onChange={() => {}} />
+          <CheckBox locked={props.locked} value={false} onChange={() => {}} />
         </Label>
         {winPoint}
       </LabelledSection>

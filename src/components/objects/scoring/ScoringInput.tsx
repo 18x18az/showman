@@ -5,6 +5,7 @@ import { Label } from '../../primitives/Label'
 
 interface ScoringInputProps {
   alliance: 'red' | 'blue'
+  locked: boolean
 }
 
 const ELEVATION_OPTIONS = ['—', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
@@ -16,28 +17,28 @@ export function ScoringInput (props: ScoringInputProps): JSX.Element {
     <>
       <LabelledSection label={allianceTriballText}>
         <Label title='Either goal'>
-          <InputNumber value={0} minimum={0} maximum={2} onChange={val => {}} />
+          <InputNumber locked={props.locked} value={0} minimum={0} maximum={2} onChange={val => {}} />
         </Label>
         <Label title='Either zone'>
-          <InputNumber value={0} minimum={0} maximum={2} onChange={val => {}} />
+          <InputNumber locked={props.locked} value={0} minimum={0} maximum={2} onChange={val => {}} />
         </Label>
       </LabelledSection>
 
       <LabelledSection label='Triballs scored in'>
         <Label title={`${allianceCapitalized} goal`}>
-          <InputNumber value={0} minimum={0} onChange={val => {}} />
+          <InputNumber locked={props.locked} value={0} minimum={0} onChange={val => {}} />
         </Label>
         <Label title={`${allianceCapitalized} zone`}>
-          <InputNumber value={0} minimum={0} onChange={val => {}} />
+          <InputNumber locked={props.locked} value={0} minimum={0} onChange={val => {}} />
         </Label>
       </LabelledSection>
 
       <LabelledSection label='Elevation'>
         <Label title='1'>
-          <Dropdown value={ELEVATION_OPTIONS[0]} options={ELEVATION_OPTIONS} onChange={() => {}} />
+          <Dropdown locked={props.locked} value={ELEVATION_OPTIONS[0]} options={ELEVATION_OPTIONS} onChange={() => {}} />
         </Label>
         <Label title='2'>
-          <Dropdown value={ELEVATION_OPTIONS[0]} options={ELEVATION_OPTIONS} onChange={() => {}} />
+          <Dropdown locked={props.locked} value={ELEVATION_OPTIONS[0]} options={ELEVATION_OPTIONS} onChange={() => {}} />
         </Label>
       </LabelledSection>
     </>
