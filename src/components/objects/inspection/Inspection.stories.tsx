@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react'
 import { Inspection, InspectionInfo, InspectionProps, InspectionSectionData } from './Inspection'
-import { loremIpsum } from 'lorem-ipsum'
+import { LoremIpsum } from 'lorem-ipsum'
 
 const meta: Meta<typeof Inspection> = {
   component: Inspection,
@@ -22,8 +22,18 @@ export default meta
 
 type Story = StoryObj<typeof Inspection>
 
+function makeRandom (): () => number {
+  let seed = 1
+  return () => {
+    const x = Math.sin(seed++) * 10000
+    return x - Math.floor(x)
+  }
+}
+
+const generator = new LoremIpsum({ random: makeRandom() })
+
 function fakeRequirement (index: number): InspectionInfo {
-  const description = loremIpsum()
+  const description = generator.generateSentences(1)
   const rules = [`R${index}`]
   if (index % 6 === 0) {
     rules.push(`R${index / 2}`)
