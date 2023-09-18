@@ -1,9 +1,11 @@
 import { AutoScore } from './AutoScore'
 import { ScoringInput } from './ScoringInput'
+import { TeamMeta } from './TeamMeta'
 
 interface AllianceInputProps {
   alliance: 'red' | 'blue'
   isElim: boolean
+  teams: string[]
 }
 
 export function AllianceInput (props: AllianceInputProps): JSX.Element {
@@ -18,10 +20,15 @@ export function AllianceInput (props: AllianceInputProps): JSX.Element {
   const teamColor = `${textColor} tablet:text-slate-12 text-lg flex items-center justify-center pb-2 tablet:items-start tablet:justify-start`
   const allianceCapitalized = props.alliance.charAt(0).toUpperCase() + props.alliance.slice(1)
   return (
-    <div className={'m-1 p-2 rounded tablet:p-8 tablet:m-4 tablet:mx-8 tablet:outline outline-1 desktop:outline-2 desktop:rounded-lg bg-slate-3 desktop:p-4 desktop:mx-4 ' + outlineColor}>
+    <div className={'flex flex-col space-y-4 p-2 desktop:w-96 tablet:rounded tablet:p-8 tablet:m-4 tablet:mx-8 tablet:outline outline-2 tablet:rounded-lg tablet:bg-slate-3 desktop:p-4 desktop:mx-4 ' + outlineColor}>
       <div className={teamColor}>{`${allianceCapitalized} Alliance`}</div>
       <ScoringInput alliance={props.alliance} />
       <AutoScore isElim={props.isElim} />
+      <div className='flex items-center justify-evenly'>
+        {props.teams.map((team, i) => (
+          <TeamMeta key={`${team}-${i}`} team={team} dq={false} noShow={false} />
+        ))}
+      </div>
     </div>
   )
 }

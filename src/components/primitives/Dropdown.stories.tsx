@@ -4,20 +4,9 @@ import { Dropdown } from './Dropdown'
 const meta: Meta<typeof Dropdown> = {
   component: Dropdown,
   argTypes: {
-    id: {
-      control: {
-        type: 'text',
-        defaultValue: 'test'
-      }
-    },
     options: {
       control: {
         type: 'array'
-      }
-    },
-    defaultOption: {
-      control: {
-        type: 'text'
       }
     }
   }
@@ -31,8 +20,7 @@ const DEFAULT_OPTIONS = ['None', 'A', 'B', 'C']
 
 export const Primary: Story = {
   args: {
-    id: 'test',
     options: DEFAULT_OPTIONS,
-    defaultOption: DEFAULT_OPTIONS[0]
+    value: DEFAULT_OPTIONS[0]
   }
 }

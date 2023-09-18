@@ -1,14 +1,22 @@
 import { AllianceInput } from './AllianceInput'
 
 interface MatchScoreProps {
+  matchName: string
   isElim: boolean
+  alliances: { red: string[], blue: string[] }
 }
 
 export function MatchScore (props: MatchScoreProps): JSX.Element {
   return (
-    <div className='flex flex-col desktop:flex-row'>
-      <AllianceInput isElim={props.isElim} alliance='red' />
-      <AllianceInput isElim={props.isElim} alliance='blue' />
+    <div>
+      <div className='flex justify-evenly desktop:m-4 text-slate-12 desktop:mt-8  mt-2 mb-2 tablet:mt-4 tablet:text-lg desktop:text-2xl desktop:font-semibold'>
+        {props.matchName}
+      </div>
+      <div className='flex divide-y-2 divide-gray-6 tablet:divide-y-0 flex-col desktop:flex-row desktop:justify-center gap-8'>
+        <AllianceInput isElim={props.isElim} alliance='red' teams={props.alliances.red} />
+        <AllianceInput isElim={props.isElim} alliance='blue' teams={props.alliances.blue} />
+      </div>
     </div>
+
   )
 }

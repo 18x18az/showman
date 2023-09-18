@@ -1,3 +1,4 @@
+import { LabelledSection } from '../../primitives/LabelledSection'
 import { Dropdown } from '../../primitives/Dropdown'
 import { InputNumber } from '../../primitives/InputNumber'
 import { Label } from '../../primitives/Label'
@@ -6,41 +7,39 @@ interface ScoringInputProps {
   alliance: 'red' | 'blue'
 }
 
-const TITLE_STYLE = 'col-span-2 align-center text-slate-12 flex items-center justify-center'
-
-const ELEVATION_OPTIONS = ['NONE', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+const ELEVATION_OPTIONS = ['—', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
 
 export function ScoringInput (props: ScoringInputProps): JSX.Element {
   const allianceCapitalized = props.alliance.charAt(0).toUpperCase() + props.alliance.slice(1)
-  const allianceTriballTText = `${allianceCapitalized} alliance triballs scored in`
+  const allianceTriballText = `${allianceCapitalized} alliance triballs scored in`
   return (
-    <div className='grid grid-cols-2 justify-evenly lg:mx-0 tablet:mx-8 gap-x-4 tablet:gap-x-32 xl:gap-x-4 gap-y-4 desktop:gap-x-8 tablet:gap-y-8'>
+    <>
+      <LabelledSection label={allianceTriballText}>
+        <Label title='Either goal'>
+          <InputNumber value={0} minimum={0} maximum={2} onChange={val => {}} />
+        </Label>
+        <Label title='Either zone'>
+          <InputNumber value={0} minimum={0} maximum={2} onChange={val => {}} />
+        </Label>
+      </LabelledSection>
 
-      <div className={TITLE_STYLE}>{allianceTriballTText}</div>
-      <Label title='Either goal'>
-        <InputNumber value={0} onChange={val => {}} />
-      </Label>
-      <Label title='Either zone'>
-        <InputNumber value={0} onChange={val => {}} />
-      </Label>
+      <LabelledSection label='Triballs scored in'>
+        <Label title={`${allianceCapitalized} goal`}>
+          <InputNumber value={0} minimum={0} onChange={val => {}} />
+        </Label>
+        <Label title={`${allianceCapitalized} zone`}>
+          <InputNumber value={0} minimum={0} onChange={val => {}} />
+        </Label>
+      </LabelledSection>
 
-      <div className={TITLE_STYLE}>Triballs scored in</div>
-      <Label title={`${allianceCapitalized} goal`}>
-        <InputNumber value={0} onChange={val => {}} />
-      </Label>
-      <Label title={`${allianceCapitalized} zone`}>
-        <InputNumber value={0} onChange={val => {}} />
-      </Label>
-
-      <div className={TITLE_STYLE}>Elevation</div>
-
-      <Label title='1'>
-        <Dropdown value={ELEVATION_OPTIONS[0]} options={ELEVATION_OPTIONS} onChange={() => {}} />
-      </Label>
-      <Label title='2'>
-        <Dropdown value={ELEVATION_OPTIONS[0]} options={ELEVATION_OPTIONS} onChange={() => {}} />
-      </Label>
-
-    </div>
+      <LabelledSection label='Elevation'>
+        <Label title='1'>
+          <Dropdown value={ELEVATION_OPTIONS[0]} options={ELEVATION_OPTIONS} onChange={() => {}} />
+        </Label>
+        <Label title='2'>
+          <Dropdown value={ELEVATION_OPTIONS[0]} options={ELEVATION_OPTIONS} onChange={() => {}} />
+        </Label>
+      </LabelledSection>
+    </>
   )
 }

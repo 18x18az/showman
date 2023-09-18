@@ -1,3 +1,4 @@
+import { LabelledSection } from '../../primitives/LabelledSection'
 import { CheckBox } from '../../primitives/CheckBox'
 import { Label } from '../../primitives/Label'
 
@@ -10,7 +11,7 @@ export function AutoScore (props: AutoScoreProps): JSX.Element {
 
   if (!props.isElim) {
     winPoint = (
-      <Label title='WP'>
+      <Label title='AWP'>
         <CheckBox value={false} onChange={() => {}} />
       </Label>
     )
@@ -18,13 +19,16 @@ export function AutoScore (props: AutoScoreProps): JSX.Element {
 
   return (
     <div className='flex justify-evenly'>
-      <Label title='Win'>
-        <CheckBox value={false} onChange={() => {}} />
-      </Label>
-      <Label title='Tie'>
-        <CheckBox value={false} onChange={() => {}} />
-      </Label>
-      {winPoint}
+      <LabelledSection label='Auto'>
+
+        <Label title='Win'>
+          <CheckBox value={false} onChange={() => {}} />
+        </Label>
+        <Label title='Tie'>
+          <CheckBox value={false} onChange={() => {}} />
+        </Label>
+        {winPoint}
+      </LabelledSection>
     </div>
   )
 }
