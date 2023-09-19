@@ -23,6 +23,10 @@ export default meta
 export const Primary = {
   args: {
     alliance: 'red',
-    isElim: false
+    isElim: false,
+    locked: false,
+    hidden: false,
+    score: 12,
+    teams: ['127C', '6030J']
   }
 }
