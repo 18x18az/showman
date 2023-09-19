@@ -17,6 +17,19 @@ const config: Config = {
     screens: {
       tablet: '600px',
       desktop: '1024px'
+    },
+    extend: {
+      animation: {
+        'intense': 'intense 1s cubic-bezier(0, 0, 0.2, 1) infinite'
+      },
+      keyframes: {
+        'intense': {
+          '75%, 100%': {
+            transform: 'scale(1.2)',
+            opacity: '0'
+          }
+        }
+      }
     }
   }
 }
