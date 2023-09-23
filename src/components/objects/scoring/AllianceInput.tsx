@@ -31,11 +31,11 @@ export function AllianceInput (props: AllianceInputProps): JSX.Element {
   return (
     <div className={'flex flex-col space-y-4 p-2 desktop:w-96 tablet:rounded tablet:p-8 tablet:m-4 tablet:mx-8 tablet:outline outline-2 tablet:rounded-lg tablet:bg-slate-3 desktop:p-4 desktop:mx-4 ' + outlineColor}>
       <div className={teamColor}>{allianceText}</div>
-      <ScoringInput alliance={props.alliance} locked={props.locked}/>
+      <ScoringInput alliance={props.alliance} locked={props.locked} />
       <AutoScore isElim={props.isElim} locked={props.locked} />
       <div className='flex items-center justify-evenly'>
         {props.teams.map((team, i) => (
-          <TeamMeta key={`${team}-${i}`} team={team} dq={false} noShow={false} locked={props.locked}/>
+          <TeamMeta key={`${team}-${i}`} team={team} dq={false} noShow={false} locked={props.locked} />
         ))}
       </div>
     </div>

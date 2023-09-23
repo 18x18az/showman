@@ -16,10 +16,12 @@ const UP_STYLE = 'flex items-center justify-center text-slate-12'
 export function Dropdown (props: DropdownProps): JSX.Element {
   let dropDownIcon
 
-  if(props.locked !== true){
-    dropDownIcon = <Select.Icon className='ml-2'>
-    <ChevronDownIcon />
-  </Select.Icon>
+  if (props.locked !== true) {
+    dropDownIcon = (
+      <Select.Icon className='ml-2'>
+        <ChevronDownIcon />
+      </Select.Icon>
+    )
   }
 
   return (

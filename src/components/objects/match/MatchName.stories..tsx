@@ -1,16 +1,16 @@
-import { Meta } from "@storybook/react"
-import { MatchName } from "./MatchName"
+import { Meta } from '@storybook/react'
+import { MatchName } from './MatchName'
 
 const meta: Meta<typeof MatchName> = {
-    component: MatchName
+  component: MatchName
 }
 
 export default meta
 
 export const Primary = {
-    args: {
-        match: "Qualification Match 25",
-        time: 150,
-        phase: "auto"
-    }
+  args: {
+    match: 'Qualification Match 25',
+    time: 150,
+    phase: 'auto'
+  }
 }
