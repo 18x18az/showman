@@ -8,11 +8,9 @@ interface RoundProps {
 }
 
 export function Round (props: RoundProps): JSX.Element {
-  let rowTable: string[]
+  let rowTable: string[] = []
 
   const numMatches = props.pairings.length
-
-  // let roundName = ''
 
   let column = ''
 
