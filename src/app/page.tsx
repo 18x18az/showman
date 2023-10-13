@@ -16,6 +16,8 @@ export default function Home (): JSX.Element | null {
   }
 
   return (
-    <div />
+    <div>
+      This is the admin page
+    </div>
   )
 }
