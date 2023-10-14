@@ -1,7 +1,6 @@
 interface LabelProps {
   readonly children: React.ReactNode
   readonly title: string
-  readonly className?: string
   readonly reverse?: boolean
   readonly justify?: 'right' | 'left'
 }
