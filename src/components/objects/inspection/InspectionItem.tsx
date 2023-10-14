@@ -10,10 +10,10 @@ interface InspectionItemProps {
 }
 
 export function InspectionItem (props: InspectionItemProps): JSX.Element {
-  const [isMet, setMet] = useState(props.met)
+  const [isMet, setIsMet] = useState(props.met)
 
   const onChange = (value: boolean): void => {
-    setMet(value)
+    setIsMet(value)
     props.onChange?.(value)
   }
 

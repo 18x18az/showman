@@ -7,8 +7,6 @@ interface LinesProps {
   readonly height: number
   readonly r16: Array<PairingInfo | undefined>
   readonly qf: Array<PairingInfo | undefined>
-  readonly sf: Array<PairingInfo | undefined>
-  readonly f: (PairingInfo | undefined)
 }
 
 interface LineOutProps {

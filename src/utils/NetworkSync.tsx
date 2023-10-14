@@ -13,7 +13,7 @@ interface NetworkSynchronizerResults<T extends NestedJSON> {
 
 export function NetworkSynchronizer<T extends NestedJSON> (initialValue: T, onLocalChange?: PartialCallback<T>, onAnyChange?: PartialCallback<T>): NetworkSynchronizerResults<T> {
   const [output, setOutput] = useState<T>(initialValue)
-  const [networkState, updateNetworkState] = useState<T>(initialValue)
+  const [networkState, setNetworkState] = useState<T>(initialValue)
 
   // on update from local, check if anything has changed, if so update the output and call onChange
   const updateFromLocal = (updates: Partial<T>): void => {
@@ -32,7 +32,7 @@ export function NetworkSynchronizer<T extends NestedJSON> (initialValue: T, onLo
     const updates = findDifferences(networkState, value)
     // See if the network state has changed
     if (Object.keys(updates).length > 0) {
-      updateNetworkState(value)
+      setNetworkState(value)
       const updated = {}
       merge(updated, output, updates)
       const changes = findDifferences(output, updated)
