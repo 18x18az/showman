@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion'
 
 interface MatchNameProps {
-  match: string
-  time: number
-  phase: 'auto' | 'driver' | null
+  readonly match: string
+  readonly time: number
+  readonly phase: 'auto' | 'driver' | null
 }
 
 export function MatchName (props: MatchNameProps): JSX.Element {

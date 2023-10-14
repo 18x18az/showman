@@ -3,10 +3,10 @@ import { Label } from '../../primitives/Label'
 import { Popover } from '../../primitives/Popover'
 
 interface TeamMetaProps {
-  team: string
-  dq: boolean
-  noShow: boolean
-  locked: boolean
+  readonly team: string
+  readonly dq: boolean
+  readonly noShow: boolean
+  readonly locked: boolean
 }
 
 export function TeamMeta (props: TeamMetaProps): JSX.Element {

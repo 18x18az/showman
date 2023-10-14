@@ -3,8 +3,8 @@ import { ExpandButton } from './ExpandButton'
 import { Cross1Icon } from '@radix-ui/react-icons'
 
 interface PopoverPops {
-  title: string
-  children: React.ReactNode
+  readonly title: string
+  readonly children: React.ReactNode
 }
 
 const CONTENT_STYLE = 'radix-side-top:animate-slide-up radix-side-bottom:animate-slide-down z-50 w-48 rounded-lg p-4 shadow-md md:w-56 bg-slate-5'

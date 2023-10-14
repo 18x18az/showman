@@ -5,13 +5,13 @@ import { merge } from 'lodash'
 type PartialCallback<T extends NESTED_JSON> = (value: Partial<T>) => void
 type FullCallback<T extends NESTED_JSON> = (value: T) => void
 
-interface NetworkSynchronizer<T extends NESTED_JSON> {
+interface NetworkSynchronizerResults<T extends NESTED_JSON> {
   output: T
   updateFromNetwork: FullCallback<T>
   updateFromLocal: PartialCallback<T>
 }
 
-export function networkSynchronizer<T extends NESTED_JSON> (initialValue: T, onLocalChange?: PartialCallback<T>, onAnyChange?: PartialCallback<T>): NetworkSynchronizer<T> {
+export function NetworkSynchronizer<T extends NESTED_JSON> (initialValue: T, onLocalChange?: PartialCallback<T>, onAnyChange?: PartialCallback<T>): NetworkSynchronizerResults<T> {
   const [output, setOutput] = useState<T>(initialValue)
   const [networkState, updateNetworkState] = useState<T>(initialValue)
 

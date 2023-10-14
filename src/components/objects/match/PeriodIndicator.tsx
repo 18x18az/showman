@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 
 interface PeriodIndicatorProps {
-  period: 'auto' | 'driver' | 'none'
+  readonly period: 'auto' | 'driver' | 'none'
 }
 
 const baseConfig = 'absolute px-8 py-3 text-4xl rounded-xl'

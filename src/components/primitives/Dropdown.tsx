@@ -3,10 +3,10 @@ import * as Select from '@radix-ui/react-select'
 import { ExpandButton } from './ExpandButton'
 
 interface DropdownProps {
-  value: string
-  options: string[]
-  onChange: (value: string) => void
-  locked?: boolean
+  readonly value: string
+  readonly options: string[]
+  readonly onChange: (value: string) => void
+  readonly locked?: boolean
 }
 
 const VIEWPORT_STYLE = 'bg-slate-4 rounded-md p-2'

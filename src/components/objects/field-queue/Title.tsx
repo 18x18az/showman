@@ -1,5 +1,5 @@
 interface TitleProps {
-  title: string
+  readonly title: string
 }
 
 export function Title (props: TitleProps): JSX.Element {

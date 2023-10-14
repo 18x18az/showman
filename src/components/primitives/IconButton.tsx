@@ -1,8 +1,8 @@
 interface IconButtonProps {
-  onClick: () => void
-  children: React.ReactNode
-  locked?: boolean
-  activeColor?: string
+  readonly onClick: () => void
+  readonly children: React.ReactNode
+  readonly locked?: boolean
+  readonly activeColor?: string
 }
 
 export function IconButton (props: IconButtonProps): JSX.Element {

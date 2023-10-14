@@ -2,9 +2,9 @@ import { AllianceInfo } from './AllianceInfo'
 import { Title } from './Title'
 
 interface FieldQueueProps {
-  red: string[]
-  blue: string[]
-  title: string
+  readonly red: string[]
+  readonly blue: string[]
+  readonly title: string
 }
 
 export function FieldQueue (props: FieldQueueProps): JSX.Element {

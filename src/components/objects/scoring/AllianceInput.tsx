@@ -3,12 +3,12 @@ import { ScoringInput } from './ScoringInput'
 import { TeamMeta } from './TeamMeta'
 
 interface AllianceInputProps {
-  alliance: 'red' | 'blue'
-  isElim: boolean
-  teams: string[]
-  locked: boolean
-  hidden: boolean
-  score: number
+  readonly alliance: 'red' | 'blue'
+  readonly isElim: boolean
+  readonly teams: string[]
+  readonly locked: boolean
+  readonly hidden: boolean
+  readonly score: number
 }
 
 export function AllianceInput (props: AllianceInputProps): JSX.Element {

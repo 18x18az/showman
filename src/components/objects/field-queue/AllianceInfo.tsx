@@ -1,6 +1,6 @@
 interface AllianceInfoProps {
-  teams: string[]
-  alliance: 'red' | 'blue'
+  readonly teams: string[]
+  readonly alliance: 'red' | 'blue'
 }
 
 export function AllianceInfo (props: AllianceInfoProps): JSX.Element {

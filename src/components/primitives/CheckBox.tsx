@@ -5,9 +5,9 @@ const ROOT_STYLE = 'disabled:hover:bg-slate-3 bg-slate-3 hover:bg-slate-4 focus:
 const CHECK_STYLE = 'text-slate-12 self-center h-4 w-4'
 
 export interface CheckBoxProps {
-  value: boolean
-  onChange: (value: boolean) => void
-  locked?: boolean
+  readonly value: boolean
+  readonly onChange: (value: boolean) => void
+  readonly locked?: boolean
 }
 
 export function CheckBox (props: CheckBoxProps): JSX.Element {

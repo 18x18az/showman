@@ -3,8 +3,8 @@ import { Final } from './Final'
 import { Pairing, PairingInfo } from './Pairing'
 
 interface RoundProps {
-  pairings: Array<PairingInfo | undefined>
-  side: 'left' | 'right' | 'final'
+  readonly pairings: Array<PairingInfo | undefined>
+  readonly side: 'left' | 'right' | 'final'
 }
 
 export function Round (props: RoundProps): JSX.Element {

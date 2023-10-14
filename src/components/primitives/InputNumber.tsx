@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 
 export interface InputNumberProps {
-  value: number
-  minimum?: number
-  maximum?: number
-  onChange: (value: number) => void
-  locked?: boolean
+  readonly value: number
+  readonly minimum?: number
+  readonly maximum?: number
+  readonly onChange: (value: number) => void
+  readonly locked?: boolean
 }
 
 interface ValidatorOptions {

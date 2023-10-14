@@ -1,9 +1,9 @@
 interface LabelProps {
-  children: React.ReactNode
-  title: string
-  className?: string
-  reverse?: boolean
-  justify?: 'right' | 'left'
+  readonly children: React.ReactNode
+  readonly title: string
+  readonly className?: string
+  readonly reverse?: boolean
+  readonly justify?: 'right' | 'left'
 }
 
 export function Label (props: LabelProps): JSX.Element {

@@ -4,8 +4,8 @@ import { InputNumber } from '../../primitives/InputNumber'
 import { Label } from '../../primitives/Label'
 
 interface ScoringInputProps {
-  alliance: 'red' | 'blue'
-  locked: boolean
+  readonly alliance: 'red' | 'blue'
+  readonly locked: boolean
 }
 
 const ELEVATION_OPTIONS = ['—', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']

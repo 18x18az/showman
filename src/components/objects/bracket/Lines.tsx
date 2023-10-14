@@ -3,37 +3,37 @@ import { PairingInfo } from './Pairing'
 const lineColor = 'slategrey'
 
 interface LinesProps {
-  width: number
-  height: number
-  r16: Array<PairingInfo | undefined>
-  qf: Array<PairingInfo | undefined>
-  sf: Array<PairingInfo | undefined>
-  f: (PairingInfo | undefined)
+  readonly width: number
+  readonly height: number
+  readonly r16: Array<PairingInfo | undefined>
+  readonly qf: Array<PairingInfo | undefined>
+  readonly sf: Array<PairingInfo | undefined>
+  readonly f: (PairingInfo | undefined)
 }
 
 interface LineOutProps {
-  x: number
-  y: number
-  xInterval: number
-  yInterval: number
-  direction: 'left' | 'right'
+  readonly x: number
+  readonly y: number
+  readonly xInterval: number
+  readonly yInterval: number
+  readonly direction: 'left' | 'right'
 }
 
 interface LineInProps {
-  x: number
-  y: number
-  xInterval: number
-  yInterval: number
-  direction: 'up' | 'down'
+  readonly x: number
+  readonly y: number
+  readonly xInterval: number
+  readonly yInterval: number
+  readonly direction: 'up' | 'down'
 }
 
 interface CornerProps {
-  x: number
-  y: number
-  xInterval: number
-  yInterval: number
-  horizontal: 'left' | 'right'
-  vertical: 'up' | 'down'
+  readonly x: number
+  readonly y: number
+  readonly xInterval: number
+  readonly yInterval: number
+  readonly horizontal: 'left' | 'right'
+  readonly vertical: 'up' | 'down'
 }
 
 function Corner (props: CornerProps): JSX.Element {
@@ -90,11 +90,11 @@ function LineIn (props: LineInProps): JSX.Element {
 }
 
 interface LineUpProps {
-  x: number
-  yStart: number
-  yEnd: number
-  xInterval: number
-  yInterval: number
+  readonly x: number
+  readonly yStart: number
+  readonly yEnd: number
+  readonly xInterval: number
+  readonly yInterval: number
 }
 
 function LineUp (props: LineUpProps): JSX.Element {
@@ -190,12 +190,12 @@ function Center (props: CenterProps): JSX.Element {
 }
 
 interface LineBetweenProps {
-  xInterval: number
-  yInterval: number
-  xStart: number
-  yStart: number
-  yEnd: number
-  direction: 'left' | 'right'
+  readonly xInterval: number
+  readonly yInterval: number
+  readonly xStart: number
+  readonly yStart: number
+  readonly yEnd: number
+  readonly direction: 'left' | 'right'
 }
 
 function LineBetween (props: LineBetweenProps): JSX.Element {

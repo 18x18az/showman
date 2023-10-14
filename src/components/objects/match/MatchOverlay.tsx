@@ -4,11 +4,11 @@ import { PeriodIndicator } from './PeriodIndicator'
 import { Timer } from './Timer'
 
 interface MatchOverlayProps {
-  redTeams: string[]
-  blueTeams: string[]
-  autoWinner: 'red' | 'blue' | 'tie' | null
-  time: number | null
-  period: 'auto' | 'driver' | 'none'
+  readonly redTeams: string[]
+  readonly blueTeams: string[]
+  readonly autoWinner: 'red' | 'blue' | 'tie' | null
+  readonly time: number | null
+  readonly period: 'auto' | 'driver' | 'none'
 }
 
 export function MatchOverlay (props: MatchOverlayProps): JSX.Element {

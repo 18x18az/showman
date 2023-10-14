@@ -3,8 +3,8 @@ import { CheckBox } from '../../primitives/CheckBox'
 import { Label } from '../../primitives/Label'
 
 interface AutoScoreProps {
-  isElim: boolean
-  locked: boolean
+  readonly isElim: boolean
+  readonly locked: boolean
 }
 
 export function AutoScore (props: AutoScoreProps): JSX.Element {

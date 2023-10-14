@@ -2,11 +2,11 @@ import { useState } from 'react'
 import { CheckBox } from '../../primitives/CheckBox'
 
 interface InspectionItemProps {
-  description: string
-  rules: string[]
-  met: boolean
-  onChange?: (value: boolean) => void
-  hideComplete: boolean
+  readonly description: string
+  readonly rules: string[]
+  readonly met: boolean
+  readonly onChange?: (value: boolean) => void
+  readonly hideComplete: boolean
 }
 
 export function InspectionItem (props: InspectionItemProps): JSX.Element {

@@ -2,12 +2,12 @@ import { AllianceInput } from './AllianceInput'
 import { SaveBar } from './SaveBar'
 
 interface MatchScoreProps {
-  matchName: string
-  isElim: boolean
-  alliances: { red: string[], blue: string[] }
-  locked: boolean
-  hidden: boolean
-  score: { red: number, blue: number }
+  readonly matchName: string
+  readonly isElim: boolean
+  readonly alliances: { red: string[], blue: string[] }
+  readonly locked: boolean
+  readonly hidden: boolean
+  readonly score: { red: number, blue: number }
 }
 
 export function MatchScore (props: MatchScoreProps): JSX.Element {

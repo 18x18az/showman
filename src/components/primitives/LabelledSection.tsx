@@ -1,6 +1,6 @@
 interface LabelledSectionProps {
-  label: string
-  children: React.ReactNode
+  readonly label: string
+  readonly children: React.ReactNode
 }
 
 export function LabelledSection (props: LabelledSectionProps): JSX.Element {

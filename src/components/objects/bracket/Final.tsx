@@ -1,9 +1,9 @@
 import { PairingInfo } from './Pairing'
 
 export interface FinalProps {
-  pairing: PairingInfo | undefined
-  row: string
-  column: string
+  readonly pairing: PairingInfo | undefined
+  readonly row: string
+  readonly column: string
 }
 // create a trapezoid shaped div
 export function Final (props: FinalProps): JSX.Element {

@@ -4,10 +4,10 @@ import { Round } from './Round'
 import { useMeasure } from 'react-use'
 
 interface BracketProps {
-  r16: Array<PairingInfo | undefined>
-  qf: Array<PairingInfo | undefined>
-  sf: Array<PairingInfo | undefined>
-  f: (PairingInfo | undefined)
+  readonly r16: Array<PairingInfo | undefined>
+  readonly qf: Array<PairingInfo | undefined>
+  readonly sf: Array<PairingInfo | undefined>
+  readonly f: (PairingInfo | undefined)
 }
 
 export function Bracket (props: BracketProps): JSX.Element {

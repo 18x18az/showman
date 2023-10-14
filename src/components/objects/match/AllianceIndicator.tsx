@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion'
 
 interface AllianceIndicatorProps {
-  alliance: 'red' | 'blue'
-  teams: string[]
-  wonAuto: boolean
+  readonly alliance: 'red' | 'blue'
+  readonly teams: string[]
+  readonly wonAuto: boolean
 }
 
 export function AllianceIndicator (props: AllianceIndicatorProps): JSX.Element {

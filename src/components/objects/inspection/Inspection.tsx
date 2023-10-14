@@ -1,5 +1,5 @@
 import { InspectionItem } from './InspectionItem'
-import { networkSynchronizer } from '../../../utils/NetworkSync'
+import { NetworkSynchronizer } from '../../../utils/NetworkSync'
 
 export interface InspectionInfo {
   uuid: string
@@ -20,8 +20,8 @@ interface InspectionSectionProps extends InspectionSectionData {
 }
 
 export interface InspectionProps {
-  sections: InspectionSectionData[]
-  hideComplete: boolean
+  readonly sections: InspectionSectionData[]
+  readonly hideComplete: boolean
 }
 
 interface InspectionStatus {
@@ -66,7 +66,7 @@ export function Inspection (props: InspectionProps): JSX.Element {
   }
   , {})
 
-  const { output: status, updateFromLocal } = networkSynchronizer<InspectionStatus>(valuesFromNetwork)
+  const { output: status, updateFromLocal } = NetworkSynchronizer<InspectionStatus>(valuesFromNetwork)
 
   const reconciled: InspectionSectionData[] = props.sections.map((section) => {
     return {

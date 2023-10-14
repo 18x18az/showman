@@ -3,9 +3,9 @@ import { IconButton } from './IconButton'
 import { Meta } from '@storybook/react'
 
 interface DemoButtonProps {
-  onClick: () => void
-  locked?: boolean
-  color: 'green' | 'red' | 'gray'
+  readonly onClick: () => void
+  readonly locked?: boolean
+  readonly color: 'green' | 'red' | 'gray'
 }
 
 function DemoButton (props: DemoButtonProps): JSX.Element {

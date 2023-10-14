@@ -1,8 +1,8 @@
 export interface AllianceProps {
-  teams: string[] | undefined
-  alliance: 'red' | 'blue'
-  won: boolean | undefined
-  side: 'left' | 'right'
+  readonly teams: string[] | undefined
+  readonly alliance: 'red' | 'blue'
+  readonly won: boolean | undefined
+  readonly side: 'left' | 'right'
 }
 
 export function Alliance (props: AllianceProps): JSX.Element {

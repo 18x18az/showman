@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion'
 
 interface TimerProps {
-  time: number | null
-  period: 'auto' | 'driver' | 'none'
+  readonly time: number | null
+  readonly period: 'auto' | 'driver' | 'none'
 }
 
 export function Timer (props: TimerProps): JSX.Element {

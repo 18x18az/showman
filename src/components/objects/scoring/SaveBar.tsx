@@ -2,8 +2,8 @@ import { IconButton } from '../../primitives/IconButton'
 import { CheckCircledIcon, EyeClosedIcon, EyeOpenIcon, LockClosedIcon, LockOpen2Icon } from '@radix-ui/react-icons'
 
 interface SaveBarProps {
-  locked: boolean
-  hidden: boolean
+  readonly locked: boolean
+  readonly hidden: boolean
 }
 
 const SIZE = 'h-4 w-4'

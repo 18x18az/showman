@@ -3,8 +3,8 @@ import { InputNumber } from './InputNumber'
 import { Label } from './Label'
 
 interface LabelledNumInputProps {
-  label: string
-  onChange: (value: number) => void
+  readonly label: string
+  readonly onChange: (value: number) => void
 }
 
 function LabelledNumInput (props: LabelledNumInputProps): JSX.Element {

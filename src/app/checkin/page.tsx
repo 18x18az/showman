@@ -1,13 +1,13 @@
-import { Metadata } from "next"
+import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-    title: 'Team Check-In'
-  }
+  title: 'Team Check-In'
+}
 
 export default function CheckIn (): JSX.Element | null {
-    return (
-      <div>
-        This is the checkin page
-      </div>
-    )
-  }
+  return (
+    <div>
+      This is the checkin page
+    </div>
+  )
+}
