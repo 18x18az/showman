@@ -3,8 +3,14 @@
 import * as mqtt from 'mqtt/dist/mqtt'
 import { useEffect, useState } from 'react'
 
-const host = window.location.hostname // TODO handle Bifrost
-const mqttBroker = `mqtt://${host}:1883`
+function getHostname(): string {
+  return window.location.hostname
+}
+
+function getMqttBroker(): string {
+  const host = getHostname()
+  return `mqtt://${host}:1883`
+}
 
 function BaseTopic (topic: string, initial: string): string {
   const [variable, setVariable] = useState(initial)
@@ -19,7 +25,7 @@ function BaseTopic (topic: string, initial: string): string {
 
     console.log(mqttOption)
 
-    client = mqtt.connect(mqttBroker, mqttOption)
+    client = mqtt.connect(getMqttBroker(), mqttOption)
     client.on('message', (topic, payload): void => (setVariable(payload.toString())))
     client.subscribe(topic)
 
@@ -44,7 +50,7 @@ export function JsonTopic<Type> (topic: string, initial: Type): Type {
 }
 
 export async function EmptyPost (resource: string): Promise<void> {
-  const url = `http://${host}/api/${resource}`
+  const url = `http://${getHostname()}/api/${resource}`
   await fetch(url, {
     method: 'POST'
   })
