@@ -1,5 +1,6 @@
 'use client'
 import { useTheme } from 'next-themes'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 export default function Home (): JSX.Element | null {
@@ -18,6 +19,7 @@ export default function Home (): JSX.Element | null {
   return (
     <div>
       This is the admin page
+      <Link href='/checkin'>Check in</Link>
     </div>
   )
 }
