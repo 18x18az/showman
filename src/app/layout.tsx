@@ -17,7 +17,7 @@ export default function RootLayout ({
 }): JSX.IntrinsicElements['html'] {
   return (
     <html lang='en'>
-      <body className={inter.className}>
+      <body className={`${inter.className} bg-slate-0`}>
         <div>This is a test</div>
         <Providers>
           {children}
