@@ -15,8 +15,8 @@ export interface InspectionSectionData {
 }
 
 interface InspectionSectionProps extends InspectionSectionData {
-  hideComplete: boolean
-  onChange: (uuid: string, value: boolean) => void
+  readonly hideComplete: boolean
+  readonly onChange: (uuid: string, value: boolean) => void
 }
 
 export interface InspectionProps {

@@ -131,14 +131,14 @@ function LineOut (props: LineOutProps): JSX.Element {
 }
 
 interface CenterProps {
-  xInterval: number
-  yInterval: number
+  readonly xInterval: number
+  readonly yInterval: number
 }
 
 interface CenterLineProps {
-  xInterval: number
-  yInterval: number
-  direction: 'left' | 'right'
+  readonly xInterval: number
+  readonly yInterval: number
+  readonly direction: 'left' | 'right'
 }
 
 function CenterLine (props: CenterLineProps): JSX.Element {

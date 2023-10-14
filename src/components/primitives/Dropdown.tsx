@@ -38,8 +38,8 @@ export function Dropdown (props: DropdownProps): JSX.Element {
         </Select.ScrollUpButton>
         <Select.Viewport className={VIEWPORT_STYLE}>
           <Select.Group>
-            {props.options.map((option, i) => (
-              <Select.Item key={`${option}-${i}`} value={option} className={ITEM_STYLE}>
+            {props.options.map((option) => (
+              <Select.Item key={option} value={option} className={ITEM_STYLE}>
                 <Select.ItemText>{option}</Select.ItemText>
                 <Select.ItemIndicator className='absolute left-2 inline-flex items-cetner'>
                   <CheckIcon />

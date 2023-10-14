@@ -1,17 +1,17 @@
-import { NESTED_JSON, findDifferences } from './findDifferences'
+import { NestedJSON, findDifferences } from './findDifferences'
 import { useState } from 'react'
 import { merge } from 'lodash'
 
-type PartialCallback<T extends NESTED_JSON> = (value: Partial<T>) => void
-type FullCallback<T extends NESTED_JSON> = (value: T) => void
+type PartialCallback<T extends NestedJSON> = (value: Partial<T>) => void
+type FullCallback<T extends NestedJSON> = (value: T) => void
 
-interface NetworkSynchronizerResults<T extends NESTED_JSON> {
+interface NetworkSynchronizerResults<T extends NestedJSON> {
   output: T
   updateFromNetwork: FullCallback<T>
   updateFromLocal: PartialCallback<T>
 }
 
-export function NetworkSynchronizer<T extends NESTED_JSON> (initialValue: T, onLocalChange?: PartialCallback<T>, onAnyChange?: PartialCallback<T>): NetworkSynchronizerResults<T> {
+export function NetworkSynchronizer<T extends NestedJSON> (initialValue: T, onLocalChange?: PartialCallback<T>, onAnyChange?: PartialCallback<T>): NetworkSynchronizerResults<T> {
   const [output, setOutput] = useState<T>(initialValue)
   const [networkState, updateNetworkState] = useState<T>(initialValue)
 

@@ -1,15 +1,15 @@
 import { Alliance } from './Alliance'
 
 export interface PairingInfo {
-  redAlliance: string[]
-  blueAlliance: string[]
-  winner: 'red' | 'blue' | undefined
-  column: string
-  row: string
+  readonly redAlliance: string[]
+  readonly blueAlliance: string[]
+  readonly winner: 'red' | 'blue' | undefined
+  readonly column: string
+  readonly row: string
 }
 
 interface PairingProps extends PairingInfo {
-  side: 'left' | 'right'
+  readonly side: 'left' | 'right'
 }
 
 export function Pairing (props: PairingProps): JSX.Element {
