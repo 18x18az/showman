@@ -3,12 +3,11 @@ import { loadLocalSession } from './localStorage'
 import { sessionSlice } from '.'
 import { Post } from '@/utils/maestro'
 
-export async function hydrateSession (dispatch: ThunkDispatch<{}, {}, any>): Promise<void> {
+export async function hydrateSession (dispatch: ThunkDispatch<{}, {}, any>): Promise<boolean> {
   const local = loadLocalSession()
 
   if (local.token === undefined || local.userId === undefined) {
-    dispatch(sessionSlice.actions.markNeedsUpdate(true))
-    return
+    return false
   }
   dispatch(sessionSlice.actions.load(local))
   const validationResponse = await Post('auth/login', { id: local.userId, token: local.token })
@@ -16,5 +15,8 @@ export async function hydrateSession (dispatch: ThunkDispatch<{}, {}, any>): Pro
 
   if (!validationResult) {
     dispatch(sessionSlice.actions.logout())
+    return false
   }
+
+  return true
 }

@@ -6,8 +6,6 @@ type Selector<T> = (state: ReduxState) => T
 const selectUserId: Selector<number | undefined> = (state: ReduxState) => state.session?.userId
 const selectToken: Selector<string | undefined> = (state: ReduxState) => state.session?.token
 
-export const selectNeedsUpdate: Selector<boolean> = (state: ReduxState) => state.session.needsUpdate
-
 export const selectAuthentication = createSelector([selectUserId, selectToken], (userId, token) => {
   if (userId === undefined || token === undefined) {
     return null
