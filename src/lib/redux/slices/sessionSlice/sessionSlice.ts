@@ -1,29 +1,36 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { LoginPayload, SessionSliceState, UserInfo } from '.'
-import { loadLocalSession, saveSession } from './localStorage'
+import { saveSession } from './localStorage'
+
+const initialState: SessionSliceState = { needsUpdate: false }
 
 export const sessionSlice = createSlice({
   name: 'session',
-  initialState: loadLocalSession(),
+  initialState,
   reducers: {
     registered: (state: SessionSliceState, action: PayloadAction<LoginPayload>) => {
-      if (state === null) {
-        state = action.payload
-      } else {
-        state = { ...state, ...action.payload }
-      }
+      state = { ...state, ...action.payload, needsUpdate: false }
       saveSession(state)
+      return state
     },
     busUpdate: (state: SessionSliceState, action: PayloadAction<UserInfo>) => {
-      if (state === null) {
-        return
-      }
-      state = { ...state, ...action.payload }
+      state = { ...state, ...action.payload, needsUpdate: false }
       saveSession(state)
+      return state
     },
     logout: (state: SessionSliceState) => {
-      state = null
+      state = { needsUpdate: true }
       saveSession(state)
+      return state
+    },
+    markNeedsUpdate: (state: SessionSliceState, action: PayloadAction<boolean>) => {
+      state = { ...state, needsUpdate: action.payload }
+      return state
+    },
+    load: (state: SessionSliceState, action: PayloadAction<SessionSliceState>) => {
+      state = { ...action.payload, needsUpdate: false }
+      saveSession(state)
+      return state
     }
   }
 })

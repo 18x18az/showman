@@ -6,4 +6,4 @@ export interface LoginPayload extends User {
 
 export interface SessionInfo extends LoginPayload {}
 
-export type SessionSliceState = SessionInfo | null
+export type SessionSliceState = Partial<SessionInfo> & { needsUpdate: boolean }

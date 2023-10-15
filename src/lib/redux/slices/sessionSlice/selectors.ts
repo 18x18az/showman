@@ -1,17 +1,19 @@
+import { createSelector } from '@reduxjs/toolkit'
 import type { ReduxState } from '@/lib/redux'
-
-interface SessionInfo {
-  id: number
-  token: string
-}
 
 type Selector<T> = (state: ReduxState) => T
 
-export const selectAuthentication: Selector<SessionInfo | null> = (state: ReduxState) => {
-  if (state.session === null) {
+const selectUserId: Selector<number | undefined> = (state: ReduxState) => state.session?.userId
+const selectToken: Selector<string | undefined> = (state: ReduxState) => state.session?.token
+
+export const selectNeedsUpdate: Selector<boolean> = (state: ReduxState) => state.session.needsUpdate
+
+export const selectAuthentication = createSelector([selectUserId, selectToken], (userId, token) => {
+  if (userId === undefined || token === undefined) {
     return null
   } else {
-    return { id: state.session.userId, token: state.session.token }
+    return { id: userId, token }
   }
-}
+})
+
 export const selectUserName: Selector<string | undefined> = (state: ReduxState) => state.session?.name

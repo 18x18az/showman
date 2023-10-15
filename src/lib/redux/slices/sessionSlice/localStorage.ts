@@ -1,32 +1,15 @@
-'use client'
-
-const ISSERVER = typeof window === "undefined"
-
-import { SessionInfo } from '.'
+import { SessionSliceState } from '.'
 
 const LOGIN_INFO_KEY = 'loginInfo'
 
-export function loadLocalSession (): SessionInfo | null {
-  if (ISSERVER) {
-    return null
-  }
-  
+export function loadLocalSession (): SessionSliceState {
   const info = localStorage.getItem(LOGIN_INFO_KEY)
   if (info === null) {
-    return null
+    return { needsUpdate: false }
   }
-  return JSON.parse(info) as SessionInfo
+  return JSON.parse(info) as SessionSliceState
 }
 
-export function saveSession (info: SessionInfo | null): void {
-  if (ISSERVER) {
-    return
-  }
-
-  if (info === null) {
-    localStorage.removeItem(LOGIN_INFO_KEY)
-    return
-  }
-
+export function saveSession (info: SessionSliceState): void {
   localStorage.setItem(LOGIN_INFO_KEY, JSON.stringify(info))
 }
