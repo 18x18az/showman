@@ -1,57 +1,58 @@
 'use client'
 
-import * as mqtt from 'mqtt/dist/mqtt'
 import { useEffect, useState } from 'react'
+import { Client } from 'paho-mqtt'
 
-function getHostname(): string {
-  return window.location.hostname
+function getHostname (): string {
+  return 'l.18x18az.org'
 }
 
-function getMqttBroker(): string {
-  const host = getHostname()
-  return `mqtt://${host}:1883`
-}
-
-function BaseTopic (topic: string, initial: string): string {
+function BaseTopic (topic: string | undefined, initial: string): string {
   const [variable, setVariable] = useState(initial)
-  let client: mqtt.MqttClient
   useEffect(() => {
-    console.log('hello')
-
-    const mqttOption = {
-      protocol: 'ws' as const,
-      clientId: Math.random().toString(16)
+    if (topic === undefined) {
+      return
     }
+    const client = new Client('wss://l.18x18az.org/mqtt', Math.random().toString(16))
+    client.connect({ onSuccess: () => { client.subscribe(topic) } })
 
-    console.log(mqttOption)
-
-    client = mqtt.connect(getMqttBroker(), mqttOption)
-    client.on('message', (topic, payload): void => (setVariable(payload.toString())))
-    client.subscribe(topic)
+    client.onMessageArrived = (message) => {
+      setVariable(message.payloadString)
+    }
 
     return () => {
-      console.log('ended')
-      client.end()
+      client.disconnect()
     }
-  }, [])
+  }, [topic])
 
   return variable
 }
 
-export function StringTopic<Type> (topic: string, initial: Type): Type {
+export function StringTopic<Type> (topic: string | undefined, initial: Type): Type {
   const raw = BaseTopic(topic, initial as string)
   return raw.slice(1, -1) as Type
 }
 
-export function JsonTopic<Type> (topic: string, initial: Type): Type {
+export function JsonTopic<Type> (topic: string | undefined, initial: Type): Type {
   const initialString = JSON.stringify(initial)
   const raw = BaseTopic(topic, initialString)
   return JSON.parse(raw)
 }
 
-export async function EmptyPost (resource: string): Promise<void> {
-  const url = `http://${getHostname()}/api/${resource}`
-  await fetch(url, {
+export async function EmptyPost (resource: string): Promise<Response> {
+  const url = `https://${getHostname()}/api/${resource}`
+  return await fetch(url, {
     method: 'POST'
+  })
+}
+
+export async function Post (resource: string, payload: object): Promise<Response> {
+  const url = `https://${getHostname()}/api/${resource}`
+  return await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+    headers: {
+      'Content-Type': 'application/json'
+    }
   })
 }

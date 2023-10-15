@@ -26,11 +26,13 @@ export default function CheckInBody (): JSX.Element | null {
     return <></>
   }
 
-  if(notCheckedIn.length === 0) {
-    return <div className='fixed text-center w-full mt-48'>
-      <h1 className='text-indigo-9 text-6xl mb-6'>Team Check-In Complete</h1>
-      <h2 className='text-slate-12 text-4xl'>Please return device to tech operator</h2>
-    </div>
+  if (notCheckedIn.length === 0) {
+    return (
+      <div className='fixed text-center w-full mt-48'>
+        <h1 className='text-indigo-9 text-6xl mb-6'>Team Check-In Complete</h1>
+        <h2 className='text-slate-12 text-4xl'>Please return device to tech operator</h2>
+      </div>
+    )
   }
 
   if (selected === undefined || !(notCheckedIn.some(value => value === selected))) {
