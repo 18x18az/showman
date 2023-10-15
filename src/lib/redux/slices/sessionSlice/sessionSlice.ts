@@ -18,8 +18,8 @@ export const sessionSlice = createSlice({
       saveSession(state)
       return state
     },
-    logout: (state: SessionSliceState) => {
-      state = { needsUpdate: true }
+    logout: () => {
+      const state = { needsUpdate: true }
       saveSession(state)
       return state
     },
