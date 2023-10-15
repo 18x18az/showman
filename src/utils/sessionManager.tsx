@@ -10,12 +10,12 @@ export function SessionManager (): JSX.Element {
   const dispatch = useDispatch()
   const authentication = useSelector(selectAuthentication)
   const pathname = usePathname()
-  
+
   const [needsToken, setNeedsToken] = useState(false)
   const [needsRedirect, setNeedsRedirect] = useState(false)
   const [busIsLive, setBusIsLive] = useState(false)
 
-  if(needsRedirect === true) {
+  if (needsRedirect) {
     setNeedsRedirect(false)
     if (pathname !== '/login') {
       redirect('/login')
@@ -41,7 +41,7 @@ export function SessionManager (): JSX.Element {
   // On startup, hydrate the session
   useEffect(() => {
     void hydrateSession(dispatch).then((exists: boolean) => {
-      if(exists === false) {
+      if (!exists) {
         setNeedsRedirect(true)
         setNeedsToken(true)
       }
@@ -50,11 +50,11 @@ export function SessionManager (): JSX.Element {
 
   // Check if it needs to register
   useEffect(() => {
-    if(needsToken === false) {
+    if (!needsToken) {
       return
     }
 
-    if(authentication !== null) {
+    if (authentication !== null) {
       return
     }
 
@@ -71,12 +71,10 @@ export function SessionManager (): JSX.Element {
     if (Object.keys(sessionInfo).length !== 0) {
       setBusIsLive(true)
       dispatch(sessionSlice.actions.busUpdate(sessionInfo as UserInfo))
-    } else {
-      if(busIsLive) {
-        setNeedsToken(true)
-        setNeedsRedirect(true)
-        dispatch(sessionSlice.actions.logout)
-      }
+    } else if (busIsLive) {
+      setNeedsToken(true)
+      setNeedsRedirect(true)
+      dispatch(sessionSlice.actions.logout)
     }
   }, [sessionInfo])
 

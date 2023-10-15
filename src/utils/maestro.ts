@@ -39,11 +39,11 @@ export function JsonTopic<Type> (topic: string | undefined, initial: Type): Type
   return JSON.parse(raw)
 }
 
-function makeUrl(resource: string): string {
+function makeUrl (resource: string): string {
   return `https://${getHostname()}/api/${resource}`
 }
 
-export async function Delete(resource: string): Promise<Response> {
+export async function Delete (resource: string): Promise<Response> {
   const url = makeUrl(resource)
   return await fetch(url, {
     method: 'DELETE'
