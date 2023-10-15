@@ -7,8 +7,6 @@ export const metadata: Metadata = {
 
 export default function CheckIn (): JSX.Element | null {
   return (
-    <>
-      <CheckInBody />
-    </>
+    <CheckInBody />
   )
 }
