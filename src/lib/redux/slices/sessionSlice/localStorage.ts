@@ -5,7 +5,7 @@ const LOGIN_INFO_KEY = 'loginInfo'
 export function loadLocalSession (): SessionSliceState {
   const info = localStorage.getItem(LOGIN_INFO_KEY)
   if (info === null) {
-    return { needsUpdate: false }
+    return {}
   }
   return JSON.parse(info) as SessionSliceState
 }

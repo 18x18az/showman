@@ -1,14 +1,26 @@
 'use client'
 
-import { sessionSlice, selectAuthentication, useDispatch, useSelector, UserInfo, hydrateSession, selectNeedsUpdate, LoginPayload } from '@/lib/redux'
-import { useEffect } from 'react'
+import { sessionSlice, selectAuthentication, useDispatch, useSelector, UserInfo, hydrateSession, LoginPayload } from '@/lib/redux'
+import { useEffect, useState } from 'react'
 import { EmptyPost, JsonTopic } from './maestro'
 import { redirect, usePathname } from 'next/navigation'
 
 export function SessionManager (): JSX.Element {
+  console.log('running loop')
   const dispatch = useDispatch()
   const authentication = useSelector(selectAuthentication)
-  const needsUpdate = useSelector(selectNeedsUpdate)
+  const pathname = usePathname()
+  
+  const [needsToken, setNeedsToken] = useState(false)
+  const [needsRedirect, setNeedsRedirect] = useState(false)
+  const [busIsLive, setBusIsLive] = useState(false)
+
+  if(needsRedirect === true) {
+    setNeedsRedirect(false)
+    if (pathname !== '/login') {
+      redirect('/login')
+    }
+  }
 
   let id: number | undefined
 
@@ -19,54 +31,52 @@ export function SessionManager (): JSX.Element {
   const topic = id !== undefined ? `users/${id}` : undefined
 
   const sessionInfo = JsonTopic<UserInfo | {}>(topic, {})
-  const pathname = usePathname()
+
+  const doRegister: () => Promise<void> = async () => {
+    const response = await EmptyPost('auth/register')
+    const session = await response.json() as LoginPayload
+    dispatch(sessionSlice.actions.registered(session))
+  }
 
   // On startup, hydrate the session
   useEffect(() => {
-    void hydrateSession(dispatch)
+    void hydrateSession(dispatch).then((exists: boolean) => {
+      if(exists === false) {
+        setNeedsRedirect(true)
+        setNeedsToken(true)
+      }
+    })
   }, [])
 
+  // Check if it needs to register
   useEffect(() => {
-    if (!needsUpdate) {
+    if(needsToken === false) {
+      return
+    }
+
+    if(authentication !== null) {
       return
     }
 
     if (pathname === '/login') {
-      const doRegister: () => Promise<void> = async () => {
-        const response = await EmptyPost('auth/register')
-        const session = await response.json() as LoginPayload
-        dispatch(sessionSlice.actions.registered(session))
-      }
+      setNeedsToken(false)
       void doRegister()
-      dispatch(sessionSlice.actions.markNeedsUpdate(false))
     } else {
-      redirect('/login')
+      setNeedsRedirect(true)
     }
-  }, [pathname, needsUpdate])
-
-  // If no local user ID is set, register a new user and redirect to the login page
-  // useEffect(() => {
-  //   if (id !== undefined) {
-  //     return
-  //   }
-
-  //   const doRegister: () => Promise<void> = async () => {
-  //     const response = await EmptyPost('auth/register')
-  //     const session = await response.json() as LoginPayload
-  //     dispatch(sessionSlice.actions.registered(session))
-  //   }
-
-  //   if (pathname === '/login') {
-  //     void doRegister()
-  //   } else {
-  //     redirect('/login')
-  //   }
-  // }, [id])
+  }, [pathname, needsToken])
 
   // Propagate bus session info updates
   useEffect(() => {
     if (Object.keys(sessionInfo).length !== 0) {
+      setBusIsLive(true)
       dispatch(sessionSlice.actions.busUpdate(sessionInfo as UserInfo))
+    } else {
+      if(busIsLive) {
+        setNeedsToken(true)
+        setNeedsRedirect(true)
+        dispatch(sessionSlice.actions.logout)
+      }
     }
   }, [sessionInfo])
 

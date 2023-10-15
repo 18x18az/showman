@@ -39,15 +39,26 @@ export function JsonTopic<Type> (topic: string | undefined, initial: Type): Type
   return JSON.parse(raw)
 }
 
+function makeUrl(resource: string): string {
+  return `https://${getHostname()}/api/${resource}`
+}
+
+export async function Delete(resource: string): Promise<Response> {
+  const url = makeUrl(resource)
+  return await fetch(url, {
+    method: 'DELETE'
+  })
+}
+
 export async function EmptyPost (resource: string): Promise<Response> {
-  const url = `https://${getHostname()}/api/${resource}`
+  const url = makeUrl(resource)
   return await fetch(url, {
     method: 'POST'
   })
 }
 
 export async function Post (resource: string, payload: object): Promise<Response> {
-  const url = `https://${getHostname()}/api/${resource}`
+  const url = makeUrl(resource)
   return await fetch(url, {
     method: 'POST',
     body: JSON.stringify(payload),
