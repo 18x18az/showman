@@ -29,8 +29,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { getRoleText } from '@/utils/strings'
 
 interface DataTableProps<TData, TValue> {
-  columns: Array<ColumnDef<TData, TValue>>
-  data: TData[]
+  readonly columns: Array<ColumnDef<TData, TValue>>
+  readonly data: TData[]
 }
 
 export function DataTable<TData, TValue> ({
