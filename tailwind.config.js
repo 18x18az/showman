@@ -2,9 +2,6 @@
 module.exports = {
   darkMode: ['class'],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}'
   ],
   theme: {
@@ -12,7 +9,8 @@ module.exports = {
       center: true,
       padding: '2rem',
       screens: {
-        '2xl': '1400px'
+        tablet: '600px',
+        desktop: '1024px'
       }
     },
     extend: {
@@ -24,13 +22,24 @@ module.exports = {
         'accordion-up': {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: 0 }
+        },
+        intense: {
+          '75%, 100%': {
+            transform: 'scale(1.2)',
+            opacity: '0'
+          }
         }
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out'
+        'accordion-up': 'accordion-up 0.2s ease-out',
+        intense: 'intense 1s cubic-bezier(0, 0, 0.2, 1) infinite'
       }
     }
   },
-  plugins: [require('tailwindcss-animate')]
+  plugins: [
+    require('tailwindcss-animate'),
+    require('tailwindcss-radix')(),
+    require('windy-radix-palette')()
+  ]
 }
