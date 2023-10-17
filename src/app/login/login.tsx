@@ -4,7 +4,6 @@ import { selectUserName, useSelector } from '@/lib/redux'
 
 export function LoginBody (): JSX.Element {
   const name = useSelector(selectUserName)
-  console.log(name)
 
   // Cut name to last 10 characters
   let shortName = name ?? ''
