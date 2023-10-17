@@ -7,9 +7,8 @@ export const metadata: Metadata = {
 
 export default function Page (): JSX.Element {
   return (
-    <div>
-      Device info:
+    <>
       <Devices />
-    </div>
+    </>
   )
 }

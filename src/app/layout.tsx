@@ -17,7 +17,7 @@ export default function RootLayout ({
   readonly children: React.ReactNode
 }): JSX.IntrinsicElements['html'] {
   return (
-    <html lang='en'>
+    <html lang='en' suppressHydrationWarning>
       <body className={`${inter.className} bg-slate-0`}>
         <Providers>
           <SessionManager />

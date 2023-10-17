@@ -16,7 +16,7 @@ import { deleteTeam, setRole, setName as updateName } from './controls'
 import { Input } from '@/components/ui/input'
 import { useState } from 'react'
 
-export const columns: Array<ColumnDef<User>> = [
+export const Columns: Array<ColumnDef<User>> = [
   {
     accessorKey: 'name',
     header: ({ column }) => {
