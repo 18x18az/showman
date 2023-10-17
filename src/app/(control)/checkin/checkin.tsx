@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { Dropdown } from '../../components/primitives/Dropdown'
-import { EmptyPost, JsonTopic } from '../../utils/maestro'
+import { Dropdown } from '@/components/primitives/Dropdown'
+import { EmptyPost, JsonTopic } from '@/utils/maestro'
 
 interface ExpectedResult {
   teams: string[] | undefined

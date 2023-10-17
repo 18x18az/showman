@@ -6,7 +6,6 @@ import { EmptyPost, JsonTopic } from './maestro'
 import { redirect, usePathname } from 'next/navigation'
 
 export function SessionManager (): JSX.Element {
-  console.log('running loop')
   const dispatch = useDispatch()
   const authentication = useSelector(selectAuthentication)
   const pathname = usePathname()
