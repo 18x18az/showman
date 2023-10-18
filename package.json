@@ -81,7 +81,7 @@
     "wait-on": "^7.0.1"
   },
   "resolutions": {
-    "jackspeak": "2.3.5"
+    "jackspeak": "2.1.1"
   },
   "ts-standard": {
     "ignore": [
