@@ -43,12 +43,10 @@ export default function CheckInBody (): JSX.Element | null {
   }
 
   return (
-    <>
-      <div className='flex flex-col text-center fixed w-full mt-24 gap-8 items-center'>
-        <h1 className='text-6xl text-slate-12 mb-6 text-slate-12'>Team Check-In</h1>
-        <Dropdown size='L' value={selected ?? ''} options={notCheckedIn} onChange={(value: string) => { setSelected(value) }} />
-        <button onClick={() => { void clickHandler(selected) }} className='text-indigo-12 text-2xl bg-indigo-5 hover:bg-indigo-6 w-fit p-4 rounded-md'>Check In</button>
-      </div>
-    </>
+    <div className='flex flex-col text-center fixed w-full mt-24 gap-8 items-center'>
+      <h1 className='text-6xl text-slate-12 mb-6 text-slate-12'>Team Check-In</h1>
+      <Dropdown size='L' value={selected ?? ''} options={notCheckedIn} onChange={(value: string) => { setSelected(value) }} />
+      <button onClick={() => { void clickHandler(selected) }} className='text-indigo-12 text-2xl bg-indigo-5 hover:bg-indigo-6 w-fit p-4 rounded-md'>Check In</button>
+    </div>
   )
 }
