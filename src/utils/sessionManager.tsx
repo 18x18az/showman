@@ -1,9 +1,10 @@
 'use client'
 
-import { sessionSlice, selectAuthentication, useDispatch, useSelector, UserInfo, hydrateSession, LoginPayload } from '@/lib/redux'
+import { sessionSlice, selectAuthentication, useDispatch, useSelector, UserInfo, hydrateSession, LoginPayload, stageSlice } from '@/lib/redux'
 import { useEffect, useState } from 'react'
 import { EmptyPost, JsonTopic } from './maestro'
 import { redirect, usePathname } from 'next/navigation'
+import { EventStage, STAGE } from '@18x18az/maestro-interfaces'
 
 export function SessionManager (): JSX.Element {
   const dispatch = useDispatch()
@@ -13,6 +14,13 @@ export function SessionManager (): JSX.Element {
   const [needsToken, setNeedsToken] = useState(false)
   const [needsRedirect, setNeedsRedirect] = useState(false)
   const [busIsLive, setBusIsLive] = useState(false)
+
+  const stageInfo = JsonTopic<EventStage>('eventStage', { stage: undefined as unknown as STAGE })
+  const stage = stageInfo.stage
+
+  if (stage !== undefined) {
+    dispatch(stageSlice.actions.updateStage(stage))
+  }
 
   if (needsRedirect) {
     setNeedsRedirect(false)

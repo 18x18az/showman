@@ -1,5 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit'
 import type { ReduxState } from '@/lib/redux'
+import { ROLE } from '@18x18az/maestro-interfaces'
 
 type Selector<T> = (state: ReduxState) => T
 
@@ -15,3 +16,11 @@ export const selectAuthentication = createSelector([selectUserId, selectToken], 
 })
 
 export const selectUserName: Selector<string | undefined> = (state: ReduxState) => state.session?.name
+export const selectRole: Selector<ROLE | undefined> = (state: ReduxState) => state.session?.role
+
+export const selectIsAdmin: Selector<boolean | undefined> = createSelector([selectRole], (role) => role === undefined ? undefined : role === ROLE.ADMIN)
+export const selectIsEmcee: Selector<boolean | undefined> = createSelector([selectRole], (role) => role === undefined ? undefined : role === ROLE.EMCEE)
+export const selectIsUnassigned: Selector<boolean | undefined> = createSelector([selectRole], (role) => role === undefined ? undefined : role === ROLE.NONE)
+export const selectIsAssigned: Selector<boolean | undefined> = createSelector([selectRole], (role) => role === undefined ? undefined : role !== ROLE.NONE)
+export const selectIsReferee: Selector<boolean | undefined> = createSelector([selectRole], (role) => role === undefined ? undefined : role === ROLE.REFEREE)
+export const selectIsCheckin: Selector<boolean | undefined> = createSelector([selectRole], (role) => role === undefined ? undefined : role === ROLE.CHECKIN)

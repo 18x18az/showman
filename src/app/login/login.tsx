@@ -1,13 +1,15 @@
 'use client'
 
-import { selectUserName, useSelector } from '@/lib/redux'
+import { selectIsUnassigned, selectUserName, useSelector } from '@/lib/redux'
+import { accessRedirect } from '../../utils/AccessRedirect'
 
 export function LoginBody (): JSX.Element {
+  accessRedirect(selectIsUnassigned, true)
+
   const name = useSelector(selectUserName)
 
-  // Cut name to last 10 characters
   let shortName = name ?? ''
-  if (shortName.length > 10) {
+  if (shortName.length > 15) {
     shortName = '...' + shortName.substring(shortName.length - 10)
   }
 
