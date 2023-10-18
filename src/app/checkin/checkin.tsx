@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { Dropdown } from '@/components/primitives/Dropdown'
 import { EmptyPost, JsonTopic } from '@/utils/maestro'
+import { accessRedirect } from '../../utils/AccessRedirect'
+import { selectCanAccessCheckin } from '../../lib/redux'
 
 interface ExpectedResult {
   teams: string[] | undefined
@@ -18,6 +20,7 @@ async function clickHandler (team: string | undefined): Promise<void> {
 }
 
 export default function CheckInBody (): JSX.Element | null {
+  accessRedirect(selectCanAccessCheckin)
   const notCheckedIn: string[] | undefined = JsonTopic<ExpectedResult>('inspection/stage/NOT_HERE', { teams: undefined }).teams
 
   const [selected, setSelected] = useState<string | undefined>(undefined)

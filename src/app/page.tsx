@@ -1,7 +1,7 @@
 'use client'
 import { useTheme } from 'next-themes'
-import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { LandingPage } from './landing'
 
 export default function Home (): JSX.Element | null {
   const [mounted, setMounted] = useState(false)
@@ -17,9 +17,6 @@ export default function Home (): JSX.Element | null {
   }
 
   return (
-    <div>
-      This is the admin page
-      <Link href='/checkin'>Check in</Link>
-    </div>
+    <LandingPage />
   )
 }

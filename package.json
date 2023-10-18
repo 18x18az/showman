@@ -16,7 +16,7 @@
     "test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook && npx http-server storybook-static --port 6006\" \"wait-on tcp:6006 && yarn test-storybook\""
   },
   "dependencies": {
-    "@18x18az/maestro-interfaces": "^1.11.0",
+    "@18x18az/maestro-interfaces": "^1.13.0",
     "@radix-ui/colors": "^3.0.0-rc.4",
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-dropdown-menu": "^2.0.6",

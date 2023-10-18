@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@18x18az/maestro-interfaces@^1.11.0":
-  version "1.12.0"
-  resolved "https://registry.yarnpkg.com/@18x18az/maestro-interfaces/-/maestro-interfaces-1.12.0.tgz#15eec6bab64be2d089595fb725e935946cd94040"
-  integrity sha512-KJ+S6gevPMPO9+eeYupCSlcpMgCa0K37/ELFvlufwO+kvWIjeYcD0H+x1fjukwfxzfB8e6Xlql87NAFBJ6eIGw==
+"@18x18az/maestro-interfaces@^1.13.0":
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/@18x18az/maestro-interfaces/-/maestro-interfaces-1.13.0.tgz#e4a55797b26b7222877727d235d3d6b89e0f1c39"
+  integrity sha512-k7wFqKlGXxCc9o8/mbdziZHxXALwgFwM0DLgLFMalluGuGAie6nvbc4DCCQrMbzGdB9GZc9FWPCKdDS+CaJ03Q==
 
 "@aashutoshrathi/word-wrap@^1.2.3":
   version "1.2.6"
