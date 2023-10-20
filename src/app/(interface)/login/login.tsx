@@ -1,7 +1,7 @@
 'use client'
 
 import { selectIsUnassigned, selectUserName, useSelector } from '@/lib/redux'
-import { accessRedirect } from '../../utils/AccessRedirect'
+import { accessRedirect } from '@/utils/AccessRedirect'
 
 export function LoginBody (): JSX.Element {
   accessRedirect(selectIsUnassigned, true)

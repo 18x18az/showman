@@ -3,8 +3,8 @@
 import { useState } from 'react'
 import { Dropdown } from '@/components/primitives/Dropdown'
 import { EmptyPost, JsonTopic } from '@/utils/maestro'
-import { accessRedirect } from '../../utils/AccessRedirect'
-import { selectCanAccessCheckin } from '../../lib/redux'
+import { accessRedirect } from '@/utils/AccessRedirect'
+import { selectCanAccessCheckin } from '@/lib/redux'
 
 interface ExpectedResult {
   teams: string[] | undefined
