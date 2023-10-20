@@ -30,7 +30,7 @@ function BaseTopic (topic: string | undefined, initial: string): string {
 
 export function StringTopic<Type> (topic: string | undefined, initial: Type): Type {
   const raw = BaseTopic(topic, initial as string)
-  return raw.slice(1, -1) as Type
+  return raw as Type
 }
 
 export function JsonTopic<Type> (topic: string | undefined, initial: Type): Type {
