@@ -22,7 +22,7 @@ export const Columns: Array<ColumnDef<Team>> = [
       )
     },
     cell: ({ row }) => {
-      return <div className="font-medium">{row.original.number}</div>
+      return <div className='font-medium'>{row.original.number}</div>
     }
   }
 ]

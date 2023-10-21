@@ -1,5 +1,5 @@
 'use client'
 
-export default function Page(): JSX.Element {
-    return <></>
+export default function Page (): JSX.Element {
+  return <></>
 }
