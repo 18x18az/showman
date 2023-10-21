@@ -1,10 +1,30 @@
 'use client'
 
+const SECURE_HOST = 'l.18x18az.org'
+
 import { useEffect, useState } from 'react'
 import { Client } from 'paho-mqtt'
 
 function getHostname (): string {
-  return 'l.18x18az.org'
+  return window.location.hostname
+}
+
+function getApiHostname (): string {
+  const host = getHostname()
+  if(host === SECURE_HOST) {
+    return `https://${host}`
+  } else {
+    return `http://${host}:2000`
+  }
+}
+
+function getMqttHost(): string {
+  const host = getHostname()
+  if(host === SECURE_HOST) {
+    return `wss://${host}/mqtt`
+  } else {
+    return `ws://${host}:1883/`
+  }
 }
 
 function BaseTopic (topic: string | undefined, initial: string): string {
@@ -13,7 +33,7 @@ function BaseTopic (topic: string | undefined, initial: string): string {
     if (topic === undefined) {
       return
     }
-    const client = new Client('wss://l.18x18az.org/mqtt', Math.random().toString(16))
+    const client = new Client(getMqttHost(), Math.random().toString(16))
     client.connect({ onSuccess: () => { client.subscribe(topic) } })
 
     client.onMessageArrived = (message) => {
@@ -40,7 +60,7 @@ export function JsonTopic<Type> (topic: string | undefined, initial: Type): Type
 }
 
 function makeUrl (resource: string): string {
-  return `https://${getHostname()}/api/${resource}`
+  return `${getApiHostname()}/api/${resource}`
 }
 
 export async function Delete (resource: string): Promise<Response> {
