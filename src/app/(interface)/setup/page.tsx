@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Header } from '@/components/primitives/Header'
+import { Post } from '@/utils/maestro'
 
 const formSchema = z.object({
   eventName: z.string().min(2, {
@@ -27,7 +28,6 @@ const formSchema = z.object({
 })
 
 function SetupForm (): JSX.Element {
-  // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -46,11 +46,8 @@ function SetupForm (): JSX.Element {
     control: form.control
   })
 
-  // 2. Define a submit handler.
   function onSubmit (values: z.infer<typeof formSchema>): void {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+    Post('setup/config', values)
   }
 
   return (

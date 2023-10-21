@@ -7,7 +7,7 @@ import { Columns } from './columns'
 
 type TeamInfo = Record<string, Team>
 
-export async function TeamList (): Promise<JSX.Element> {
+export function TeamList (): JSX.Element {
   const teamList = Object.values(JsonTopic<TeamInfo>('teams', {}))
   // const inspectionRollup = StringTopic('inspection/team/+', '')
   return (
