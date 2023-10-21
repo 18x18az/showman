@@ -11,5 +11,20 @@ export default meta
 type Story = StoryObj<typeof Navbar>
 
 export const Primary: Story = {
-  args: {}
+  args: {
+    items: [
+      {
+        text: 'owo',
+        href: '/owo'
+      },
+      {
+        text: 'uwu',
+        href: '/uwu'
+      },
+      {
+        text: 'hehe',
+        href: '/hehe'
+      }
+    ]
+  }
 }
