@@ -47,12 +47,12 @@ function SetupForm (): JSX.Element {
   })
 
   function onSubmit (values: z.infer<typeof formSchema>): void {
-    Post('setup/config', values)
+    void Post('setup/config', values)
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={(event) => {void form.handleSubmit(onSubmit)(event) }} className='space-y-8 xl:space-y-8 xl:mt-8'>
+      <form onSubmit={(event) => { void form.handleSubmit(onSubmit)(event) }} className='space-y-8 xl:space-y-8 xl:mt-8'>
         <FormField
           control={form.control}
           name='eventName'
