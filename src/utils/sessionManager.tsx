@@ -6,7 +6,7 @@ import { EmptyPost, JsonTopic } from './maestro'
 import { redirect, usePathname } from 'next/navigation'
 import { EventStage, STAGE } from '@18x18az/maestro-interfaces'
 
-export function SessionManager (): JSX.Element {
+export function SessionProvider ({ children }: any): JSX.Element {
   const dispatch = useDispatch()
   const authentication = useSelector(selectAuthentication)
   const pathname = usePathname()
@@ -85,5 +85,9 @@ export function SessionManager (): JSX.Element {
     }
   }, [sessionInfo])
 
-  return <></>
+  return (
+    <>
+      {children}
+    </>
+  )
 }
