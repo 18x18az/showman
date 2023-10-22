@@ -1,9 +1,9 @@
 'use client'
 
-const SECURE_HOST = 'l.18x18az.org'
-
 import { useEffect, useState } from 'react'
 import { Client } from 'paho-mqtt'
+
+const SECURE_HOST = 'l.18x18az.org'
 
 function getHostname (): string {
   return window.location.hostname
@@ -11,16 +11,16 @@ function getHostname (): string {
 
 function getApiHostname (): string {
   const host = getHostname()
-  if(host === SECURE_HOST) {
+  if (host === SECURE_HOST) {
     return `https://${host}`
   } else {
     return `http://${host}:2000`
   }
 }
 
-function getMqttHost(): string {
+function getMqttHost (): string {
   const host = getHostname()
-  if(host === SECURE_HOST) {
+  if (host === SECURE_HOST) {
     return `wss://${host}/mqtt`
   } else {
     return `ws://${host}:1883/`
@@ -50,7 +50,7 @@ function BaseTopic (topic: string | undefined, initial: string): string {
 
 export function StringTopic<Type> (topic: string | undefined, initial: Type): Type {
   const raw = BaseTopic(topic, initial as string)
-  return raw.slice(1, -1) as Type
+  return raw as Type
 }
 
 export function JsonTopic<Type> (topic: string | undefined, initial: Type): Type {

@@ -1,14 +1,10 @@
-import './globals.css'
+import '../globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import Providers from '../lib/providers'
-import { SessionManager } from '../utils/sessionManager'
-
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Event Orchestrator',
-  description: 'Tournament management for the 21st century'
+  title: 'Display Page'
 }
 
 export default function RootLayout ({
@@ -19,10 +15,7 @@ export default function RootLayout ({
   return (
     <html lang='en' suppressHydrationWarning>
       <body className={`${inter.className} bg-slate-0`}>
-        <Providers>
-          <SessionManager />
-          {children}
-        </Providers>
+        {children}
       </body>
     </html>
   )
