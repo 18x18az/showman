@@ -6,9 +6,9 @@ import { cn } from '@/utils'
 import { buttonVariants } from './button'
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
-  items: {
-    href: string
-    title: string
+  readonly items: {
+    readonly href: string
+    readonly title: string
   }[]
 }
 

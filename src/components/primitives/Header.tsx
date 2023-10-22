@@ -1,8 +1,8 @@
 import { Separator } from '../ui/separator'
 
 interface HeaderProps {
-  name: string
-  description: string
+  readonly name: string
+  readonly description: string
 }
 
 export function Header ({ name, description }: HeaderProps): JSX.Element {

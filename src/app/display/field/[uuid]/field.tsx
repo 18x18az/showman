@@ -4,7 +4,7 @@ import { JsonTopic } from '@/utils/maestro'
 import { DisplayConfig } from '@18x18az/maestro-interfaces'
 
 interface FieldDisplayProps {
-  uuid: string
+  readonly uuid: string
 }
 
 export async function FieldDisplay (props: FieldDisplayProps): Promise<JSX.Element> {
