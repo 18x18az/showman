@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@18x18az/maestro-interfaces@^1.16.1":
-  version "1.16.1"
-  resolved "https://registry.yarnpkg.com/@18x18az/maestro-interfaces/-/maestro-interfaces-1.16.1.tgz#2ec895c9fbd858f3a4a6014fb0935401f8fbd335"
-  integrity sha512-1EpGclskSdx30U4j4hjSV3/bEf2HlZE8lFkLzk/m2OwUubkOIGpvwlASFDI6/pXCeTSnWr8ze7Fs24ZKOYRkyQ==
+"@18x18az/maestro-interfaces@^1.17.1":
+  version "1.17.1"
+  resolved "https://registry.yarnpkg.com/@18x18az/maestro-interfaces/-/maestro-interfaces-1.17.1.tgz#a242483ed8a85c461110ae90b578f2555bfc9568"
+  integrity sha512-rnmZPiNrpS8bbxto2eSLjvc7CUs0bl20g1/+o3B2yRR+R2rFmYuxoAxt4mA7hiIfQm4N3qaCQeJnM0MbGgvQRA==
 
 "@aashutoshrathi/word-wrap@^1.2.3":
   version "1.2.6"
@@ -2330,6 +2330,20 @@
   dependencies:
     "@babel/runtime" "^7.13.10"
     "@radix-ui/react-compose-refs" "1.0.1"
+
+"@radix-ui/react-switch@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-switch/-/react-switch-1.0.3.tgz#6119f16656a9eafb4424c600fdb36efa5ec5837e"
+  integrity sha512-mxm87F88HyHztsI7N+ZUmEoARGkC22YVW5CaC+Byc+HRpuvCrOBPTAnXgf+tZ/7i0Sg/eOePGdMhUKhPaQEqow==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    "@radix-ui/primitive" "1.0.1"
+    "@radix-ui/react-compose-refs" "1.0.1"
+    "@radix-ui/react-context" "1.0.1"
+    "@radix-ui/react-primitive" "1.0.3"
+    "@radix-ui/react-use-controllable-state" "1.0.1"
+    "@radix-ui/react-use-previous" "1.0.1"
+    "@radix-ui/react-use-size" "1.0.1"
 
 "@radix-ui/react-toast@^1.1.5":
   version "1.1.5"

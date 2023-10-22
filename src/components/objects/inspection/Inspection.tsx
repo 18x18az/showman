@@ -1,38 +1,20 @@
 import { InspectionItem } from './InspectionItem'
-import { NetworkSynchronizer } from '../../../utils/NetworkSync'
 
-export interface InspectionInfo {
-  uuid: string
-  description: string
-  rules: string[]
-  met: boolean
-}
+import { InspectionSectionDataBroadcast } from '@18x18az/maestro-interfaces'
 
-export interface InspectionSectionData {
-  uuid: string
-  title: string
-  childRequirements: InspectionInfo[]
-}
-
-interface InspectionSectionProps extends InspectionSectionData {
+interface InspectionSectionProps extends InspectionSectionDataBroadcast {
   readonly hideComplete: boolean
-  readonly onChange: (uuid: string, value: boolean) => void
+  readonly onChange: (uuid: number, value: boolean) => void
 }
 
 export interface InspectionProps {
-  readonly sections: InspectionSectionData[]
+  readonly sections: InspectionSectionDataBroadcast[]
   readonly hideComplete: boolean
-}
-
-interface InspectionStatus {
-  [key: string]: {
-    [key: string]: boolean
-  }
+  readonly onChange: (uuid: number, value: boolean) => void
 }
 
 function InspectionSection (props: InspectionSectionProps): JSX.Element {
-  // Return a fragment if all requirements are met and we're hiding complete sections
-  if (props.hideComplete && props.childRequirements.every((req) => req.met)) {
+  if (props.hideComplete && props.childRequirements.every((req) => req.isMet)) {
     return <></>
   }
 
@@ -42,7 +24,7 @@ function InspectionSection (props: InspectionSectionProps): JSX.Element {
         key={requirement.uuid}
         hideComplete={props.hideComplete}
         description={requirement.description}
-        rules={requirement.rules} met={requirement.met}
+        met={requirement.isMet}
         onChange={value => { props.onChange(requirement.uuid, value) }}
       />
     )
@@ -57,40 +39,16 @@ function InspectionSection (props: InspectionSectionProps): JSX.Element {
 }
 
 export function Inspection (props: InspectionProps): JSX.Element {
-  const valuesFromNetwork: InspectionStatus = props.sections.reduce<InspectionStatus>((acc, section) => {
-    acc[section.uuid] = section.childRequirements.reduce<{ [key: string]: boolean }>((acc, req) => {
-      acc[req.uuid] = req.met
-      return acc
-    }, {})
-    return acc
-  }
-  , {})
-
-  const { output: status, updateFromLocal } = NetworkSynchronizer<InspectionStatus>(valuesFromNetwork)
-
-  const reconciled: InspectionSectionData[] = props.sections.map((section) => {
-    return {
-      ...section,
-      childRequirements: section.childRequirements.map((req) => {
-        return {
-          ...req,
-          met: status[section.uuid][req.uuid]
-        }
-      })
-    }
-  })
-
   return (
-    <div className='flex flex-col bg-slate-2'>
-      {reconciled.flatMap((section) => {
+    <div className='flex flex-col'>
+      {props.sections.map(section => {
         return (
           <InspectionSection
-            uuid={section.uuid}
             hideComplete={props.hideComplete}
-            key={section.uuid}
+            key={section.title}
             title={section.title}
             childRequirements={section.childRequirements}
-            onChange={(uuid, value) => { updateFromLocal({ [section.uuid]: { [uuid]: value } }) }}
+            onChange={(uuid, value) => { props.onChange(uuid, value) }}
           />
         )
       })}
