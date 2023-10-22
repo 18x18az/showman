@@ -1,3 +1,4 @@
+'use client'
 import { useState } from 'react'
 import Link from 'next/link'
 
@@ -6,19 +7,23 @@ interface NavbarItem {
   href: string
 }
 
-interface NavbarProps {
-  readonly children: React.ReactNode
-  readonly items: NavbarItem[]
-}
-
 const MOBILE_MENU_ID: string = 'mobile'
 
-export function Navbar (props: NavbarProps): JSX.Element {
+export function Navbar (): JSX.Element {
   const [mobileMenu, setMobileMenu] = useState('hidden')
 
   function handleClick (): void {
     setMobileMenu(prevMobileMenu => prevMobileMenu === 'hidden' ? '' : 'hidden')
   }
+
+
+  const items: NavbarItem[] = []
+
+  items.push({ text: 'Control', href: '/control' })
+  items.push({ text: 'Config', href: '/config' })
+  items.push({ text: 'Devices', href: '/devices' })
+  items.push({ text: 'Inspection', href: '/inspection' })
+  items.push({ text: 'Checkin', href: '/checkin' })
 
   return (
     <nav className='flex items-center justify-between flex-wrap bg-teal-900 p-6'>
@@ -29,7 +34,7 @@ export function Navbar (props: NavbarProps): JSX.Element {
       </div>
       <div id={MOBILE_MENU_ID} className={mobileMenu}>
         {
-            props.items.map((value: NavbarItem) => {
+            items.map((value: NavbarItem) => {
               return (
                 <Link key={value.href} href={value.href} className='block mt-4 lg:inline-block lg:mt-0 text-teal-100 hover:text-white'>
                   {value.text}
@@ -39,9 +44,9 @@ export function Navbar (props: NavbarProps): JSX.Element {
           }
       </div>
       <div className='w-full hidden flex-grow lg:flex lg:items-center lg:w-auto'>
-        <div className='text-md lg:flex-grow space-x-2'>
+        <div className='text-md lg:flex-grow space-x-4'>
           {
-            props.items.map((value: NavbarItem) => {
+            items.map((value: NavbarItem) => {
               return (
                 <Link key={value.href} href={value.href} className='block mt-4 lg:inline-block lg:mt-0 text-teal-100 hover:text-white'>
                   {value.text}

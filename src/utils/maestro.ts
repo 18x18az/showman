@@ -41,7 +41,12 @@ function BaseTopic (topic: string | undefined, initial: string): string {
     }
 
     return () => {
-      client.disconnect()
+      try {
+        client.disconnect()
+      } catch (e) {
+        console.log(e)
+      }
+      
     }
   }, [topic])
 
