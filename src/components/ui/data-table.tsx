@@ -2,11 +2,8 @@
 
 import {
   ColumnDef,
+  Table as TableType,
   flexRender,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable
 } from '@tanstack/react-table'
 
 import {
@@ -22,23 +19,15 @@ import { Button } from '@/components/ui/button'
 
 interface DataTableProps<TData, TValue> {
   readonly columns: Array<ColumnDef<TData, TValue>>
-  readonly data: TData[]
+  readonly table: TableType<TData>
 }
 
 export function DataTable<TData, TValue> ({
   columns,
-  data
+  table
 }: DataTableProps<TData, TValue>): JSX.Element {
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel()
-  })
-
   return (
-    <div>
+    <>
       <div className='rounded-md border'>
         <Table>
           <TableHeader>
@@ -64,7 +53,7 @@ export function DataTable<TData, TValue> ({
               ? (
                   table.getRowModel().rows.map((row) => (
                     <TableRow
-                      key={row.id}
+                      key={row.getValue('name')}
                       data-state={row.getIsSelected() && 'selected'}
                     >
                       {row.getVisibleCells().map((cell) => (
@@ -103,6 +92,6 @@ export function DataTable<TData, TValue> ({
           Next
         </Button>
       </div>
-    </div>
+    </>
   )
 }
