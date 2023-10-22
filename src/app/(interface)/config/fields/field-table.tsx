@@ -36,6 +36,6 @@ export function FieldTable<TData, TValue> ({
   })
 
   return (
-    <DataTable columns={columns} table={table} keyValue='id'/>
+    <DataTable columns={columns} table={table} keyValue='fieldId'/>
   )
 }
