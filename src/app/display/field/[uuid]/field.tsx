@@ -7,7 +7,7 @@ interface FieldDisplayProps {
   readonly uuid: string
 }
 
-export async function FieldDisplay (props: FieldDisplayProps): Promise<JSX.Element> {
+export function FieldDisplay (props: FieldDisplayProps): JSX.Element {
   const topic = `displays/${props.uuid}`
   const fieldInfo = JsonTopic<DisplayConfig>(topic, { uuid: props.uuid, name: '', fieldId: '' })
 

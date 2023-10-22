@@ -15,7 +15,7 @@ export function Devices (): JSX.Element {
   return (
     <>
       <Header name='Devices' description='View and manage devices.' />
-      <DeviceTable columns={Columns} data={deviceInfo}/>
+      <DeviceTable columns={Columns} data={deviceInfo} />
     </>
 
   )

@@ -13,12 +13,12 @@ export const Columns: Array<ColumnDef<User>> = [
   {
     accessorKey: 'name',
     header: ({ column }) => <SortableHeader column={column}>Name</SortableHeader>,
-    cell: ({ row }) => <TextInput value={row.original.name} updateValue={(name) => {void updateName(row.original.userId, name)}}/>
+    cell: ({ row }) => <TextInput value={row.original.name} updateValue={(name) => { void updateName(row.original.userId, name) }} />
   },
   {
     accessorKey: 'role',
     header: 'Role',
-    cell: ({ row }) => <DropdownHeader current={row.original.role} options={Object.values(ROLE)} stringGetter={getRoleText} updateValue={(value) => {void setRole(row.original.userId, value)}}/>
+    cell: ({ row }) => <DropdownHeader current={row.original.role} options={Object.values(ROLE)} stringGetter={getRoleText} updateValue={(value) => { void setRole(row.original.userId, value) }} />
   },
   {
     id: 'delete',

@@ -2,6 +2,7 @@
 
 import {
   ColumnDef,
+  SortingState,
   getCoreRowModel,
   getPaginationRowModel,
   getSortedRowModel,
@@ -10,26 +11,32 @@ import {
 
 import { DataTable } from '@/components/ui/data-table'
 
-interface TeamTableProps<TData, TValue> {
+import { useState } from 'react'
+
+interface DisplayTableProps<TData, TValue> {
   readonly columns: Array<ColumnDef<TData, TValue>>
   readonly data: TData[]
 }
 
-export function TeamTable<TData, TValue> ({
+export function DisplayTable<TData, TValue> ({
   columns,
   data
-}: TeamTableProps<TData, TValue>): JSX.Element {
+}: DisplayTableProps<TData, TValue>): JSX.Element {
+  const [sorting, setSorting] = useState<SortingState>([])
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel()
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting
+    }
   })
 
   return (
-    <div>
-      <DataTable columns={columns} table={table} keyValue='number' />
-    </div>
+    <DataTable columns={columns} table={table} keyValue='name' />
   )
 }
