@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Client } from 'paho-mqtt'
+import axios from 'axios'
 
 const SECURE_HOST = 'l.18x18az.org'
 
@@ -46,7 +47,6 @@ function BaseTopic (topic: string | undefined, initial: string): string {
       } catch (e) {
         console.log(e)
       }
-      
     }
   }, [topic])
 
@@ -82,13 +82,13 @@ export async function EmptyPost (resource: string): Promise<Response> {
   })
 }
 
-export async function Post (resource: string, payload: object): Promise<Response> {
+export async function Post (resource: string, payload: object): Promise<number> {
   const url = makeUrl(resource)
-  return await fetch(url, {
+  const response = await axios({
     method: 'POST',
-    body: JSON.stringify(payload),
-    headers: {
-      'Content-Type': 'application/json'
-    }
+    url,
+    data: payload,
+    validateStatus: () => true
   })
+  return response.status
 }

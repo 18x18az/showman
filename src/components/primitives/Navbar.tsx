@@ -16,7 +16,6 @@ export function Navbar (): JSX.Element {
     setMobileMenu(prevMobileMenu => prevMobileMenu === 'hidden' ? '' : 'hidden')
   }
 
-
   const items: NavbarItem[] = []
 
   items.push({ text: 'Control', href: '/control' })

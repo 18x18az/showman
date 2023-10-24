@@ -49,6 +49,7 @@ export function SessionProvider ({ children }: any): JSX.Element {
   useEffect(() => {
     void hydrateSession(dispatch).then((exists: boolean) => {
       if (!exists) {
+        console.log('No session found, redirecting to login')
         setNeedsRedirect(true)
         setNeedsToken(true)
       }
@@ -69,6 +70,7 @@ export function SessionProvider ({ children }: any): JSX.Element {
       setNeedsToken(false)
       void doRegister()
     } else {
+      console.log('needs auth or whatever')
       setNeedsRedirect(true)
     }
   }, [pathname, needsToken])
@@ -79,6 +81,7 @@ export function SessionProvider ({ children }: any): JSX.Element {
       setBusIsLive(true)
       dispatch(sessionSlice.actions.busUpdate(sessionInfo as UserInfo))
     } else if (busIsLive) {
+      console.log('Bus session info is empty, logging out')
       setNeedsToken(true)
       setNeedsRedirect(true)
       dispatch(sessionSlice.actions.logout)
