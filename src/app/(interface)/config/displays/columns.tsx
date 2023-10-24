@@ -2,9 +2,10 @@ import { DropdownHeader, TextInput } from '@/components/ui/data-table'
 import { Post } from '@/utils/maestro'
 import { DisplayConfig, FieldInfoBroadcast } from '@18x18az/maestro-interfaces'
 import { ColumnDef } from '@tanstack/react-table'
+import { Field } from '../../interfaces'
 
 interface DisplayConfigWithFields extends DisplayConfig {
-  fields: FieldInfoBroadcast[]
+  fields: Field[]
 }
 
 async function updateName (uuid: string, name: string): Promise<void> {
@@ -30,14 +31,14 @@ export const Columns: Array<ColumnDef<DisplayConfigWithFields>> = [
       const currentId = row.original.fieldId
       let currentFieldName = 'Unassigned'
 
-      if (currentId !== null) currentFieldName = row.original.fields.find((field) => { return field.fieldId === currentId })?.name ?? 'Unassigned'
+      if (currentId !== null) currentFieldName = row.original.fields.find((field) => { return field.id === currentId })?.name ?? 'Unassigned'
 
       const fieldNames = row.original.fields.map((field) => { return field.name })
 
       function handleAssignField (name: string): void {
         const field = row.original.fields.find((field) => { return field.name === name })
         if (field === undefined) return
-        void assignField(row.original.uuid, field.fieldId)
+        void assignField(row.original.uuid, field.id)
       }
 
       return <DropdownHeader updateValue={handleAssignField} current={currentFieldName} options={fieldNames} stringGetter={(v) => v} />

@@ -30,5 +30,5 @@ export interface FieldStatus extends Field {
   time?: Date
   redAlliance?: Alliance
   blueAlliance?: Alliance
-  match: MatchIdentifier
+  match?: MatchIdentifier
 }

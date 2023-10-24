@@ -34,8 +34,8 @@ function BaseTopic (topic: string | undefined, initial: string): string {
     if (topic === undefined) {
       return
     }
-    const client = new Client(getMqttHost(), Math.random().toString(16))
-    client.connect({ onSuccess: () => { client.subscribe(topic) } })
+    const client = new Client(getMqttHost(), Math.random().toString(16), )
+    client.connect({ onSuccess: () => { client.subscribe(topic) }, reconnect: true })
 
     client.onMessageArrived = (message) => {
       setVariable(message.payloadString)
