@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-function offsetTimer(time: Date): number {
+export function offsetTimer(time: Date): number {
     const realDate = new Date(time)
     const [offset, setOffset] = useState(0)
   
@@ -63,8 +63,9 @@ function offsetTimer(time: Date): number {
     let offset = offsetTimer(props.time)
     if(offset < 0) offset = 0
 
-    const minutes = Math.floor(offset / 60000).toString().padStart(2, '0')
-    const seconds = Math.floor((offset % 60000) / 1000).toString().padStart(2, '0')
+    const roundedSeconds = Math.ceil(offset / 1000)
+    const minutes = Math.floor(roundedSeconds / 60).toString()
+    const seconds = Math.floor(roundedSeconds % 60).toString().padStart(2, '0')
 
     const time = `${minutes}:${seconds}`
     return <>{time}</>

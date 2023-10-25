@@ -3,14 +3,13 @@
 import { Alliance, FieldState, FieldStatus, MatchIdentifier } from '@/app/(interface)/interfaces'
 import { JsonTopic } from '@/utils/maestro'
 import { DisplayConfig } from '@18x18az/maestro-interfaces'
-import { useEffect, useState } from 'react'
 import { Countdown, Timer } from './timer'
 
 interface FieldDisplayProps {
   readonly uuid: string
 }
 
-function makeMatchName(match: MatchIdentifier | undefined): string {
+export function makeMatchName(match: MatchIdentifier | undefined): string {
   if (match === undefined) return ''
   const roundNames = ['Qualification']
   const roundName = roundNames[match.round]
@@ -84,7 +83,11 @@ export function FieldDisplay (props: FieldDisplayProps): JSX.Element {
       body = <>
           <h1 className='text-7xl text-zinc-300'>{matchName}</h1>
           <h2 className='text-9xl mb-12 text-zinc-100'>SCORING MATCH</h2>
-          <h2 className='text-7xl text-zinc-300'>{fieldName}</h2>
+          <div className='flex justify-between items-end'>
+          <AllianceDisplay alliance={status.blueAlliance} color='blue' />
+        <h2 className='text-7xl text-zinc-300'>{fieldName}</h2>
+        <AllianceDisplay alliance={status.redAlliance} color='red' />
+        </div>
           </>
       break
     case FieldState.PAUSED:
