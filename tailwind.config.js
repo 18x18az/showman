@@ -11,6 +11,11 @@ module.exports = {
       screens: {
         tablet: '600px',
         desktop: '1024px'
+      },
+      extend: {
+        fontSize: {
+          '10xl': '10rem',
+        }
       }
     },
     extend: {

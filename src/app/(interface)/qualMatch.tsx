@@ -4,7 +4,6 @@ import { EmptyPost, JsonTopic } from '@/utils/maestro'
 import { Alliance, FieldState, FieldStatus, MatchIdentifier } from './interfaces'
 import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
-import { stat } from 'fs/promises'
 
 interface FieldControlProps {
   readonly status: FieldStatus
