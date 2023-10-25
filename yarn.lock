@@ -3991,6 +3991,11 @@
   resolved "https://registry.npmjs.org/@types/normalize-package-data/-/normalize-package-data-2.4.2.tgz"
   integrity sha512-lqa4UEhhv/2sjjIQgjX8B+RBjj47eo0mzGasklVJ78UKGQY1r0VpB9XHDaZZO9qzEFDdy4MrXLuEaSmPrPSe/A==
 
+"@types/obs-studio@^2.17.1":
+  version "2.17.1"
+  resolved "https://registry.yarnpkg.com/@types/obs-studio/-/obs-studio-2.17.1.tgz#778051535c41b23d761f8f8a19b1c030ee452fc7"
+  integrity sha512-xQ7RWjLyNQQKblPuiq6Hh60nhlZ+vXI1uel/smLj9uwW0dYp9G8byz1nXbuPFxtJLdSnBRpozkhE1iKt7g5wMA==
+
 "@types/paho-mqtt@^1.0.8":
   version "1.0.8"
   resolved "https://registry.npmjs.org/@types/paho-mqtt/-/paho-mqtt-1.0.8.tgz"

@@ -4,10 +4,12 @@ import { FieldState, FieldStatus } from "@/app/(interface)/interfaces"
 import { MatchOverlay, MatchPeriod } from "@/components/objects/match/MatchOverlay"
 import { JsonTopic } from "@/utils/maestro"
 import { makeMatchName } from "../field/[uuid]/field"
-import { offsetTimer } from "../field/[uuid]/timer"
+import { useState } from "react"
 
 export default function Page(): JSX.Element {
     const competition = JsonTopic<FieldStatus>('fieldControl', {state: FieldState.IDLE, name: 'None', id: 0})
+
+    const [currentScene, setCurrentScene] = useState('')
 
     if(competition.redAlliance === undefined) return <></>
     if(competition.blueAlliance === undefined) return <></>
@@ -25,6 +27,23 @@ export default function Page(): JSX.Element {
 
     let time = competition.time
     if(competition.state !== FieldState.AUTO && competition.state !== FieldState.DRIVER) time = undefined
+
+    /**
+    * @callback EventListener
+    * @param {CustomEvent} event
+    */
+
+    /**
+    * @param {string} type
+    * @param {EventListener} listener
+    */
+    window.addEventListener('obsSceneChanged', function(event) {
+        setCurrentScene(event.detail.name)
+    })
+
+    if(!currentScene.startsWith('Field')) {
+        return <></>
+    }
 
     return <MatchOverlay time={time} title={matchName} period={period} redTeams={redTeams} blueTeams={blueTeams}/>
 }
