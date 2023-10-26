@@ -10,14 +10,14 @@ export function AllianceIndicator (props: AllianceIndicatorProps): JSX.Element {
   const rounding = props.alliance === 'red' ? 'rounded-r-xl' : 'rounded-l-xl'
   const border = props.alliance === 'red' ? 'border-l-4 border-red-9 pl-4' : 'border-r-4 border-blue-9 pr-4'
 
-  const offset = 1.3
+  const offset = 0.7
 
   return (
     <div className={`h-48 flex flex-col justify-center fixed bottom-0 ${side}`}>
       <motion.div
-        className={`px-4 py-2 flex flex-col justify-center bg-zinc-700 bg-opacity-60 ${rounding}`}
-        initial={{ backgroundColor: 'rgba(0,0,0,0)'}}
-        animate={{ backgroundColor: 'rgba(39,39,39,0.95)'}}
+        className={`px-4 py-2 flex flex-col justify-center ${rounding}`}
+        initial={{ backgroundColor: 'rgba(24,24,27,0)'}}
+        animate={{ backgroundColor: 'rgba(24,24,27,.998)'}}
         transition={{ delay: 0.4 + offset, type: 'spring', stiffness: 100, damping: 20 }}
       >
         <motion.div
