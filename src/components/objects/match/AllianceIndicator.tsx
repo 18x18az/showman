@@ -15,9 +15,9 @@ export function AllianceIndicator (props: AllianceIndicatorProps): JSX.Element {
   return (
     <div className={`h-48 flex flex-col justify-center fixed bottom-0 ${side}`}>
       <motion.div
-        className={`px-4 py-2 flex flex-col justify-center bg-gray-600 bg-opacity-30 ${rounding}`}
-        initial={{ backgroundColor: 'rgba(0,0,0,0)' }}
-        animate={{ backgroundColor: 'rgba(39,39,39,0.6)' }}
+        className={`px-4 py-2 flex flex-col justify-center bg-zinc-700 bg-opacity-60 ${rounding}`}
+        initial={{ backgroundColor: 'rgba(0,0,0,0)'}}
+        animate={{ backgroundColor: 'rgba(39,39,39,0.95)'}}
         transition={{ delay: 0.4 + offset, type: 'spring', stiffness: 100, damping: 20 }}
       >
         <motion.div
@@ -31,8 +31,8 @@ export function AllianceIndicator (props: AllianceIndicatorProps): JSX.Element {
               <motion.div
                 className='text-6xl text-white'
                 key={team}
-                initial={{ opacity: 0, letterSpacing: '-0.5em' }}
-                animate={{ opacity: 1, letterSpacing: '0' }}
+                initial={{ opacity: 0, letterSpacing: '-0.5em', width: 0 }}
+                animate={{ opacity: 1, letterSpacing: '0', width: '16rem' }}
                 transition={{ delay: 0.31 + offset, type: 'spring', stiffness: 100, damping: 20 }}
               >{team}
               </motion.div>

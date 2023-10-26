@@ -1,6 +1,6 @@
 'use client'
 
-import { EmptyPost, JsonTopic } from '@/utils/maestro'
+import { EmptyPost, JsonTopic, Post } from '@/utils/maestro'
 import { Alliance, FieldState, FieldStatus, MatchIdentifier } from './interfaces'
 import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
@@ -130,6 +130,10 @@ const resume = () => {
   void EmptyPost('resume')
 }
 
+const replay = (status: FieldStatus) => {
+  void Post('replay', status)
+}
+
 function FieldControl (props: FieldControlProps): JSX.Element {
   const status = props.status
   const isCurrent = props.isCurrent
@@ -147,7 +151,7 @@ function FieldControl (props: FieldControlProps): JSX.Element {
   }
 
   if(status.state === FieldState.SCORING) {
-    actionButton = <Button className='w-24'>Replay</Button>
+    actionButton = <Button className='w-24' onClick={() => {replay(status)}}>Replay</Button>
   }
 
   //const actionButton = isCurrent === true ? <Button className='w-24'>Do Thing</Button> : <></>

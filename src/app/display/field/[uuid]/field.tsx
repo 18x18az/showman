@@ -4,6 +4,7 @@ import { Alliance, FieldState, FieldStatus, MatchIdentifier } from '@/app/(inter
 import { JsonTopic } from '@/utils/maestro'
 import { DisplayConfig } from '@18x18az/maestro-interfaces'
 import { Countdown, Timer } from './timer'
+import Logo from '@/components/primitives/logo'
 
 interface FieldDisplayProps {
   readonly uuid: string
@@ -44,7 +45,7 @@ export function FieldDisplay (props: FieldDisplayProps): JSX.Element {
   const status = JsonTopic<FieldStatus>(`fieldStatus/${fieldInfo.fieldId}`, { } as any as FieldStatus)
 
   const state = status.state
-  let body = <></>
+  let body = <div className='flex flex-col justify-evenly h-full w-full'><div className='flex justify-evenly'><Logo className="mt-14" viewBox="0 0 350.417 279.405" style={{ width: "65%", height: "100%" }}/></div></div>
 
   const matchName = makeMatchName(status.match)
   const fieldName = status.name
