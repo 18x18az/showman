@@ -1,13 +1,21 @@
 'use client'
 
-import { EmptyPost, JsonTopic, Post } from '@/utils/maestro'
+import { EmptyPost, JsonTopic, Post, StringTopic } from '@/utils/maestro'
 import { Alliance, FieldState, FieldStatus, MatchIdentifier } from './interfaces'
 import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
+import { Input } from '@/components/ui/input'
+
+enum DisplayState {
+  IDLE = 'IDLE',
+  RESULTS = 'RESULTS',
+  IN_MATCH = 'IN_MATCH'
+}
 
 interface FieldControlProps {
   readonly status: FieldStatus
   readonly isCurrent: boolean
+  readonly display: DisplayState
 }
 
 function makeTime(offset: number, truncate=false): string {
@@ -26,7 +34,16 @@ function makeMatchString (match: MatchIdentifier | undefined): string {
     if (match === undefined) {
         return ''
     }
-    const pre = 'Q'
+    let pre = 'Q'
+    if(match.round === 1) {
+      pre = 'R16'
+    } else if(match.round === 2) {
+      pre = 'QF'
+    } else if(match.round === 3) {
+      pre = 'SF'
+    } else if(match.round === 4) {
+      return "Finals"
+    }
     const num = match.match.toString()
 
     return pre + num
@@ -134,6 +151,22 @@ const replay = (status: FieldStatus) => {
   void Post('replay', status)
 }
 
+const cut = () => {
+  void EmptyPost('cut')
+}
+
+const clearScore = () => {
+  void EmptyPost('clearScore')
+}
+
+const pushScore = () => {
+  void EmptyPost('pushScore')
+}
+
+const timeout = () => {
+  void EmptyPost('timeout')
+}
+
 function FieldControl (props: FieldControlProps): JSX.Element {
   const status = props.status
   const isCurrent = props.isCurrent
@@ -144,14 +177,26 @@ function FieldControl (props: FieldControlProps): JSX.Element {
 
   if(isCurrent === true) {
     if(status.state === FieldState.ON_DECK) {
-        actionButton = <Button onClick={start} className='w-24'>Start</Button>
+        if(props.display === DisplayState.IN_MATCH) {
+          actionButton = <Button onClick={start} className='w-24'>Start</Button>
+        } else {
+          actionButton = <Button onClick={cut} className='w-24'>Intro</Button>
+        }
     } else if(status.state === FieldState.PAUSED) {
       actionButton = <><Button className='w-24' onClick={start}>Reset</Button><Button className='w-24' onClick={resume}>Resume</Button></>
     }
   }
 
+  const endEarly = () => {
+    void EmptyPost('endEarly')
+  }
+
   if(status.state === FieldState.SCORING) {
     actionButton = <Button className='w-24' onClick={() => {replay(status)}}>Replay</Button>
+  }
+
+  if(status.state === FieldState.AUTO || status.state === FieldState.DRIVER) {
+    actionButton = <Button className='w-24' onClick={endEarly}>End Early</Button>
   }
 
   //const actionButton = isCurrent === true ? <Button className='w-24'>Do Thing</Button> : <></>
@@ -184,6 +229,7 @@ function FieldControl (props: FieldControlProps): JSX.Element {
 export function QualMatchControl (): JSX.Element {
   const fields = JsonTopic<FieldStatus[]>('fieldStatuses', [])
   const fieldControl = JsonTopic<FieldStatus>('fieldControl', {state: FieldState.IDLE, name: 'None', id: 0})
+  const displayControl = StringTopic<DisplayState>('displayState', DisplayState.IDLE)
 
   // check if all fields are idle
   const allIdle = fields.every((field) => {
@@ -196,9 +242,25 @@ export function QualMatchControl (): JSX.Element {
 
   const bottomButton = allIdle ? <Button onClick={handleContinue}>Continue</Button> : <></>
 
+  const [manualReplay, setManualReplay] = useState('')
+
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setManualReplay(e.target.value)
+  }
+
+  const handleManualReplay = () => {
+    const components = manualReplay.split('-')
+    const ident: MatchIdentifier = {
+      round: parseInt(components[0]),
+      match: parseInt(components[1]),
+      sitting: 0
+    }
+    void Post('forceReplay', {ident})
+  }
+
   const fieldControls = fields.map((field) => {
     const isCurrent = field.id === fieldControl.id
-    return <FieldControl key={field.id} status={field} isCurrent={isCurrent}/>
+    return <FieldControl key={field.id} status={field} isCurrent={isCurrent} display={displayControl}/>
   })
   return (
     <div className='flex flex-col gap-6'>
@@ -207,6 +269,12 @@ export function QualMatchControl (): JSX.Element {
       </div>
       <div className='flex justify-evenly'>
         {bottomButton}
+        <Button onClick={pushScore}>Push Score</Button>
+        <Button onClick={clearScore}>Clear Score</Button>
+        <Button onClick={timeout}>Timeout</Button>
+      </div>
+      <div className='flex gap-2 mt-6'>
+        <Input className='w-42' onChange={handleInput} value={manualReplay}/> <Button onClick={handleManualReplay}>Manual Replay</Button>
       </div>
     </div>
   )

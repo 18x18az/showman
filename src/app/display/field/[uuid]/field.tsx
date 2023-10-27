@@ -1,7 +1,7 @@
 'use client'
 
 import { Alliance, FieldState, FieldStatus, MatchIdentifier } from '@/app/(interface)/interfaces'
-import { JsonTopic } from '@/utils/maestro'
+import { JsonTopic, StringTopic } from '@/utils/maestro'
 import { DisplayConfig } from '@18x18az/maestro-interfaces'
 import { Countdown, Timer } from './timer'
 import Logo from '@/components/primitives/logo'
@@ -12,8 +12,11 @@ interface FieldDisplayProps {
 
 export function makeMatchName(match: MatchIdentifier | undefined): string {
   if (match === undefined) return ''
-  const roundNames = ['Qualification']
+  if(match.round === 4) return "Finals"
+  const roundNames = ['Qualification', 'Round of 16', 'Quarterfinal', 'Semifinal', 'Final']
+  
   const roundName = roundNames[match.round]
+
   return `${roundName} Match ${match.match}`
 }
 
@@ -43,6 +46,7 @@ export function FieldDisplay (props: FieldDisplayProps): JSX.Element {
   const topic = `displays/${props.uuid}`
   const fieldInfo = JsonTopic<DisplayConfig>(topic, { uuid: props.uuid, name: '', fieldId: '' })
   const status = JsonTopic<FieldStatus>(`fieldStatus/${fieldInfo.fieldId}`, { } as any as FieldStatus)
+  const timeout = StringTopic<string>(`timeout`, 'null')
 
   const state = status.state
   let body = <div className='flex flex-col justify-evenly h-full w-full'><div className='flex justify-evenly'><Logo className="mt-14" viewBox="0 0 350.417 279.405" style={{ width: "65%", height: "100%" }}/></div></div>
@@ -101,6 +105,15 @@ export function FieldDisplay (props: FieldDisplayProps): JSX.Element {
         </div>
       </>
       break
+  }
+
+  if(timeout !== 'null') {
+    const time = new Date(timeout.slice(1, -1))
+    body = <>
+      <h1 className='text-9xl text-zinc-300'>Timeout</h1>
+      <h2 style={{"fontSize": "250px"}}><Timer time={time} /></h2>
+      <h2 className='text-7xl text-zinc-300'>{fieldName}</h2>
+      </>
   }
 
   

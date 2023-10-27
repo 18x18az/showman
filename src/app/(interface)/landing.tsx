@@ -10,7 +10,9 @@ enum STAGE {
   UNKNOWN = 'UNKNOWN',
   WAITING_FOR_TEAMS = 'WAITING_FOR_TEAMS',
   WAITING_FOR_MATCHES = 'WAITING_FOR_MATCHES',
-  QUAL_MATCHES = 'QUAL_MATCHES'
+  QUAL_MATCHES = 'QUAL_MATCHES',
+  WAITING_FOR_ELIMS = 'WAITING_FOR_ELIMS',
+  ELIMS = 'ELIMS',
 }
 
 export function LandingPage (): JSX.Element {
@@ -28,7 +30,7 @@ export function LandingPage (): JSX.Element {
     content = <GetTmConnection />
   } else if (stage === STAGE.WAITING_FOR_MATCHES) {
     content = <UploadMatches />
-  } else if (stage === STAGE.QUAL_MATCHES) {
+  } else if (stage === STAGE.QUAL_MATCHES || stage === STAGE.ELIMS) {
     content = <QualMatchControl />
   }
 
