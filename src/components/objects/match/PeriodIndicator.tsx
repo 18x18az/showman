@@ -32,7 +32,7 @@ export function PeriodIndicator (props: PeriodIndicatorProps): JSX.Element {
   return (
     <div className='fixed top-0 w-full mt-28 flex justify-center'>
       <motion.div
-        className={`${baseConfig} border border-1 z-10 text-slateA-1`}
+        className={`${baseConfig} border border-1 border-zinc-200 z-10 text-zinc-200 border-opacity-30`}
         animate={{ clipPath: pathKeyframes }}
         transition={{ duration, times: timingKeyframes }}
       >
@@ -40,7 +40,7 @@ export function PeriodIndicator (props: PeriodIndicatorProps): JSX.Element {
       </motion.div>
 
       <motion.div
-        className={`${baseConfig} bg-gray-800 bg-o-30 z-0 bg-opacity-50`}
+        className={`${baseConfig} bg-zinc-800 bg-o-30 z-0 bg-opacity-50`}
         // create a diagonal mask wipe animation from the middle working its way out
         animate={{ clipPath: pathKeyframes }}
         transition={{ delay: 0.2, duration, times: timingKeyframes }}

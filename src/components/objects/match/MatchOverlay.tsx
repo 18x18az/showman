@@ -3,20 +3,27 @@ import { MatchName } from './MatchName'
 import { PeriodIndicator } from './PeriodIndicator'
 import { Timer } from './Timer'
 
+export enum MatchPeriod {
+  Auto = 'auto',
+  Driver = 'driver',
+  None = 'none'
+}
+
 interface MatchOverlayProps {
   readonly redTeams: string[]
   readonly blueTeams: string[]
-  readonly autoWinner: 'red' | 'blue' | 'tie' | null
-  readonly time: number | null
-  readonly period: 'auto' | 'driver' | 'none'
+  //readonly autoWinner: 'red' | 'blue' | 'tie' | null
+  readonly time: Date | undefined
+  readonly period: MatchPeriod
+  readonly title: string
 }
 
 export function MatchOverlay (props: MatchOverlayProps): JSX.Element {
   return (
     <>
-      <MatchName match='Qualification Match 23' time={120} phase='auto' />
-      <AllianceIndicator alliance='red' teams={props.redTeams} wonAuto={props.autoWinner === 'red'} />
-      <AllianceIndicator alliance='blue' teams={props.blueTeams} wonAuto={props.autoWinner === 'blue'} />
+      <MatchName match={props.title} time={120} phase='auto' />
+      <AllianceIndicator alliance='red' teams={props.redTeams}/>
+      <AllianceIndicator alliance='blue' teams={props.blueTeams} />
       <Timer time={props.time} period={props.period} />
       <PeriodIndicator period={props.period} />
     </>

@@ -1,93 +1,96 @@
-'use client'
+// 'use client'
 
-import { sessionSlice, selectAuthentication, useDispatch, useSelector, UserInfo, hydrateSession, LoginPayload, stageSlice } from '@/lib/redux'
-import { useEffect, useState } from 'react'
-import { EmptyPost, JsonTopic } from './maestro'
-import { redirect, usePathname } from 'next/navigation'
-import { EventStage, STAGE } from '@18x18az/maestro-interfaces'
+// import { sessionSlice, selectAuthentication, useDispatch, useSelector, UserInfo, hydrateSession, LoginPayload, stageSlice } from '@/lib/redux'
+// import { useEffect, useState } from 'react'
+// import { EmptyPost, JsonTopic } from './maestro'
+// import { redirect, usePathname } from 'next/navigation'
+// import { EventStage, STAGE } from '@18x18az/maestro-interfaces'
 
-export function SessionProvider ({ children }: any): JSX.Element {
-  const dispatch = useDispatch()
-  const authentication = useSelector(selectAuthentication)
-  const pathname = usePathname()
+// export function SessionProvider ({ children }: any): JSX.Element {
+//   const dispatch = useDispatch()
+//   const authentication = useSelector(selectAuthentication)
+//   const pathname = usePathname()
 
-  const [needsToken, setNeedsToken] = useState(false)
-  const [needsRedirect, setNeedsRedirect] = useState(false)
-  const [busIsLive, setBusIsLive] = useState(false)
+//   const [needsToken, setNeedsToken] = useState(false)
+//   const [needsRedirect, setNeedsRedirect] = useState(false)
+//   const [busIsLive, setBusIsLive] = useState(false)
 
-  const stageInfo = JsonTopic<EventStage>('eventStage', { stage: undefined as unknown as STAGE })
-  const stage = stageInfo.stage
+//   const stageInfo = JsonTopic<EventStage>('eventStage', { stage: undefined as unknown as STAGE })
+//   const stage = stageInfo.stage
 
-  if (stage !== undefined) {
-    dispatch(stageSlice.actions.updateStage(stage))
-  }
+//   if (stage !== undefined) {
+//     dispatch(stageSlice.actions.updateStage(stage))
+//   }
 
-  if (needsRedirect) {
-    setNeedsRedirect(false)
-    if (pathname !== '/login') {
-      redirect('/login')
-    }
-  }
+//   if (needsRedirect) {
+//     setNeedsRedirect(false)
+//     if (pathname !== '/login') {
+//       redirect('/login')
+//     }
+//   }
 
-  let id: number | undefined
+//   let id: number | undefined
 
-  if (authentication !== null) {
-    id = authentication.id
-  }
+//   if (authentication !== null) {
+//     id = authentication.id
+//   }
 
-  const topic = id !== undefined ? `users/${id}` : undefined
+//   const topic = id !== undefined ? `users/${id}` : undefined
 
-  const sessionInfo = JsonTopic<UserInfo | {}>(topic, {})
+//   const sessionInfo = JsonTopic<UserInfo | {}>(topic, {})
 
-  const doRegister: () => Promise<void> = async () => {
-    const response = await EmptyPost('auth/register')
-    const session = await response.json() as LoginPayload
-    dispatch(sessionSlice.actions.registered(session))
-  }
+//   const doRegister: () => Promise<void> = async () => {
+//     const response = await EmptyPost('auth/register')
+//     const session = await response.json() as LoginPayload
+//     dispatch(sessionSlice.actions.registered(session))
+//   }
 
-  // On startup, hydrate the session
-  useEffect(() => {
-    void hydrateSession(dispatch).then((exists: boolean) => {
-      if (!exists) {
-        setNeedsRedirect(true)
-        setNeedsToken(true)
-      }
-    })
-  }, [])
+//   // On startup, hydrate the session
+//   useEffect(() => {
+//     void hydrateSession(dispatch).then((exists: boolean) => {
+//       if (!exists) {
+//         console.log('No session found, redirecting to login')
+//         setNeedsRedirect(true)
+//         setNeedsToken(true)
+//       }
+//     })
+//   }, [])
 
-  // Check if it needs to register
-  useEffect(() => {
-    if (!needsToken) {
-      return
-    }
+//   // Check if it needs to register
+//   useEffect(() => {
+//     if (!needsToken) {
+//       return
+//     }
 
-    if (authentication !== null) {
-      return
-    }
+//     if (authentication !== null) {
+//       return
+//     }
 
-    if (pathname === '/login') {
-      setNeedsToken(false)
-      void doRegister()
-    } else {
-      setNeedsRedirect(true)
-    }
-  }, [pathname, needsToken])
+//     if (pathname === '/login') {
+//       setNeedsToken(false)
+//       void doRegister()
+//     } else {
+//       console.log('needs auth or whatever')
+//       setNeedsRedirect(true)
+//     }
+//   }, [pathname, needsToken])
 
-  // Propagate bus session info updates
-  useEffect(() => {
-    if (Object.keys(sessionInfo).length !== 0) {
-      setBusIsLive(true)
-      dispatch(sessionSlice.actions.busUpdate(sessionInfo as UserInfo))
-    } else if (busIsLive) {
-      setNeedsToken(true)
-      setNeedsRedirect(true)
-      dispatch(sessionSlice.actions.logout)
-    }
-  }, [sessionInfo])
+//   // Propagate bus session info updates
+//   useEffect(() => {
+//     if (Object.keys(sessionInfo).length !== 0) {
+//       setBusIsLive(true)
+//       dispatch(sessionSlice.actions.busUpdate(sessionInfo as UserInfo))
+//     } else if (busIsLive) {
+//       console.log('Bus session info is empty, logging out')
+//       setNeedsToken(true)
+//       setNeedsRedirect(true)
+//       dispatch(sessionSlice.actions.logout)
+//     }
+//   }, [sessionInfo])
 
-  return (
-    <>
-      {children}
-    </>
-  )
-}
+//   return (
+//     <>
+//       {children}
+//     </>
+//   )
+// }

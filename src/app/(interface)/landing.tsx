@@ -1,19 +1,43 @@
 'use client'
 
-import { useSelector } from 'react-redux'
-import { selectIsAssigned } from '../../lib/redux'
-import { accessRedirect } from '../../utils/AccessRedirect'
-import { selectIsSetupStage } from '../../lib/redux/slices/stageSlice/selectors'
-import { redirect } from 'next/navigation'
+import { EmptyPost, StringTopic } from '@/utils/maestro'
+import { GetTmConnection } from './tmSetup'
+import UploadMatches from './upload'
+import { Button } from '@/components/ui/button'
+import { QualMatchControl } from './qualMatch'
+
+enum STAGE {
+  UNKNOWN = 'UNKNOWN',
+  WAITING_FOR_TEAMS = 'WAITING_FOR_TEAMS',
+  WAITING_FOR_MATCHES = 'WAITING_FOR_MATCHES',
+  QUAL_MATCHES = 'QUAL_MATCHES',
+  WAITING_FOR_ELIMS = 'WAITING_FOR_ELIMS',
+  ELIMS = 'ELIMS',
+}
 
 export function LandingPage (): JSX.Element {
-  accessRedirect(selectIsAssigned)
-
-  const isSetup = useSelector(selectIsSetupStage)
-
-  if (isSetup === true) {
-    redirect('/setup')
+  const handleReset = () => {
+    void EmptyPost('reset')
   }
 
-  return <div>TODO</div>
+  const stage = StringTopic('stage', STAGE.UNKNOWN)
+
+  let content = <div>{stage}</div>
+
+  if (stage === STAGE.UNKNOWN) {
+    content = <div>Loading</div>
+  } else if (stage === STAGE.WAITING_FOR_TEAMS) {
+    content = <GetTmConnection />
+  } else if (stage === STAGE.WAITING_FOR_MATCHES) {
+    content = <UploadMatches />
+  } else if (stage === STAGE.QUAL_MATCHES || stage === STAGE.ELIMS) {
+    content = <QualMatchControl />
+  }
+
+  return (
+    <div className='flex flex-col gap-24 justify-center content-center width-full'>
+      {content}
+      <div><Button onClick={handleReset}>Reset</Button></div>
+    </div>
+  )
 }
