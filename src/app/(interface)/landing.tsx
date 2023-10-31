@@ -1,36 +1,28 @@
 'use client'
 
-import { EmptyPost, StringTopic } from '@/utils/maestro'
+import { EmptyPost } from '@/utils/maestro'
 import { GetTmConnection } from './tmSetup'
 import UploadMatches from './upload'
 import { Button } from '@/components/ui/button'
 import { QualMatchControl } from './qualMatch'
-
-enum STAGE {
-  UNKNOWN = 'UNKNOWN',
-  WAITING_FOR_TEAMS = 'WAITING_FOR_TEAMS',
-  WAITING_FOR_MATCHES = 'WAITING_FOR_MATCHES',
-  QUAL_MATCHES = 'QUAL_MATCHES',
-  WAITING_FOR_ELIMS = 'WAITING_FOR_ELIMS',
-  ELIMS = 'ELIMS',
-}
+import { EventStage, StageSubscription } from '@/contracts/stage'
 
 export function LandingPage (): JSX.Element {
   const handleReset = () => {
-    void EmptyPost('reset')
+    void EmptyPost('stage/reset')
   }
 
-  const stage = StringTopic('stage', STAGE.UNKNOWN)
+  const stage = StageSubscription()
 
   let content = <div>{stage}</div>
 
-  if (stage === STAGE.UNKNOWN) {
+  if (stage === undefined) {
     content = <div>Loading</div>
-  } else if (stage === STAGE.WAITING_FOR_TEAMS) {
+  } else if (stage === EventStage.WAITING_FOR_TEAMS) {
     content = <GetTmConnection />
-  } else if (stage === STAGE.WAITING_FOR_MATCHES) {
+  } else if (stage === EventStage.CHECKIN) {
     content = <UploadMatches />
-  } else if (stage === STAGE.QUAL_MATCHES || stage === STAGE.ELIMS) {
+  } else if (stage === EventStage.QUALIFICATIONS || stage === EventStage.ELIMS) {
     content = <QualMatchControl />
   }
 

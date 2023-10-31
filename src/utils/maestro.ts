@@ -28,8 +28,8 @@ function getMqttHost (): string {
   }
 }
 
-function BaseTopic (topic: string | undefined, initial: string): string {
-  const [variable, setVariable] = useState(initial)
+function BaseTopic (topic: string | undefined): string | undefined {
+  const [variable, setVariable] = useState<string | undefined>(undefined)
   useEffect(() => {
     if (topic === undefined) {
       return
@@ -53,14 +53,11 @@ function BaseTopic (topic: string | undefined, initial: string): string {
   return variable
 }
 
-export function StringTopic<Type> (topic: string | undefined, initial: Type): Type {
-  const raw = BaseTopic(topic, initial as string)
-  return raw as Type
-}
-
-export function JsonTopic<Type> (topic: string | undefined, initial: Type): Type {
-  const initialString = JSON.stringify(initial)
-  const raw = BaseTopic(topic, initialString)
+export function JsonTopic<Type> (topic: string | undefined): Type | undefined {
+  const raw = BaseTopic(topic)
+  if (raw === undefined) {
+    return undefined
+  }
   return JSON.parse(raw)
 }
 

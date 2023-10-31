@@ -19,16 +19,43 @@ export interface Alliance {
   team2?: string
 }
 
-export interface MatchIdentifier {
-  round: number
-  match: number
-  sitting: number
+export enum Round {
+  QUAL = 'qual',
+  Ro16 = 'ro16',
+  QF = 'qf',
+  SF = 'sf',
+  F = 'f'
 }
 
-export interface FieldStatus extends Field {
-  state: FieldState
-  time?: Date
-  redAlliance?: Alliance
-  blueAlliance?: Alliance
-  match?: MatchIdentifier
+export interface Match {
+  id: number
+  round: Round
+  matchNum: number
+  sitting: number
+  red: Alliance
+  blue: Alliance
 }
+
+export enum ReplayStatus {
+  NOT_STARTED = 'NOT_STARTED',
+  ON_DECK = 'ON_DECK',
+  AWAITING_SCORES = 'AWAITING_SCORES',
+  RESOLVED = 'RESOLVED'
+}
+
+
+export interface ScheduledMatch extends Match {
+  id: number
+  fieldId: number
+  fieldName: string
+  replay: number
+  time?: string
+  status: ReplayStatus
+}
+
+export interface FieldStatus {
+  field: Field
+  state: FieldState
+  match: ScheduledMatch | null
+}
+

@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
+import { uploadMatches } from '@/contracts/matches'
 import { Post } from '@/utils/maestro'
 import { useState } from 'react'
 
@@ -10,12 +11,7 @@ export default function UploadMatches (): JSX.Element {
 
   const handleFileUpload = async () => {
     if (file != null) {
-      const formData = new FormData()
-      formData.append(
-        'file',
-        file,
-        file.name)
-      await Post('uploadMatches', formData)
+      await uploadMatches(file)
     } else {
       toast({
         duration: 3000,

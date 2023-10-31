@@ -1,7 +1,7 @@
 'use client'
 
-import { EmptyPost, JsonTopic, Post, StringTopic } from '@/utils/maestro'
-import { Alliance, FieldState, FieldStatus, MatchIdentifier } from './interfaces'
+import { EmptyPost, JsonTopic, Post } from '@/utils/maestro'
+import { Alliance, FieldState, FieldStatus, Match, Round } from './interfaces'
 import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
 import { Input } from '@/components/ui/input'
@@ -30,21 +30,21 @@ function makeTime(offset: number, truncate=false): string {
   return `${minutes}:${seconds}`
 }
 
-function makeMatchString (match: MatchIdentifier | undefined): string {
+function makeMatchString (match: Match | undefined): string {
     if (match === undefined) {
         return ''
     }
     let pre = 'Q'
-    if(match.round === 1) {
+    if(match.round === Round.Ro16) {
       pre = 'R16'
-    } else if(match.round === 2) {
+    } else if(match.round === Round.QF) {
       pre = 'QF'
-    } else if(match.round === 3) {
+    } else if(match.round === Round.SF) {
       pre = 'SF'
-    } else if(match.round === 4) {
+    } else if(match.round === Round.F) {
       return "Finals"
     }
-    const num = match.match.toString()
+    const num = match.matchNum.toString()
 
     return pre + num
 }
@@ -56,7 +56,7 @@ interface AlliancesProps {
 
 interface TimerBodyProps {
     state: FieldState
-    time?: Date
+    time?: string
 }
 
 function offsetTimer(time: Date): number {
@@ -207,29 +207,41 @@ function FieldControl (props: FieldControlProps): JSX.Element {
     body = <p className={'mt-8 text-4xl text-zinc-500'}>IDLE</p>
   } else if ([FieldState.ON_DECK, FieldState.AUTO, FieldState.PAUSED, FieldState.DRIVER, FieldState.SCORING].includes(status.state)) {
 
-    const matchString = makeMatchString(status.match)
+    const match = status.match
+
+    if(match === null) {
+        return <></>
+    }
+
+    const matchString = makeMatchString(match)
 
     body = <>
         <h2 className='text-lg text-zinc-400 font-semibold'>{matchString}</h2>
-        <TimerBody state={status.state} time={status.time}/>
+        <TimerBody state={status.state} time={match.time}/>
         <div className='flex  justify-evenly mt-2'>{actionButton}</div>
         <div className='grow'></div>
-        <Alliances red={status.redAlliance} blue={status.blueAlliance} />
+        <Alliances red={match.red} blue={match.blue} />
     </>
   }
 
   return (
     <div className={`flex flex-col text-center border rounded-lg ${outlineStrength} p-4 h-72 grow basis-0`}>
-      <h1 className='text-xl text-zinc-300'>{status.name}</h1>
+      <h1 className='text-xl text-zinc-300'>{status.field.name}</h1>
       {body}
     </div>
   )
 }
 
 export function QualMatchControl (): JSX.Element {
-  const fields = JsonTopic<FieldStatus[]>('fieldStatuses', [])
-  const fieldControl = JsonTopic<FieldStatus>('fieldControl', {state: FieldState.IDLE, name: 'None', id: 0})
-  const displayControl = StringTopic<DisplayState>('displayState', DisplayState.IDLE)
+  const fields = JsonTopic<FieldStatus[]>('fieldStatuses')
+  const fieldControl = JsonTopic<FieldStatus | {state: null} >('fieldControl')
+  const displayControl = JsonTopic<DisplayState>('displayState')
+
+  const [manualReplay, setManualReplay] = useState('')
+
+  if(fields === undefined || fieldControl === undefined) {
+    return <>Loading</>
+  }
 
   // check if all fields are idle
   const allIdle = fields.every((field) => {
@@ -242,25 +254,11 @@ export function QualMatchControl (): JSX.Element {
 
   const bottomButton = allIdle ? <Button onClick={handleContinue}>Continue</Button> : <></>
 
-  const [manualReplay, setManualReplay] = useState('')
-
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setManualReplay(e.target.value)
-  }
-
-  const handleManualReplay = () => {
-    const components = manualReplay.split('-')
-    const ident: MatchIdentifier = {
-      round: parseInt(components[0]),
-      match: parseInt(components[1]),
-      sitting: 0
-    }
-    void Post('forceReplay', {ident})
-  }
-
-  const fieldControls = fields.map((field) => {
-    const isCurrent = field.id === fieldControl.id
-    return <FieldControl key={field.id} status={field} isCurrent={isCurrent} display={displayControl}/>
+  const fieldControls = fields.map((status) => {
+    const field = status.field
+    console.log(fieldControl)
+    const isCurrent = (fieldControl.state !== null && field.id === fieldControl.field.id)
+    return <FieldControl key={field.id} status={status} isCurrent={isCurrent} display={DisplayState.IN_MATCH}/>
   })
   return (
     <div className='flex flex-col gap-6'>
@@ -272,9 +270,6 @@ export function QualMatchControl (): JSX.Element {
         <Button onClick={pushScore}>Push Score</Button>
         <Button onClick={clearScore}>Clear Score</Button>
         <Button onClick={timeout}>Timeout</Button>
-      </div>
-      <div className='flex gap-2 mt-6'>
-        <Input className='w-42' onChange={handleInput} value={manualReplay}/> <Button onClick={handleManualReplay}>Manual Replay</Button>
       </div>
     </div>
   )
