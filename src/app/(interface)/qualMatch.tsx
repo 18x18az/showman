@@ -157,11 +157,11 @@ const cut = () => {
 }
 
 const clearScore = () => {
-  void EmptyPost('clearScore')
+  void EmptyPost('stream/clearScore')
 }
 
 const pushScore = () => {
-  void EmptyPost('pushScore')
+  void EmptyPost('stream/pushScore')
 }
 
 const timeout = () => {

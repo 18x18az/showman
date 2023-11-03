@@ -5,6 +5,8 @@ import { JsonTopic } from "@/utils/maestro"
 import { ScoreDisplay } from "./score"
 import { MatchDisplay } from "./match"
 import { StreamDisplayStage } from "@/app/(interface)/qualMatch"
+import { EventStage } from "@/contracts/stage"
+import { AllianceSelection } from "./alliance"
 
 export default function Page ({ params }: { readonly params: { readonly field: string } }): JSX.Element {
 
@@ -12,6 +14,13 @@ export default function Page ({ params }: { readonly params: { readonly field: s
     const statuses = JsonTopic<FieldStatus[]>('fieldStatuses')
     const active = JsonTopic<FieldStatus>('fieldControl')
     const displayControl = JsonTopic<{stage: StreamDisplayStage}>('displayStage')
+    const stage = JsonTopic<{stage: EventStage}>('stage')
+
+    if(stage === undefined) return <></>
+
+    if(stage.stage === EventStage.ALLIANCE_SELECTION) {
+      return <AllianceSelection />
+    }
 
     // find the status with a field name containing the field name in the url
 

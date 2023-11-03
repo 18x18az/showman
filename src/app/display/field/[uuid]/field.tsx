@@ -4,6 +4,7 @@ import { Alliance, FieldState, FieldStatus, Round, ScheduledMatch } from '@/app/
 import { JsonTopic } from '@/utils/maestro'
 import { Countdown, Timer } from './timer'
 import Logo from '@/components/primitives/logo'
+import { StreamDisplayStage } from '@/app/(interface)/qualMatch'
 
 interface FieldDisplayProps {
   readonly uuid: string
@@ -43,11 +44,13 @@ function ActualFieldDisplay(props: {fieldId: number}): JSX.Element {
   const topic = `fieldStatus/${props.fieldId}`
   const status = JsonTopic<FieldStatus>(topic)
 
-  if(status === undefined) return <></>
-  if(status.match === null) return <></>
+  let body = <div className='flex flex-col justify-evenly h-full w-full'><div className='flex justify-evenly'><Logo className="mt-14" viewBox="0 0 350.417 279.405" style={{ width: "65%", height: "100%" }}/></div></div>
+    
+  if(status === undefined) return body
+  if(status.match === null) return body
 
   const state = status.state
-  let body = <div className='flex flex-col justify-evenly h-full w-full'><div className='flex justify-evenly'><Logo className="mt-14" viewBox="0 0 350.417 279.405" style={{ width: "65%", height: "100%" }}/></div></div>
+  
 
   const matchName = makeMatchName(status.match)
   const fieldName = status.field.name
@@ -105,15 +108,7 @@ function ActualFieldDisplay(props: {fieldId: number}): JSX.Element {
       break
   }
 
-  return (
-    <div className='bg-zinc-950 h-screen text-zinc-100 flex justify-evenly w-full'>
-      <div className='flex flex-col justify-evenly w-11/12'>
-      <div className='rounded-2xl bg-zinc-800 h-5/6 w-full text-center flex flex-col justify-between font-sans p-8'>
-      {body}
-      </div>
-      </div>
-    </div>
-  )
+  return body
 }
 
 interface DisplayConfig {
@@ -123,88 +118,26 @@ interface DisplayConfig {
 export function FieldDisplay (props: FieldDisplayProps): JSX.Element {
   const topic = `displays/${props.uuid}`
   const fieldInfo = JsonTopic<DisplayConfig>(topic)
+  const fieldControl = JsonTopic<FieldStatus | {state: null} >('fieldControl')
+  const displayControl = JsonTopic<{stage: StreamDisplayStage}>('displayStage')
 
-  if(fieldInfo === undefined) return <></>
+  const isCurrent = (fieldControl !== null && fieldControl !== undefined && fieldControl.state !== null && fieldInfo !== undefined && fieldInfo.fieldId === fieldControl.field.id && displayControl !== undefined && displayControl.stage === StreamDisplayStage.MATCH)
 
-  return <ActualFieldDisplay fieldId={fieldInfo.fieldId} />
+  let body = <div className='flex flex-col justify-evenly h-full w-full'><div className='flex justify-evenly'><Logo className="mt-14" viewBox="0 0 350.417 279.405" style={{ width: "65%", height: "100%" }}/></div></div>
 
-  // const state = status.state
-  // let body = <div className='flex flex-col justify-evenly h-full w-full'><div className='flex justify-evenly'><Logo className="mt-14" viewBox="0 0 350.417 279.405" style={{ width: "65%", height: "100%" }}/></div></div>
+  const background = isCurrent ? 'bg-zinc-700' : 'bg-zinc-900'
 
-  // const matchName = makeMatchName(status.match)
-  // const fieldName = status.name
+  if(fieldInfo !== undefined) {
+    body = <ActualFieldDisplay fieldId={fieldInfo.fieldId} />
+  }
 
-  // switch (state) {
-  //   case FieldState.ON_DECK:
-  //     let clock = <></>
-  //     if(status.time !== undefined) clock = <Countdown time={status.time} />
-
-  //     body = <>
-  //      <h1 className='text-7xl text-zinc-300'>{matchName}</h1>
-  //      <h2 className='text-9xl'>{clock}</h2>
-  //      <div className='flex justify-between items-end'>
-  //      <AllianceDisplay alliance={status.blueAlliance} color='blue' />
-  //       <h2 className='text-7xl text-zinc-300'>{fieldName}</h2>
-  //       <AllianceDisplay alliance={status.redAlliance} color='red' />
-  //       </div>
-  //     </>
-  //     break
-  //   case FieldState.AUTO:
-  //   case FieldState.DRIVER:
-  //     let timer = <></>
-  //     if(status.time !== undefined) timer = <Timer time={status.time} />
-
-  //     body = <>
-  //      <h1 className='text-7xl text-zinc-300'>{matchName}</h1>
-  //      <h2 className='mt-14' style={{"fontSize": "250px"}}>{timer}</h2>
-  //      <div className='flex justify-between items-end'>
-  //      <AllianceDisplay alliance={status.blueAlliance} color='blue' />
-  //       <h2 className='text-7xl text-zinc-300'>{fieldName}</h2>
-  //       <AllianceDisplay alliance={status.redAlliance} color='red' />
-  //       </div>
-  //     </>
-  //     break
-  //   case FieldState.SCORING:
-  //     body = <>
-  //         <h1 className='text-7xl text-zinc-300'>{matchName}</h1>
-  //         <h2 className='text-9xl mb-12 text-zinc-100'>SCORING MATCH</h2>
-  //         <div className='flex justify-between items-end'>
-  //         <AllianceDisplay alliance={status.blueAlliance} color='blue' />
-  //       <h2 className='text-7xl text-zinc-300'>{fieldName}</h2>
-  //       <AllianceDisplay alliance={status.redAlliance} color='red' />
-  //       </div>
-  //         </>
-  //     break
-  //   case FieldState.PAUSED:
-  //     body = <>
-  //      <h1 className='text-7xl text-zinc-300'>{matchName}</h1>
-  //      <div className='flex justify-between items-end'>
-  //      <AllianceDisplay alliance={status.blueAlliance} color='blue' />
-  //       <h2 className='text-7xl text-zinc-300'>{fieldName}</h2>
-  //       <AllianceDisplay alliance={status.redAlliance} color='red' />
-  //       </div>
-  //     </>
-  //     break
-  // }
-
-  // if(timeout !== 'null') {
-  //   const time = new Date(timeout.slice(1, -1))
-  //   body = <>
-  //     <h1 className='text-9xl text-zinc-300'>Timeout</h1>
-  //     <h2 style={{"fontSize": "250px"}}><Timer time={time} /></h2>
-  //     <h2 className='text-7xl text-zinc-300'>{fieldName}</h2>
-  //     </>
-  // }
-
-  
-
-  // return (
-  //   <div className='bg-zinc-950 h-screen text-zinc-100 flex justify-evenly w-full'>
-  //     <div className='flex flex-col justify-evenly w-11/12'>
-  //     <div className='rounded-2xl bg-zinc-800 h-5/6 w-full text-center flex flex-col justify-between font-sans p-8'>
-  //     {body}
-  //     </div>
-  //     </div>
-  //   </div>
-  // )
+  return (
+    <div className={`bg-zinc-950 h-screen text-zinc-100 flex justify-evenly w-full`}>
+      <div className='flex flex-col justify-evenly w-11/12'>
+      <div className={`rounded-2xl ${background} h-5/6 w-full text-center flex flex-col justify-between font-sans p-8`}>
+      {body}
+      </div>
+      </div>
+    </div>
+  )
 }

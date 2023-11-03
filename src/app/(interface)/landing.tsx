@@ -1,12 +1,25 @@
 'use client'
 
-import { EmptyPost } from '@/utils/maestro'
+import { EmptyPost, Post } from '@/utils/maestro'
 import { GetTmConnection } from './tmSetup'
 import UploadMatches from './upload'
 import { Button } from '@/components/ui/button'
 import { QualMatchControl } from './qualMatch'
 import { EventStage, StageSubscription } from '@/contracts/stage'
 import { AlliancSelectionControl } from './alliance'
+
+
+
+function SceneControl (props: {name: string, number: number}): JSX.Element {
+  return <div className='flex flex-col content-center text-center gap-2'>
+    <h1>{props.name}</h1>
+    <Button onClick={() => Post(`stream/ready`, {field: props.number})}>Preview</Button>
+    <div className='flex gap-2'>
+      <Button onClick={() => {void Post('stream/preset', {field: props.number, preset: 0})}}>0</Button>
+      <Button onClick={() => {void Post('stream/preset', {field: props.number, preset: 1})}}>1</Button>
+      <Button onClick={() => {void Post('stream/preset', {field: props.number, preset: 2})}}>2</Button></div>
+  </div>
+}
 
 export function LandingPage (): JSX.Element {
   const handleReset = () => {
@@ -32,6 +45,7 @@ export function LandingPage (): JSX.Element {
   return (
     <div className='flex flex-col gap-24 justify-center content-center width-full'>
       {content}
+      <div className='flex justify-evenly'><SceneControl name='Field 1' number={1}/><SceneControl name='Field 2' number={2}/><SceneControl name='Field 3' number={3}/></div>
       <div><Button onClick={handleReset}>Reset</Button></div>
     </div>
   )
