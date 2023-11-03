@@ -10,7 +10,7 @@ export function MatchName (props: MatchNameProps): JSX.Element {
   return (
     <div className='fixed top-0 w-full flex justify-center'>
       <motion.div
-        className='rounded-b-xl w-1/2 bg-zinc-900 opacity-[0.998]'
+        className='rounded-b-xl w-1/2 bg-zinc-900 opacity-[0.98]'
         initial={{ width: 0, height: 0 }}
         animate={{ width: [80, 900], height: 90 }}
         transition={{ type: 'spring', stiffness: 100, damping: 20 }}

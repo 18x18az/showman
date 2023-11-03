@@ -13,7 +13,7 @@ interface MatchOverlayProps {
   readonly redTeams: string[]
   readonly blueTeams: string[]
   //readonly autoWinner: 'red' | 'blue' | 'tie' | null
-  readonly time: Date | undefined
+  readonly time: string | undefined
   readonly period: MatchPeriod
   readonly title: string
 }

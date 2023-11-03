@@ -45,7 +45,7 @@ export enum ReplayStatus {
 
 
 export interface ScheduledMatch extends Match {
-  id: number
+  replayId: number
   fieldId: number
   fieldName: string
   replay: number

@@ -4,18 +4,18 @@ import { EmptyPost, JsonTopic, Post } from '@/utils/maestro'
 import { Alliance, FieldState, FieldStatus, Match, Round } from './interfaces'
 import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
-import { Input } from '@/components/ui/input'
 
-enum DisplayState {
-  IDLE = 'IDLE',
+export enum StreamDisplayStage {
+  UNKNOWN = 'UNKNOWN',
+  MATCH  = 'MATCH',
   RESULTS = 'RESULTS',
-  IN_MATCH = 'IN_MATCH'
+  TRANSITIONING = 'TRANSITIONING',
 }
 
 interface FieldControlProps {
   readonly status: FieldStatus
   readonly isCurrent: boolean
-  readonly display: DisplayState
+  readonly display: StreamDisplayStage
 }
 
 function makeTime(offset: number, truncate=false): string {
@@ -139,20 +139,21 @@ function Alliances(props: AlliancesProps): JSX.Element {
     </div>
 }
 
-const start = () => {
-  void EmptyPost('start')
+const start = (id: number) => {
+  void EmptyPost(`fieldControl/start`)
 }
 
 const resume = () => {
-  void EmptyPost('resume')
+  void EmptyPost('fieldControl/resume')
 }
 
 const replay = (status: FieldStatus) => {
-  void Post('replay', status)
+  if(status.match === null) return
+  void Post('matches/replay', status.match)
 }
 
 const cut = () => {
-  void EmptyPost('cut')
+  void EmptyPost('stream/cut')
 }
 
 const clearScore = () => {
@@ -177,18 +178,24 @@ function FieldControl (props: FieldControlProps): JSX.Element {
 
   if(isCurrent === true) {
     if(status.state === FieldState.ON_DECK) {
-        if(props.display === DisplayState.IN_MATCH) {
-          actionButton = <Button onClick={start} className='w-24'>Start</Button>
-        } else {
+        if(props.display === StreamDisplayStage.MATCH) {
+          actionButton = <Button onClick={() => {
+            if(status.match === null) return
+            start(status.match.replayId)
+          }} className='w-24'>Start</Button>
+        } else if (props.display === StreamDisplayStage.RESULTS) {
           actionButton = <Button onClick={cut} className='w-24'>Intro</Button>
         }
     } else if(status.state === FieldState.PAUSED) {
-      actionButton = <><Button className='w-24' onClick={start}>Reset</Button><Button className='w-24' onClick={resume}>Resume</Button></>
+      actionButton = <><Button className='w-24' onClick={() => {
+        if(status.match === null) return
+        start(status.match.replayId)
+      }}>Reset</Button><Button className='w-24' onClick={resume}>Resume</Button></>
     }
   }
 
   const endEarly = () => {
-    void EmptyPost('endEarly')
+    void EmptyPost('fieldControl/endEarly')
   }
 
   if(status.state === FieldState.SCORING) {
@@ -235,9 +242,9 @@ function FieldControl (props: FieldControlProps): JSX.Element {
 export function QualMatchControl (): JSX.Element {
   const fields = JsonTopic<FieldStatus[]>('fieldStatuses')
   const fieldControl = JsonTopic<FieldStatus | {state: null} >('fieldControl')
-  const displayControl = JsonTopic<DisplayState>('displayState')
+  const displayControl = JsonTopic<{stage: StreamDisplayStage}>('displayStage')
 
-  const [manualReplay, setManualReplay] = useState('')
+  let display = displayControl === undefined ? StreamDisplayStage.UNKNOWN : displayControl.stage
 
   if(fields === undefined || fieldControl === undefined) {
     return <>Loading</>
@@ -249,16 +256,15 @@ export function QualMatchControl (): JSX.Element {
   })
 
   const handleContinue = () => {
-    void EmptyPost('continue')
+    void EmptyPost('fieldControl/nextBlock')
   }
 
   const bottomButton = allIdle ? <Button onClick={handleContinue}>Continue</Button> : <></>
 
   const fieldControls = fields.map((status) => {
     const field = status.field
-    console.log(fieldControl)
-    const isCurrent = (fieldControl.state !== null && field.id === fieldControl.field.id)
-    return <FieldControl key={field.id} status={status} isCurrent={isCurrent} display={DisplayState.IN_MATCH}/>
+    const isCurrent = (fieldControl !== null && fieldControl.state !== null && field.id === fieldControl.field.id)
+    return <FieldControl key={field.id} status={status} isCurrent={isCurrent} display={display}/>
   })
   return (
     <div className='flex flex-col gap-6'>
