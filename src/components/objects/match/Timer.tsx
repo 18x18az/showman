@@ -4,11 +4,11 @@ import { offsetTimer } from '@/app/display/field/[uuid]/timer'
 import { motion } from 'framer-motion'
 
 interface TimerProps {
-  readonly time: Date | undefined
+  readonly time: string | undefined
   readonly period: 'auto' | 'driver' | 'none'
 }
 
-function ActualTimer(props: { time: Date, period: 'auto' | 'driver' | 'none' }): JSX.Element {
+function ActualTimer(props: { time: string, period: 'auto' | 'driver' | 'none' }): JSX.Element {
   let offset = offsetTimer(props.time)
   if (offset < 0) offset = 0
 
@@ -20,7 +20,7 @@ function ActualTimer(props: { time: Date, period: 'auto' | 'driver' | 'none' }):
   const pulse = (props.period === 'driver' && roundedSeconds <= 5 && roundedSeconds > 0) ? 'animate-intense' : ''
   return (
     <motion.div
-      className='fixed right-0 top-0 py-4 px-4 mr-48 bg-zinc-900 bg-opacity-[0.998] rounded-b-xl text-zinc-200'
+      className='fixed right-0 top-0 py-4 px-4 mr-48 bg-zinc-900 bg-opacity-[0.98] rounded-b-xl text-zinc-200'
       initial={{ transform: 'translateY(-100%)' }}
       animate={{ transform: 'translateY(0%)' }}
       exit={{ transform: 'translateY(-100%)' }}

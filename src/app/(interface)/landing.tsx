@@ -1,42 +1,51 @@
 'use client'
 
-import { EmptyPost, StringTopic } from '@/utils/maestro'
+import { EmptyPost, Post } from '@/utils/maestro'
 import { GetTmConnection } from './tmSetup'
 import UploadMatches from './upload'
 import { Button } from '@/components/ui/button'
 import { QualMatchControl } from './qualMatch'
+import { EventStage, StageSubscription } from '@/contracts/stage'
+import { AlliancSelectionControl } from './alliance'
 
-enum STAGE {
-  UNKNOWN = 'UNKNOWN',
-  WAITING_FOR_TEAMS = 'WAITING_FOR_TEAMS',
-  WAITING_FOR_MATCHES = 'WAITING_FOR_MATCHES',
-  QUAL_MATCHES = 'QUAL_MATCHES',
-  WAITING_FOR_ELIMS = 'WAITING_FOR_ELIMS',
-  ELIMS = 'ELIMS',
+
+
+function SceneControl (props: {name: string, number: number}): JSX.Element {
+  return <div className='flex flex-col content-center text-center gap-2'>
+    <h1>{props.name}</h1>
+    <Button onClick={() => Post(`stream/ready`, {field: props.number})}>Preview</Button>
+    <div className='flex gap-2'>
+      <Button onClick={() => {void Post('stream/preset', {field: props.number, preset: 0})}}>0</Button>
+      <Button onClick={() => {void Post('stream/preset', {field: props.number, preset: 1})}}>1</Button>
+      <Button onClick={() => {void Post('stream/preset', {field: props.number, preset: 2})}}>2</Button></div>
+  </div>
 }
 
 export function LandingPage (): JSX.Element {
   const handleReset = () => {
-    void EmptyPost('reset')
+    void EmptyPost('stage/reset')
   }
 
-  const stage = StringTopic('stage', STAGE.UNKNOWN)
+  const stage = StageSubscription()
 
   let content = <div>{stage}</div>
 
-  if (stage === STAGE.UNKNOWN) {
+  if (stage === undefined) {
     content = <div>Loading</div>
-  } else if (stage === STAGE.WAITING_FOR_TEAMS) {
+  } else if (stage === EventStage.WAITING_FOR_TEAMS) {
     content = <GetTmConnection />
-  } else if (stage === STAGE.WAITING_FOR_MATCHES) {
+  } else if (stage === EventStage.CHECKIN) {
     content = <UploadMatches />
-  } else if (stage === STAGE.QUAL_MATCHES || stage === STAGE.ELIMS) {
+  } else if (stage === EventStage.QUALIFICATIONS || stage === EventStage.ELIMS) {
     content = <QualMatchControl />
+  } else if (stage === EventStage.ALLIANCE_SELECTION) {
+    content = <AlliancSelectionControl />
   }
 
   return (
     <div className='flex flex-col gap-24 justify-center content-center width-full'>
       {content}
+      <div className='flex justify-evenly'><SceneControl name='Field 1' number={1}/><SceneControl name='Field 2' number={2}/><SceneControl name='Field 3' number={3}/></div>
       <div><Button onClick={handleReset}>Reset</Button></div>
     </div>
   )

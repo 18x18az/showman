@@ -1,15 +1,17 @@
 'use client'
 
-import { DisplayConfig, FieldInfoBroadcast } from '@18x18az/maestro-interfaces'
+import { DisplayConfig } from '@18x18az/maestro-interfaces'
 import { JsonTopic } from '@/utils/maestro'
 import { Columns } from './columns'
 import { DisplayTable } from './display-table'
 import { Field } from '../../interfaces'
 
 export default function Page (): JSX.Element {
-  const displays = JsonTopic<DisplayConfig[]>('displays', [])
+  const displays = JsonTopic<DisplayConfig[]>('displays')
 
-  const fields = JsonTopic<Field[]>('fields', [])
+  const fields = JsonTopic<Field[]>('fields')
+
+  if(displays === undefined || fields === undefined) return <></>
 
   const displaysWithFields = displays.map((display) => {
     return { ...display, fields }

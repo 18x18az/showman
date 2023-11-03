@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-export function offsetTimer(time: Date): number {
+export function offsetTimer(time: string): number {
     const realDate = new Date(time)
     const [offset, setOffset] = useState(0)
   
@@ -45,7 +45,7 @@ export function offsetTimer(time: Date): number {
 //   }
 
   interface TimerProps {
-    time: Date
+    time: string
   }
 
   export function Countdown(props: TimerProps) {
