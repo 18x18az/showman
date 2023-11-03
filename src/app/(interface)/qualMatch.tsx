@@ -165,7 +165,7 @@ const pushScore = () => {
 }
 
 const timeout = () => {
-  void EmptyPost('timeout')
+  void EmptyPost('fieldControl/timeout')
 }
 
 function FieldControl (props: FieldControlProps): JSX.Element {

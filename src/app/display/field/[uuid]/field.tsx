@@ -43,6 +43,7 @@ function AllianceDisplay(props: AllianceDisplayProps): JSX.Element {
 function ActualFieldDisplay(props: {fieldId: number}): JSX.Element {
   const topic = `fieldStatus/${props.fieldId}`
   const status = JsonTopic<FieldStatus>(topic)
+  const timeout = JsonTopic<{time: string | null}>('timeout')
 
   let body = <div className='flex flex-col justify-evenly h-full w-full'><div className='flex justify-evenly'><Logo className="mt-14" viewBox="0 0 350.417 279.405" style={{ width: "65%", height: "100%" }}/></div></div>
     
@@ -54,6 +55,19 @@ function ActualFieldDisplay(props: {fieldId: number}): JSX.Element {
 
   const matchName = makeMatchName(status.match)
   const fieldName = status.field.name
+
+  if(timeout !== undefined && timeout.time !== null) {
+    const clock = <Timer time={timeout.time} />
+    return <>
+      <h1 className='text-7xl text-zinc-300'>Timeout</h1>
+      <h2 className='text-9xl'>{clock}</h2>
+      <div className='flex justify-between items-end'>
+       <AllianceDisplay alliance={status.match.blue} color='blue' />
+        <h2 className='text-7xl text-zinc-300'>{fieldName}</h2>
+        <AllianceDisplay alliance={status.match.red} color='red' />
+        </div>
+    </>
+  }
 
   switch (state) {
     case FieldState.ON_DECK:
