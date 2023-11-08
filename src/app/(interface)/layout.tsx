@@ -20,11 +20,7 @@ export default function RootLayout ({
     <html lang='en' suppressHydrationWarning>
       <body className={`${inter.className} bg-zinc-950`}>
         <Providers>
-          <div className='flex flex-row min-h-screen justify-center items-start'>
-            <div className='xl:p-8 xl:border xl:rounded-lg xl:mt-12 xl:w-2/3 m-2 xl:border-zinc-700'>
-              {children}
-            </div>
-          </div>
+            {children}
           <Toaster />
         </Providers>
       </body>

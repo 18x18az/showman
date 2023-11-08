@@ -27,13 +27,24 @@ export enum Round {
   F = 'f'
 }
 
+export enum MatchStatus {
+  NOT_STARTED = 'NOT_STARTED',
+  QUEUED = 'QUEUED',
+  NEEDS_REPLAY = 'NEEDS_REPLAY',
+  COMPLETE = 'COMPLETE'
+}
+
 export interface Match {
   id: number
-  round: Round
-  matchNum: number
-  sitting: number
+  block: string
+  number: number
   red: Alliance
   blue: Alliance
+  fieldId?: number
+  fieldName?: string
+  status: MatchStatus
+  round: Round
+  sitting: number
 }
 
 export enum ReplayStatus {
@@ -43,19 +54,10 @@ export enum ReplayStatus {
   RESOLVED = 'RESOLVED'
 }
 
-
-export interface ScheduledMatch extends Match {
-  replayId: number
-  fieldId: number
-  fieldName: string
-  replay: number
-  time?: string
-  status: ReplayStatus
-}
-
 export interface FieldStatus {
   field: Field
   state: FieldState
-  match: ScheduledMatch | null
+  match: Match | null
+  onDeck: Match | null
 }
 
