@@ -30,6 +30,7 @@ export enum Round {
 export enum MatchStatus {
   NOT_STARTED = 'NOT_STARTED',
   QUEUED = 'QUEUED',
+  SCORING = 'SCORING',
   NEEDS_REPLAY = 'NEEDS_REPLAY',
   COMPLETE = 'COMPLETE'
 }
@@ -59,5 +60,6 @@ export interface FieldStatus {
   state: FieldState
   match: Match | null
   onDeck: Match | null
+  endTime: string | null
 }
 

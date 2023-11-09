@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 
 export function offsetTimer(time: string): number {
     const realDate = new Date(time)
-    const [offset, setOffset] = useState(0)
+    const initialOffset = realDate.getTime() - Date.now()
+    const [offset, setOffset] = useState(initialOffset)
   
     useEffect(() => {
         const interval = setInterval(() => {
@@ -17,32 +18,6 @@ export function offsetTimer(time: string): number {
   
       return offset
   }
-
-// function makeTime(offset: number, truncate: boolean): string {
-//     if(truncate && offset < 0) {
-//       return '0:00'
-//     }
-  
-//     const time = Math.floor(offset / 1000)
-//     const minutes = Math.floor(time / 60).toString()
-//     const seconds = (time % 60).toString().padStart(2, '0')
-  
-//     return `${minutes}:${seconds}`
-//   }
-  
-//   interface TimerBodyProps {
-//     time: Date
-//     format: 'timer' | 'countdown'
-//   }
-  
-//   export function Timer(props: TimerBodyProps): JSX.Element {
-//     const truncate = props.format !== 'countdown'
-//     const properDate = new Date(props.time)
-//     const offset = offsetTimer(properDate)
-//     const time = makeTime(offset, truncate)
-  
-//     return <div className='text-9xl'>{time}</div>
-//   }
 
   interface TimerProps {
     time: string
