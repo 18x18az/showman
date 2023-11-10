@@ -72,7 +72,7 @@ function ActualFieldDisplay(props: {fieldId: number}): JSX.Element {
   switch (state) {
     case FieldState.IDLE:
       let clock = <></>
-      //if(status.match.time !== undefined) clock = <Countdown time={status.match.time} />
+      if(status.match.time !== undefined) clock = <Countdown time={status.match.time} />
 
       body = <>
        <h1 className='text-7xl text-zinc-300'>{matchName}</h1>

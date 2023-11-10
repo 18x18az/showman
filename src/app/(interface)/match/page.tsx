@@ -1,7 +1,7 @@
 'use client'
 
 import { EmptyPost, JsonTopic } from "@/utils/maestro"
-import { Alliance, FieldState, FieldStatus } from "../interfaces"
+import { Alliance, FieldState, FieldStatus, MatchStatus } from "../interfaces"
 import Logo from "@/components/primitives/logo"
 import { makeMatchName } from "@/app/display/field/[uuid]/field"
 import { Button } from "@/components/ui/button"
@@ -76,6 +76,8 @@ export default function Page (): JSX.Element {
     if (referenced !== undefined) {
 
         const preIntro = stage === DisplayState.RESULTS || stage === DisplayState.UNKNOWN
+        const nextMatchReady = next !== null && next.match !== null && next.match.status !== MatchStatus.SCORING
+        const canGoToNext = preIntro && nextMatchReady
 
         const canStart = stage === DisplayState.MATCH && fieldControl !== null && fieldControl.state === FieldState.IDLE
 
@@ -89,7 +91,7 @@ export default function Page (): JSX.Element {
         <AllianceDisplay alliance={referenced.match!.blue} color='blue' teams={teams.teams} />
         <div className="flex-1 grow"></div>
         <div className="flex justify-evenly mb-12">
-        <DisplayButton disabled={!preIntro} />
+        <DisplayButton disabled={!canGoToNext} />
         <StartButton disabled={!canStart && !canResume} />
         </div>
         </div>

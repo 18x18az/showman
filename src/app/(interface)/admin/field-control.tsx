@@ -1,11 +1,12 @@
 'use client'
 
 import { EmptyPost, JsonTopic, Post } from "@/utils/maestro"
-import { Alliance, Field, FieldStatus, Match, MatchStatus } from "../interfaces"
+import { Alliance, Field, FieldState, FieldStatus, Match, MatchStatus } from "../interfaces"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { makeShortMatchName } from "@/utils/strings/match"
+import { Countdown, Timer } from "@/app/display/field/[uuid]/timer"
 
 function RemoveButton(props: {match: Match}): JSX.Element {
 
@@ -143,11 +144,18 @@ export function FieldDisplay(props: FieldDisplayProps): JSX.Element {
 
     let statusText = <></>
 
+    const isActive = props.activeField !== null && props.activeField.match !== null && props.activeField.match.id === props.match.id
+
     if(props.match.status === MatchStatus.SCORING) {
         statusText = <>Scoring</>
+    } else if(isActive && props.activeField !== null && props.activeField.state === FieldState.PAUSED) {
+        statusText = <>1:45</>
+    } else if (isActive && props.activeField !== null && props.activeField.endTime !== null) {
+        statusText = <Timer time={props.activeField.endTime} />
+    } else if (props.match.time !== undefined) {
+        statusText = <Countdown time={props.match.time} />
     }
 
-    const isActive = props.activeField !== null && props.activeField.match !== null && props.activeField.match.id === props.match.id
     const isNext = props.nextField !== null && props.nextField.match !== null && props.nextField.field.id === props.field.id
     const canQueue = !(isActive || isNext)
 
