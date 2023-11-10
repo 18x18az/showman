@@ -1,10 +1,10 @@
-import { ScheduledMatch } from "@/app/(interface)/interfaces"
 import { JsonTopic } from "@/utils/maestro"
-import { makeMatchName } from "../../field/[uuid]/field"
+import { makeMatchName } from "../field/[uuid]/field"
+import { Match } from "@/app/(interface)/interfaces"
 
 
 interface MatchResult {
-    match: ScheduledMatch
+    match: Match
     redScore: number
     blueScore: number
 }
@@ -68,7 +68,7 @@ export function ScoreDisplay(): JSX.Element {
     const results = JsonTopic<MatchResult | null>('results')
     const teamObj = JsonTopic<{teams: Team[]}>('teams')
 
-    if(results === null || results === undefined || teamObj === undefined) return <></>
+    if(results === null || results === undefined || teamObj === undefined) return <>TODO score</>
 
     const match = results.match
 

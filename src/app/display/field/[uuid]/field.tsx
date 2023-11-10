@@ -1,6 +1,6 @@
 'use client'
 
-import { Alliance, FieldState, FieldStatus, Round, ScheduledMatch } from '@/app/(interface)/interfaces'
+import { Alliance, FieldState, FieldStatus, Match, Round } from '@/app/(interface)/interfaces'
 import { JsonTopic } from '@/utils/maestro'
 import { Countdown, Timer } from './timer'
 import Logo from '@/components/primitives/logo'
@@ -10,12 +10,12 @@ interface FieldDisplayProps {
   readonly uuid: string
 }
 
-export function makeMatchName(match: ScheduledMatch| undefined): string {
-  if (match === undefined) return ''
+export function makeMatchName(match: Match | undefined | null): string {
+  if (match === undefined || match === null) return ''
   
   const roundName = match.round === Round.Ro16 ? 'Round of 16' : match.round === Round.QF ? 'Quarterfinals' : match.round === Round.SF ? 'Semifinals' : match.round === Round.F ? 'Finals' : 'Qualification'
 
-  return `${roundName} Match ${match.matchNum}`
+  return `${roundName} Match ${match.number}`
 }
 
 interface AllianceDisplayProps {
@@ -70,9 +70,9 @@ function ActualFieldDisplay(props: {fieldId: number}): JSX.Element {
   }
 
   switch (state) {
-    case FieldState.ON_DECK:
+    case FieldState.IDLE:
       let clock = <></>
-      if(status.match.time !== undefined) clock = <Countdown time={status.match.time} />
+      //if(status.match.time !== undefined) clock = <Countdown time={status.match.time} />
 
       body = <>
        <h1 className='text-7xl text-zinc-300'>{matchName}</h1>
@@ -87,7 +87,7 @@ function ActualFieldDisplay(props: {fieldId: number}): JSX.Element {
     case FieldState.AUTO:
     case FieldState.DRIVER:
       let timer = <></>
-      if(status.match.time !== undefined) timer = <Timer time={status.match.time} />
+      if(status.endTime !== null) timer = <Timer time={status.endTime} />
 
       body = <>
        <h1 className='text-7xl text-zinc-300'>{matchName}</h1>

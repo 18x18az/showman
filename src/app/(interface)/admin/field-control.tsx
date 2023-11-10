@@ -1,6 +1,6 @@
 'use client'
 
-import { JsonTopic, Post } from "@/utils/maestro"
+import { EmptyPost, JsonTopic, Post } from "@/utils/maestro"
 import { Alliance, Field, FieldStatus, Match, MatchStatus } from "../interfaces"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
@@ -248,7 +248,7 @@ export function FieldControl(props: FieldControlProps): JSX.Element {
         return <>Loading...</>
     }
 
-    unqueued = unqueued.slice(0, 5)
+    unqueued = unqueued.slice(0, 7)
 
     const openFields = statuses.filter((status) => status.onDeck === null).map((status) => status.field)
 
@@ -260,7 +260,23 @@ export function FieldControl(props: FieldControlProps): JSX.Element {
         </div>
     })
 
-    const unqueuedInfo = unqueued.map((match) => <UnqueuedInfo match={match} statuses={statuses} key={match.id}/>)
+    let unqueuedInfo = <></>
+    
+
+    if(unqueued.length > 0) {
+        unqueuedInfo = <>{unqueued.map((match) => <UnqueuedInfo match={match} statuses={statuses} key={match.id}/>)}</>
+    } else {
+        const allFieldsEmpty = statuses.every((status) => status.match === null)
+        if(allFieldsEmpty) {
+            unqueuedInfo = <div className="rounded-md flex-1 flex flex-col justify-center items-center h-full">
+                <Button onClick={() => {void EmptyPost('matches/proceed')}} variant='secondary' className="text-4xl p-6 py-8">Queue Next Block</Button>
+            </div>
+        } else {
+            unqueuedInfo = <div className="rounded-md flex-1 flex flex-col justify-center">
+                <h1 className="text-center text-4xl font-sans text-zinc-700">No remaining unqueued matches.</h1>
+            </div>
+        }
+    }
 
     return <div className="flex flex-col gap-4 h-full">
             <div className="flex gap-4 justify-evenly flex-1">{columns}</div>

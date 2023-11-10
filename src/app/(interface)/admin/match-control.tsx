@@ -105,7 +105,7 @@ export function MatchControl(props: MatchControlProps): JSX.Element {
             canReplay = true
         }
 
-        if(state === FieldState.ON_DECK || state === FieldState.PAUSED) {
+        if(state === FieldState.IDLE || state === FieldState.PAUSED) {
             canStart = true
             if(state === FieldState.PAUSED) {
                 timeText = <>1:45</>
@@ -124,10 +124,6 @@ export function MatchControl(props: MatchControlProps): JSX.Element {
     let startStopButton = <StartButton disabled={!canStart} />
     if(canEnd) {
         startStopButton = <StopButton />
-    }
-
-    const startMatch = async () => {
-        EmptyPost('fieldControl/start')
     }
 
   return <div>

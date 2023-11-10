@@ -1,7 +1,6 @@
-import { FieldState, FieldStatus, Match } from "@/app/(interface)/interfaces";
+import { FieldState, FieldStatus } from "@/app/(interface)/interfaces";
 import { MatchOverlay, MatchPeriod } from "@/components/objects/match/MatchOverlay";
-import { makeMatchName } from "../../field/[uuid]/field";
-import { m } from "framer-motion";
+import { makeMatchName } from "../field/[uuid]/field";
 
 interface MatchDisplayProps {
     status: FieldStatus
@@ -21,8 +20,8 @@ export function MatchDisplay(props: MatchDisplayProps): JSX.Element {
 
     let time: string | undefined = undefined
 
-    if(match.time !== undefined && props.status.state === FieldState.AUTO || props.status.state === FieldState.DRIVER) {
-        time = match.time
+    if(props.status.endTime !== null) {
+        time = props.status.endTime
     }
 
     return <MatchOverlay time={time} title={matchName} period={period} redTeams={redTeams} blueTeams={blueTeams}/>
