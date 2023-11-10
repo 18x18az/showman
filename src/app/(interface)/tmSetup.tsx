@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/components/ui/use-toast'
 import { setTmAddress } from '@/contracts/tm'
-import { Post } from '@/utils/maestro'
 import { useState } from 'react'
 
 export function GetTmConnection (): JSX.Element {

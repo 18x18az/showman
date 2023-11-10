@@ -61,6 +61,24 @@ export function JsonTopic<Type> (topic: string | undefined): Type | undefined {
   return JSON.parse(raw)
 }
 
+export enum BaseStatus {
+  NOT_CONFIGURED = 'NOT_CONFIGURED',
+  OFFLINE = 'OFFLINE',
+  NOMINAL = 'NOMINAL',
+  DEGRADED = 'DEGRADED'
+}
+
+
+export function StatusTopic (topic: string | undefined): BaseStatus | undefined {
+  const topicName = `status/${topic}`
+  const raw = JsonTopic<{status: BaseStatus}>(topicName)
+  if (raw === undefined) {
+    return undefined
+  }
+
+  return raw.status
+}
+
 function makeUrl (resource: string): string {
   return `${getApiHostname()}/api/${resource}`
 }

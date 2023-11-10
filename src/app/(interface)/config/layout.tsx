@@ -12,6 +12,10 @@ const sidebarNavItems = [
     href: '/config/displays'
   },
   {
+    title: 'TM',
+    href: '/config/tm'
+  },
+  {
     title: 'Etc',
     href: '/config/etc'
   }

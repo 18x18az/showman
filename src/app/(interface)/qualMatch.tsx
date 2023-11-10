@@ -4,6 +4,7 @@ import { EmptyPost, JsonTopic, Post } from '@/utils/maestro'
 import { Alliance, FieldState, FieldStatus, Match, Round } from './interfaces'
 import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
+import RestButton from '@/components/ui/rest-button'
 
 export enum StreamDisplayStage {
   UNKNOWN = 'UNKNOWN',
@@ -243,8 +244,17 @@ export function QualMatchControl (): JSX.Element {
   const fields = JsonTopic<FieldStatus[]>('fieldStatuses')
   const fieldControl = JsonTopic<FieldStatus | {state: null} >('fieldControl')
   const displayControl = JsonTopic<{stage: StreamDisplayStage}>('displayStage')
+  const block = JsonTopic<{block: string | null}>('block')
 
   let display = displayControl === undefined ? StreamDisplayStage.UNKNOWN : displayControl.stage
+
+  if(block === undefined) {
+    return <>Loading</>
+  }
+
+  if(block.block === null) {
+    return <div><RestButton url='matches/proceed' text='Queue Next Block' pendingText={'Loading...'} className='w-48'/></div>
+  }
 
   if(fields === undefined || fieldControl === undefined) {
     return <>Loading</>

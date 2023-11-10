@@ -45,7 +45,6 @@ export function LandingPage (): JSX.Element {
   return (
     <div className='flex flex-col gap-24 justify-center content-center width-full'>
       {content}
-      <div className='flex justify-evenly'><SceneControl name='Field 1' number={1}/><SceneControl name='Field 2' number={2}/><SceneControl name='Field 3' number={3}/></div>
       <div><Button onClick={handleReset}>Reset</Button></div>
     </div>
   )
