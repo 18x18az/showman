@@ -16,8 +16,8 @@ export function AllianceIndicator (props: AllianceIndicatorProps): JSX.Element {
     <div className={`h-48 flex flex-col justify-center fixed bottom-0 ${side}`}>
       <motion.div
         className={`px-4 py-2 flex flex-col justify-center ${rounding}`}
-        initial={{ backgroundColor: 'rgba(24,24,27,0)'}}
-        animate={{ backgroundColor: 'rgba(24,24,27,.98)'}}
+        initial={{ backgroundColor: 'rgba(24,24,27,0)' }}
+        animate={{ backgroundColor: 'rgba(24,24,27,.98)' }}
         transition={{ delay: 0.4 + offset, type: 'spring', stiffness: 100, damping: 20 }}
       >
         <motion.div

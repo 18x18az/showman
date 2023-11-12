@@ -10,7 +10,16 @@ import { Header } from '@/components/primitives/Header'
 
 export function Devices (): JSX.Element {
   // accessRedirect(selectCanAccessDevices)
-  const deviceInfo = JsonTopic<User[]>('users', [])
+  const deviceInfo = JsonTopic<User[]>('users')
+
+  if (deviceInfo === undefined) {
+    return (
+      <div>
+        <div>Devices</div>
+        <div>Devices are not yet configured.</div>
+      </div>
+    )
+  }
 
   return (
     <>

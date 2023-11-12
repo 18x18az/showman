@@ -11,7 +11,7 @@ export default function Page (): JSX.Element {
 
   const fields = JsonTopic<Field[]>('fields')
 
-  if(displays === undefined || fields === undefined) return <></>
+  if (displays === undefined || fields === undefined) return <></>
 
   const displaysWithFields = displays.map((display) => {
     return { ...display, fields }

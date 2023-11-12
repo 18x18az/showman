@@ -7,8 +7,13 @@ interface InspectionStage {
 }
 
 export function InspectionSelector (): JSX.Element {
-  const checkedIn = JsonTopic<InspectionStage>('inspection/stage/CHECKED_IN', { teams: [] })
-  const partial = JsonTopic<InspectionStage>('inspection/stage/PARTIAL', { teams: [] })
+  const checkedIn = JsonTopic<InspectionStage>('inspection/stage/CHECKED_IN')
+  const partial = JsonTopic<InspectionStage>('inspection/stage/PARTIAL')
+
+  if (checkedIn === undefined || partial === undefined) {
+    return <div>Loading...</div>
+  }
+
   // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
   const allTeams = [...checkedIn.teams, ...partial.teams].sort(function (a, b) { return a.length - b.length || a.localeCompare(b) })
 

@@ -68,7 +68,7 @@
 //     return <div className={`bg-zinc-900 ${color} text-zinc-200 w-72 p-4 opacity-[.998]`}>
 //         <div className={`flex flex-col py-2 ${border} text-8xl`}>
 //             {props.score}
-//         </div> 
+//         </div>
 //         </div>
 // }
 
@@ -104,6 +104,6 @@
 //         </div>
 // }
 
-export default function Page(): JSX.Element {
-    return <></>    
+export default function Page (): JSX.Element {
+  return <></>
 }

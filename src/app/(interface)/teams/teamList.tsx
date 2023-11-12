@@ -8,11 +8,20 @@ import { Columns } from './columns'
 type TeamInfo = Record<string, Team>
 
 export function TeamList (): JSX.Element {
-  const teamList = Object.values(JsonTopic<TeamInfo>('teams', {}))
+  const teams = JsonTopic<TeamInfo[]>('teams')
+
+  if (teams === undefined) {
+    return (
+      <div>
+        <div>Teams</div>
+        <div>Teams are not yet configured.</div>
+      </div>
+    )
+  }
+
   // const inspectionRollup = StringTopic('inspection/team/+', '')
   return (
     <div className='container mx-auto py-10'>
-      <TeamTable columns={Columns} data={teamList} />
     </div>
   )
 }

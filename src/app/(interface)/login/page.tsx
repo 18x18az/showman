@@ -5,8 +5,8 @@
 //   title: 'Device Setup'
 // }
 
-// export default function Login (): JSX.Element | null {
-//   return (
-//     <LoginBody />
-//   )
-// }
+export default function Login (): JSX.Element | null {
+  return (
+    <></>
+  )
+}

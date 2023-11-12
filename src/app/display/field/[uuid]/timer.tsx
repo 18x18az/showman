@@ -1,47 +1,47 @@
 'use client'
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react'
 
-export function offsetTimer(time: string): number {
-    const realDate = new Date(time)
-    const initialOffset = realDate.getTime() - Date.now()
-    const [offset, setOffset] = useState(initialOffset)
-  
-    useEffect(() => {
-        const interval = setInterval(() => {
-            const diff = realDate.getTime() - Date.now()
-            setOffset(diff)
-        }, 20);
-    
-        return () => clearInterval(interval);
-      }, [time]);
-  
-      return offset
-  }
+export function offsetTimer (time: string): number {
+  const realDate = new Date(time)
+  const initialOffset = realDate.getTime() - Date.now()
+  const [offset, setOffset] = useState(initialOffset)
 
-  interface TimerProps {
-    time: string
-  }
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const diff = realDate.getTime() - Date.now()
+      setOffset(diff)
+    }, 20)
 
-  export function Countdown(props: TimerProps) {
-    const offset = offsetTimer(props.time)
-    const sign = offset < 0 ? '+' : '-'
-    const magnitude = Math.abs(offset)/1000
-    const seconds = Math.floor(magnitude % 60).toString().padStart(2, '0')
-    const minutes = Math.floor(magnitude / 60).toString().padStart(2, '0')
-    const time = `${sign}${minutes}:${seconds}`
+    return () => clearInterval(interval)
+  }, [time])
 
-    return <>{time}</>
-  }
+  return offset
+}
 
-  export function Timer(props: TimerProps) {
-    let offset = offsetTimer(props.time)
-    if(offset < 0) offset = 0
+interface TimerProps {
+  time: string
+}
 
-    const roundedSeconds = Math.ceil(offset / 1000)
-    const minutes = Math.floor(roundedSeconds / 60).toString()
-    const seconds = Math.floor(roundedSeconds % 60).toString().padStart(2, '0')
+export function Countdown (props: TimerProps) {
+  const offset = offsetTimer(props.time)
+  const sign = offset < 0 ? '+' : '-'
+  const magnitude = Math.abs(offset) / 1000
+  const seconds = Math.floor(magnitude % 60).toString().padStart(2, '0')
+  const minutes = Math.floor(magnitude / 60).toString().padStart(2, '0')
+  const time = `${sign}${minutes}:${seconds}`
 
-    const time = `${minutes}:${seconds}`
-    return <>{time}</>
-  }
+  return <>{time}</>
+}
+
+export function Timer (props: TimerProps) {
+  let offset = offsetTimer(props.time)
+  if (offset < 0) offset = 0
+
+  const roundedSeconds = Math.ceil(offset / 1000)
+  const minutes = Math.floor(roundedSeconds / 60).toString()
+  const seconds = Math.floor(roundedSeconds % 60).toString().padStart(2, '0')
+
+  const time = `${minutes}:${seconds}`
+  return <>{time}</>
+}
