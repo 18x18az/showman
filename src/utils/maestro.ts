@@ -34,7 +34,7 @@ function BaseTopic (topic: string | undefined): string | undefined {
     if (topic === undefined) {
       return
     }
-    const client = new Client(getMqttHost(), Math.random().toString(16), )
+    const client = new Client(getMqttHost(), Math.random().toString(16))
     client.connect({ onSuccess: () => { client.subscribe(topic) }, reconnect: true })
 
     client.onMessageArrived = (message) => {
@@ -68,10 +68,9 @@ export enum BaseStatus {
   DEGRADED = 'DEGRADED'
 }
 
-
 export function StatusTopic (topic: string | undefined): BaseStatus | undefined {
   const topicName = `status/${topic}`
-  const raw = JsonTopic<{status: BaseStatus}>(topicName)
+  const raw = JsonTopic<{ status: BaseStatus }>(topicName)
   if (raw === undefined) {
     return undefined
   }

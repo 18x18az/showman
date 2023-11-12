@@ -14,7 +14,7 @@ module.exports = {
       },
       extend: {
         fontSize: {
-          '10xl': '10rem',
+          '10xl': '10rem'
         }
       }
     },

@@ -63,4 +63,3 @@ export interface FieldStatus {
   onDeck: Match | null
   endTime: string | null
 }
-

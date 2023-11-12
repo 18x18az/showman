@@ -6,7 +6,17 @@ import { FieldTable } from './field-table'
 import { Columns } from './columns'
 
 export default function Page (): JSX.Element {
-  const fields = JsonTopic<FieldInfoBroadcast[]>('fields', [])
+  const fields = JsonTopic<FieldInfoBroadcast[]>('fields')
+
+  if (fields === undefined) {
+    return (
+      <div>
+        <div>Fields</div>
+        <div>Fields are not yet configured.</div>
+      </div>
+    )
+  }
+
   return (
     <div>
       <FieldTable columns={Columns} data={fields} />

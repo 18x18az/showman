@@ -8,7 +8,7 @@ interface TimerProps {
   readonly period: 'auto' | 'driver' | 'none'
 }
 
-function ActualTimer(props: { time: string, period: 'auto' | 'driver' | 'none' }): JSX.Element {
+function ActualTimer (props: { time: string, period: 'auto' | 'driver' | 'none' }): JSX.Element {
   let offset = offsetTimer(props.time)
   if (offset < 0) offset = 0
 

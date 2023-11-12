@@ -20,7 +20,7 @@ export default function RootLayout ({
     <html lang='en' suppressHydrationWarning>
       <body className={`${inter.className} bg-zinc-950`}>
         <Providers>
-            {children}
+          {children}
           <Toaster />
         </Providers>
       </body>
