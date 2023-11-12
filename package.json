@@ -83,7 +83,7 @@
     "@types/paho-mqtt": "^1.0.8",
     "@types/redux-logger": "^3.0.10",
     "chromatic": "^7.1.0",
-    "concurrently": "^8.2.1",
+    "concurrently": "^8.2.2",
     "http-server": "^14.1.1",
     "husky": "^8.0.0",
     "redux-logger": "^3.0.6",
