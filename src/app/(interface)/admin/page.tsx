@@ -3,6 +3,7 @@
 import { EventStage, StageSubscription } from '@/contracts/stage'
 import { CompetitionControl } from './competition-control'
 import { AlliancSelectionControl } from '../alliance'
+import TmSelector from './tm-connect'
 
 export default function Page (): JSX.Element {
   const stage = StageSubscription()
@@ -17,6 +18,8 @@ export default function Page (): JSX.Element {
         <AlliancSelectionControl />
       </div>
     )
+  } else if (stage === EventStage.WAITING_FOR_TEAMS) {
+    return <TmSelector />
   }
 
   return (

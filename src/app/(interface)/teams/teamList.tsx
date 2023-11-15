@@ -21,7 +21,6 @@ export function TeamList (): JSX.Element {
 
   // const inspectionRollup = StringTopic('inspection/team/+', '')
   return (
-    <div className='container mx-auto py-10'>
-    </div>
+    <div className='container mx-auto py-10' />
   )
 }
