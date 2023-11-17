@@ -70,7 +70,7 @@ export function ScoreDisplay (): JSX.Element {
   const results = JsonTopic<MatchResult | null>('results')
   const teamObj = JsonTopic<{ teams: Team[] }>('teams')
 
-  if (results === null || results === undefined || teamObj === undefined) return <>TODO score</>
+  if (results === null || results === undefined || teamObj === undefined) return <></>
 
   const match = results.match
 
