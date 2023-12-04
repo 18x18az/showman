@@ -1,14 +1,11 @@
 import { makeShortMatchName } from '@/utils/strings/match'
-import { FieldState, FieldStatus, Match } from '../interfaces'
 import { Button } from '@/components/ui/button'
 import { PlayIcon, ReloadIcon, ResetIcon, StopIcon } from '@radix-ui/react-icons'
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { EmptyPost } from '@/utils/maestro'
+import { EmptyPost, JsonTopic } from '@/utils/maestro'
 import { offsetTimer } from '@/app/display/field/[uuid]/timer'
-
-interface MatchControlProps {
-  active: FieldStatus | null
-}
+import { CompetitionFieldStatus, FieldControlStatus, MATCH_STAGE } from '@/contracts/fields'
+import { Match } from '@/contracts/match'
 
 function makeTime (offset: number, truncate = false): string {
   if (truncate && offset < 0) {
@@ -24,7 +21,7 @@ function makeTime (offset: number, truncate = false): string {
 
 function StartButton (props: { disabled: boolean }): JSX.Element {
   const handler = async () => {
-    await EmptyPost('fieldControl/start')
+    await EmptyPost('competitionControl/start')
   }
 
   return (
@@ -62,7 +59,7 @@ function StopButton (): JSX.Element {
 
 function ResetButton (props: { disabled: boolean }): JSX.Element {
   const handler = async () => {
-    await EmptyPost('fieldControl/reset')
+    await EmptyPost('competitionControl/reset')
   }
 
   return (
@@ -98,39 +95,38 @@ function ReplayButton (props: { disabled: boolean }): JSX.Element {
   )
 }
 
-export function MatchControl (props: MatchControlProps): JSX.Element {
-  const match: Match | null = props.active?.match ?? null
+function MatchControlContent (props: { match: Match | null, stage: MATCH_STAGE, control: FieldControlStatus | null }): JSX.Element {
+  const match = props.match
+  const stage = props.stage
   const matchName = match !== null ? makeShortMatchName(match) : '-'
 
+  console.log(stage)
+
   let canStart = false
+  if (stage === MATCH_STAGE.QUEUED || stage === MATCH_STAGE.SCORING_AUTON) {
+    canStart = true
+  }
+
   let canEnd = false
+  if (stage === MATCH_STAGE.AUTON || stage === MATCH_STAGE.DRIVER) {
+    canEnd = true
+  }
+
   let canReset = false
+  if (stage === MATCH_STAGE.SCORING_AUTON) {
+    canReset = true
+  }
+
   let canReplay = false
+  if (stage === MATCH_STAGE.QUEUED || stage === MATCH_STAGE.SCORING_AUTON || stage === MATCH_STAGE.OUTRO) {
+    canReplay = true
+  }
+
   let timeText = <>-:--</>
 
-  if (props.active !== null) {
-    const state = props.active.state
-
-    if (state !== FieldState.ON_DECK) {
-      canReset = true
-    } else {
-      canReplay = true
-    }
-
-    if (state === FieldState.IDLE || state === FieldState.PAUSED) {
-      canStart = true
-      if (state === FieldState.PAUSED) {
-        timeText = <>1:45</>
-      } else {
-        timeText = <>0:15</>
-      }
-    } else if (state === FieldState.AUTO || state === FieldState.DRIVER) {
-      if (props.active.endTime !== null) {
-        const offset = offsetTimer(props.active.endTime)
-        timeText = <>{makeTime(offset)}</>
-      }
-      canEnd = true
-    }
+  if (match !== null && props.control !== null && props.control.endTime !== null) {
+    const offset = offsetTimer(props.control.endTime)
+    timeText = <>{makeTime(offset)}</>
   }
 
   let startStopButton = <StartButton disabled={!canStart} />
@@ -150,4 +146,30 @@ export function MatchControl (props: MatchControlProps): JSX.Element {
       </div>
     </div>
   )
+}
+
+function EmptyMatchControl (): JSX.Element {
+  return <MatchControlContent match={null} stage={MATCH_STAGE.EMPTY} control={null}/>
+}
+
+function PopulatedMatchControl (props: { fieldId: number }): JSX.Element {
+  const status = JsonTopic<CompetitionFieldStatus>(`competitionField/${props.fieldId}`)
+  const fieldControl = JsonTopic<FieldControlStatus>(`fieldControl/${props.fieldId}`) ?? null
+  let match: Match | null = null
+  const stage = status?.stage ?? MATCH_STAGE.EMPTY
+
+  if (status?.onField !== null) {
+    match = status?.onField ?? null
+  }
+
+  return <MatchControlContent match={match} stage={stage} control={fieldControl} />
+}
+export function MatchControl (): JSX.Element {
+  const activeField = JsonTopic<{ fieldId: number | null }>('currentField')
+
+  if (activeField === undefined || activeField.fieldId === null) {
+    return <EmptyMatchControl />
+  } else {
+    return <PopulatedMatchControl fieldId={activeField.fieldId} />
+  }
 }

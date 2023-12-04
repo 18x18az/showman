@@ -9,7 +9,7 @@ export default function Page (): JSX.Element {
   const stage = StageSubscription()
 
   if (stage === undefined) {
-    return <></>
+    return <>Loading</>
   } else if (stage === EventStage.QUALIFICATIONS || stage === EventStage.ELIMS) {
     return <CompetitionControl />
   } else if (stage === EventStage.ALLIANCE_SELECTION) {
