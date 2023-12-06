@@ -2,10 +2,10 @@ import { makeShortMatchName } from '@/utils/strings/match'
 import { Button } from '@/components/ui/button'
 import { PlayIcon, ReloadIcon, ResetIcon, StopIcon } from '@radix-ui/react-icons'
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { EmptyPost, JsonTopic } from '@/utils/maestro'
 import { offsetTimer } from '@/app/display/field/[uuid]/timer'
-import { CompetitionFieldStatus, FieldControlStatus, MATCH_STAGE } from '@/contracts/fields'
+import { CompetitionFieldStatusSubscription, FieldControlStatus, FieldControlSubscription, LiveFieldSubscription, MATCH_STAGE } from '@/contracts/fields'
 import { Match } from '@/contracts/match'
+import { endEarly, replayCurrentMatch, resetMatch, startMatch } from '@/contracts/match-control'
 
 function makeTime (offset: number, truncate = false): string {
   if (truncate && offset < 0) {
@@ -20,15 +20,11 @@ function makeTime (offset: number, truncate = false): string {
 }
 
 function StartButton (props: { disabled: boolean }): JSX.Element {
-  const handler = async () => {
-    await EmptyPost('competitionControl/start')
-  }
-
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button variant='secondary' disabled={props.disabled} onClick={() => { void handler() }}><PlayIcon /></Button>
+          <Button variant='secondary' disabled={props.disabled} onClick={() => { void startMatch() }}><PlayIcon /></Button>
         </TooltipTrigger>
         <TooltipContent>
           <p>Start Match</p>
@@ -39,15 +35,11 @@ function StartButton (props: { disabled: boolean }): JSX.Element {
 }
 
 function StopButton (): JSX.Element {
-  const handler = async () => {
-    await EmptyPost('fieldControl/endEarly')
-  }
-
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button variant='secondary' onClick={() => { void handler() }}><StopIcon /></Button>
+          <Button variant='secondary' onClick={() => { void endEarly() }}><StopIcon /></Button>
         </TooltipTrigger>
         <TooltipContent>
           <p>End Early</p>
@@ -58,15 +50,11 @@ function StopButton (): JSX.Element {
 }
 
 function ResetButton (props: { disabled: boolean }): JSX.Element {
-  const handler = async () => {
-    await EmptyPost('competitionControl/reset')
-  }
-
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button disabled={props.disabled} variant='secondary' onClick={() => { void handler() }}><ResetIcon /></Button>
+          <Button disabled={props.disabled} variant='secondary' onClick={() => { void resetMatch() }}><ResetIcon /></Button>
         </TooltipTrigger>
         <TooltipContent>
           <p>Reset Match</p>
@@ -77,15 +65,11 @@ function ResetButton (props: { disabled: boolean }): JSX.Element {
 }
 
 function ReplayButton (props: { disabled: boolean }): JSX.Element {
-  const handler = async () => {
-    await EmptyPost('fieldControl/replay')
-  }
-
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button disabled={props.disabled} variant='secondary' onClick={() => { void handler() }}><ReloadIcon /></Button>
+          <Button disabled={props.disabled} variant='secondary' onClick={() => { void replayCurrentMatch() }}><ReloadIcon /></Button>
         </TooltipTrigger>
         <TooltipContent>
           <p>Replay</p>
@@ -99,8 +83,6 @@ function MatchControlContent (props: { match: Match | null, stage: MATCH_STAGE, 
   const match = props.match
   const stage = props.stage
   const matchName = match !== null ? makeShortMatchName(match) : '-'
-
-  console.log(stage)
 
   let canStart = false
   if (stage === MATCH_STAGE.QUEUED || stage === MATCH_STAGE.SCORING_AUTON) {
@@ -149,12 +131,13 @@ function MatchControlContent (props: { match: Match | null, stage: MATCH_STAGE, 
 }
 
 function EmptyMatchControl (): JSX.Element {
-  return <MatchControlContent match={null} stage={MATCH_STAGE.EMPTY} control={null}/>
+  return <MatchControlContent match={null} stage={MATCH_STAGE.EMPTY} control={null} />
 }
 
 function PopulatedMatchControl (props: { fieldId: number }): JSX.Element {
-  const status = JsonTopic<CompetitionFieldStatus>(`competitionField/${props.fieldId}`)
-  const fieldControl = JsonTopic<FieldControlStatus>(`fieldControl/${props.fieldId}`) ?? null
+  const status = CompetitionFieldStatusSubscription(props.fieldId)
+  const fieldControl = FieldControlSubscription(props.fieldId) ?? null
+
   let match: Match | null = null
   const stage = status?.stage ?? MATCH_STAGE.EMPTY
 
@@ -165,11 +148,11 @@ function PopulatedMatchControl (props: { fieldId: number }): JSX.Element {
   return <MatchControlContent match={match} stage={stage} control={fieldControl} />
 }
 export function MatchControl (): JSX.Element {
-  const activeField = JsonTopic<{ fieldId: number | null }>('currentField')
+  const liveField = LiveFieldSubscription()
 
-  if (activeField === undefined || activeField.fieldId === null) {
+  if (liveField === undefined || liveField === null) {
     return <EmptyMatchControl />
   } else {
-    return <PopulatedMatchControl fieldId={activeField.fieldId} />
+    return <PopulatedMatchControl fieldId={liveField} />
   }
 }

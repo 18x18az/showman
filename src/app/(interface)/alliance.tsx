@@ -12,7 +12,7 @@ export interface AllianceSelectionStatus {
   remaining: string[]
 }
 
-export function AlliancSelectionControl (): JSX.Element {
+export function AllianceSelectionControl (): JSX.Element {
   const status = JsonTopic<AllianceSelectionStatus | null>('allianceSelection')
 
   if (status === undefined || status === null) return <></>

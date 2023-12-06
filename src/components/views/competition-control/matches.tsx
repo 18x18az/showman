@@ -1,14 +1,11 @@
-import { JsonTopic, Post } from '@/utils/maestro'
 import { makeShortMatchName } from '@/utils/strings/match'
-import { Field } from '@/contracts/fields'
+import { Field, QueueableFieldsSubscription } from '@/contracts/fields'
 import { Match } from '@/contracts/match'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
-
-async function queueMatch (fieldId: number, matchId: number): Promise<void> {
-  await Post(`competitionField/${fieldId}/queue`, { matchId })
-}
+import { UnqueuedMatchesSubscription } from '@/contracts/matches'
+import { queueMatch } from '@/contracts/match-control'
 
 interface ActionMenuProps {
   queueableFields: Field[]
@@ -52,8 +49,8 @@ function UnqueuedMatch (props: { match: Match, queueableFields: Field[] }): JSX.
   )
 }
 export function UnqueuedMatches (): JSX.Element {
-  const unqueued = JsonTopic<Match[]>('unqueued')
-  const queueableFields = JsonTopic<Field[]>('competitionFields/queueable')
+  const unqueued = UnqueuedMatchesSubscription()
+  const queueableFields = QueueableFieldsSubscription()
 
   if (unqueued === undefined || queueableFields === undefined) {
     return <>Loading...</>

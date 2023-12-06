@@ -1,37 +1,27 @@
-'use client'
-
-import { EmptyPost, JsonTopic, Post } from '@/utils/maestro'
-import { Settings } from './settings'
-import { CompetitionFieldStatus, Field, MATCH_STAGE } from '@/contracts/fields'
-import { Queueing } from './queueing'
-import { MatchControl } from './match-control'
-import { UnqueuedMatches } from './unqueued'
+import { CompetitionFieldStatusSubscription, Field, FieldsSubscription, LiveFieldSubscription, MATCH_STAGE, OnDeckFieldSubscription } from '@/contracts/fields'
 import { Match } from '@/contracts/match'
 import { makeShortMatchName } from '@/utils/strings/match'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../../ui/dropdown-menu'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
+import { putFieldOnDeck, replayMatch } from '@/contracts/match-control'
 
-async function putOnDeck (fieldId: number): Promise<void> {
-  await Post('competitionControl/onDeck', { fieldId })
-}
-
-async function replay (matchId: number): Promise<void> {
-  await EmptyPost(`competitionControl/match/${matchId}/replay`)
-}
 function FieldActionMenu (props: { field: Field, match: Match, stage: MATCH_STAGE }): JSX.Element {
-  const currentField = JsonTopic<{ fieldId: number | null }>('currentField')
-  const onDeckField = JsonTopic<{ fieldId: number | null }>('onDeckField')
+  const liveField = LiveFieldSubscription()
+  const onDeckField = OnDeckFieldSubscription()
+
+  const thisField = props.field.id
+
   const stage = props.stage
 
-  if (currentField === undefined || onDeckField === undefined) {
+  if (liveField === undefined || onDeckField === undefined) {
     return <></>
   }
 
   const options: JSX.Element[] = []
 
-  if (currentField.fieldId !== props.field.id && onDeckField.fieldId !== props.field.id && stage === MATCH_STAGE.QUEUED) {
+  if (liveField !== thisField && onDeckField !== thisField && stage === MATCH_STAGE.QUEUED) {
     options.push(
-      <DropdownMenuItem key='queue' onClick={() => { void putOnDeck(props.field.id) }}>
+      <DropdownMenuItem key='queue' onClick={() => { void putFieldOnDeck(props.field.id) }}>
         Queue
       </DropdownMenuItem>
     )
@@ -39,7 +29,7 @@ function FieldActionMenu (props: { field: Field, match: Match, stage: MATCH_STAG
 
   if (stage === MATCH_STAGE.SCORING || stage === MATCH_STAGE.OUTRO) {
     options.push(
-      <DropdownMenuItem key='replay' onClick={() => { void replay(props.match.id) }}>
+      <DropdownMenuItem key='replay' onClick={() => { void replayMatch(props.match.id) }}>
         Replay
       </DropdownMenuItem>
     )
@@ -106,8 +96,8 @@ function OnDeck (props: { field: Field, match: Match | null }): JSX.Element {
     </div>
   )
 }
-function FieldControl (props: { field: Field }): JSX.Element {
-  const status = JsonTopic<CompetitionFieldStatus>(`competitionField/${props.field.id}`)
+function FieldInfo (props: { field: Field }): JSX.Element {
+  const status = CompetitionFieldStatusSubscription(props.field.id)
 
   if (status === undefined) {
     return <>Loading...</>
@@ -121,8 +111,8 @@ function FieldControl (props: { field: Field }): JSX.Element {
     </div>
   )
 }
-function FieldControls (): JSX.Element {
-  const fields = JsonTopic<Field[]>('fields')
+export function FieldInfos (): JSX.Element {
+  const fields = FieldsSubscription()
 
   if (fields === undefined) {
     return <>Loading</>
@@ -132,44 +122,11 @@ function FieldControls (): JSX.Element {
 
   const fieldControls = competitionFields.map((field) => {
     return (
-      <FieldControl field={field} key={field.id} />
+      <FieldInfo field={field} key={field.id} />
     )
   })
 
   return (
     <div className='flex justify-evenly flex-1'>{fieldControls}</div>
-  )
-}
-
-function RightBar (): JSX.Element {
-  const elements = [
-    MatchControl,
-    Queueing,
-    Settings
-  ]
-
-  const submenus = elements.map((element) => {
-    return (
-      <div className='border border-zinc-800 p-8 rounded-xl' key={element.name}>
-        {element()}
-      </div>
-    )
-  })
-
-  return (
-    <div className='flex flex-col gap-8'>
-      {submenus}
-    </div>
-  )
-}
-export function CompetitionControl (): JSX.Element {
-  return (
-    <div className='flex w-full p-8 gap-8 h-screen'>
-      <div className='p-6 flex-1 flex-col justify-evenly h-screen'>
-        <FieldControls />
-        <UnqueuedMatches />
-      </div>
-      <RightBar />
-    </div>
   )
 }

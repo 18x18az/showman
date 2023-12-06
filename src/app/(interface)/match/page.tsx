@@ -55,7 +55,7 @@ function AllianceDisplay (props: { alliance: Alliance, color: 'red' | 'blue', te
 }
 
 export default function Page (): JSX.Element {
-  const fieldControl = JsonTopic<FieldStatus | null>('activeField')
+  const fieldControl = JsonTopic<FieldStatus | null>('liveField')
   const displayControl = JsonTopic<{ stage: DisplayState }>('displayStage')
   const next = JsonTopic<FieldStatus | null>('nextField')
   const teams = JsonTopic<{ teams: TeamInformation[] }>('teams')

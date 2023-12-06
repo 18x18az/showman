@@ -1,9 +1,9 @@
 'use client'
 
 import { EventStage, StageSubscription } from '@/contracts/stage'
-import { CompetitionControl } from './competition-control'
-import { AlliancSelectionControl } from '../alliance'
+import { AllianceSelectionControl } from '../alliance'
 import TmSelector from './tm-connect'
+import { CompetitionControl } from '@/components/views/competition-control/main'
 
 export default function Page (): JSX.Element {
   const stage = StageSubscription()
@@ -15,7 +15,7 @@ export default function Page (): JSX.Element {
   } else if (stage === EventStage.ALLIANCE_SELECTION) {
     return (
       <div className='flex flex-col gap-8 p-4'>
-        <AlliancSelectionControl />
+        <AllianceSelectionControl />
       </div>
     )
   } else if (stage === EventStage.WAITING_FOR_TEAMS) {

@@ -6,7 +6,7 @@ import UploadMatches from './upload'
 import { Button } from '@/components/ui/button'
 import { QualMatchControl } from './qualMatch'
 import { EventStage, StageSubscription } from '@/contracts/stage'
-import { AlliancSelectionControl } from './alliance'
+import { AllianceSelectionControl } from './alliance'
 
 export function LandingPage (): JSX.Element {
   const handleReset = () => {
@@ -26,7 +26,7 @@ export function LandingPage (): JSX.Element {
   } else if (stage === EventStage.QUALIFICATIONS || stage === EventStage.ELIMS) {
     content = <QualMatchControl />
   } else if (stage === EventStage.ALLIANCE_SELECTION) {
-    content = <AlliancSelectionControl />
+    content = <AllianceSelectionControl />
   }
 
   return (

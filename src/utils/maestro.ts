@@ -68,7 +68,7 @@ export enum BaseStatus {
   DEGRADED = 'DEGRADED'
 }
 
-export function StatusTopic (topic: string | undefined): BaseStatus | undefined {
+export function StatusTopic (topic: string): BaseStatus | undefined {
   const topicName = `status/${topic}`
   const raw = JsonTopic<{ status: BaseStatus }>(topicName)
   if (raw === undefined) {

@@ -10,7 +10,7 @@ import { AllianceSelection } from './alliance'
 
 export default function Page ({ params }: { readonly params: { readonly field: string } }): JSX.Element {
   // const statuses = JsonTopic<FieldStatus[]>('fieldStatuses')
-  const active = JsonTopic<FieldStatus | null>('activeField')
+  const active = JsonTopic<FieldStatus | null>('liveField')
   // const displayControl = JsonTopic<{stage: StreamDisplayStage}>('displayStage')
   const stage = JsonTopic<{ stage: EventStage }>('stage')?.stage
   const displayStage = JsonTopic<{ stage: StreamDisplayStage }>('displayStage')?.stage
