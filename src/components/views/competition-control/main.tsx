@@ -1,4 +1,4 @@
-import { FieldInfos } from './field-info'
+import { FieldInfos } from './field-info/main'
 import { MatchControl } from './match-control'
 import { UnqueuedMatches } from './matches'
 import { Queueing } from './queue-control'
@@ -29,8 +29,9 @@ function RightBar (): JSX.Element {
 export function CompetitionControl (): JSX.Element {
   return (
     <div className='flex w-full p-8 gap-8 h-screen'>
-      <div className='p-6 flex-1 flex-col justify-evenly h-screen'>
+      <div className='p-6 flex-col flex justify-evenly h-full grow'>
         <FieldInfos />
+        <div className='grow' />
         <UnqueuedMatches />
       </div>
       <RightBar />

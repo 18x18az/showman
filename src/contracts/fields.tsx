@@ -36,7 +36,7 @@ export interface FieldControlStatus {
   endTime: string | null
 }
 
-type SelectedField = number | null | undefined
+export type SelectedField = number | null | undefined
 interface FieldSelection {
   fieldId: number | null
 }
