@@ -1,8 +1,7 @@
 import { Field, LiveFieldSubscription, MATCH_STAGE, OnDeckFieldSubscription, SelectedField } from '@/contracts/fields'
 import { Match } from '@/contracts/match'
-import { putFieldOnDeck, replayMatch } from '@/contracts/match-control'
-import { DropdownMenuItem } from '@radix-ui/react-dropdown-menu'
 import { CommonFieldInfo, FieldStatus } from './common'
+import { PutOnDeckAction, RemoveAction, ReplayAction } from './actions'
 
 function FieldOptions (field: Field, match: Match | null, stage: MATCH_STAGE, liveField: SelectedField, onDeckField: SelectedField): JSX.Element[] {
   const thisField = field.id
@@ -14,19 +13,15 @@ function FieldOptions (field: Field, match: Match | null, stage: MATCH_STAGE, li
   const options: JSX.Element[] = []
 
   if (liveField !== thisField && onDeckField !== thisField && stage === MATCH_STAGE.QUEUED) {
-    options.push(
-      <DropdownMenuItem key='queue' onClick={() => { void putFieldOnDeck(field.id) }}>
-        Queue
-      </DropdownMenuItem>
-    )
+    options.push(<PutOnDeckAction field={field} />)
   }
 
   if (stage === MATCH_STAGE.SCORING || stage === MATCH_STAGE.OUTRO) {
-    options.push(
-      <DropdownMenuItem key='replay' onClick={() => { void replayMatch(match.id) }}>
-        Replay
-      </DropdownMenuItem>
-    )
+    options.push(<ReplayAction match={match} />)
+  }
+
+  if (liveField !== thisField && stage === MATCH_STAGE.QUEUED) {
+    options.push(<RemoveAction match={match} />)
   }
 
   return options

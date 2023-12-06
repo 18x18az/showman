@@ -33,9 +33,13 @@ export async function queueMatch (fieldId: number, matchId: number): Promise<voi
 }
 
 export async function replayMatch (matchId: number): Promise<void> {
-
+  await EmptyPost(`competitionControl/match/${matchId}/replay`)
 }
 
 export async function putFieldOnDeck (fieldId: number): Promise<void> {
   await Post('competitionControl/onDeck', { fieldId })
+}
+
+export async function removeMatch (matchId: number): Promise<void> {
+  await EmptyPost(`competitionControl/match/${matchId}/remove`)
 }

@@ -1,15 +1,42 @@
 import { Field } from '@/contracts/fields'
 import { Match } from '@/contracts/match'
 import { CommonFieldInfo, FieldStatus } from './common'
+import { RemoveAction } from './actions'
 
-export function OnDeck (props: { field: Field, match: Match | null }): JSX.Element {
-  const expectedFieldId = props.match?.fieldId
+function isOnWrongField (field: Field, match: Match | null): boolean {
+  const expectedFieldId = match?.fieldId
 
-  let status: FieldStatus | undefined
-
-  if (expectedFieldId !== undefined && expectedFieldId !== props.field.id) {
-    status = FieldStatus.WRONG_FIELD
+  if (expectedFieldId !== undefined && expectedFieldId !== field.id) {
+    return true
   }
 
-  return <CommonFieldInfo match={props.match} options={[]} status={status} />
+  return false
+}
+function onDeckOptions (match: Match | null): JSX.Element[] {
+  const options: JSX.Element[] = []
+
+  if (match !== null) {
+    options.push(<RemoveAction match={match} />)
+  }
+
+  return options
+}
+
+function onDeckText (field: Field, match: Match | null): string | undefined {
+  if (isOnWrongField(field, match)) {
+    return match?.fieldName !== undefined ? `Exp ${match.fieldName}` : undefined
+  }
+}
+
+function onDeckStatus (field: Field, match: Match | null): FieldStatus | undefined {
+  if (isOnWrongField(field, match)) {
+    return FieldStatus.WRONG_FIELD
+  }
+}
+export function OnDeck (props: { field: Field, match: Match | null }): JSX.Element {
+  const status = onDeckStatus(props.field, props.match)
+  const options = onDeckOptions(props.match)
+  const text = onDeckText(props.field, props.match)
+
+  return <CommonFieldInfo match={props.match} options={options} status={status} text={text} />
 }

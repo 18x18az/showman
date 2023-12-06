@@ -44,7 +44,7 @@ function MatchText (props: { text: string | undefined }): JSX.Element {
 enum OutlineColor {
   EMPTY = 'border-zinc-900',
   NORMAL = 'border-zinc-800',
-  WRONG_FIELD = 'border-red-900',
+  WRONG_FIELD = 'border-yellow-900',
   LIVE_FIELD = 'border-green-500',
   ON_DECK_FIELD = 'border-blue-900'
 }
@@ -56,6 +56,8 @@ function getOutlineColor (match: Match | null, status: FieldStatus | undefined):
     return OutlineColor.LIVE_FIELD
   } else if (status === FieldStatus.ON_DECK) {
     return OutlineColor.ON_DECK_FIELD
+  } else if (status === FieldStatus.WRONG_FIELD) {
+    return OutlineColor.WRONG_FIELD
   }
 
   return OutlineColor.NORMAL
