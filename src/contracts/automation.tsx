@@ -1,7 +1,7 @@
 import { JsonTopic, Post } from '@/utils/maestro'
 
-export async function setAutomation (state: boolean): Promise<void> {
-  await Post('fieldControl/automation', { state })
+export async function setAutomation (enabled: boolean): Promise<void> {
+  await Post('competitionControl/automation', { enabled })
 }
 
 export enum AutomationState {
@@ -10,6 +10,6 @@ export enum AutomationState {
   DISABLED = 'DISABLED',
 }
 
-export const AutomationSubscription = (): AutomationState | undefined => {
-  return JsonTopic<{ state: AutomationState }>('automation')?.state
+export const AutomationSubscription = (): boolean | undefined => {
+  return JsonTopic<{ enabled: boolean }>('automation')?.enabled
 }

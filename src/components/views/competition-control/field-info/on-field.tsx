@@ -13,15 +13,15 @@ function FieldOptions (field: Field, match: Match | null, stage: MATCH_STAGE, li
   const options: JSX.Element[] = []
 
   if (liveField !== thisField && onDeckField !== thisField && stage === MATCH_STAGE.QUEUED) {
-    options.push(<PutOnDeckAction field={field} />)
+    options.push(<PutOnDeckAction field={field} key='push' />)
   }
 
   if (stage === MATCH_STAGE.SCORING || stage === MATCH_STAGE.OUTRO) {
-    options.push(<ReplayAction match={match} />)
+    options.push(<ReplayAction match={match} key='replay' />)
   }
 
   if (liveField !== thisField && stage === MATCH_STAGE.QUEUED) {
-    options.push(<RemoveAction match={match} />)
+    options.push(<RemoveAction match={match} key='remove' />)
   }
 
   return options

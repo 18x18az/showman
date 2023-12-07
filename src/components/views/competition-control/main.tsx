@@ -27,6 +27,7 @@ function RightBar (): JSX.Element {
 }
 
 export function CompetitionControl (): JSX.Element {
+  console.log('Competition control')
   return (
     <div className='flex w-full p-8 gap-8 h-screen'>
       <div className='p-6 flex-col flex justify-evenly h-full grow'>

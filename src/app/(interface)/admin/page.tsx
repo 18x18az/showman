@@ -9,6 +9,7 @@ export default function Page (): JSX.Element {
   const stage = StageSubscription()
 
   if (stage === undefined) {
+    console.log('Waiting for stage')
     return <>Loading</>
   } else if (stage === EventStage.QUALIFICATIONS || stage === EventStage.ELIMS) {
     return <CompetitionControl />

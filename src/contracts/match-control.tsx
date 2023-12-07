@@ -21,7 +21,7 @@ export async function startMatch (): Promise<void> {
 }
 
 export async function endEarly (): Promise<void> {
-  await EmptyPost('competitionControl/endEarly')
+  await EmptyPost('competitionControl/stop')
 }
 
 export async function resetMatch (): Promise<void> {

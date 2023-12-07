@@ -1,17 +1,21 @@
-import { FieldState, FieldStatus } from '@/app/(interface)/interfaces'
 import { MatchOverlay, MatchPeriod } from '@/components/objects/match/MatchOverlay'
 import { makeMatchName } from '../field/[uuid]/field'
+import { CompetitionFieldStatusSubscription, FieldControlSubscription, MATCH_STAGE } from '../../../contracts/fields'
 
 interface MatchDisplayProps {
-  status: FieldStatus
+  field: number
 }
 
 export function MatchDisplay (props: MatchDisplayProps): JSX.Element {
-  const match = props.status.match
-  if (match === undefined || match === null) return <></>
+  const status = CompetitionFieldStatusSubscription(props.field)
+  const fieldControl = FieldControlSubscription(props.field)
+
+  if (status === undefined || status.onField === null || fieldControl === undefined) return <></>
+  const match = status.onField
+  const stage = status.stage
 
   const matchName = makeMatchName(match)
-  const period = props.status.state === FieldState.AUTO ? MatchPeriod.Auto : props.status.state === FieldState.DRIVER ? MatchPeriod.Driver : MatchPeriod.None
+  const period = stage === MATCH_STAGE.AUTON ? MatchPeriod.Auto : stage === MATCH_STAGE.DRIVER ? MatchPeriod.Driver : MatchPeriod.None
 
   const redTeams = [match.red.team1]
   if (match.red.team2 !== undefined) redTeams.push(match.red.team2)
@@ -20,8 +24,8 @@ export function MatchDisplay (props: MatchDisplayProps): JSX.Element {
 
   let time: string | undefined
 
-  if (props.status.endTime !== null) {
-    time = props.status.endTime
+  if (fieldControl.endTime !== null) {
+    time = fieldControl.endTime
   }
 
   return <MatchOverlay time={time} title={matchName} period={period} redTeams={redTeams} blueTeams={blueTeams} />

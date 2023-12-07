@@ -16,7 +16,7 @@ function onDeckOptions (match: Match | null): JSX.Element[] {
   const options: JSX.Element[] = []
 
   if (match !== null) {
-    options.push(<RemoveAction match={match} />)
+    options.push(<RemoveAction match={match} key='remove' />)
   }
 
   return options

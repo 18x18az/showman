@@ -50,7 +50,7 @@ function UnqueuedMatch (props: { match: Match, queueableFields: Field[] }): JSX.
 }
 export function UnqueuedMatches (): JSX.Element {
   const unqueued = UnqueuedMatchesSubscription()
-  const queueableFields = QueueableFieldsSubscription()
+  const queueableFields = QueueableFieldsSubscription()?.sort((a, b) => { return a.id - b.id })
 
   if (unqueued === undefined || queueableFields === undefined) {
     return <>Loading...</>
