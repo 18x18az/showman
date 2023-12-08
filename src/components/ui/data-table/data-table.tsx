@@ -20,13 +20,11 @@ import { Button } from '@/components/ui/button'
 interface DataTableProps<TData, TValue> {
   readonly columns: Array<ColumnDef<TData, TValue>>
   readonly table: TableType<TData>
-  readonly keyValue: string
 }
 
 export function DataTable<TData, TValue> ({
   columns,
-  table,
-  keyValue
+  table
 }: DataTableProps<TData, TValue>): JSX.Element {
   return (
     <>
@@ -55,7 +53,7 @@ export function DataTable<TData, TValue> ({
               ? (
                   table.getRowModel().rows.map((row) => (
                     <TableRow
-                      key={row.getValue(keyValue)}
+                      key={row.id}
                       data-state={row.getIsSelected() && 'selected'}
                     >
                       {row.getVisibleCells().map((cell) => (

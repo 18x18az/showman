@@ -75,7 +75,7 @@ export function DeviceTable<TData, TValue> ({
       <div className='flex items-center py-4'>
         {RoleDropdownFilter}
       </div>
-      <DataTable columns={columns} table={table} keyValue='name' />
+      <DataTable columns={columns} table={table} />
     </div>
   )
 }

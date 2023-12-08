@@ -37,6 +37,6 @@ export function DisplayTable<TData, TValue> ({
   })
 
   return (
-    <DataTable columns={columns} table={table} keyValue='name' />
+    <DataTable columns={columns} table={table} />
   )
 }

@@ -15,7 +15,7 @@ interface StagePayload {
   stage: EventStage
 }
 
-export const StageSubscription = () => {
+export const StageSubscription = (): EventStage | undefined => {
   const results = JsonTopic<StagePayload>(STAGE_TOPIC)
   if (results === undefined) {
     return undefined

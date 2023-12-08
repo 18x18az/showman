@@ -5,6 +5,7 @@ import { Alliance, FieldState, FieldStatus, Match, Round } from './interfaces'
 import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
 import RestButton from '@/components/ui/rest-button'
+import { Field } from '../../contracts/fields'
 
 export enum StreamDisplayStage {
   UNKNOWN = 'UNKNOWN',
@@ -257,12 +258,11 @@ function FieldControl (props: FieldControlProps): JSX.Element {
 }
 
 export function QualMatchControl (): JSX.Element {
-  const fields = JsonTopic<FieldStatus[]>('fieldStatuses')
-  const fieldControl = JsonTopic<FieldStatus | { state: null } >('fieldControl')
-  const displayControl = JsonTopic<{ stage: StreamDisplayStage }>('displayStage')
+  const fields = JsonTopic<Field[]>('fields')
+  // const displayControl = JsonTopic<{ stage: StreamDisplayStage }>('displayStage')
   const block = JsonTopic<{ block: string | null }>('block')
 
-  const display = displayControl === undefined ? StreamDisplayStage.UNKNOWN : displayControl.stage
+  // const display = displayControl === undefined ? StreamDisplayStage.UNKNOWN : displayControl.stage
 
   if (block === undefined) {
     return <>Loading</>
@@ -272,37 +272,59 @@ export function QualMatchControl (): JSX.Element {
     return <div><RestButton url='matches/proceed' text='Queue Next Block' pendingText='Loading...' className='w-48' /></div>
   }
 
-  if (fields === undefined || fieldControl === undefined) {
+  if (fields === undefined) {
     return <>Loading</>
   }
 
-  // check if all fields are idle
-  const allIdle = fields.every((field) => {
-    return field.state === FieldState.IDLE
+  const compFields = fields.filter((field) => {
+    return field.isCompetition
   })
 
-  const handleContinue = () => {
-    void EmptyPost('fieldControl/nextBlock')
-  }
-
-  const bottomButton = allIdle ? <Button onClick={handleContinue}>Continue</Button> : <></>
-
-  const fieldControls = fields.map((status) => {
-    const field = status.field
-    const isCurrent = (fieldControl !== null && fieldControl.state !== null && field.id === fieldControl.field.id)
-    return <FieldControl key={field.id} status={status} isCurrent={isCurrent} display={display} />
+  const fieldControls = compFields.map((field) => {
+    return (
+      <div key={field.id}>
+        {field.name}
+      </div>
+    )
   })
+
   return (
-    <div className='flex flex-col gap-6'>
-      <div className='flex justify-evenly gap-4'>
-        {fieldControls}
-      </div>
-      <div className='flex justify-evenly'>
-        {bottomButton}
-        <Button onClick={pushScore}>Push Score</Button>
-        <Button onClick={clearScore}>Clear Score</Button>
-        <Button onClick={timeout}>Timeout</Button>
-      </div>
+    <div>
+      <div className='flex justify-evenly'>{fieldControls}</div>
     </div>
   )
+
+  // if (fields === undefined || fieldControl === undefined) {
+  //   return <>Loading</>
+  // }
+
+  // check if all fields are idle
+  // const allIdle = fields.every((field) => {
+  //   return field.state === FieldState.IDLE
+  // })
+
+  // const handleContinue = () => {
+  //   void EmptyPost('fieldControl/nextBlock')
+  // }
+
+  // const bottomButton = allIdle ? <Button onClick={handleContinue}>Continue</Button> : <></>
+
+  // const fieldControls = fields.map((status) => {
+  //   const field = status.field
+  //   const isCurrent = (fieldControl !== null && fieldControl.state !== null && field.id === fieldControl.field.id)
+  //   return <FieldControl key={field.id} status={status} isCurrent={isCurrent} display={display} />
+  // })
+  // return (
+  //   <div className='flex flex-col gap-6'>
+  //     <div className='flex justify-evenly gap-4'>
+  //       {fieldControls}
+  //     </div>
+  //     <div className='flex justify-evenly'>
+  //       {bottomButton}
+  //       <Button onClick={pushScore}>Push Score</Button>
+  //       <Button onClick={clearScore}>Clear Score</Button>
+  //       <Button onClick={timeout}>Timeout</Button>
+  //     </div>
+  //   </div>
+  // )
 }
