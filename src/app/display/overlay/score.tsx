@@ -1,6 +1,7 @@
 import { JsonTopic } from '@/utils/maestro'
 import { makeMatchName } from '../field/[uuid]/field'
 import { Match } from '@/app/(interface)/interfaces'
+import { TeamsInformationSubscription } from '../../../contracts/teams'
 
 interface MatchResult {
   match: Match
@@ -67,16 +68,16 @@ function Scores (props: ScoreProps): JSX.Element {
 }
 
 export function ScoreDisplay (): JSX.Element {
+  const teams = TeamsInformationSubscription()
   const results = JsonTopic<MatchResult | null>('results')
-  const teamObj = JsonTopic<{ teams: Team[] }>('teams')
 
-  if (results === null || results === undefined || teamObj === undefined) return <></>
+  console.log(results)
+
+  if (results === null || results === undefined || teams === undefined) return <></>
 
   const match = results.match
 
   const title = makeMatchName(match)
-
-  const teams = teamObj.teams
 
   const redTeam1 = teams.find(team => team.number === match.red.team1)
   const redTeam2 = teams.find(team => team.number === match.red.team2)

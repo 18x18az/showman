@@ -3,16 +3,21 @@ import { Switch } from '@/components/ui/switch'
 import { EventStage, StageSubscription } from '@/contracts/stage'
 import { ArrowUpFromLine, Eraser, TimerIcon } from 'lucide-react'
 import { AutomationSubscription, setAutomation } from '@/contracts/automation'
-import { callTimeout } from '@/contracts/match-control'
+import { SkillsEnabledSubscription, callTimeout, enableSkills } from '@/contracts/match-control'
 import { clearScore, pushScore } from '@/contracts/stream-control'
+import { BlockSubscription } from '@/contracts/matches'
 
 export function Settings (): JSX.Element {
   const automation = AutomationSubscription()
   const stage = StageSubscription()
+  const block = BlockSubscription()
+  const skills = SkillsEnabledSubscription()
 
-  if (automation === undefined || stage === undefined) {
+  if (automation === undefined || stage === undefined || block === undefined) {
     return <>Loading...</>
   }
+
+  const inBlock = block !== null
 
   let timeoutButton = <></>
   if (stage === EventStage.ELIMS) {
@@ -25,6 +30,10 @@ export function Settings (): JSX.Element {
         <div className='flex align-center gap-4 justify-between'>
           <label>Automation</label>
           <Switch onCheckedChange={(checked: boolean) => { void setAutomation(checked) }} checked={automation} />
+        </div>
+        <div className='flex align-center gap-4 justify-between'>
+          <label>Skills</label>
+          <Switch onCheckedChange={(checked: boolean) => { void enableSkills(checked) }} checked={skills} disabled={inBlock} />
         </div>
         <div className='flex justify-evenly'>
           {timeoutButton}

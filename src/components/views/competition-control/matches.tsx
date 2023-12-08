@@ -1,11 +1,11 @@
 import { makeShortMatchName } from '@/utils/strings/match'
-import { Field, QueueableFieldsSubscription } from '@/contracts/fields'
+import { Field, FieldsSubscription, QueueableFieldsSubscription, VacantFieldsSubscription } from '@/contracts/fields'
 import { Match } from '@/contracts/match'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
-import { UnqueuedMatchesSubscription } from '@/contracts/matches'
-import { queueMatch } from '@/contracts/match-control'
+import { BlockSubscription, UnqueuedMatchesSubscription, nextBlock } from '@/contracts/matches'
+import { SkillsEnabledSubscription, queueMatch } from '@/contracts/match-control'
 
 interface ActionMenuProps {
   queueableFields: Field[]
@@ -48,15 +48,37 @@ function UnqueuedMatch (props: { match: Match, queueableFields: Field[] }): JSX.
     </div>
   )
 }
+
+function ProceedButton (): JSX.Element {
+  const block = BlockSubscription()
+  const skillsEnabled = SkillsEnabledSubscription()
+
+  if (block === undefined || skillsEnabled === undefined) return <></>
+  const hasBlock = block !== null
+
+  const text = hasBlock ? 'End Block' : 'Proceed'
+
+  return (
+    <div>
+      <Button disabled={skillsEnabled} onClick={() => { void nextBlock() }}>{text}</Button>
+    </div>
+  )
+}
 export function UnqueuedMatches (): JSX.Element {
   const unqueued = UnqueuedMatchesSubscription()
   const queueableFields = QueueableFieldsSubscription()?.sort((a, b) => { return a.id - b.id })
+  const vacantFields = VacantFieldsSubscription()
+  const fields = FieldsSubscription()
 
-  if (unqueued === undefined || queueableFields === undefined) {
+  if (unqueued === undefined || queueableFields === undefined || vacantFields === undefined || fields === undefined) {
     return <>Loading...</>
   }
 
   const toDisplay = unqueued.slice(0, 7)
+
+  if (toDisplay.length === 0 && vacantFields.length === fields.length) {
+    return <ProceedButton />
+  }
 
   const matches = toDisplay.map((match) => {
     return <UnqueuedMatch key={match.id} match={match} queueableFields={queueableFields} />

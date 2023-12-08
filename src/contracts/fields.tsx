@@ -71,6 +71,10 @@ export const QueueableFieldsSubscription = (): Field[] | undefined => {
   return JsonTopic<Field[]>('competitionFields/queueable')
 }
 
+export const VacantFieldsSubscription = (): Field[] | undefined => {
+  return JsonTopic<Field[]>('competitionFields/vacant')
+}
+
 export const FieldControlSubscription = (fieldId: number): FieldControlStatus | undefined => {
   return JsonTopic<FieldControlStatus>(`fieldControl/${fieldId}`) ?? undefined
 }

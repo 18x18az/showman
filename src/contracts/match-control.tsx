@@ -1,4 +1,4 @@
-import { EmptyPost, Post } from '../utils/maestro'
+import { EmptyPost, JsonTopic, Post } from '../utils/maestro'
 
 export async function callTimeout (): Promise<void> {
   await EmptyPost('fieldControl/timeout')
@@ -42,4 +42,12 @@ export async function putFieldOnDeck (fieldId: number): Promise<void> {
 
 export async function removeMatch (matchId: number): Promise<void> {
   await EmptyPost(`competitionControl/match/${matchId}/remove`)
+}
+
+export async function enableSkills (enabled: boolean): Promise<void> {
+  await Post('competitionControl/enableSkills', { enabled })
+}
+
+export const SkillsEnabledSubscription = (): boolean | undefined => {
+  return JsonTopic<{ enabled: boolean }>('skillsEnabled')?.enabled
 }
