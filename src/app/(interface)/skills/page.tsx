@@ -3,18 +3,18 @@ import { useState } from 'react'
 import { Dropdown } from '../../../components/primitives/Dropdown'
 import { CONTROL_MODE, Field, FieldControlSubscription, FieldsSubscription } from '@/contracts/fields'
 import { Button } from '../../../components/ui/button'
-import { queueDriverSkillsMatch, queueProgrammingSkillsMatch, startSkillsMatch, stopSkillsMatch } from '@/contracts/skills'
+import { StopTimeSubscription, queueDriverSkillsMatch, queueProgrammingSkillsMatch, startSkillsMatch, stopSkillsMatch } from '@/contracts/skills'
 
-function StartButton (props: { mode: CONTROL_MODE | undefined, fieldId: number }): JSX.Element {
-  const { mode } = props
+function StartButton (props: { mode: CONTROL_MODE | undefined, fieldId: number, duration: number | null }): JSX.Element {
+  const { mode, duration } = props
 
-  const canStart = mode !== undefined
+  const canStart = mode !== undefined && duration !== null
 
   let startText = ''
 
-  if (mode === CONTROL_MODE.AUTO) {
+  if (mode === CONTROL_MODE.AUTO && canStart) {
     startText = 'Auto'
-  } else if (mode === CONTROL_MODE.DRIVER) {
+  } else if (mode === CONTROL_MODE.DRIVER && canStart) {
     startText = 'Driver'
   }
 
@@ -24,9 +24,9 @@ function StartButton (props: { mode: CONTROL_MODE | undefined, fieldId: number }
 function EndButton (props: { fieldId: number }): JSX.Element {
   return <Button className='w-44 h-12' onClick={() => { void stopSkillsMatch(props.fieldId) }}>End Early</Button>
 }
-function StartStopButton (props: { mode: CONTROL_MODE | undefined, endTime: string | null, fieldId: number }): JSX.Element {
+function StartStopButton (props: { mode: CONTROL_MODE | undefined, endTime: string | null, fieldId: number, duration: number | null }): JSX.Element {
   if (props.endTime === null) {
-    return <StartButton mode={props.mode} fieldId={props.fieldId} />
+    return <StartButton mode={props.mode} duration={props.duration} fieldId={props.fieldId} />
   } else {
     return <EndButton fieldId={props.fieldId} />
   }
@@ -37,8 +37,10 @@ function SkillsControl (props: { field: Field }): JSX.Element {
   const fieldId = field.id
 
   const fieldControl = FieldControlSubscription(field.id) ?? null
+  const stopTime = StopTimeSubscription(field.id) ?? null
   const mode = fieldControl?.mode
   const endTime = fieldControl?.endTime ?? null
+  const duration = fieldControl?.duration ?? null
 
   const canChange = endTime === null
 
@@ -49,7 +51,8 @@ function SkillsControl (props: { field: Field }): JSX.Element {
         <Button disabled={!canChange} className='w-32 h-12' onClick={() => { void queueDriverSkillsMatch(fieldId) }}>Driver</Button>
         <Button disabled={!canChange} className='w-32 h-12' onClick={() => { void queueProgrammingSkillsMatch(fieldId) }}>Programming</Button>
       </div>
-      <StartStopButton mode={mode} endTime={endTime} fieldId={fieldId} />
+      <StartStopButton mode={mode} endTime={endTime} duration={duration} fieldId={fieldId} />
+      <h2 className='text-2xl'>{stopTime}</h2>
     </div>
   )
 }

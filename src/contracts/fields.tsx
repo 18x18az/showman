@@ -34,6 +34,7 @@ export enum CONTROL_MODE {
 export interface FieldControlStatus {
   mode: CONTROL_MODE
   endTime: string | null
+  duration: number | null
 }
 
 export type SelectedField = number | null | undefined

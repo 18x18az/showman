@@ -71,10 +71,11 @@ function FieldContent (props: { content: JSX.Element, match: Match | string, fie
 
 function SkillsDisplay (props: { fieldName: string, fieldControl: FieldControlStatus }): JSX.Element {
   const mode = props.fieldControl.mode
-  let title = 'Skills'
-  if (mode === CONTROL_MODE.AUTO) {
+  const duration = props.fieldControl.duration
+  let title = 'Skills Field'
+  if (mode === CONTROL_MODE.AUTO && duration !== null) {
     title = 'Programming Skills'
-  } else if (mode === CONTROL_MODE.DRIVER) {
+  } else if (mode === CONTROL_MODE.DRIVER !== null && duration !== null) {
     title = 'Driver Skills'
   }
 
