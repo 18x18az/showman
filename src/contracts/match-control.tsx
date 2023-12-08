@@ -2,7 +2,7 @@
 import { EmptyPost, JsonTopic, Post } from '../utils/maestro'
 
 export async function callTimeout (): Promise<void> {
-  await EmptyPost('fieldControl/timeout')
+  await EmptyPost('competitionControl/timeout')
 }
 
 export async function pushLive (): Promise<void> {

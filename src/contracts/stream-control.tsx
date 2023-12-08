@@ -1,10 +1,10 @@
 import { EmptyPost } from '../utils/maestro'
 
 export async function pushScore (): Promise<void> {
-  await EmptyPost('stream/pushScore')
+  await EmptyPost('competitionControl/pushResult')
 }
 
-export const clearScoreUrl = 'stream/clearScore'
+export const clearScoreUrl = 'competitionControl/clearResult'
 
 export async function clearScore (): Promise<void> {
   await EmptyPost(clearScoreUrl)
