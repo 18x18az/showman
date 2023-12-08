@@ -4,7 +4,7 @@ import { Alliance, Match, Round } from '@/app/(interface)/interfaces'
 import { JsonTopic } from '@/utils/maestro'
 import { Countdown, Timer } from './timer'
 import Logo from '@/components/primitives/logo'
-import { CompetitionFieldStatusSubscription, FieldControlSubscription, LiveFieldSubscription, MATCH_STAGE } from '../../../../contracts/fields'
+import { CONTROL_MODE, CompetitionFieldStatusSubscription, FieldControlStatus, FieldControlSubscription, LiveFieldSubscription, MATCH_STAGE } from '../../../../contracts/fields'
 
 interface FieldDisplayProps {
   readonly uuid: string
@@ -42,30 +42,92 @@ function AllianceDisplay (props: AllianceDisplayProps): JSX.Element {
   )
 }
 
-function FieldContent (props: { content: JSX.Element, match: Match, fieldName: string }): JSX.Element {
+function FieldContent (props: { content: JSX.Element, match: Match | string, fieldName: string }): JSX.Element {
   const { content, match, fieldName } = props
+  let blue = <></>
+  let red = <></>
 
-  const title = makeMatchName(match)
+  let title = ''
+  if (typeof match === 'string') {
+    title = match
+  } else {
+    title = makeMatchName(match)
+    blue = <AllianceDisplay alliance={match.blue} color='blue' />
+    red = <AllianceDisplay alliance={match.red} color='red' />
+  }
 
   return (
     <>
       <h1 className='text-7xl text-zinc-300'>{title}</h1>
       {content}
       <div className='flex justify-between items-end'>
-        <AllianceDisplay alliance={match.blue} color='blue' />
+        {red}
         <h2 className='text-7xl text-zinc-300'>{fieldName}</h2>
-        <AllianceDisplay alliance={match.red} color='red' />
+        {blue}
       </div>
     </>
   )
 }
 
+function SkillsDisplay (props: { fieldName: string, fieldControl: FieldControlStatus }): JSX.Element {
+  const mode = props.fieldControl.mode
+  let title = 'Skills'
+  if (mode === CONTROL_MODE.AUTO) {
+    title = 'Programming Skills'
+  } else if (mode === CONTROL_MODE.DRIVER) {
+    title = 'Driver Skills'
+  }
+
+  const endTime = props.fieldControl.endTime
+  let content = <></>
+  if (endTime !== undefined && endTime !== null) {
+    const clock = <Countdown time={endTime} />
+    content = <h2 className='text-9xl'>{clock}</h2>
+  }
+
+  const body = <FieldContent content={content} fieldName={props.fieldName} match={title} />
+  return body
+}
+
+function TimeoutDisplay (props: { match: Match, timeout: string, fieldName: string }): JSX.Element {
+  const clock = <Timer time={props.timeout} />
+  const content = <h2 className='text-9xl'>{clock}</h2>
+  const body = <FieldContent content={content} match={props.match} fieldName={props.fieldName} />
+  return body
+}
+
+function CompetitionDisplay (props: { fieldName: string, stage: MATCH_STAGE, match: Match, fieldControl: FieldControlStatus }): JSX.Element {
+  const { stage, match, fieldControl } = props
+
+  let content = <></>
+  let clock = <></>
+  switch (stage) {
+    case MATCH_STAGE.QUEUED:
+      if (match.time !== undefined) clock = <Countdown time={match.time} />
+      content = <h2 className='text-9xl'>{clock}</h2>
+      break
+    case MATCH_STAGE.AUTON:
+    case MATCH_STAGE.DRIVER:
+      if (fieldControl.endTime !== null) clock = <Timer time={fieldControl.endTime} />
+      content = <h2 className='mt-14' style={{ fontSize: '250px' }}>{clock}</h2>
+      break
+    case MATCH_STAGE.OUTRO:
+    case MATCH_STAGE.SCORING:
+      content = <h2 className='text-9xl mb-12 text-zinc-100'>SCORING MATCH</h2>
+      break
+    case MATCH_STAGE.SCORING_AUTON:
+      break
+  }
+  const body = <FieldContent content={content} match={props.match} fieldName={props.fieldName} />
+  return body
+}
+
 function ActualFieldDisplay (props: { fieldId: number }): JSX.Element {
   const status = CompetitionFieldStatusSubscription(props.fieldId)
   const fieldControl = FieldControlSubscription(props.fieldId)
-  const timeout = JsonTopic<{ time: string | null }>('timeout')
+  const timeout = JsonTopic<{ time: string | null }>('timeout')?.time ?? null
 
-  let body = <div className='flex flex-col justify-evenly h-full w-full'><div className='flex justify-evenly'><Logo className='mt-14' viewBox='0 0 350.417 279.405' style={{ width: '65%', height: '100%' }} /></div></div>
+  const body = <div className='flex flex-col justify-evenly h-full w-full'><div className='flex justify-evenly'><Logo className='mt-14' viewBox='0 0 350.417 279.405' style={{ width: '65%', height: '100%' }} /></div></div>
 
   if (status === undefined || status === null || fieldControl === undefined) return body
 
@@ -77,35 +139,14 @@ function ActualFieldDisplay (props: { fieldId: number }): JSX.Element {
   }
 
   const fieldName = status.field.name
-  let content = <></>
 
-  if (timeout?.time !== undefined && timeout?.time !== null) {
-    const clock = <Timer time={timeout.time} />
-    content = <h2 className='text-9xl'>{clock}</h2>
+  if (status.field.isSkills) {
+    return <SkillsDisplay fieldName={fieldName} fieldControl={fieldControl} />
+  } else if (timeout !== null) {
+    return <TimeoutDisplay match={match} timeout={timeout} fieldName={fieldName} />
   } else {
-    let clock = <></>
-    switch (stage) {
-      case MATCH_STAGE.QUEUED:
-        if (match.time !== undefined) clock = <Countdown time={match.time} />
-        content = <h2 className='text-9xl'>{clock}</h2>
-        break
-      case MATCH_STAGE.AUTON:
-      case MATCH_STAGE.DRIVER:
-        if (fieldControl.endTime !== null) clock = <Timer time={fieldControl.endTime} />
-        content = <h2 className='mt-14' style={{ fontSize: '250px' }}>{clock}</h2>
-        break
-      case MATCH_STAGE.OUTRO:
-      case MATCH_STAGE.SCORING:
-        content = <h2 className='text-9xl mb-12 text-zinc-100'>SCORING MATCH</h2>
-        break
-      case MATCH_STAGE.SCORING_AUTON:
-        break
-    }
-
-    body = <FieldContent content={content} match={match} fieldName={fieldName} />
+    return <CompetitionDisplay match={match} fieldName={fieldName} stage={stage} fieldControl={fieldControl} />
   }
-
-  return body
 }
 
 interface DisplayConfig {

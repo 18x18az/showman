@@ -1,3 +1,4 @@
+'use client'
 import { EmptyPost, JsonTopic, Post } from '../utils/maestro'
 
 export async function callTimeout (): Promise<void> {
