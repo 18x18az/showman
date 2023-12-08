@@ -29,7 +29,7 @@ export function TeamTable<TData, TValue> ({
 
   return (
     <div>
-      <DataTable columns={columns} table={table} keyValue='number' />
+      <DataTable columns={columns} table={table} />
     </div>
   )
 }
