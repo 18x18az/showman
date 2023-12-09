@@ -1,3 +1,4 @@
+'use client'
 import { JsonTopic } from '@/utils/maestro'
 
 export enum EventStage {
