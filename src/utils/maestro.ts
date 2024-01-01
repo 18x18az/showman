@@ -15,7 +15,7 @@ function getApiHostname (): string {
   if (host === SECURE_HOST) {
     return `https://${host}`
   } else {
-    return `http://${host}:2000`
+    return `http://${host}:3002`
   }
 }
 

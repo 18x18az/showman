@@ -1,31 +1,54 @@
 'use client'
+import { useQuery } from '@apollo/client'
 
-import { EventStage, StageSubscription } from '@/contracts/stage'
+import { gql } from '../../../__generated__/gql'
+import { EventStage } from '../../../__generated__/graphql'
+import { CompetitionControl } from '../../../components/views/competition-control/main'
 import { AllianceSelectionControl } from '../alliance'
 import TmSelector from './tm-connect'
-import { CompetitionControl } from '@/components/views/competition-control/main'
+import UploadMatches from '../upload'
+
+const GET_EVENT_STAGE = gql(/* GraphQL */ `
+  query GetEventStage {
+    stage {
+      stage
+    }
+  }
+`)
 
 export default function Page (): JSX.Element {
-  const stage = StageSubscription()
+  const { data } = useQuery(
+    GET_EVENT_STAGE,
+    {
+      pollInterval: 500
+    }
+  )
 
-  if (stage === undefined) {
-    console.log('Waiting for stage')
+  if (data === undefined) {
     return <>Loading</>
-  } else if (stage === EventStage.QUALIFICATIONS || stage === EventStage.ELIMS) {
+  }
+
+  const stage = data.stage.stage
+
+  if (stage === EventStage.Qualifications || stage === EventStage.Elims) {
     return <CompetitionControl />
-  } else if (stage === EventStage.ALLIANCE_SELECTION) {
-    return (
-      <div className='flex flex-col gap-8 p-4'>
-        <AllianceSelectionControl />
-      </div>
-    )
-  } else if (stage === EventStage.WAITING_FOR_TEAMS) {
+  }
+
+  if (stage === EventStage.AllianceSelection) {
+    return <AllianceSelectionControl />
+  }
+
+  if (stage === EventStage.WaitingForTeams) {
     return <TmSelector />
+  }
+
+  if (stage === EventStage.Checkin) {
+    return <UploadMatches />
   }
 
   return (
     <div>
-      {stage}
+      {data.stage.stage}
     </div>
   )
 }
