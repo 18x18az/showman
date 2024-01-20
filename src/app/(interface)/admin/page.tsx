@@ -8,7 +8,7 @@ import { AllianceSelectionControl } from '../alliance'
 import TmSelector from './tm-connect'
 import UploadMatches from '../upload'
 
-const GET_EVENT_STAGE = gql(/* GraphQL */ `
+const GET_EVENT_STAGE = gql(`
   query GetEventStage {
     stage {
       stage

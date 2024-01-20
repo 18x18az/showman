@@ -20,6 +20,32 @@ export type Scalars = {
   URL: { input: any; output: any; }
 };
 
+/** A block refers to a group of match sittings played in the same stretch of time, e.g. all quals played in the morning before lunch */
+export type Block = {
+  __typename?: 'Block';
+  /** The time the last match is scheduled to start */
+  endTime: Maybe<Scalars['DateTime']['output']>;
+  /** Unique identifier for the block */
+  id: Scalars['Float']['output'];
+  /** The name of the block */
+  name: Scalars['String']['output'];
+  /** Sittings in the block */
+  sittings: Array<Sitting>;
+  /** The time the first match is scheduled to start */
+  startTime: Maybe<Scalars['DateTime']['output']>;
+  /** Status of the block */
+  status: BlockStatus;
+  /** Sittings in the block that have not yet been queued */
+  unqueuedSittings: Array<Sitting>;
+};
+
+/** The status of a block of matches */
+export enum BlockStatus {
+  Finished = 'FINISHED',
+  InProgress = 'IN_PROGRESS',
+  NotStarted = 'NOT_STARTED'
+}
+
 export enum Control_Mode {
   Auto = 'AUTO',
   Driver = 'DRIVER'
@@ -31,6 +57,34 @@ export enum Checkin {
   NotHere = 'NOT_HERE',
   NoShow = 'NO_SHOW'
 }
+
+export type CompetitionField = {
+  __typename?: 'CompetitionField';
+  fieldId: Scalars['Float']['output'];
+  /** The match currently on the field */
+  onFieldSitting: Maybe<Sitting>;
+  /** The match currently on the queueing table (on deck) for the field */
+  onTableSitting: Maybe<Sitting>;
+  /** The current stage of the match on the field */
+  stage: Scalars['String']['output'];
+};
+
+/** A contest refers to a match or group of matches between two alliances. E.g. in Bo3 finals, F1 and F2 are both part of the same contest */
+export type Contest = {
+  __typename?: 'Contest';
+  /** The blue alliance */
+  blueTeams: Array<Team>;
+  /** Unique identifier for the contest */
+  id: Scalars['Float']['output'];
+  /** The matches in this contest */
+  matches: Array<Match>;
+  /** The number of the contest */
+  number: Scalars['Float']['output'];
+  /** The red alliance */
+  redTeams: Array<Team>;
+  /** The round of the contest */
+  round: Round;
+};
 
 /** The current stage of the event */
 export enum EventStage {
@@ -47,8 +101,10 @@ export type Field = {
   __typename?: 'Field';
   /** Whether or not the field can be used for skills. Can be true even if the field is disabled. */
   canRunSkills: Scalars['Boolean']['output'];
+  /** Information about competition matches associated with this field. Null if the field is not being used for competition matches. */
+  competition: Maybe<CompetitionField>;
   /** The current state of field control on the field. Null if the field is disabled. */
-  fieldControl?: Maybe<FieldControl>;
+  fieldControl: Maybe<FieldControl>;
   /** Unique identifier for the field */
   id: Scalars['Int']['output'];
   /** Whether the field is allocated as a competition field. Can be true even if the field is disabled. */
@@ -64,37 +120,82 @@ export type Field = {
 export type FieldControl = {
   __typename?: 'FieldControl';
   /** If the field is currently running, the time that the current running period will end. */
-  endTime?: Maybe<Scalars['DateTime']['output']>;
+  endTime: Maybe<Scalars['DateTime']['output']>;
   /** The field that this control object is associated with */
   field: Field;
   /** Whether the field is currently running */
   isRunning: Scalars['Boolean']['output'];
   /** The current mode of the field, null if undefined. Will still return a value even if it is not currently running. */
-  mode?: Maybe<Control_Mode>;
+  mode: Maybe<Control_Mode>;
 };
 
 export type FieldUpdate = {
   /** Set a competition field to be able to run skills. Meaningless if the field is already a dedicated skills field. */
-  canRunSkills?: InputMaybe<Scalars['Boolean']['input']>;
+  canRunSkills: InputMaybe<Scalars['Boolean']['input']>;
   /** True for a competition field, false for a dedicated skills field */
-  isCompetition?: InputMaybe<Scalars['Boolean']['input']>;
+  isCompetition: InputMaybe<Scalars['Boolean']['input']>;
   /** Whether the field is enabled for use */
-  isEnabled?: InputMaybe<Scalars['Boolean']['input']>;
+  isEnabled: InputMaybe<Scalars['Boolean']['input']>;
   /** Name of the field */
-  name?: InputMaybe<Scalars['String']['input']>;
+  name: InputMaybe<Scalars['String']['input']>;
 };
+
+/** A match refers to a single scored match between two alliances. A match may have multiple sittings if it is replayed e.g. due to a field fault */
+export type Match = {
+  __typename?: 'Match';
+  /** The score of the blue alliance */
+  blueScore: Maybe<Scalars['Int']['output']>;
+  /** The contest this match is a part of */
+  contest: Contest;
+  /** Unique identifier for the match */
+  id: Scalars['Int']['output'];
+  /** The number of the match. E.g. SF-2-1 is 2 */
+  number: Scalars['Int']['output'];
+  /** The score of the red alliance */
+  redScore: Maybe<Scalars['Int']['output']>;
+  /** Sittings of the match */
+  sittings: Array<Sitting>;
+};
+
+/** The status of a match */
+export enum MatchStatus {
+  Complete = 'COMPLETE',
+  NotStarted = 'NOT_STARTED',
+  Queued = 'QUEUED',
+  Scoring = 'SCORING'
+}
 
 export type Mutation = {
   __typename?: 'Mutation';
   configureTournamentManager: TournamentManager;
+  queueSitting: Sitting;
   /** Reset the event. Only available in test mode. */
   reset: Stage;
+  startField: FieldControl;
+  startNextBlock: Block;
+  unqueue: CompetitionField;
   updateField: Field;
 };
 
 
 export type MutationConfigureTournamentManagerArgs = {
   settings: TournamentManagerSetup;
+};
+
+
+export type MutationQueueSittingArgs = {
+  fieldId: Scalars['Int']['input'];
+  sittingId: Scalars['Int']['input'];
+};
+
+
+export type MutationStartFieldArgs = {
+  fieldId: Scalars['Float']['input'];
+};
+
+
+export type MutationUnqueueArgs = {
+  sittingId: Scalars['Float']['input'];
 };
 
 
@@ -105,10 +206,52 @@ export type MutationUpdateFieldArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  blocks: Array<Block>;
+  contests: Array<Contest>;
+  currentBlock: Maybe<Block>;
   fields: Array<Field>;
+  matches: Array<Match>;
+  nextBlock: Maybe<Block>;
+  sittings: Array<Sitting>;
   stage: Stage;
   teams: Array<Team>;
   tournamentManager: TournamentManager;
+};
+
+
+export type QueryFieldsArgs = {
+  isCompetition: InputMaybe<Scalars['Boolean']['input']>;
+  isEnabled: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** The round of the match */
+export enum Round {
+  F = 'F',
+  Qf = 'QF',
+  Qual = 'QUAL',
+  Ro16 = 'Ro16',
+  Sf = 'SF'
+}
+
+/** A sitting is an instance of a match being played. In case of a replay, another sitting is created for the same match. */
+export type Sitting = {
+  __typename?: 'Sitting';
+  /** The block this sitting is a part of */
+  block: Block;
+  /** The contest this sitting is a part of */
+  contest: Contest;
+  /** The field this sitting will nominally be played on */
+  field: Maybe<Field>;
+  /** Unique identifier for the sitting */
+  id: Scalars['Float']['output'];
+  /** The match this sitting is a part of */
+  match: Match;
+  /** The number of the sitting. Indexed from 1 */
+  number: Scalars['Float']['output'];
+  /** The time the sitting is scheduled to be played */
+  scheduled: Maybe<Scalars['DateTime']['output']>;
+  /** The status of the sitting */
+  status: MatchStatus;
 };
 
 export type Stage = {
@@ -145,7 +288,7 @@ export type TournamentManager = {
   /** The status of the TM server */
   status: TmStatus;
   /** The address of Tournament Manager. IP addresses must start with http e.g. http://192.168.1.42 */
-  url?: Maybe<Scalars['URL']['output']>;
+  url: Maybe<Scalars['URL']['output']>;
 };
 
 export type TournamentManagerSetup = {
@@ -158,5 +301,19 @@ export type GetEventStageQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetEventStageQuery = { __typename?: 'Query', stage: { __typename?: 'Stage', stage: EventStage } };
 
+export type ConfigureTournamentManagerMutationVariables = Exact<{
+  settings: TournamentManagerSetup;
+}>;
+
+
+export type ConfigureTournamentManagerMutation = { __typename?: 'Mutation', configureTournamentManager: { __typename?: 'TournamentManager', status: TmStatus } };
+
+export type GetUnqueuedMatchesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUnqueuedMatchesQuery = { __typename?: 'Query', currentBlock: { __typename?: 'Block', name: string, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, contest: { __typename?: 'Contest', round: Round, number: number }, field: { __typename?: 'Field', name: string } | null, match: { __typename?: 'Match', number: number } }> } | null };
+
 
 export const GetEventStageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetEventStage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stage"}}]}}]}}]} as unknown as DocumentNode<GetEventStageQuery, GetEventStageQueryVariables>;
+export const ConfigureTournamentManagerDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"configureTournamentManager"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"settings"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"TournamentManagerSetup"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"configureTournamentManager"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"settings"},"value":{"kind":"Variable","name":{"kind":"Name","value":"settings"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"status"}}]}}]}}]} as unknown as DocumentNode<ConfigureTournamentManagerMutation, ConfigureTournamentManagerMutationVariables>;
+export const GetUnqueuedMatchesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUnqueuedMatches"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentBlock"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"unqueuedSittings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"contest"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"round"}},{"kind":"Field","name":{"kind":"Name","value":"number"}}]}},{"kind":"Field","name":{"kind":"Name","value":"field"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"match"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"number"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetUnqueuedMatchesQuery, GetUnqueuedMatchesQueryVariables>;

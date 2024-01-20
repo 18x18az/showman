@@ -12,6 +12,10 @@ const config: CodegenConfig = {
 
     './src/__generated__/': {
 
+      config: {
+        avoidOptionals: true
+      },
+
       preset: 'client',
 
       plugins: [],

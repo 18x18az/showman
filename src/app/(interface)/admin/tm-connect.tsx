@@ -2,8 +2,17 @@
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
-import { setTmAddress } from '@/contracts/tm'
 import { toast } from '@/components/ui/use-toast'
+import { gql } from '../../../__generated__'
+import { useMutation } from '@apollo/client'
+
+const CONFIGURE_TM = gql(`
+  mutation configureTournamentManager($settings: TournamentManagerSetup!) {
+    configureTournamentManager(settings: $settings) {
+      status
+    }
+  }
+`)
 
 export default function TmSelector (): JSX.Element {
   const [input, setInput] = useState('')
@@ -12,25 +21,32 @@ export default function TmSelector (): JSX.Element {
     setInput(e.target.value)
   }
 
-  const tryTmConnection = async (): Promise<void> => {
-    console.log(input)
-    const response = await setTmAddress(input)
-    if (response.toString().startsWith('4')) {
-      toast({
-        duration: 3000,
-        description: (
-          <div className='text-xl flex gap-4 content-center align-center'>Could not connect to {input}</div>
-        )
-      })
-    }
+  const handleError = (): void => {
+    toast({
+      duration: 3000,
+      description: (
+        <div className='text-xl flex gap-4 content-center align-center'>Could not connect to {input}</div>
+      )
+    })
   }
+
+  const [configureTournamentManager] = useMutation(CONFIGURE_TM,
+    {
+      errorPolicy: 'all',
+      onError: handleError,
+      variables: {
+        settings: {
+          url: input
+        }
+      }
+    })
 
   return (
     <div className='flex flex-col m-4 gap-4 border p-4 w-fit border-zinc-700 rounded-md'>
       <h1>Enter TM IP Address</h1>
       <div className='flex gap-4'>
         <Input className='w-42' value={input} onChange={handleInput} />
-        <Button onClick={() => { void tryTmConnection() }}>Connect</Button>
+        <Button onClick={() => { void configureTournamentManager() }}>Connect</Button>
       </div>
     </div>
   )

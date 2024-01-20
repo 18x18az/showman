@@ -1,3 +1,5 @@
+import { Round } from '../../__generated__/graphql'
+
 export enum FieldState {
   IDLE = 'IDLE',
   ON_DECK = 'ON_DECK',
@@ -17,14 +19,6 @@ export interface Field {
 export interface Alliance {
   team1: string
   team2?: string
-}
-
-export enum Round {
-  QUAL = 'qual',
-  Ro16 = 'ro16',
-  QF = 'qf',
-  SF = 'sf',
-  F = 'f'
 }
 
 export enum MatchStatus {

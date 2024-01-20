@@ -14,6 +14,8 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "\n  query GetEventStage {\n    stage {\n      stage\n    }\n  }\n": types.GetEventStageDocument,
+    "\n  mutation configureTournamentManager($settings: TournamentManagerSetup!) {\n    configureTournamentManager(settings: $settings) {\n      status\n    }\n  }\n": types.ConfigureTournamentManagerDocument,
+    "\n  query GetUnqueuedMatches {\n    currentBlock {\n      name\n      unqueuedSittings {\n        id\n        contest {\n          round\n          number\n        }\n        field {\n          name\n        }\n        match {\n          number\n        }\n      }\n    }\n  }\n": types.GetUnqueuedMatchesDocument,
 };
 
 /**
@@ -34,6 +36,14 @@ export function gql(source: string): unknown;
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query GetEventStage {\n    stage {\n      stage\n    }\n  }\n"): (typeof documents)["\n  query GetEventStage {\n    stage {\n      stage\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation configureTournamentManager($settings: TournamentManagerSetup!) {\n    configureTournamentManager(settings: $settings) {\n      status\n    }\n  }\n"): (typeof documents)["\n  mutation configureTournamentManager($settings: TournamentManagerSetup!) {\n    configureTournamentManager(settings: $settings) {\n      status\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetUnqueuedMatches {\n    currentBlock {\n      name\n      unqueuedSittings {\n        id\n        contest {\n          round\n          number\n        }\n        field {\n          name\n        }\n        match {\n          number\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetUnqueuedMatches {\n    currentBlock {\n      name\n      unqueuedSittings {\n        id\n        contest {\n          round\n          number\n        }\n        field {\n          name\n        }\n        match {\n          number\n        }\n      }\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

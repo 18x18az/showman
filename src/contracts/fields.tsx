@@ -4,8 +4,6 @@ import { Match } from './match'
 export interface Field {
   id: number
   name: string
-  isCompetition: boolean
-  isSkills: boolean
 }
 
 export enum MATCH_STAGE {

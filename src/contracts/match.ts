@@ -1,10 +1,4 @@
-export enum Round {
-  QUAL = 'qual',
-  Ro16 = 'ro16',
-  QF = 'qf',
-  SF = 'sf',
-  F = 'f'
-}
+import { Round } from '../__generated__/graphql'
 
 export enum MatchStatus {
   NOT_STARTED = 'NOT_STARTED',
