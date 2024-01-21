@@ -3,7 +3,10 @@ import { Button } from '@/components/ui/button'
 import { PlayIcon, ReloadIcon, ResetIcon, StopIcon } from '@radix-ui/react-icons'
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { offsetTimer } from '@/app/display/field/[uuid]/timer'
-import { Match } from '@/contracts/match'
+import { gql } from '../../../__generated__'
+import { useQuery } from '@apollo/client'
+import { SittingIdentifier } from './field-info/interfaces'
+import { MatchStage } from '../../../__generated__/graphql'
 
 function makeTime (offset: number, truncate = false): string {
   if (truncate && offset < 0) {
@@ -22,7 +25,7 @@ function StartButton (props: { disabled: boolean }): JSX.Element {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button variant='secondary' disabled={props.disabled} onClick={() => { void startMatch() }}><PlayIcon /></Button>
+          <Button variant='secondary' disabled={props.disabled} onClick={() => { }}><PlayIcon /></Button>
         </TooltipTrigger>
         <TooltipContent>
           <p>Start Match</p>
@@ -37,7 +40,7 @@ function StopButton (): JSX.Element {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button variant='secondary' onClick={() => { void endEarly() }}><StopIcon /></Button>
+          <Button variant='secondary' onClick={() => { }}><StopIcon /></Button>
         </TooltipTrigger>
         <TooltipContent>
           <p>End Early</p>
@@ -52,7 +55,7 @@ function ResetButton (props: { disabled: boolean }): JSX.Element {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button disabled={props.disabled} variant='secondary' onClick={() => { void resetMatch() }}><ResetIcon /></Button>
+          <Button disabled={props.disabled} variant='secondary' onClick={() => { }}><ResetIcon /></Button>
         </TooltipTrigger>
         <TooltipContent>
           <p>Reset Match</p>
@@ -67,7 +70,7 @@ function ReplayButton (props: { disabled: boolean }): JSX.Element {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button disabled={props.disabled} variant='secondary' onClick={() => { void replayCurrentMatch() }}><ReloadIcon /></Button>
+          <Button disabled={props.disabled} variant='secondary' onClick={() => { }}><ReloadIcon /></Button>
         </TooltipTrigger>
         <TooltipContent>
           <p>Replay</p>
@@ -77,35 +80,34 @@ function ReplayButton (props: { disabled: boolean }): JSX.Element {
   )
 }
 
-function MatchControlContent (props: { match: Match | null, stage: MATCH_STAGE, control: FieldControlStatus | null }): JSX.Element {
-  const match = props.match
-  const stage = props.stage
-  const matchName = match !== null ? makeShortMatchName(match) : '-'
+function MatchControlContent (props: { sitting: SittingIdentifier | null, stage: MatchStage, endTime: string | null }): JSX.Element {
+  const { sitting, stage, endTime } = props
+  const sittingName = sitting !== null ? makeShortMatchName(sitting) : '-'
 
   let canStart = false
-  if (stage === MATCH_STAGE.QUEUED || stage === MATCH_STAGE.SCORING_AUTON) {
+  if (stage === MatchStage.Queued || stage === MatchStage.ScoringAuton) {
     canStart = true
   }
 
   let canEnd = false
-  if (stage === MATCH_STAGE.AUTON || stage === MATCH_STAGE.DRIVER) {
+  if (stage === MatchStage.Auton || stage === MatchStage.Driver) {
     canEnd = true
   }
 
   let canReset = false
-  if (stage === MATCH_STAGE.SCORING_AUTON) {
+  if (stage === MatchStage.ScoringAuton) {
     canReset = true
   }
 
   let canReplay = false
-  if (stage === MATCH_STAGE.QUEUED || stage === MATCH_STAGE.SCORING_AUTON || stage === MATCH_STAGE.OUTRO) {
+  if (stage === MatchStage.Queued || stage === MatchStage.ScoringAuton || stage === MatchStage.Scoring) {
     canReplay = true
   }
 
   let timeText = <>-:--</>
 
-  if (match !== null && props.control !== null && props.control.endTime !== null) {
-    const offset = offsetTimer(props.control.endTime)
+  if (endTime !== null) {
+    const offset = offsetTimer(endTime)
     timeText = <>{makeTime(offset)}</>
   }
 
@@ -117,7 +119,7 @@ function MatchControlContent (props: { match: Match | null, stage: MATCH_STAGE, 
   return (
     <div>
       <h1 className='text-center text-2xl text-zinc-600 mb-3'>Match</h1>
-      <h2 className='text-center text-4xl text-zinc-400 mb-4'>{matchName}</h2>
+      <h2 className='text-center text-4xl text-zinc-400 mb-4'>{sittingName}</h2>
       <h2 className='text-center text-3xl font-mono text-zinc-400 mb-4'>{timeText}</h2>
       <div className='flex justify-evenly gap-4'>
         <ResetButton disabled={!canReset} />
@@ -129,26 +131,54 @@ function MatchControlContent (props: { match: Match | null, stage: MATCH_STAGE, 
 }
 
 function EmptyMatchControl (): JSX.Element {
-  return <MatchControlContent match={null} stage={MATCH_STAGE.EMPTY} control={null} />
+  return <MatchControlContent sitting={null} stage={MatchStage.Empty} endTime={null} />
 }
 
-function PopulatedMatchControl (props: { fieldId: number }): JSX.Element {
-  const status = CompetitionFieldStatusSubscription(props.fieldId)
-  const fieldControl = FieldControlSubscription(props.fieldId) ?? null
+function PopulatedMatchControl (props: { sitting: SittingIdentifier, stage: MatchStage, endTime: string | null }): JSX.Element {
+  return <MatchControlContent sitting={props.sitting} stage={props.stage} endTime={props.endTime} />
+}
 
-  let match: Match | null = null
-  const stage = status?.stage ?? MATCH_STAGE.EMPTY
-
-  if (status?.onField !== null) {
-    match = status?.onField ?? null
+const LIVE_FIELD = gql(`
+  query LiveField {
+    competitionInformation {
+      liveField {
+        id
+        fieldControl {
+          endTime
+        }
+        competition {
+          stage
+          onFieldSitting {
+            id
+            contest {
+              round
+              number
+            }
+            match {
+              number
+            }
+          }
+        }
+      }
+    }
   }
+`)
 
-  return <MatchControlContent match={match} stage={stage} control={fieldControl} />
-}
 export function MatchControl (): JSX.Element {
-  if (liveField === undefined || liveField === null) {
+  const { data } = useQuery(LIVE_FIELD)
+  const competition = data?.competitionInformation?.liveField?.competition
+  const sitting = competition?.onFieldSitting
+  if (competition === null || competition === undefined || sitting === null || sitting === undefined) {
     return <EmptyMatchControl />
   } else {
-    return <PopulatedMatchControl fieldId={liveField} />
+    const sitingIdent = {
+      id: sitting.id,
+      contest: sitting.contest.number,
+      round: sitting.contest.round,
+      match: sitting.match.number
+    }
+    const endTime = data?.competitionInformation?.liveField?.fieldControl?.endTime
+    const stage = competition.stage
+    return <PopulatedMatchControl sitting={sitingIdent} endTime={endTime} stage={stage} />
   }
 }
