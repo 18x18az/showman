@@ -1,5 +1,3 @@
-import { Field } from '@/contracts/fields'
-import { Match } from '@/contracts/match'
 import { CommonFieldInfo, FieldStatus } from './common'
 import { RemoveAction } from './actions'
 

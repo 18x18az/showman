@@ -58,6 +58,14 @@ export enum Checkin {
   NoShow = 'NO_SHOW'
 }
 
+export type Competition = {
+  __typename?: 'Competition';
+  /** The field that is currently live */
+  liveField: Maybe<Field>;
+  /** The field that is currently on deck */
+  onDeckField: Maybe<Field>;
+};
+
 export type CompetitionField = {
   __typename?: 'CompetitionField';
   fieldId: Scalars['Float']['output'];
@@ -66,7 +74,7 @@ export type CompetitionField = {
   /** The match currently on the queueing table (on deck) for the field */
   onTableSitting: Maybe<Sitting>;
   /** The current stage of the match on the field */
-  stage: Scalars['String']['output'];
+  stage: MatchStage;
 };
 
 /** A contest refers to a match or group of matches between two alliances. E.g. in Bo3 finals, F1 and F2 are both part of the same contest */
@@ -157,6 +165,16 @@ export type Match = {
   sittings: Array<Sitting>;
 };
 
+export enum MatchStage {
+  Auton = 'AUTON',
+  Driver = 'DRIVER',
+  Empty = 'EMPTY',
+  Outro = 'OUTRO',
+  Queued = 'QUEUED',
+  Scoring = 'SCORING',
+  ScoringAuton = 'SCORING_AUTON'
+}
+
 /** The status of a match */
 export enum MatchStatus {
   Complete = 'COMPLETE',
@@ -207,6 +225,7 @@ export type MutationUpdateFieldArgs = {
 export type Query = {
   __typename?: 'Query';
   blocks: Array<Block>;
+  competitionInformation: Competition;
   contests: Array<Contest>;
   currentBlock: Maybe<Block>;
   fields: Array<Field>;
@@ -308,12 +327,41 @@ export type ConfigureTournamentManagerMutationVariables = Exact<{
 
 export type ConfigureTournamentManagerMutation = { __typename?: 'Mutation', configureTournamentManager: { __typename?: 'TournamentManager', status: TmStatus } };
 
+export type SittingInformationFragment = { __typename?: 'Sitting', id: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } } & { ' $fragmentName'?: 'SittingInformationFragment' };
+
+export type GetCompetitionFieldsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCompetitionFieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: (
+        { __typename?: 'Sitting' }
+        & { ' $fragmentRefs'?: { 'SittingInformationFragment': SittingInformationFragment } }
+      ) | null, onTableSitting: (
+        { __typename?: 'Sitting' }
+        & { ' $fragmentRefs'?: { 'SittingInformationFragment': SittingInformationFragment } }
+      ) | null } | null, fieldControl: { __typename?: 'FieldControl', endTime: any | null } | null }> };
+
+export type QueueSittingMutationVariables = Exact<{
+  sittingId: Scalars['Int']['input'];
+  fieldId: Scalars['Int']['input'];
+}>;
+
+
+export type QueueSittingMutation = { __typename?: 'Mutation', queueSitting: { __typename?: 'Sitting', id: number } };
+
 export type GetUnqueuedMatchesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUnqueuedMatchesQuery = { __typename?: 'Query', currentBlock: { __typename?: 'Block', name: string, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, contest: { __typename?: 'Contest', round: Round, number: number }, field: { __typename?: 'Field', name: string } | null, match: { __typename?: 'Match', number: number } }> } | null };
+export type GetUnqueuedMatchesQuery = { __typename?: 'Query', currentBlock: { __typename?: 'Block', name: string, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, contest: { __typename?: 'Contest', round: Round, number: number }, field: { __typename?: 'Field', id: number, name: string } | null, match: { __typename?: 'Match', number: number } }> } | null };
+
+export type GetTableOccupiedQueryVariables = Exact<{ [key: string]: never; }>;
 
 
+export type GetTableOccupiedQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', onTableSitting: { __typename?: 'Sitting', id: number } | null } | null }> };
+
+export const SittingInformationFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"SittingInformation"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Sitting"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"contest"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"round"}},{"kind":"Field","name":{"kind":"Name","value":"number"}}]}},{"kind":"Field","name":{"kind":"Name","value":"match"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"number"}}]}}]}}]} as unknown as DocumentNode<SittingInformationFragment, unknown>;
 export const GetEventStageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetEventStage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stage"}}]}}]}}]} as unknown as DocumentNode<GetEventStageQuery, GetEventStageQueryVariables>;
 export const ConfigureTournamentManagerDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"configureTournamentManager"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"settings"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"TournamentManagerSetup"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"configureTournamentManager"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"settings"},"value":{"kind":"Variable","name":{"kind":"Name","value":"settings"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"status"}}]}}]}}]} as unknown as DocumentNode<ConfigureTournamentManagerMutation, ConfigureTournamentManagerMutationVariables>;
-export const GetUnqueuedMatchesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUnqueuedMatches"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentBlock"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"unqueuedSittings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"contest"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"round"}},{"kind":"Field","name":{"kind":"Name","value":"number"}}]}},{"kind":"Field","name":{"kind":"Name","value":"field"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"match"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"number"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetUnqueuedMatchesQuery, GetUnqueuedMatchesQueryVariables>;
+export const GetCompetitionFieldsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCompetitionFields"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fields"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"isEnabled"},"value":{"kind":"BooleanValue","value":true}},{"kind":"Argument","name":{"kind":"Name","value":"isCompetition"},"value":{"kind":"BooleanValue","value":true}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"competition"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stage"}},{"kind":"Field","name":{"kind":"Name","value":"onFieldSitting"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"SittingInformation"}}]}},{"kind":"Field","name":{"kind":"Name","value":"onTableSitting"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"SittingInformation"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"fieldControl"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"endTime"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"SittingInformation"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Sitting"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"contest"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"round"}},{"kind":"Field","name":{"kind":"Name","value":"number"}}]}},{"kind":"Field","name":{"kind":"Name","value":"match"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"number"}}]}}]}}]} as unknown as DocumentNode<GetCompetitionFieldsQuery, GetCompetitionFieldsQueryVariables>;
+export const QueueSittingDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"QueueSitting"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sittingId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"fieldId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"queueSitting"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"sittingId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sittingId"}}},{"kind":"Argument","name":{"kind":"Name","value":"fieldId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"fieldId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<QueueSittingMutation, QueueSittingMutationVariables>;
+export const GetUnqueuedMatchesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUnqueuedMatches"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentBlock"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"unqueuedSittings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"contest"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"round"}},{"kind":"Field","name":{"kind":"Name","value":"number"}}]}},{"kind":"Field","name":{"kind":"Name","value":"field"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"match"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"number"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetUnqueuedMatchesQuery, GetUnqueuedMatchesQueryVariables>;
+export const GetTableOccupiedDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetTableOccupied"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fields"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"isEnabled"},"value":{"kind":"BooleanValue","value":true}},{"kind":"Argument","name":{"kind":"Name","value":"isCompetition"},"value":{"kind":"BooleanValue","value":true}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"competition"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onTableSitting"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetTableOccupiedQuery, GetTableOccupiedQueryVariables>;

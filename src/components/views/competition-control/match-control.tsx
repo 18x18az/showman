@@ -3,9 +3,7 @@ import { Button } from '@/components/ui/button'
 import { PlayIcon, ReloadIcon, ResetIcon, StopIcon } from '@radix-ui/react-icons'
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { offsetTimer } from '@/app/display/field/[uuid]/timer'
-import { CompetitionFieldStatusSubscription, FieldControlStatus, FieldControlSubscription, LiveFieldSubscription, MATCH_STAGE } from '@/contracts/fields'
 import { Match } from '@/contracts/match'
-import { endEarly, replayCurrentMatch, resetMatch, startMatch } from '@/contracts/match-control'
 
 function makeTime (offset: number, truncate = false): string {
   if (truncate && offset < 0) {
@@ -148,8 +146,6 @@ function PopulatedMatchControl (props: { fieldId: number }): JSX.Element {
   return <MatchControlContent match={match} stage={stage} control={fieldControl} />
 }
 export function MatchControl (): JSX.Element {
-  const liveField = LiveFieldSubscription()
-
   if (liveField === undefined || liveField === null) {
     return <EmptyMatchControl />
   } else {

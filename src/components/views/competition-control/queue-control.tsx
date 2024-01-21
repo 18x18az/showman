@@ -1,9 +1,6 @@
 import { makeShortMatchName } from '@/utils/strings/match'
 import { Button } from '@/components/ui/button'
 import { PlayIcon, StopIcon, TrackNextIcon } from '@radix-ui/react-icons'
-import { Match, MatchStatus } from '@/contracts/match'
-import { CompetitionFieldStatusSubscription, LiveFieldSubscription, MATCH_STAGE, OnDeckFieldSubscription, SelectedField } from '@/contracts/fields'
-import { clearLive, pushLive } from '@/contracts/match-control'
 
 function MatchName (props: { title: string, match: Match | null }): JSX.Element {
   let color = 'text-zinc-500'

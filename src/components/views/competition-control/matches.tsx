@@ -2,10 +2,8 @@ import { makeShortMatchName } from '@/utils/strings/match'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
-import { BlockSubscription, nextBlock } from '@/contracts/matches'
-import { SkillsEnabledSubscription, queueMatch } from '@/contracts/match-control'
 import { gql } from '../../../__generated__'
-import { useQuery } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 import { Round } from '../../../__generated__/graphql'
 
 interface QueueableField {
@@ -17,13 +15,27 @@ interface ActionMenuProps {
   queueableFields: QueueableField[]
   sittingId: number
 }
+
+const QUEUE_SITTING = gql(`
+  mutation QueueSitting($sittingId: Int!, $fieldId: Int!) {
+    queueSitting(sittingId: $sittingId, fieldId: $fieldId) {
+      id
+    }
+  }
+`)
+
 function ActionMenu (props: ActionMenuProps): JSX.Element {
+  const [queueSitting] = useMutation(QUEUE_SITTING)
   if (props.queueableFields.length === 0) {
     return <div />
   }
   const options = props.queueableFields.map((field) => {
     return (
-      <DropdownMenuItem key={field.id} onClick={() => { void queueMatch(field.id, props.sittingId) }}>
+      <DropdownMenuItem
+        key={field.id} onClick={() => {
+          void queueSitting({ variables: { sittingId: props.sittingId, fieldId: field.id } })
+        }}
+      >
         {field.name}
       </DropdownMenuItem>
     )
@@ -72,21 +84,18 @@ function UnqueuedSitting (props: { sitting: UnqueuedSittingProps, queueableField
   )
 }
 
-function ProceedButton (): JSX.Element {
-  const block = BlockSubscription()
-  const skillsEnabled = SkillsEnabledSubscription()
+// function ProceedButton (): JSX.Element {
+//   if (block === undefined || skillsEnabled === undefined) return <></>
+//   const hasBlock = block !== null
 
-  if (block === undefined || skillsEnabled === undefined) return <></>
-  const hasBlock = block !== null
+//   const text = hasBlock ? 'End Block' : 'Proceed'
 
-  const text = hasBlock ? 'End Block' : 'Proceed'
-
-  return (
-    <div>
-      <Button disabled={skillsEnabled} onClick={() => { void nextBlock() }}>{text}</Button>
-    </div>
-  )
-}
+//   return (
+//     <div>
+//       <Button disabled={skillsEnabled} onClick={() => { void nextBlock() }}>{text}</Button>
+//     </div>
+//   )
+// }
 
 const GET_UNQUEUED_MATCHES = gql(`
   query GetUnqueuedMatches {
@@ -99,6 +108,7 @@ const GET_UNQUEUED_MATCHES = gql(`
           number
         }
         field {
+          id
           name
         }
         match {
@@ -109,28 +119,52 @@ const GET_UNQUEUED_MATCHES = gql(`
   }
 `)
 
+const GET_TABLE_OCCUPIED = gql(`
+  query GetTableOccupied {
+    fields(isEnabled: true, isCompetition: true) {
+      id
+      name
+      competition {
+        onTableSitting {
+          id
+        }
+      }
+    }
+  }
+`)
+
 export function UnqueuedMatches (): JSX.Element {
-  const { data } = useQuery(
+  const { data: blockData } = useQuery(
     GET_UNQUEUED_MATCHES,
     {
       pollInterval: 500
     }
   )
 
-  if (data === undefined) {
+  const { data: tableData } = useQuery(
+    GET_TABLE_OCCUPIED,
+    {
+      pollInterval: 500
+    }
+  )
+
+  if (blockData === undefined || tableData === undefined) {
     return <>Loading...</>
   }
 
-  const currentBlock = data.currentBlock
+  const currentBlock = blockData.currentBlock
+
+  const openFields = tableData.fields.filter((field) => { return field.competition?.onTableSitting === null })
+  const openFieldInfo = openFields.map((field) => { return { id: field.id, name: field.name } })
 
   if (currentBlock === null) {
-    return <ProceedButton />
+    return <div />
   }
 
   const sittings = currentBlock.unqueuedSittings.slice(0, 7)
 
   const matches = sittings.map((sitting) => {
-    return <UnqueuedSitting key={sitting.id} sitting={sitting} queueableFields={[]} />
+    return <UnqueuedSitting key={sitting.id} sitting={sitting} queueableFields={openFieldInfo} />
   })
 
   return <div className='flex gap-8'>{matches}</div>
