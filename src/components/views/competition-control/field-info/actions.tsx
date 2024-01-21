@@ -15,8 +15,37 @@ export function ReplayAction (props: { sittingId: number }): JSX.Element {
   return <BaseAction text='Replay' action={async () => { }} />
 }
 
+const PUT_ON_DECK = gql(`
+  mutation PutOnDeck($fieldId: Int!) {
+    putOnDeck(fieldId: $fieldId) {
+      onDeckField {
+        id
+      }
+    }
+  }
+`)
+
 export function PutOnDeckAction (props: { fieldId: number }): JSX.Element {
-  return <BaseAction text='Queue' action={async () => { }} />
+  const [putOnDeck, { error }] = useMutation(PUT_ON_DECK, {
+    refetchQueries: ['GetCompetitionFields']
+  })
+
+  if (error !== undefined) {
+    toast({
+      duration: 3000,
+      description: (
+        <div className='text-xl flex gap-4 content-center align-center'>{error.message}</div>
+      )
+    })
+  }
+
+  return (
+    <BaseAction
+      text='Queue' action={async () => {
+        void putOnDeck({ variables: { fieldId: props.fieldId } })
+      }}
+    />
+  )
 }
 
 const UNQUEUE_SITTING = gql(`

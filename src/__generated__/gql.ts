@@ -15,6 +15,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
     "\n  query GetEventStage {\n    stage {\n      stage\n    }\n  }\n": types.GetEventStageDocument,
     "\n  mutation configureTournamentManager($settings: TournamentManagerSetup!) {\n    configureTournamentManager(settings: $settings) {\n      status\n    }\n  }\n": types.ConfigureTournamentManagerDocument,
+    "\n  mutation PutOnDeck($fieldId: Int!) {\n    putOnDeck(fieldId: $fieldId) {\n      onDeckField {\n        id\n      }\n    }\n  }\n": types.PutOnDeckDocument,
     "\n  mutation UnqueueSitting($sittingId: Int!) {\n    unqueue(sittingId: $sittingId) {\n      onFieldSitting {\n        id\n      }\n      onTableSitting {\n        id\n      }\n    }\n  }\n": types.UnqueueSittingDocument,
     "\n  fragment SittingInformation on Sitting {\n    id\n    contest {\n      round\n      number\n    }\n    match {\n      number\n    }\n  }\n": types.SittingInformationFragmentDoc,
     "\n  query GetCompetitionFields {\n    fields(isEnabled: true, isCompetition: true) {\n      id\n      name\n      competition {\n        stage\n        onFieldSitting {\n          ...SittingInformation\n        }\n        onTableSitting {\n          ...SittingInformation\n        }\n      }\n      fieldControl {\n        endTime\n      }\n    }\n  }\n": types.GetCompetitionFieldsDocument,
@@ -45,6 +46,10 @@ export function gql(source: "\n  query GetEventStage {\n    stage {\n      stage
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation configureTournamentManager($settings: TournamentManagerSetup!) {\n    configureTournamentManager(settings: $settings) {\n      status\n    }\n  }\n"): (typeof documents)["\n  mutation configureTournamentManager($settings: TournamentManagerSetup!) {\n    configureTournamentManager(settings: $settings) {\n      status\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation PutOnDeck($fieldId: Int!) {\n    putOnDeck(fieldId: $fieldId) {\n      onDeckField {\n        id\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation PutOnDeck($fieldId: Int!) {\n    putOnDeck(fieldId: $fieldId) {\n      onDeckField {\n        id\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

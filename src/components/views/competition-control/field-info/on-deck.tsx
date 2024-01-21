@@ -34,9 +34,9 @@ function onDeckText (field: FieldInfo, match: SittingIdentifier | null): string 
 // }
 
 export function OnDeck (props: { fieldId: number, match: SittingIdentifier | null }): JSX.Element {
-  //const status = onDeckStatus(props.field, props.match)
+  // const status = onDeckStatus(props.field, props.match)
   const options = onDeckOptions(props.match)
-  //const text = onDeckText(props.field, props.match)
+  // const text = onDeckText(props.field, props.match)
   const text = undefined
 
   return <CommonFieldInfo match={props.match} options={options} status={undefined} text={text} />
