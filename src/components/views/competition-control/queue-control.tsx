@@ -2,7 +2,7 @@ import { makeShortMatchName } from '@/utils/strings/match'
 import { Button } from '@/components/ui/button'
 import { PlayIcon, StopIcon, TrackNextIcon } from '@radix-ui/react-icons'
 import { SittingIdentifier } from './field-info/interfaces'
-import { MatchStage, useOnDeckFieldQuery } from '../../../__generated__/graphql'
+import { MatchStage, useOnDeckFieldQuery, usePutLiveMutation } from '../../../__generated__/graphql'
 
 function SittingName (props: { title: string, sitting: SittingIdentifier | null }): JSX.Element {
   let color = 'text-zinc-500'
@@ -28,10 +28,13 @@ function ClearLiveButton (props: { hasOnDeck: boolean, canQueue: boolean }): JSX
   )
 }
 
-function MakeLiveButton (props: { hasOnDeck: boolean, activeStage: MatchStage }): JSX.Element {
-  const disabled = !props.hasOnDeck || props.activeStage !== MatchStage.Scoring
+function MakeLiveButton (props: { hasOnDeck: boolean, canQueue: boolean }): JSX.Element {
+  const disabled = !props.hasOnDeck || !props.canQueue
+  const [makeLive] = usePutLiveMutation({
+    refetchQueries: ['LiveField', 'OnDeckField']
+  })
   return (
-    <Button variant='secondary' onClick={() => { }} disabled={disabled}>
+    <Button variant='secondary' onClick={() => { void makeLive() }} disabled={disabled}>
       <PlayIcon />
     </Button>
   )
@@ -39,7 +42,7 @@ function MakeLiveButton (props: { hasOnDeck: boolean, activeStage: MatchStage })
 
 function ClearOrPushButton (props: { hasOnDeck: boolean, canQueue: boolean, activeStage: MatchStage }): JSX.Element {
   const hasActive = props.activeStage !== MatchStage.Empty
-  return hasActive ? <ClearLiveButton hasOnDeck={props.hasOnDeck} canQueue={props.canQueue} /> : <MakeLiveButton activeStage={props.activeStage} hasOnDeck={props.hasOnDeck} />
+  return hasActive ? <ClearLiveButton hasOnDeck={props.hasOnDeck} canQueue={props.canQueue} /> : <MakeLiveButton canQueue={props.canQueue} hasOnDeck={props.hasOnDeck} />
 }
 
 function ForceButton (props: { activeStage: MatchStage, hasOnDeck: boolean }): JSX.Element {
@@ -52,7 +55,7 @@ function ForceButton (props: { activeStage: MatchStage, hasOnDeck: boolean }): J
 }
 
 function QueueingContent (props: { activeStage: MatchStage, sitting: SittingIdentifier | null }): JSX.Element {
-  const canQueue = (props.activeStage === MatchStage.Queued || props.activeStage === MatchStage.Scoring)
+  const canQueue = (props.activeStage === MatchStage.Queued || props.activeStage === MatchStage.Scoring || props.activeStage === MatchStage.Empty)
   const hasOnDeck = props.sitting !== null
   return (
     <>

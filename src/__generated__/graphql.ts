@@ -185,6 +185,7 @@ export enum MatchStatus {
 export type Mutation = {
   __typename?: 'Mutation';
   configureTournamentManager: TournamentManager;
+  putLive: Competition;
   putOnDeck: Competition;
   queueSitting: Sitting;
   /** Reset the event. Only available in test mode. */
@@ -344,6 +345,11 @@ export type PutOnDeckMutationVariables = Exact<{
 
 export type PutOnDeckMutation = { __typename?: 'Mutation', putOnDeck: { __typename?: 'Competition', onDeckField: { __typename?: 'Field', id: number } | null } };
 
+export type PutLiveMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PutLiveMutation = { __typename?: 'Mutation', putLive: { __typename?: 'Competition', liveField: { __typename?: 'Field', id: number } | null } };
+
 export type UnqueueSittingMutationVariables = Exact<{
   sittingId: Scalars['Int']['input'];
 }>;
@@ -495,6 +501,40 @@ export function usePutOnDeckMutation(baseOptions?: Apollo.MutationHookOptions<Pu
 export type PutOnDeckMutationHookResult = ReturnType<typeof usePutOnDeckMutation>;
 export type PutOnDeckMutationResult = Apollo.MutationResult<PutOnDeckMutation>;
 export type PutOnDeckMutationOptions = Apollo.BaseMutationOptions<PutOnDeckMutation, PutOnDeckMutationVariables>;
+export const PutLiveDocument = gql`
+    mutation PutLive {
+  putLive {
+    liveField {
+      id
+    }
+  }
+}
+    `;
+export type PutLiveMutationFn = Apollo.MutationFunction<PutLiveMutation, PutLiveMutationVariables>;
+
+/**
+ * __usePutLiveMutation__
+ *
+ * To run a mutation, you first call `usePutLiveMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePutLiveMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [putLiveMutation, { data, loading, error }] = usePutLiveMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePutLiveMutation(baseOptions?: Apollo.MutationHookOptions<PutLiveMutation, PutLiveMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PutLiveMutation, PutLiveMutationVariables>(PutLiveDocument, options);
+      }
+export type PutLiveMutationHookResult = ReturnType<typeof usePutLiveMutation>;
+export type PutLiveMutationResult = Apollo.MutationResult<PutLiveMutation>;
+export type PutLiveMutationOptions = Apollo.BaseMutationOptions<PutLiveMutation, PutLiveMutationVariables>;
 export const UnqueueSittingDocument = gql`
     mutation UnqueueSitting($sittingId: Int!) {
   unqueue(sittingId: $sittingId) {

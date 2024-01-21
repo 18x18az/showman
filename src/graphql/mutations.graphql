@@ -11,20 +11,28 @@ mutation configureTournamentManager($settings: TournamentManagerSetup!) {
 }
 
 mutation PutOnDeck($fieldId: Int!) {
-    putOnDeck(fieldId: $fieldId) {
-      onDeckField {
-        id
-      }
+  putOnDeck(fieldId: $fieldId) {
+    onDeckField {
+      id
     }
   }
+}
 
-  mutation UnqueueSitting($sittingId: Int!) {
-    unqueue(sittingId: $sittingId) {
-      onFieldSitting {
-        id
-      }
-      onTableSitting {
-        id
-      }
+mutation PutLive {
+  putLive {
+    liveField {
+      id
     }
   }
+}
+
+mutation UnqueueSitting($sittingId: Int!) {
+  unqueue(sittingId: $sittingId) {
+    onFieldSitting {
+      id
+    }
+    onTableSitting {
+      id
+    }
+  }
+}
