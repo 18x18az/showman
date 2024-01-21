@@ -190,6 +190,7 @@ export type Mutation = {
   queueSitting: Sitting;
   /** Reset the event. Only available in test mode. */
   reset: Stage;
+  resetAuton: CompetitionField;
   startField: FieldControl;
   startNextBlock: Block;
   unqueue: CompetitionField;
@@ -213,8 +214,13 @@ export type MutationQueueSittingArgs = {
 };
 
 
+export type MutationResetAutonArgs = {
+  fieldId: Scalars['Int']['input'];
+};
+
+
 export type MutationStartFieldArgs = {
-  fieldId: Scalars['Float']['input'];
+  fieldId: Scalars['Int']['input'];
 };
 
 
@@ -356,6 +362,20 @@ export type UnqueueSittingMutationVariables = Exact<{
 
 
 export type UnqueueSittingMutation = { __typename?: 'Mutation', unqueue: { __typename?: 'CompetitionField', onFieldSitting: { __typename?: 'Sitting', id: number } | null, onTableSitting: { __typename?: 'Sitting', id: number } | null } };
+
+export type StartFieldMutationVariables = Exact<{
+  fieldId: Scalars['Int']['input'];
+}>;
+
+
+export type StartFieldMutation = { __typename?: 'Mutation', startField: { __typename?: 'FieldControl', endTime: any | null } };
+
+export type ResetAutonMutationVariables = Exact<{
+  fieldId: Scalars['Int']['input'];
+}>;
+
+
+export type ResetAutonMutation = { __typename?: 'Mutation', resetAuton: { __typename?: 'CompetitionField', stage: MatchStage } };
 
 export type OnDeckFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -573,6 +593,72 @@ export function useUnqueueSittingMutation(baseOptions?: Apollo.MutationHookOptio
 export type UnqueueSittingMutationHookResult = ReturnType<typeof useUnqueueSittingMutation>;
 export type UnqueueSittingMutationResult = Apollo.MutationResult<UnqueueSittingMutation>;
 export type UnqueueSittingMutationOptions = Apollo.BaseMutationOptions<UnqueueSittingMutation, UnqueueSittingMutationVariables>;
+export const StartFieldDocument = gql`
+    mutation StartField($fieldId: Int!) {
+  startField(fieldId: $fieldId) {
+    endTime
+  }
+}
+    `;
+export type StartFieldMutationFn = Apollo.MutationFunction<StartFieldMutation, StartFieldMutationVariables>;
+
+/**
+ * __useStartFieldMutation__
+ *
+ * To run a mutation, you first call `useStartFieldMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStartFieldMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [startFieldMutation, { data, loading, error }] = useStartFieldMutation({
+ *   variables: {
+ *      fieldId: // value for 'fieldId'
+ *   },
+ * });
+ */
+export function useStartFieldMutation(baseOptions?: Apollo.MutationHookOptions<StartFieldMutation, StartFieldMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<StartFieldMutation, StartFieldMutationVariables>(StartFieldDocument, options);
+      }
+export type StartFieldMutationHookResult = ReturnType<typeof useStartFieldMutation>;
+export type StartFieldMutationResult = Apollo.MutationResult<StartFieldMutation>;
+export type StartFieldMutationOptions = Apollo.BaseMutationOptions<StartFieldMutation, StartFieldMutationVariables>;
+export const ResetAutonDocument = gql`
+    mutation ResetAuton($fieldId: Int!) {
+  resetAuton(fieldId: $fieldId) {
+    stage
+  }
+}
+    `;
+export type ResetAutonMutationFn = Apollo.MutationFunction<ResetAutonMutation, ResetAutonMutationVariables>;
+
+/**
+ * __useResetAutonMutation__
+ *
+ * To run a mutation, you first call `useResetAutonMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResetAutonMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resetAutonMutation, { data, loading, error }] = useResetAutonMutation({
+ *   variables: {
+ *      fieldId: // value for 'fieldId'
+ *   },
+ * });
+ */
+export function useResetAutonMutation(baseOptions?: Apollo.MutationHookOptions<ResetAutonMutation, ResetAutonMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ResetAutonMutation, ResetAutonMutationVariables>(ResetAutonDocument, options);
+      }
+export type ResetAutonMutationHookResult = ReturnType<typeof useResetAutonMutation>;
+export type ResetAutonMutationResult = Apollo.MutationResult<ResetAutonMutation>;
+export type ResetAutonMutationOptions = Apollo.BaseMutationOptions<ResetAutonMutation, ResetAutonMutationVariables>;
 export const OnDeckFieldDocument = gql`
     query OnDeckField {
   competitionInformation {

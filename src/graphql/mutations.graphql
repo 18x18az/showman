@@ -36,3 +36,15 @@ mutation UnqueueSitting($sittingId: Int!) {
     }
   }
 }
+
+mutation StartField($fieldId: Int!) {
+  startField(fieldId: $fieldId) {
+    endTime
+  }
+}
+
+mutation ResetAuton($fieldId: Int!) {
+  resetAuton(fieldId: $fieldId) {
+    stage
+  }
+}
