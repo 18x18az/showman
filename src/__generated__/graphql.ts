@@ -68,6 +68,10 @@ export type Competition = {
 export type CompetitionField = {
   __typename?: 'CompetitionField';
   fieldId: Scalars['Float']['output'];
+  /** Whether the field is the current live field */
+  isLive: Scalars['Boolean']['output'];
+  /** Whether the field is currently on deck */
+  isOnDeck: Scalars['Boolean']['output'];
   /** The match currently on the field */
   onFieldSitting: Maybe<Sitting>;
   /** The match currently on the queueing table (on deck) for the field */
@@ -405,7 +409,7 @@ export type GetEventStageQuery = { __typename?: 'Query', stage: { __typename?: '
 export type GetCompetitionFieldsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCompetitionFieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', id: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } } | null, onTableSitting: { __typename?: 'Sitting', id: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } } | null } | null, fieldControl: { __typename?: 'FieldControl', endTime: any | null } | null }> };
+export type GetCompetitionFieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, isLive: boolean, isOnDeck: boolean, onFieldSitting: { __typename?: 'Sitting', id: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } } | null, onTableSitting: { __typename?: 'Sitting', id: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } } | null } | null, fieldControl: { __typename?: 'FieldControl', endTime: any | null } | null }> };
 
 export const SittingInformationFragmentDoc = gql`
     fragment SittingInformation on Sitting {
@@ -898,6 +902,8 @@ export const GetCompetitionFieldsDocument = gql`
     name
     competition {
       stage
+      isLive
+      isOnDeck
       onFieldSitting {
         ...SittingInformation
       }

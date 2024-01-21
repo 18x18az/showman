@@ -71,6 +71,8 @@ query GetCompetitionFields {
     name
     competition {
       stage
+      isLive
+      isOnDeck
       onFieldSitting {
         ...SittingInformation
       }

@@ -1,9 +1,9 @@
 import { CommonFieldInfo, FieldStatus } from './common'
 import { PutOnDeckAction, RemoveAction, ReplayAction } from './actions'
 import { MatchStage } from '../../../../__generated__/graphql'
-import { SittingIdentifier, SelectedField } from './interfaces'
+import { SittingIdentifier } from './interfaces'
 
-function FieldOptions (fieldId: number, sittingId: number | null, stage: MatchStage, liveField: SelectedField, onDeckField: SelectedField): JSX.Element[] {
+function FieldOptions (fieldId: number, sittingId: number | null, stage: MatchStage, isLive: boolean, isOnDeck: boolean): JSX.Element[] {
   const thisField = fieldId
   if (sittingId === null) {
     return []
@@ -11,7 +11,7 @@ function FieldOptions (fieldId: number, sittingId: number | null, stage: MatchSt
 
   const options: JSX.Element[] = []
 
-  if (liveField !== thisField && onDeckField !== thisField && stage === MatchStage.Queued) {
+  if (!isLive && !isOnDeck && stage === MatchStage.Queued) {
     options.push(<PutOnDeckAction fieldId={thisField} key='push' />)
   }
 
@@ -19,27 +19,25 @@ function FieldOptions (fieldId: number, sittingId: number | null, stage: MatchSt
     options.push(<ReplayAction sittingId={sittingId} key='replay' />)
   }
 
-  if (liveField !== thisField && stage === MatchStage.Queued) {
+  if (!isLive && stage === MatchStage.Queued) {
     options.push(<RemoveAction sittingId={sittingId} key='remove' />)
   }
 
   return options
 }
 
-export function OnField (props: { fieldId: number, match: SittingIdentifier | null, stage: MatchStage }): JSX.Element {
-  const { fieldId, match } = props
+export function OnField (props: { fieldId: number, match: SittingIdentifier | null, stage: MatchStage, isLive: boolean, isOnDeck: boolean }): JSX.Element {
+  const { fieldId, match, isLive, isOnDeck } = props
   const sittingId = match !== null ? match.id : null
   const stage = props.stage
-  const liveField = null
-  const onDeckField = null
 
-  const options = FieldOptions(fieldId, sittingId, stage, null, null)
+  const options = FieldOptions(fieldId, sittingId, stage, isLive, isOnDeck)
 
   let status: FieldStatus | undefined
 
-  if (liveField === props.fieldId) {
+  if (isLive) {
     status = FieldStatus.ACTIVE
-  } else if (onDeckField === fieldId) {
+  } else if (isOnDeck) {
     status = FieldStatus.ON_DECK
   }
 
