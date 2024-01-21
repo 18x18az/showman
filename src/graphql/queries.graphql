@@ -1,0 +1,85 @@
+query OnDeckField {
+  competitionInformation {
+    onDeckField {
+      id
+      competition {
+        onFieldSitting {
+          ...SittingInformation
+        }
+      }
+    }
+    liveField {
+      id
+      competition {
+        stage
+      }
+    }
+  }
+}
+
+query LiveField {
+    competitionInformation {
+      liveField {
+        id
+        fieldControl {
+          endTime
+        }
+        competition {
+          stage
+          onFieldSitting {
+            ...SittingInformation
+          }
+        }
+      }
+    }
+  }
+
+query GetTableOccupied {
+  fields(isEnabled: true, isCompetition: true) {
+    id
+    name
+    competition {
+      onTableSitting {
+        id
+      }
+    }
+  }
+}
+
+query GetUnqueuedSittings {
+  currentBlock {
+    name
+      unqueuedSittings {
+      ...SittingInformation
+      field {
+        id
+        name
+      }
+    }
+  }
+}
+
+query GetEventStage {
+  stage {
+    stage
+  }
+}
+
+query GetCompetitionFields {
+  fields(isEnabled: true, isCompetition: true) {
+  id
+    name
+    competition {
+      stage
+      onFieldSitting {
+        ...SittingInformation
+      }
+      onTableSitting {
+        ...SittingInformation
+      }
+    }
+    fieldControl {
+      endTime
+    }
+  }
+}

@@ -2,10 +2,8 @@ import { makeShortMatchName } from '@/utils/strings/match'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
-import { gql } from '../../../__generated__'
-import { useMutation, useQuery } from '@apollo/client'
-import { Round } from '../../../__generated__/graphql'
 import { toast } from '../../ui/use-toast'
+import { Round, useGetTableOccupiedQuery, useGetUnqueuedSittingsQuery, useQueueSittingMutation } from '../../../__generated__/graphql'
 
 interface QueueableField {
   id: number
@@ -17,16 +15,8 @@ interface ActionMenuProps {
   sittingId: number
 }
 
-const QUEUE_SITTING = gql(`
-  mutation QueueSitting($sittingId: Int!, $fieldId: Int!) {
-    queueSitting(sittingId: $sittingId, fieldId: $fieldId) {
-      id
-    }
-  }
-`)
-
 function ActionMenu (props: ActionMenuProps): JSX.Element {
-  const [queueSitting, { error }] = useMutation(QUEUE_SITTING, {
+  const [queueSitting, { error }] = useQueueSittingMutation({
     refetchQueries: ['GetUnqueuedMatches', 'GetCompetitionFields']
   })
   if (props.queueableFields.length === 0) {
@@ -109,56 +99,14 @@ function UnqueuedSitting (props: { sitting: UnqueuedSittingProps, queueableField
 //   )
 // }
 
-const GET_UNQUEUED_MATCHES = gql(`
-  query GetUnqueuedMatches {
-    currentBlock {
-      name
-      unqueuedSittings {
-        id
-        contest {
-          round
-          number
-        }
-        field {
-          id
-          name
-        }
-        match {
-          number
-        }
-      }
-    }
-  }
-`)
-
-const GET_TABLE_OCCUPIED = gql(`
-  query GetTableOccupied {
-    fields(isEnabled: true, isCompetition: true) {
-      id
-      name
-      competition {
-        onTableSitting {
-          id
-        }
-      }
-    }
-  }
-`)
-
 export function UnqueuedMatches (): JSX.Element {
-  const { data: blockData } = useQuery(
-    GET_UNQUEUED_MATCHES,
-    {
-      pollInterval: 500
-    }
-  )
+  const { data: blockData } = useGetUnqueuedSittingsQuery({
+    pollInterval: 500
+  })
 
-  const { data: tableData } = useQuery(
-    GET_TABLE_OCCUPIED,
-    {
-      pollInterval: 500
-    }
-  )
+  const { data: tableData } = useGetTableOccupiedQuery({
+    pollInterval: 500
+  })
 
   if (blockData === undefined || tableData === undefined) {
     return <>Loading...</>

@@ -3,10 +3,8 @@ import { Button } from '@/components/ui/button'
 import { PlayIcon, ReloadIcon, ResetIcon, StopIcon } from '@radix-ui/react-icons'
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { offsetTimer } from '@/app/display/field/[uuid]/timer'
-import { gql } from '../../../__generated__'
-import { useQuery } from '@apollo/client'
 import { SittingIdentifier } from './field-info/interfaces'
-import { MatchStage } from '../../../__generated__/graphql'
+import { MatchStage, useLiveFieldQuery } from '../../../__generated__/graphql'
 
 function makeTime (offset: number, truncate = false): string {
   if (truncate && offset < 0) {
@@ -138,34 +136,8 @@ function PopulatedMatchControl (props: { sitting: SittingIdentifier, stage: Matc
   return <MatchControlContent sitting={props.sitting} stage={props.stage} endTime={props.endTime} />
 }
 
-const LIVE_FIELD = gql(`
-  query LiveField {
-    competitionInformation {
-      liveField {
-        id
-        fieldControl {
-          endTime
-        }
-        competition {
-          stage
-          onFieldSitting {
-            id
-            contest {
-              round
-              number
-            }
-            match {
-              number
-            }
-          }
-        }
-      }
-    }
-  }
-`)
-
 export function MatchControl (): JSX.Element {
-  const { data } = useQuery(LIVE_FIELD)
+  const { data } = useLiveFieldQuery()
   const competition = data?.competitionInformation?.liveField?.competition
   const sitting = competition?.onFieldSitting
   if (competition === null || competition === undefined || sitting === null || sitting === undefined) {

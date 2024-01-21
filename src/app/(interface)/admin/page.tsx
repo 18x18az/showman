@@ -1,24 +1,12 @@
 'use client'
-import { useQuery } from '@apollo/client'
-
-import { gql } from '../../../__generated__/gql'
-import { EventStage } from '../../../__generated__/graphql'
 import { CompetitionControl } from '../../../components/views/competition-control/main'
 import { AllianceSelectionControl } from '../alliance'
 import TmSelector from './tm-connect'
 import UploadMatches from '../upload'
-
-const GET_EVENT_STAGE = gql(`
-  query GetEventStage {
-    stage {
-      stage
-    }
-  }
-`)
+import { EventStage, useGetEventStageQuery } from '../../../__generated__/graphql'
 
 export default function Page (): JSX.Element {
-  const { data } = useQuery(
-    GET_EVENT_STAGE,
+  const { data } = useGetEventStageQuery(
     {
       pollInterval: 500
     }

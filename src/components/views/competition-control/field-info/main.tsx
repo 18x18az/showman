@@ -1,9 +1,7 @@
 import { OnDeck } from './on-deck'
 import { OnField } from './on-field'
-import { gql } from '../../../../__generated__'
-import { useQuery } from '@apollo/client'
-import { MatchStage, SittingInformationFragment } from '../../../../__generated__/graphql'
 import { SittingIdentifier } from './interfaces'
+import { MatchStage, SittingInformationFragment, useGetCompetitionFieldsQuery } from '../../../../__generated__/graphql'
 
 interface FieldInfoProps {
   name: string
@@ -23,40 +21,6 @@ function FieldInfo (props: FieldInfoProps): JSX.Element {
   )
 }
 
-gql(`
-  fragment SittingInformation on Sitting {
-    id
-    contest {
-      round
-      number
-    }
-    match {
-      number
-    }
-  }
-`)
-
-const GET_COMPETITION_FIELDS = gql(`
-  query GetCompetitionFields {
-    fields(isEnabled: true, isCompetition: true) {
-      id
-      name
-      competition {
-        stage
-        onFieldSitting {
-          ...SittingInformation
-        }
-        onTableSitting {
-          ...SittingInformation
-        }
-      }
-      fieldControl {
-        endTime
-      }
-    }
-  }
-`)
-
 function makeIdentifier (sitting: SittingInformationFragment | null): SittingIdentifier | null {
   if (sitting === null) return null
 
@@ -69,12 +33,9 @@ function makeIdentifier (sitting: SittingInformationFragment | null): SittingIde
 }
 
 export function FieldInfos (): JSX.Element {
-  const { data } = useQuery(
-    GET_COMPETITION_FIELDS,
-    {
-      pollInterval: 500
-    }
-  )
+  const { data } = useGetCompetitionFieldsQuery({
+    pollInterval: 500
+  })
 
   if (data === undefined) {
     return <>Loading</>

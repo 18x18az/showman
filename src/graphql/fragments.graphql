@@ -1,0 +1,10 @@
+fragment SittingInformation on Sitting {
+  id
+  contest {
+  	round
+  	number
+  }
+  match {
+    number
+  }
+}

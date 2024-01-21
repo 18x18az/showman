@@ -3,16 +3,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import { toast } from '@/components/ui/use-toast'
-import { gql } from '../../../__generated__'
-import { useMutation } from '@apollo/client'
-
-const CONFIGURE_TM = gql(`
-  mutation configureTournamentManager($settings: TournamentManagerSetup!) {
-    configureTournamentManager(settings: $settings) {
-      status
-    }
-  }
-`)
+import { useConfigureTournamentManagerMutation } from '../../../__generated__/graphql'
 
 export default function TmSelector (): JSX.Element {
   const [input, setInput] = useState('')
@@ -30,7 +21,7 @@ export default function TmSelector (): JSX.Element {
     })
   }
 
-  const [configureTournamentManager] = useMutation(CONFIGURE_TM,
+  const [configureTournamentManager] = useConfigureTournamentManagerMutation(
     {
       errorPolicy: 'all',
       onError: handleError,

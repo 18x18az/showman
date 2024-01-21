@@ -1,5 +1,5 @@
-/* eslint-disable */
-import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -7,6 +7,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -14,9 +15,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: { input: any; output: any; }
-  /** A field whose value conforms to the standard URL format as specified in RFC3986: https://www.ietf.org/rfc/rfc3986.txt. */
   URL: { input: any; output: any; }
 };
 
@@ -321,10 +320,15 @@ export type TournamentManagerSetup = {
   url: Scalars['URL']['input'];
 };
 
-export type GetEventStageQueryVariables = Exact<{ [key: string]: never; }>;
+export type SittingInformationFragment = { __typename?: 'Sitting', id: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } };
+
+export type QueueSittingMutationVariables = Exact<{
+  sittingId: Scalars['Int']['input'];
+  fieldId: Scalars['Int']['input'];
+}>;
 
 
-export type GetEventStageQuery = { __typename?: 'Query', stage: { __typename?: 'Stage', stage: EventStage } };
+export type QueueSittingMutation = { __typename?: 'Mutation', queueSitting: { __typename?: 'Sitting', id: number } };
 
 export type ConfigureTournamentManagerMutationVariables = Exact<{
   settings: TournamentManagerSetup;
@@ -347,55 +351,469 @@ export type UnqueueSittingMutationVariables = Exact<{
 
 export type UnqueueSittingMutation = { __typename?: 'Mutation', unqueue: { __typename?: 'CompetitionField', onFieldSitting: { __typename?: 'Sitting', id: number } | null, onTableSitting: { __typename?: 'Sitting', id: number } | null } };
 
-export type SittingInformationFragment = { __typename?: 'Sitting', id: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } } & { ' $fragmentName'?: 'SittingInformationFragment' };
-
-export type GetCompetitionFieldsQueryVariables = Exact<{ [key: string]: never; }>;
+export type OnDeckFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCompetitionFieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: (
-        { __typename?: 'Sitting' }
-        & { ' $fragmentRefs'?: { 'SittingInformationFragment': SittingInformationFragment } }
-      ) | null, onTableSitting: (
-        { __typename?: 'Sitting' }
-        & { ' $fragmentRefs'?: { 'SittingInformationFragment': SittingInformationFragment } }
-      ) | null } | null, fieldControl: { __typename?: 'FieldControl', endTime: any | null } | null }> };
+export type OnDeckFieldQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', onDeckField: { __typename?: 'Field', id: number, competition: { __typename?: 'CompetitionField', onFieldSitting: { __typename?: 'Sitting', id: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } } | null } | null } | null, liveField: { __typename?: 'Field', id: number, competition: { __typename?: 'CompetitionField', stage: MatchStage } | null } | null } };
 
 export type LiveFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type LiveFieldQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', liveField: { __typename?: 'Field', id: number, fieldControl: { __typename?: 'FieldControl', endTime: any | null } | null, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', id: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } } | null } | null } | null } };
 
-export type QueueSittingMutationVariables = Exact<{
-  sittingId: Scalars['Int']['input'];
-  fieldId: Scalars['Int']['input'];
-}>;
-
-
-export type QueueSittingMutation = { __typename?: 'Mutation', queueSitting: { __typename?: 'Sitting', id: number } };
-
-export type GetUnqueuedMatchesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetUnqueuedMatchesQuery = { __typename?: 'Query', currentBlock: { __typename?: 'Block', name: string, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, contest: { __typename?: 'Contest', round: Round, number: number }, field: { __typename?: 'Field', id: number, name: string } | null, match: { __typename?: 'Match', number: number } }> } | null };
-
 export type GetTableOccupiedQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetTableOccupiedQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', onTableSitting: { __typename?: 'Sitting', id: number } | null } | null }> };
 
-export type OnDeckFieldQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetUnqueuedSittingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type OnDeckFieldQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', onDeckField: { __typename?: 'Field', id: number, competition: { __typename?: 'CompetitionField', onFieldSitting: { __typename?: 'Sitting', id: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } } | null } | null } | null, liveField: { __typename?: 'Field', id: number, competition: { __typename?: 'CompetitionField', stage: MatchStage } | null } | null } };
+export type GetUnqueuedSittingsQuery = { __typename?: 'Query', currentBlock: { __typename?: 'Block', name: string, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, field: { __typename?: 'Field', id: number, name: string } | null, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } }> } | null };
 
-export const SittingInformationFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"SittingInformation"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Sitting"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"contest"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"round"}},{"kind":"Field","name":{"kind":"Name","value":"number"}}]}},{"kind":"Field","name":{"kind":"Name","value":"match"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"number"}}]}}]}}]} as unknown as DocumentNode<SittingInformationFragment, unknown>;
-export const GetEventStageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetEventStage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stage"}}]}}]}}]} as unknown as DocumentNode<GetEventStageQuery, GetEventStageQueryVariables>;
-export const ConfigureTournamentManagerDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"configureTournamentManager"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"settings"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"TournamentManagerSetup"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"configureTournamentManager"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"settings"},"value":{"kind":"Variable","name":{"kind":"Name","value":"settings"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"status"}}]}}]}}]} as unknown as DocumentNode<ConfigureTournamentManagerMutation, ConfigureTournamentManagerMutationVariables>;
-export const PutOnDeckDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"PutOnDeck"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"fieldId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"putOnDeck"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"fieldId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"fieldId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onDeckField"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<PutOnDeckMutation, PutOnDeckMutationVariables>;
-export const UnqueueSittingDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UnqueueSitting"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sittingId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"unqueue"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"sittingId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sittingId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onFieldSitting"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"onTableSitting"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<UnqueueSittingMutation, UnqueueSittingMutationVariables>;
-export const GetCompetitionFieldsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCompetitionFields"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fields"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"isEnabled"},"value":{"kind":"BooleanValue","value":true}},{"kind":"Argument","name":{"kind":"Name","value":"isCompetition"},"value":{"kind":"BooleanValue","value":true}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"competition"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stage"}},{"kind":"Field","name":{"kind":"Name","value":"onFieldSitting"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"SittingInformation"}}]}},{"kind":"Field","name":{"kind":"Name","value":"onTableSitting"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"SittingInformation"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"fieldControl"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"endTime"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"SittingInformation"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Sitting"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"contest"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"round"}},{"kind":"Field","name":{"kind":"Name","value":"number"}}]}},{"kind":"Field","name":{"kind":"Name","value":"match"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"number"}}]}}]}}]} as unknown as DocumentNode<GetCompetitionFieldsQuery, GetCompetitionFieldsQueryVariables>;
-export const LiveFieldDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"LiveField"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"competitionInformation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"liveField"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"fieldControl"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"endTime"}}]}},{"kind":"Field","name":{"kind":"Name","value":"competition"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stage"}},{"kind":"Field","name":{"kind":"Name","value":"onFieldSitting"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"contest"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"round"}},{"kind":"Field","name":{"kind":"Name","value":"number"}}]}},{"kind":"Field","name":{"kind":"Name","value":"match"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"number"}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<LiveFieldQuery, LiveFieldQueryVariables>;
-export const QueueSittingDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"QueueSitting"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sittingId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"fieldId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"queueSitting"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"sittingId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sittingId"}}},{"kind":"Argument","name":{"kind":"Name","value":"fieldId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"fieldId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<QueueSittingMutation, QueueSittingMutationVariables>;
-export const GetUnqueuedMatchesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUnqueuedMatches"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentBlock"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"unqueuedSittings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"contest"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"round"}},{"kind":"Field","name":{"kind":"Name","value":"number"}}]}},{"kind":"Field","name":{"kind":"Name","value":"field"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"match"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"number"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetUnqueuedMatchesQuery, GetUnqueuedMatchesQueryVariables>;
-export const GetTableOccupiedDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetTableOccupied"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fields"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"isEnabled"},"value":{"kind":"BooleanValue","value":true}},{"kind":"Argument","name":{"kind":"Name","value":"isCompetition"},"value":{"kind":"BooleanValue","value":true}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"competition"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onTableSitting"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetTableOccupiedQuery, GetTableOccupiedQueryVariables>;
-export const OnDeckFieldDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"OnDeckField"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"competitionInformation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onDeckField"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"competition"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onFieldSitting"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"contest"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"round"}},{"kind":"Field","name":{"kind":"Name","value":"number"}}]}},{"kind":"Field","name":{"kind":"Name","value":"match"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"number"}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"liveField"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"competition"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stage"}}]}}]}}]}}]}}]} as unknown as DocumentNode<OnDeckFieldQuery, OnDeckFieldQueryVariables>;
+export type GetEventStageQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetEventStageQuery = { __typename?: 'Query', stage: { __typename?: 'Stage', stage: EventStage } };
+
+export type GetCompetitionFieldsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCompetitionFieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', id: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } } | null, onTableSitting: { __typename?: 'Sitting', id: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } } | null } | null, fieldControl: { __typename?: 'FieldControl', endTime: any | null } | null }> };
+
+export const SittingInformationFragmentDoc = gql`
+    fragment SittingInformation on Sitting {
+  id
+  contest {
+    round
+    number
+  }
+  match {
+    number
+  }
+}
+    `;
+export const QueueSittingDocument = gql`
+    mutation QueueSitting($sittingId: Int!, $fieldId: Int!) {
+  queueSitting(sittingId: $sittingId, fieldId: $fieldId) {
+    id
+  }
+}
+    `;
+export type QueueSittingMutationFn = Apollo.MutationFunction<QueueSittingMutation, QueueSittingMutationVariables>;
+
+/**
+ * __useQueueSittingMutation__
+ *
+ * To run a mutation, you first call `useQueueSittingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useQueueSittingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [queueSittingMutation, { data, loading, error }] = useQueueSittingMutation({
+ *   variables: {
+ *      sittingId: // value for 'sittingId'
+ *      fieldId: // value for 'fieldId'
+ *   },
+ * });
+ */
+export function useQueueSittingMutation(baseOptions?: Apollo.MutationHookOptions<QueueSittingMutation, QueueSittingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<QueueSittingMutation, QueueSittingMutationVariables>(QueueSittingDocument, options);
+      }
+export type QueueSittingMutationHookResult = ReturnType<typeof useQueueSittingMutation>;
+export type QueueSittingMutationResult = Apollo.MutationResult<QueueSittingMutation>;
+export type QueueSittingMutationOptions = Apollo.BaseMutationOptions<QueueSittingMutation, QueueSittingMutationVariables>;
+export const ConfigureTournamentManagerDocument = gql`
+    mutation configureTournamentManager($settings: TournamentManagerSetup!) {
+  configureTournamentManager(settings: $settings) {
+    status
+  }
+}
+    `;
+export type ConfigureTournamentManagerMutationFn = Apollo.MutationFunction<ConfigureTournamentManagerMutation, ConfigureTournamentManagerMutationVariables>;
+
+/**
+ * __useConfigureTournamentManagerMutation__
+ *
+ * To run a mutation, you first call `useConfigureTournamentManagerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useConfigureTournamentManagerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [configureTournamentManagerMutation, { data, loading, error }] = useConfigureTournamentManagerMutation({
+ *   variables: {
+ *      settings: // value for 'settings'
+ *   },
+ * });
+ */
+export function useConfigureTournamentManagerMutation(baseOptions?: Apollo.MutationHookOptions<ConfigureTournamentManagerMutation, ConfigureTournamentManagerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ConfigureTournamentManagerMutation, ConfigureTournamentManagerMutationVariables>(ConfigureTournamentManagerDocument, options);
+      }
+export type ConfigureTournamentManagerMutationHookResult = ReturnType<typeof useConfigureTournamentManagerMutation>;
+export type ConfigureTournamentManagerMutationResult = Apollo.MutationResult<ConfigureTournamentManagerMutation>;
+export type ConfigureTournamentManagerMutationOptions = Apollo.BaseMutationOptions<ConfigureTournamentManagerMutation, ConfigureTournamentManagerMutationVariables>;
+export const PutOnDeckDocument = gql`
+    mutation PutOnDeck($fieldId: Int!) {
+  putOnDeck(fieldId: $fieldId) {
+    onDeckField {
+      id
+    }
+  }
+}
+    `;
+export type PutOnDeckMutationFn = Apollo.MutationFunction<PutOnDeckMutation, PutOnDeckMutationVariables>;
+
+/**
+ * __usePutOnDeckMutation__
+ *
+ * To run a mutation, you first call `usePutOnDeckMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePutOnDeckMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [putOnDeckMutation, { data, loading, error }] = usePutOnDeckMutation({
+ *   variables: {
+ *      fieldId: // value for 'fieldId'
+ *   },
+ * });
+ */
+export function usePutOnDeckMutation(baseOptions?: Apollo.MutationHookOptions<PutOnDeckMutation, PutOnDeckMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PutOnDeckMutation, PutOnDeckMutationVariables>(PutOnDeckDocument, options);
+      }
+export type PutOnDeckMutationHookResult = ReturnType<typeof usePutOnDeckMutation>;
+export type PutOnDeckMutationResult = Apollo.MutationResult<PutOnDeckMutation>;
+export type PutOnDeckMutationOptions = Apollo.BaseMutationOptions<PutOnDeckMutation, PutOnDeckMutationVariables>;
+export const UnqueueSittingDocument = gql`
+    mutation UnqueueSitting($sittingId: Int!) {
+  unqueue(sittingId: $sittingId) {
+    onFieldSitting {
+      id
+    }
+    onTableSitting {
+      id
+    }
+  }
+}
+    `;
+export type UnqueueSittingMutationFn = Apollo.MutationFunction<UnqueueSittingMutation, UnqueueSittingMutationVariables>;
+
+/**
+ * __useUnqueueSittingMutation__
+ *
+ * To run a mutation, you first call `useUnqueueSittingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnqueueSittingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unqueueSittingMutation, { data, loading, error }] = useUnqueueSittingMutation({
+ *   variables: {
+ *      sittingId: // value for 'sittingId'
+ *   },
+ * });
+ */
+export function useUnqueueSittingMutation(baseOptions?: Apollo.MutationHookOptions<UnqueueSittingMutation, UnqueueSittingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UnqueueSittingMutation, UnqueueSittingMutationVariables>(UnqueueSittingDocument, options);
+      }
+export type UnqueueSittingMutationHookResult = ReturnType<typeof useUnqueueSittingMutation>;
+export type UnqueueSittingMutationResult = Apollo.MutationResult<UnqueueSittingMutation>;
+export type UnqueueSittingMutationOptions = Apollo.BaseMutationOptions<UnqueueSittingMutation, UnqueueSittingMutationVariables>;
+export const OnDeckFieldDocument = gql`
+    query OnDeckField {
+  competitionInformation {
+    onDeckField {
+      id
+      competition {
+        onFieldSitting {
+          ...SittingInformation
+        }
+      }
+    }
+    liveField {
+      id
+      competition {
+        stage
+      }
+    }
+  }
+}
+    ${SittingInformationFragmentDoc}`;
+
+/**
+ * __useOnDeckFieldQuery__
+ *
+ * To run a query within a React component, call `useOnDeckFieldQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOnDeckFieldQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnDeckFieldQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOnDeckFieldQuery(baseOptions?: Apollo.QueryHookOptions<OnDeckFieldQuery, OnDeckFieldQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OnDeckFieldQuery, OnDeckFieldQueryVariables>(OnDeckFieldDocument, options);
+      }
+export function useOnDeckFieldLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnDeckFieldQuery, OnDeckFieldQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OnDeckFieldQuery, OnDeckFieldQueryVariables>(OnDeckFieldDocument, options);
+        }
+export function useOnDeckFieldSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<OnDeckFieldQuery, OnDeckFieldQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<OnDeckFieldQuery, OnDeckFieldQueryVariables>(OnDeckFieldDocument, options);
+        }
+export type OnDeckFieldQueryHookResult = ReturnType<typeof useOnDeckFieldQuery>;
+export type OnDeckFieldLazyQueryHookResult = ReturnType<typeof useOnDeckFieldLazyQuery>;
+export type OnDeckFieldSuspenseQueryHookResult = ReturnType<typeof useOnDeckFieldSuspenseQuery>;
+export type OnDeckFieldQueryResult = Apollo.QueryResult<OnDeckFieldQuery, OnDeckFieldQueryVariables>;
+export const LiveFieldDocument = gql`
+    query LiveField {
+  competitionInformation {
+    liveField {
+      id
+      fieldControl {
+        endTime
+      }
+      competition {
+        stage
+        onFieldSitting {
+          ...SittingInformation
+        }
+      }
+    }
+  }
+}
+    ${SittingInformationFragmentDoc}`;
+
+/**
+ * __useLiveFieldQuery__
+ *
+ * To run a query within a React component, call `useLiveFieldQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLiveFieldQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useLiveFieldQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useLiveFieldQuery(baseOptions?: Apollo.QueryHookOptions<LiveFieldQuery, LiveFieldQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<LiveFieldQuery, LiveFieldQueryVariables>(LiveFieldDocument, options);
+      }
+export function useLiveFieldLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LiveFieldQuery, LiveFieldQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<LiveFieldQuery, LiveFieldQueryVariables>(LiveFieldDocument, options);
+        }
+export function useLiveFieldSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<LiveFieldQuery, LiveFieldQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<LiveFieldQuery, LiveFieldQueryVariables>(LiveFieldDocument, options);
+        }
+export type LiveFieldQueryHookResult = ReturnType<typeof useLiveFieldQuery>;
+export type LiveFieldLazyQueryHookResult = ReturnType<typeof useLiveFieldLazyQuery>;
+export type LiveFieldSuspenseQueryHookResult = ReturnType<typeof useLiveFieldSuspenseQuery>;
+export type LiveFieldQueryResult = Apollo.QueryResult<LiveFieldQuery, LiveFieldQueryVariables>;
+export const GetTableOccupiedDocument = gql`
+    query GetTableOccupied {
+  fields(isEnabled: true, isCompetition: true) {
+    id
+    name
+    competition {
+      onTableSitting {
+        id
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetTableOccupiedQuery__
+ *
+ * To run a query within a React component, call `useGetTableOccupiedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTableOccupiedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTableOccupiedQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetTableOccupiedQuery(baseOptions?: Apollo.QueryHookOptions<GetTableOccupiedQuery, GetTableOccupiedQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetTableOccupiedQuery, GetTableOccupiedQueryVariables>(GetTableOccupiedDocument, options);
+      }
+export function useGetTableOccupiedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTableOccupiedQuery, GetTableOccupiedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetTableOccupiedQuery, GetTableOccupiedQueryVariables>(GetTableOccupiedDocument, options);
+        }
+export function useGetTableOccupiedSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetTableOccupiedQuery, GetTableOccupiedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetTableOccupiedQuery, GetTableOccupiedQueryVariables>(GetTableOccupiedDocument, options);
+        }
+export type GetTableOccupiedQueryHookResult = ReturnType<typeof useGetTableOccupiedQuery>;
+export type GetTableOccupiedLazyQueryHookResult = ReturnType<typeof useGetTableOccupiedLazyQuery>;
+export type GetTableOccupiedSuspenseQueryHookResult = ReturnType<typeof useGetTableOccupiedSuspenseQuery>;
+export type GetTableOccupiedQueryResult = Apollo.QueryResult<GetTableOccupiedQuery, GetTableOccupiedQueryVariables>;
+export const GetUnqueuedSittingsDocument = gql`
+    query GetUnqueuedSittings {
+  currentBlock {
+    name
+    unqueuedSittings {
+      ...SittingInformation
+      field {
+        id
+        name
+      }
+    }
+  }
+}
+    ${SittingInformationFragmentDoc}`;
+
+/**
+ * __useGetUnqueuedSittingsQuery__
+ *
+ * To run a query within a React component, call `useGetUnqueuedSittingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUnqueuedSittingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUnqueuedSittingsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUnqueuedSittingsQuery(baseOptions?: Apollo.QueryHookOptions<GetUnqueuedSittingsQuery, GetUnqueuedSittingsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUnqueuedSittingsQuery, GetUnqueuedSittingsQueryVariables>(GetUnqueuedSittingsDocument, options);
+      }
+export function useGetUnqueuedSittingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUnqueuedSittingsQuery, GetUnqueuedSittingsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUnqueuedSittingsQuery, GetUnqueuedSittingsQueryVariables>(GetUnqueuedSittingsDocument, options);
+        }
+export function useGetUnqueuedSittingsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetUnqueuedSittingsQuery, GetUnqueuedSittingsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetUnqueuedSittingsQuery, GetUnqueuedSittingsQueryVariables>(GetUnqueuedSittingsDocument, options);
+        }
+export type GetUnqueuedSittingsQueryHookResult = ReturnType<typeof useGetUnqueuedSittingsQuery>;
+export type GetUnqueuedSittingsLazyQueryHookResult = ReturnType<typeof useGetUnqueuedSittingsLazyQuery>;
+export type GetUnqueuedSittingsSuspenseQueryHookResult = ReturnType<typeof useGetUnqueuedSittingsSuspenseQuery>;
+export type GetUnqueuedSittingsQueryResult = Apollo.QueryResult<GetUnqueuedSittingsQuery, GetUnqueuedSittingsQueryVariables>;
+export const GetEventStageDocument = gql`
+    query GetEventStage {
+  stage {
+    stage
+  }
+}
+    `;
+
+/**
+ * __useGetEventStageQuery__
+ *
+ * To run a query within a React component, call `useGetEventStageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEventStageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEventStageQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetEventStageQuery(baseOptions?: Apollo.QueryHookOptions<GetEventStageQuery, GetEventStageQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetEventStageQuery, GetEventStageQueryVariables>(GetEventStageDocument, options);
+      }
+export function useGetEventStageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEventStageQuery, GetEventStageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetEventStageQuery, GetEventStageQueryVariables>(GetEventStageDocument, options);
+        }
+export function useGetEventStageSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetEventStageQuery, GetEventStageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetEventStageQuery, GetEventStageQueryVariables>(GetEventStageDocument, options);
+        }
+export type GetEventStageQueryHookResult = ReturnType<typeof useGetEventStageQuery>;
+export type GetEventStageLazyQueryHookResult = ReturnType<typeof useGetEventStageLazyQuery>;
+export type GetEventStageSuspenseQueryHookResult = ReturnType<typeof useGetEventStageSuspenseQuery>;
+export type GetEventStageQueryResult = Apollo.QueryResult<GetEventStageQuery, GetEventStageQueryVariables>;
+export const GetCompetitionFieldsDocument = gql`
+    query GetCompetitionFields {
+  fields(isEnabled: true, isCompetition: true) {
+    id
+    name
+    competition {
+      stage
+      onFieldSitting {
+        ...SittingInformation
+      }
+      onTableSitting {
+        ...SittingInformation
+      }
+    }
+    fieldControl {
+      endTime
+    }
+  }
+}
+    ${SittingInformationFragmentDoc}`;
+
+/**
+ * __useGetCompetitionFieldsQuery__
+ *
+ * To run a query within a React component, call `useGetCompetitionFieldsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCompetitionFieldsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCompetitionFieldsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCompetitionFieldsQuery(baseOptions?: Apollo.QueryHookOptions<GetCompetitionFieldsQuery, GetCompetitionFieldsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCompetitionFieldsQuery, GetCompetitionFieldsQueryVariables>(GetCompetitionFieldsDocument, options);
+      }
+export function useGetCompetitionFieldsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCompetitionFieldsQuery, GetCompetitionFieldsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCompetitionFieldsQuery, GetCompetitionFieldsQueryVariables>(GetCompetitionFieldsDocument, options);
+        }
+export function useGetCompetitionFieldsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetCompetitionFieldsQuery, GetCompetitionFieldsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCompetitionFieldsQuery, GetCompetitionFieldsQueryVariables>(GetCompetitionFieldsDocument, options);
+        }
+export type GetCompetitionFieldsQueryHookResult = ReturnType<typeof useGetCompetitionFieldsQuery>;
+export type GetCompetitionFieldsLazyQueryHookResult = ReturnType<typeof useGetCompetitionFieldsLazyQuery>;
+export type GetCompetitionFieldsSuspenseQueryHookResult = ReturnType<typeof useGetCompetitionFieldsSuspenseQuery>;
+export type GetCompetitionFieldsQueryResult = Apollo.QueryResult<GetCompetitionFieldsQuery, GetCompetitionFieldsQueryVariables>;

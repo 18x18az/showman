@@ -1,0 +1,30 @@
+mutation QueueSitting($sittingId: Int!, $fieldId: Int!) {
+    queueSitting(sittingId: $sittingId, fieldId: $fieldId) {
+      id
+    }
+}
+
+mutation configureTournamentManager($settings: TournamentManagerSetup!) {
+  configureTournamentManager(settings: $settings) {
+  status
+  }
+}
+
+mutation PutOnDeck($fieldId: Int!) {
+    putOnDeck(fieldId: $fieldId) {
+      onDeckField {
+        id
+      }
+    }
+  }
+
+  mutation UnqueueSitting($sittingId: Int!) {
+    unqueue(sittingId: $sittingId) {
+      onFieldSitting {
+        id
+      }
+      onTableSitting {
+        id
+      }
+    }
+  }

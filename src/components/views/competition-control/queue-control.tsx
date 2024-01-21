@@ -1,10 +1,8 @@
 import { makeShortMatchName } from '@/utils/strings/match'
 import { Button } from '@/components/ui/button'
 import { PlayIcon, StopIcon, TrackNextIcon } from '@radix-ui/react-icons'
-import { gql } from '../../../__generated__'
-import { useQuery } from '@apollo/client'
-import { MatchStage } from '../../../__generated__/graphql'
 import { SittingIdentifier } from './field-info/interfaces'
+import { MatchStage, useOnDeckFieldQuery } from '../../../__generated__/graphql'
 
 function SittingName (props: { title: string, sitting: SittingIdentifier | null }): JSX.Element {
   let color = 'text-zinc-500'
@@ -98,36 +96,8 @@ function PopulatedQueueing (props: { info: OnDeckFieldInfo, active: LiveFieldInf
   return <QueueingContent sitting={props.sitting} activeStage={stage} />
 }
 
-const ON_DECK_FIELD = gql(`
-  query OnDeckField {
-    competitionInformation {
-      onDeckField {
-        id
-        competition {
-          onFieldSitting {
-            id
-            contest {
-              round
-              number
-            }
-            match {
-              number
-            }
-          }
-        }
-      }
-      liveField {
-        id
-        competition {
-          stage
-        }
-      }
-    }
-  }
-`)
-
 export function Queueing (): JSX.Element {
-  const { data } = useQuery(ON_DECK_FIELD)
+  const { data } = useOnDeckFieldQuery({ pollInterval: 500 })
   if (data?.competitionInformation.onDeckField?.competition?.onFieldSitting?.id === undefined) {
     return <EmptyQueueing />
   } else {
