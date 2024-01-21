@@ -1,12 +1,12 @@
 import { FieldInfos } from './field-info/main'
 import { UnqueuedMatches } from './matches'
-// import { Queueing } from './queue-control'
+import { Queueing } from './queue-control'
 // import { Settings } from './settings'
 
 function RightBar (): JSX.Element {
   const elements = [
     // MatchControl
-    // Queueing,
+    Queueing
     // Settings
   ]
 

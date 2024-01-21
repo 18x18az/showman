@@ -1,12 +1,16 @@
 import { makeShortMatchName } from '@/utils/strings/match'
 import { Button } from '@/components/ui/button'
 import { PlayIcon, StopIcon, TrackNextIcon } from '@radix-ui/react-icons'
+import { gql } from '../../../__generated__'
+import { useQuery } from '@apollo/client'
+import { MatchStage } from '../../../__generated__/graphql'
+import { SittingIdentifier } from './field-info/interfaces'
 
-function MatchName (props: { title: string, match: Match | null }): JSX.Element {
+function SittingName (props: { title: string, sitting: SittingIdentifier | null }): JSX.Element {
   let color = 'text-zinc-500'
   let name = '-'
-  if (props.match !== null && props.match.status === MatchStatus.QUEUED) {
-    name = makeShortMatchName(props.match)
+  if (props.sitting !== null) {
+    name = makeShortMatchName(props.sitting)
     color = 'text-zinc-400'
   }
   return (
@@ -17,76 +21,123 @@ function MatchName (props: { title: string, match: Match | null }): JSX.Element 
   )
 }
 
-function ClearLiveButton (props: { match: Match | null, canQueue: boolean }): JSX.Element {
-  const disabled = props.match === null || !props.canQueue
+function ClearLiveButton (props: { hasOnDeck: boolean, canQueue: boolean }): JSX.Element {
+  const disabled = !props.hasOnDeck || !props.canQueue
   return (
-    <Button variant='secondary' disabled={disabled} onClick={() => { void clearLive() }}>
+    <Button variant='secondary' disabled={disabled} onClick={() => { }}>
       <StopIcon />
     </Button>
   )
 }
 
-function MakeLiveButton (props: { match: Match | null }): JSX.Element {
+function MakeLiveButton (props: { hasOnDeck: boolean, activeStage: MatchStage }): JSX.Element {
+  const disabled = !props.hasOnDeck || props.activeStage !== MatchStage.Scoring
   return (
-    <Button variant='secondary' onClick={() => { void pushLive() }} disabled={props.match === null || props.match.status === MatchStatus.SCORING}>
+    <Button variant='secondary' onClick={() => { }} disabled={disabled}>
       <PlayIcon />
     </Button>
   )
 }
 
-function ClearOrPushButton (props: { match: Match | null, hasActive: boolean, canQueue: boolean }): JSX.Element {
-  return props.hasActive ? <ClearLiveButton match={props.match} canQueue={props.canQueue} /> : <MakeLiveButton match={props.match} />
+function ClearOrPushButton (props: { hasOnDeck: boolean, canQueue: boolean, activeStage: MatchStage }): JSX.Element {
+  const hasActive = props.activeStage !== MatchStage.Empty
+  return hasActive ? <ClearLiveButton hasOnDeck={props.hasOnDeck} canQueue={props.canQueue} /> : <MakeLiveButton activeStage={props.activeStage} hasOnDeck={props.hasOnDeck} />
 }
 
-function ForceButton (props: { match: Match | null, hasActive: boolean, canQueue: boolean }): JSX.Element {
-  const disabled = !props.canQueue || !props.hasActive || props.match === null || props.match.status === MatchStatus.SCORING
+function ForceButton (props: { activeStage: MatchStage, hasOnDeck: boolean }): JSX.Element {
+  const disabled = !props.hasOnDeck || props.activeStage !== MatchStage.Scoring
   return (
-    <Button variant='secondary' disabled={disabled} onClick={() => { void pushLive() }}>
+    <Button variant='secondary' disabled={disabled} onClick={() => { }}>
       <TrackNextIcon />
     </Button>
   )
 }
 
-function QueueingContent (props: { match: Match | null, hasActive: boolean, stage: MATCH_STAGE }): JSX.Element {
-  const canQueue = (props.stage === MATCH_STAGE.ON_DECK || props.stage === MATCH_STAGE.QUEUED || props.stage === MATCH_STAGE.OUTRO)
+function QueueingContent (props: { activeStage: MatchStage, sitting: SittingIdentifier | null }): JSX.Element {
+  const canQueue = (props.activeStage === MatchStage.Queued || props.activeStage === MatchStage.Scoring)
+  const hasOnDeck = props.sitting !== null
   return (
     <>
-      <MatchName title='On Deck' match={props.match} />
+      <SittingName title='On Deck' sitting={props.sitting} />
       <div className='flex justify-evenly gap-4 mt-6'>
-        <ClearOrPushButton match={props.match} hasActive={props.hasActive} canQueue={canQueue} />
-        <ForceButton match={props.match} hasActive={props.hasActive} canQueue={canQueue} />
+        <ClearOrPushButton activeStage={props.activeStage} hasOnDeck={hasOnDeck} canQueue={canQueue} />
+        <ForceButton activeStage={props.activeStage} hasOnDeck={hasOnDeck} />
       </div>
     </>
   )
 }
 
 function EmptyQueueing (): JSX.Element {
-  return <QueueingContent match={null} hasActive={false} stage={MATCH_STAGE.EMPTY} />
+  return <QueueingContent activeStage={MatchStage.Empty} sitting={null} />
 }
 
-function PopulatedQueueing (props: { fieldId: number, active: SelectedField }): JSX.Element {
-  const status = CompetitionFieldStatusSubscription(props.fieldId) ?? { onField: null }
-  const liveStatus = CompetitionFieldStatusSubscription(props.active ?? 0)
-
-  let stage = MATCH_STAGE.EMPTY
-  if (liveStatus !== undefined) {
-    stage = liveStatus.stage
-  }
-
-  let match: Match | null = null
-  if (status.onField !== null) {
-    match = status.onField
-  }
-
-  return <QueueingContent match={match} hasActive={props.active !== undefined && props.active !== null} stage={stage} />
+interface LiveFieldInfo {
+  id: number
+  competition: {
+    stage: MatchStage
+  } | null
 }
+
+interface OnDeckFieldInfo {
+  id: number
+  competition: {
+    onFieldSitting: {
+      id: number
+    }
+  }
+}
+
+function PopulatedQueueing (props: { info: OnDeckFieldInfo, active: LiveFieldInfo | null, sitting: SittingIdentifier }): JSX.Element {
+  let stage = MatchStage.Empty
+  const { active } = props
+
+  if (active?.competition?.stage !== undefined) {
+    stage = active.competition.stage
+  }
+
+  return <QueueingContent sitting={props.sitting} activeStage={stage} />
+}
+
+const ON_DECK_FIELD = gql(`
+  query OnDeckField {
+    competitionInformation {
+      onDeckField {
+        id
+        competition {
+          onFieldSitting {
+            id
+            contest {
+              round
+              number
+            }
+            match {
+              number
+            }
+          }
+        }
+      }
+      liveField {
+        id
+        competition {
+          stage
+        }
+      }
+    }
+  }
+`)
+
 export function Queueing (): JSX.Element {
-  const onDeckField = OnDeckFieldSubscription()
-  const liveField = LiveFieldSubscription()
-
-  if (onDeckField === null || onDeckField === undefined) {
+  const { data } = useQuery(ON_DECK_FIELD)
+  if (data?.competitionInformation.onDeckField?.competition?.onFieldSitting?.id === undefined) {
     return <EmptyQueueing />
   } else {
-    return <PopulatedQueueing fieldId={onDeckField} active={liveField} />
+    const sittingRaw = data.competitionInformation.onDeckField.competition.onFieldSitting
+    const sitting = {
+      id: sittingRaw.id,
+      contest: sittingRaw.contest.number,
+      match: sittingRaw.match.number,
+      round: sittingRaw.contest.round
+    }
+    return <PopulatedQueueing sitting={sitting} info={data.competitionInformation.onDeckField as OnDeckFieldInfo} active={data.competitionInformation.liveField} />
   }
 }

@@ -27,7 +27,7 @@ const PUT_ON_DECK = gql(`
 
 export function PutOnDeckAction (props: { fieldId: number }): JSX.Element {
   const [putOnDeck, { error }] = useMutation(PUT_ON_DECK, {
-    refetchQueries: ['GetCompetitionFields']
+    refetchQueries: ['OnDeckField']
   })
 
   if (error !== undefined) {

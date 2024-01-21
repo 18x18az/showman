@@ -22,6 +22,7 @@ const documents = {
     "\n  mutation QueueSitting($sittingId: Int!, $fieldId: Int!) {\n    queueSitting(sittingId: $sittingId, fieldId: $fieldId) {\n      id\n    }\n  }\n": types.QueueSittingDocument,
     "\n  query GetUnqueuedMatches {\n    currentBlock {\n      name\n      unqueuedSittings {\n        id\n        contest {\n          round\n          number\n        }\n        field {\n          id\n          name\n        }\n        match {\n          number\n        }\n      }\n    }\n  }\n": types.GetUnqueuedMatchesDocument,
     "\n  query GetTableOccupied {\n    fields(isEnabled: true, isCompetition: true) {\n      id\n      name\n      competition {\n        onTableSitting {\n          id\n        }\n      }\n    }\n  }\n": types.GetTableOccupiedDocument,
+    "\n  query OnDeckField {\n    competitionInformation {\n      onDeckField {\n        id\n        competition {\n          onFieldSitting {\n            id\n            contest {\n              round\n              number\n            }\n            match {\n              number\n            }\n          }\n        }\n      }\n      liveField {\n        id\n        competition {\n          stage\n        }\n      }\n    }\n  }\n": types.OnDeckFieldDocument,
 };
 
 /**
@@ -74,6 +75,10 @@ export function gql(source: "\n  query GetUnqueuedMatches {\n    currentBlock {\
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query GetTableOccupied {\n    fields(isEnabled: true, isCompetition: true) {\n      id\n      name\n      competition {\n        onTableSitting {\n          id\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetTableOccupied {\n    fields(isEnabled: true, isCompetition: true) {\n      id\n      name\n      competition {\n        onTableSitting {\n          id\n        }\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query OnDeckField {\n    competitionInformation {\n      onDeckField {\n        id\n        competition {\n          onFieldSitting {\n            id\n            contest {\n              round\n              number\n            }\n            match {\n              number\n            }\n          }\n        }\n      }\n      liveField {\n        id\n        competition {\n          stage\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query OnDeckField {\n    competitionInformation {\n      onDeckField {\n        id\n        competition {\n          onFieldSitting {\n            id\n            contest {\n              round\n              number\n            }\n            match {\n              number\n            }\n          }\n        }\n      }\n      liveField {\n        id\n        competition {\n          stage\n        }\n      }\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};
