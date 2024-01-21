@@ -5,7 +5,7 @@ export interface FieldInfo {
   name: string
 }
 
-export interface MatchIdentifier {
+export interface SittingIdentifier {
   id: number
   round: Round
   contest: number

@@ -5,6 +5,7 @@ import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { gql } from '../../../__generated__'
 import { useMutation, useQuery } from '@apollo/client'
 import { Round } from '../../../__generated__/graphql'
+import { toast } from '../../ui/use-toast'
 
 interface QueueableField {
   id: number
@@ -25,14 +26,25 @@ const QUEUE_SITTING = gql(`
 `)
 
 function ActionMenu (props: ActionMenuProps): JSX.Element {
-  const [queueSitting] = useMutation(QUEUE_SITTING)
+  const [queueSitting, { error }] = useMutation(QUEUE_SITTING, {
+    refetchQueries: ['GetUnqueuedMatches', 'GetCompetitionFields']
+  })
   if (props.queueableFields.length === 0) {
     return <div />
+  }
+  if (error !== undefined) {
+    toast({
+      duration: 3000,
+      description: (
+        <div className='text-xl flex gap-4 content-center align-center'>{error.message}</div>
+      )
+    })
   }
   const options = props.queueableFields.map((field) => {
     return (
       <DropdownMenuItem
         key={field.id} onClick={() => {
+          console.log(`Queueing sitting ${props.sittingId} to field ${field.id}`)
           void queueSitting({ variables: { sittingId: props.sittingId, fieldId: field.id } })
         }}
       >

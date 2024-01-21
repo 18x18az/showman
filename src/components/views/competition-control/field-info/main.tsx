@@ -3,22 +3,22 @@ import { OnField } from './on-field'
 import { gql } from '../../../../__generated__'
 import { useQuery } from '@apollo/client'
 import { MatchStage, SittingInformationFragment } from '../../../../__generated__/graphql'
-import { MatchIdentifier } from './interfaces'
+import { SittingIdentifier } from './interfaces'
 
 interface FieldInfoProps {
   name: string
   stage: MatchStage
   id: number
-  field: MatchIdentifier | null
-  table: MatchIdentifier | null
+  sOnField: SittingIdentifier | null
+  sOnTable: SittingIdentifier | null
 }
 
 function FieldInfo (props: FieldInfoProps): JSX.Element {
   return (
     <div className='flex flex-col gap-8 w-96 mb-8 items-center justify-center h-full'>
       <h1 className='text-center text-2xl font-sans text-zinc-500'>{props.name}</h1>
-      <OnField fieldId={props.id} stage={props.stage} match={props.field} />
-      <OnDeck field={props.id} match={props.table} />
+      <OnField fieldId={props.id} stage={props.stage} match={props.sOnField} />
+      <OnDeck fieldId={props.id} match={props.sOnTable} />
     </div>
   )
 }
@@ -57,7 +57,7 @@ const GET_COMPETITION_FIELDS = gql(`
   }
 `)
 
-function makeIdentifier (sitting: SittingInformationFragment | null): MatchIdentifier | null {
+function makeIdentifier (sitting: SittingInformationFragment | null): SittingIdentifier | null {
   if (sitting === null) return null
 
   return {
@@ -90,7 +90,7 @@ export function FieldInfos (): JSX.Element {
     const onTable = compInfo === null ? null : makeIdentifier(compInfo.onTableSitting)
 
     return (
-      <FieldInfo stage={stage} id={field.id} name={field.name} key={field.id} field={onField} table={onTable} />
+      <FieldInfo stage={stage} id={field.id} name={field.name} key={field.id} sOnField={onField} sOnTable={onTable} />
     )
   })
 

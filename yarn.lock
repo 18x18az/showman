@@ -2,11 +2,6 @@
 # yarn lockfile v1
 
 
-"@18x18az/maestro-interfaces@^1.20.0":
-  version "1.20.0"
-  resolved "https://registry.yarnpkg.com/@18x18az/maestro-interfaces/-/maestro-interfaces-1.20.0.tgz#20745b58efd7980f14532e487b27b6cfba73e6ce"
-  integrity sha512-WmUJrhax5GagK0LyKa8yJp6FPmGnyQ7mobjintgG5cVEoJ7Bvx3L9TQpImdLCDfREYpxlBe+oD19s8LGHsM8TA==
-
 "@aashutoshrathi/word-wrap@^1.2.3":
   version "1.2.6"
   resolved "https://registry.npmjs.org/@aashutoshrathi/word-wrap/-/word-wrap-1.2.6.tgz"
@@ -5329,11 +5324,6 @@
   version "2.17.1"
   resolved "https://registry.yarnpkg.com/@types/obs-studio/-/obs-studio-2.17.1.tgz#778051535c41b23d761f8f8a19b1c030ee452fc7"
   integrity sha512-xQ7RWjLyNQQKblPuiq6Hh60nhlZ+vXI1uel/smLj9uwW0dYp9G8byz1nXbuPFxtJLdSnBRpozkhE1iKt7g5wMA==
-
-"@types/paho-mqtt@^1.0.8":
-  version "1.0.8"
-  resolved "https://registry.npmjs.org/@types/paho-mqtt/-/paho-mqtt-1.0.8.tgz"
-  integrity sha512-zVGEv61gh2hUGJiP+IR3ihllw380zsKlMrNkED3nRzg/avXXbiBzcEC5BQx5ZmoCe5PUIwzdrt4ct64ff9n1uA==
 
 "@types/parse-json@^4.0.0":
   version "4.0.0"
@@ -12167,11 +12157,6 @@ package-hash@^4.0.0:
     hasha "^5.0.0"
     lodash.flattendeep "^4.4.0"
     release-zalgo "^1.0.0"
-
-paho-mqtt@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.npmjs.org/paho-mqtt/-/paho-mqtt-1.1.0.tgz"
-  integrity sha512-KPbL9KAB0ASvhSDbOrZBaccXS+/s7/LIofbPyERww8hM5Ko71GUJQ6Nmg0BWqj8phAIT8zdf/Sd/RftHU9i2HA==
 
 pako@~0.2.0:
   version "0.2.9"

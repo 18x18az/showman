@@ -18,7 +18,6 @@
     "test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"yarn build-storybook && npx http-server storybook-static --port 6006\" \"wait-on tcp:6006 && yarn test-storybook\""
   },
   "dependencies": {
-    "@18x18az/maestro-interfaces": "^1.20.0",
     "@apollo/client": "^3.8.8",
     "@hookform/resolvers": "^3.3.2",
     "@radix-ui/colors": "^3.0.0-rc.4",
@@ -53,7 +52,6 @@
     "lucide-react": "^0.287.0",
     "next": "^13.5.6",
     "next-themes": "^0.2.1",
-    "paho-mqtt": "^1.1.0",
     "postcss": "8.4.31",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -87,7 +85,6 @@
     "@storybook/testing-library": "^0.2.0",
     "@testing-library/react": "^14.0.0",
     "@types/obs-studio": "^2.17.1",
-    "@types/paho-mqtt": "^1.0.8",
     "@types/redux-logger": "^3.0.10",
     "chromatic": "^7.1.0",
     "concurrently": "^8.2.2",

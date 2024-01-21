@@ -1,11 +1,11 @@
 import { CommonFieldInfo, FieldStatus } from './common'
 import { PutOnDeckAction, RemoveAction, ReplayAction } from './actions'
 import { MatchStage } from '../../../../__generated__/graphql'
-import { MatchIdentifier, SelectedField } from './interfaces'
+import { SittingIdentifier, SelectedField } from './interfaces'
 
 function FieldOptions (fieldId: number, sittingId: number | null, stage: MatchStage, liveField: SelectedField, onDeckField: SelectedField): JSX.Element[] {
   const thisField = fieldId
-  if (liveField === undefined || onDeckField === undefined || sittingId === null) {
+  if (sittingId === null) {
     return []
   }
 
@@ -26,14 +26,14 @@ function FieldOptions (fieldId: number, sittingId: number | null, stage: MatchSt
   return options
 }
 
-export function OnField (props: { fieldId: number, match: MatchIdentifier | null, stage: MatchStage }): JSX.Element {
+export function OnField (props: { fieldId: number, match: SittingIdentifier | null, stage: MatchStage }): JSX.Element {
   const { fieldId, match } = props
-  const matchId = match !== null ? match.id : null
+  const sittingId = match !== null ? match.id : null
   const stage = props.stage
   const liveField = null
   const onDeckField = null
 
-  const options = FieldOptions(fieldId, matchId, stage, null, null)
+  const options = FieldOptions(fieldId, sittingId, stage, null, null)
 
   let status: FieldStatus | undefined
 
