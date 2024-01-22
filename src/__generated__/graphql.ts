@@ -190,6 +190,7 @@ export enum MatchStatus {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  clearLive: Competition;
   configureTournamentManager: TournamentManager;
   putLive: Competition;
   putOnDeck: Competition;
@@ -405,6 +406,11 @@ export type ResetAutonMutationVariables = Exact<{
 
 
 export type ResetAutonMutation = { __typename?: 'Mutation', resetAuton: { __typename?: 'CompetitionField', stage: MatchStage } };
+
+export type ClearLiveMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ClearLiveMutation = { __typename?: 'Mutation', clearLive: { __typename?: 'Competition', liveField: { __typename?: 'Field', id: number } | null } };
 
 export type OnDeckFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -728,6 +734,40 @@ export function useResetAutonMutation(baseOptions?: Apollo.MutationHookOptions<R
 export type ResetAutonMutationHookResult = ReturnType<typeof useResetAutonMutation>;
 export type ResetAutonMutationResult = Apollo.MutationResult<ResetAutonMutation>;
 export type ResetAutonMutationOptions = Apollo.BaseMutationOptions<ResetAutonMutation, ResetAutonMutationVariables>;
+export const ClearLiveDocument = gql`
+    mutation ClearLive {
+  clearLive {
+    liveField {
+      id
+    }
+  }
+}
+    `;
+export type ClearLiveMutationFn = Apollo.MutationFunction<ClearLiveMutation, ClearLiveMutationVariables>;
+
+/**
+ * __useClearLiveMutation__
+ *
+ * To run a mutation, you first call `useClearLiveMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useClearLiveMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [clearLiveMutation, { data, loading, error }] = useClearLiveMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useClearLiveMutation(baseOptions?: Apollo.MutationHookOptions<ClearLiveMutation, ClearLiveMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ClearLiveMutation, ClearLiveMutationVariables>(ClearLiveDocument, options);
+      }
+export type ClearLiveMutationHookResult = ReturnType<typeof useClearLiveMutation>;
+export type ClearLiveMutationResult = Apollo.MutationResult<ClearLiveMutation>;
+export type ClearLiveMutationOptions = Apollo.BaseMutationOptions<ClearLiveMutation, ClearLiveMutationVariables>;
 export const OnDeckFieldDocument = gql`
     query OnDeckField {
   competitionInformation {

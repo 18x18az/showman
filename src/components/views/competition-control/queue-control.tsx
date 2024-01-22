@@ -2,7 +2,7 @@ import { makeShortMatchName } from '@/utils/strings/match'
 import { Button } from '@/components/ui/button'
 import { PlayIcon, StopIcon, TrackNextIcon } from '@radix-ui/react-icons'
 import { SittingIdentifier } from './field-info/interfaces'
-import { MatchStage, useOnDeckFieldQuery, usePutLiveMutation } from '../../../__generated__/graphql'
+import { MatchStage, useClearLiveMutation, useOnDeckFieldQuery, usePutLiveMutation } from '../../../__generated__/graphql'
 
 function SittingName (props: { title: string, sitting: SittingIdentifier | null }): JSX.Element {
   let color = 'text-zinc-500'
@@ -21,8 +21,9 @@ function SittingName (props: { title: string, sitting: SittingIdentifier | null 
 
 function ClearLiveButton (props: { hasOnDeck: boolean, canQueue: boolean }): JSX.Element {
   const disabled = !props.hasOnDeck || !props.canQueue
+  const [clearLive] = useClearLiveMutation({})
   return (
-    <Button variant='secondary' disabled={disabled} onClick={() => { }}>
+    <Button variant='secondary' disabled={disabled} onClick={() => { void clearLive() }}>
       <StopIcon />
     </Button>
   )

@@ -54,3 +54,11 @@ mutation ResetAuton($fieldId: Int!) {
     stage
   }
 }
+
+mutation ClearLive {
+  clearLive {
+    liveField {
+      id
+    }
+  }
+}
