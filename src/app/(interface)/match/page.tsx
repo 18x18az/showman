@@ -2,15 +2,21 @@
 import Logo from '@/components/primitives/logo'
 import { Button } from '@/components/ui/button'
 import { EyeIcon, PlayIcon } from 'lucide-react'
-import { MatchStage, SittingInformationFragment, SittingWithTeamsFragment, useRefereeInformationQuery } from '../../../__generated__/graphql'
+import { MatchStage, SittingInformationFragment, SittingWithTeamsFragment, usePutLiveMutation, useRefereeInformationQuery, useStartFieldMutation } from '../../../__generated__/graphql'
 import { makeMatchName } from '../../../utils/strings/match'
 
-function StartButton (props: { disabled: boolean }): JSX.Element {
-  return <Button className='p-8' disabled={props.disabled} onClick={() => { }}><PlayIcon size={48} /></Button>
+function StartButton (props: { disabled: boolean, fieldId: number }): JSX.Element {
+  const [startMatch] = useStartFieldMutation({
+    variables: {
+      fieldId: props.fieldId
+    }
+  })
+  return <Button className='p-8' disabled={props.disabled} onClick={() => { void startMatch() }}><PlayIcon size={48} /></Button>
 }
 
 function DisplayButton (props: { disabled: boolean }): JSX.Element {
-  return <Button className='p-8' disabled={props.disabled} onClick={() => { }}><EyeIcon size={48} /></Button>
+  const [putLive] = usePutLiveMutation()
+  return <Button className='p-8' disabled={props.disabled} onClick={() => { void putLive() }}><EyeIcon size={48} /></Button>
 }
 
 interface TeamInformation {
@@ -69,7 +75,7 @@ function PageContent (props: { sitting: SittingInformation, field: FieldInfo, is
       <div className='flex-1 grow' />
       <div className='flex justify-evenly mb-12'>
         <DisplayButton disabled={isLive} />
-        <StartButton disabled={!canStart} />
+        <StartButton fieldId={props.field.id} disabled={!canStart} />
       </div>
     </div>
   )

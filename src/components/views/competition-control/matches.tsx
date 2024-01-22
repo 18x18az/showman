@@ -3,7 +3,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Button } from '@/components/ui/button'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { toast } from '../../ui/use-toast'
-import { Round, useGetTableOccupiedQuery, useGetUnqueuedSittingsQuery, useQueueSittingMutation } from '../../../__generated__/graphql'
+import { SittingInformationFragment, useGetTableOccupiedQuery, useGetUnqueuedSittingsQuery, useQueueSittingMutation } from '../../../__generated__/graphql'
 
 interface QueueableField {
   id: number
@@ -57,29 +57,13 @@ function ActionMenu (props: ActionMenuProps): JSX.Element {
   )
 }
 
-interface SittingContest {
-  round: Round
-  number: number
-}
-
-interface UnqueuedSittingProps {
-  id: number
-  contest: SittingContest
-  match: {
-    number: number
-  }
-  field: {
-    name: string
-  } | null
-}
-
-function UnqueuedSitting (props: { sitting: UnqueuedSittingProps, queueableFields: QueueableField[] }): JSX.Element {
+function UnqueuedSitting (props: { sitting: SittingInformationFragment, fieldName?: string, queueableFields: QueueableField[] }): JSX.Element {
   const { sitting } = props
-  const name = makeShortMatchName({ round: sitting.contest.round, contest: sitting.contest.number, match: sitting.match.number })
-  const fieldName = sitting.field?.name ?? ''
+  const name = makeShortMatchName(sitting)
+  const fieldName = props.fieldName ?? ''
   return (
     <div className='border border-zinc-800 text-center rounded-md w-28 h-28 flex flex-col justify-between p-3'>
-      <ActionMenu sittingId={sitting.id} queueableFields={props.queueableFields} />
+      <ActionMenu sittingId={sitting?.id} queueableFields={props.queueableFields} />
       <h1>{name}</h1>
       <h2>{fieldName}</h2>
     </div>
