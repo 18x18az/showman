@@ -1,5 +1,6 @@
 fragment SittingInformation on Sitting {
   id
+  number
   contest {
   	round
   	number
