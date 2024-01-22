@@ -4,7 +4,7 @@ import { PlayIcon, ReloadIcon, ResetIcon, StopIcon } from '@radix-ui/react-icons
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { offsetTimer } from '@/app/display/field/[uuid]/timer'
 import { SittingIdentifier } from './field-info/interfaces'
-import { MatchStage, useLiveFieldQuery, useResetAutonMutation, useStartFieldMutation } from '../../../__generated__/graphql'
+import { MatchStage, useFieldControlSubscription, useLiveFieldQuery, useResetAutonMutation, useStartFieldMutation, useStopFieldMutation } from '../../../__generated__/graphql'
 
 function makeTime (offset: number, truncate = false): string {
   if (truncate && offset < 0) {
@@ -43,12 +43,22 @@ function StartButton (props: { disabled: boolean, fieldId: number }): JSX.Elemen
   )
 }
 
-function StopButton (): JSX.Element {
+function StopButton (props: { fieldId: number }): JSX.Element {
+  const [stopMatch] = useStopFieldMutation()
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button variant='secondary' onClick={() => { }}><StopIcon /></Button>
+          <Button
+            variant='secondary' onClick={() => {
+              stopMatch({
+                variables: {
+                  fieldId: props.fieldId
+                }
+              })
+            }}
+          ><StopIcon />
+          </Button>
         </TooltipTrigger>
         <TooltipContent>
           <p>End Early</p>
@@ -127,7 +137,7 @@ function MatchControlContent (props: { sitting: SittingIdentifier | null, stage:
 
   let startStopButton = <StartButton disabled={!canStart} fieldId={fieldId} />
   if (canEnd) {
-    startStopButton = <StopButton />
+    startStopButton = <StopButton fieldId={fieldId} />
   }
 
   return (
@@ -149,6 +159,13 @@ function EmptyMatchControl (): JSX.Element {
 }
 
 function PopulatedMatchControl (props: { fieldId: number, sitting: SittingIdentifier, stage: MatchStage, endTime: string | null }): JSX.Element {
+  const { data } = useFieldControlSubscription({
+    variables: {
+      fieldId: props.fieldId
+    }
+  })
+  const subEndTIme = data?.fieldControl?.endTime
+  console.log(subEndTIme)
   return <MatchControlContent sitting={props.sitting} stage={props.stage} endTime={props.endTime} fieldId={props.fieldId} />
 }
 

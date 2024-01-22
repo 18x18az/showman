@@ -43,6 +43,12 @@ mutation StartField($fieldId: Int!) {
   }
 }
 
+mutation StopField($fieldId: Int!) {
+  stopField(fieldId: $fieldId) {
+    endTime
+  }
+}
+
 mutation ResetAuton($fieldId: Int!) {
   resetAuton(fieldId: $fieldId) {
     stage

@@ -134,6 +134,8 @@ export type FieldControl = {
   endTime: Maybe<Scalars['DateTime']['output']>;
   /** The field that this control object is associated with */
   field: Field;
+  /** The ID of the field that this control object is associated with */
+  fieldId: Scalars['Float']['output'];
   /** Whether the field is currently running */
   isRunning: Scalars['Boolean']['output'];
   /** The current mode of the field, null if undefined. Will still return a value even if it is not currently running. */
@@ -197,6 +199,7 @@ export type Mutation = {
   resetAuton: CompetitionField;
   startField: FieldControl;
   startNextBlock: Block;
+  stopField: FieldControl;
   unqueue: CompetitionField;
   updateField: Field;
 };
@@ -224,6 +227,11 @@ export type MutationResetAutonArgs = {
 
 
 export type MutationStartFieldArgs = {
+  fieldId: Scalars['Int']['input'];
+};
+
+
+export type MutationStopFieldArgs = {
   fieldId: Scalars['Int']['input'];
 };
 
@@ -293,6 +301,16 @@ export type Stage = {
   __typename?: 'Stage';
   /** The current stage of the event */
   stage: EventStage;
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  fieldControl: FieldControl;
+};
+
+
+export type SubscriptionFieldControlArgs = {
+  fieldId: Scalars['Int']['input'];
 };
 
 export type Team = {
@@ -374,6 +392,13 @@ export type StartFieldMutationVariables = Exact<{
 
 export type StartFieldMutation = { __typename?: 'Mutation', startField: { __typename?: 'FieldControl', endTime: any | null } };
 
+export type StopFieldMutationVariables = Exact<{
+  fieldId: Scalars['Int']['input'];
+}>;
+
+
+export type StopFieldMutation = { __typename?: 'Mutation', stopField: { __typename?: 'FieldControl', endTime: any | null } };
+
 export type ResetAutonMutationVariables = Exact<{
   fieldId: Scalars['Int']['input'];
 }>;
@@ -409,7 +434,14 @@ export type GetEventStageQuery = { __typename?: 'Query', stage: { __typename?: '
 export type GetCompetitionFieldsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCompetitionFieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, isLive: boolean, isOnDeck: boolean, onFieldSitting: { __typename?: 'Sitting', id: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } } | null, onTableSitting: { __typename?: 'Sitting', id: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } } | null } | null, fieldControl: { __typename?: 'FieldControl', endTime: any | null } | null }> };
+export type GetCompetitionFieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, isLive: boolean, isOnDeck: boolean, onFieldSitting: { __typename?: 'Sitting', id: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } } | null, onTableSitting: { __typename?: 'Sitting', id: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } } | null } | null, fieldControl: { __typename?: 'FieldControl', fieldId: number, endTime: any | null } | null }> };
+
+export type FieldControlSubscriptionVariables = Exact<{
+  fieldId: Scalars['Int']['input'];
+}>;
+
+
+export type FieldControlSubscription = { __typename?: 'Subscription', fieldControl: { __typename?: 'FieldControl', fieldId: number, endTime: any | null, mode: Control_Mode | null } };
 
 export const SittingInformationFragmentDoc = gql`
     fragment SittingInformation on Sitting {
@@ -630,6 +662,39 @@ export function useStartFieldMutation(baseOptions?: Apollo.MutationHookOptions<S
 export type StartFieldMutationHookResult = ReturnType<typeof useStartFieldMutation>;
 export type StartFieldMutationResult = Apollo.MutationResult<StartFieldMutation>;
 export type StartFieldMutationOptions = Apollo.BaseMutationOptions<StartFieldMutation, StartFieldMutationVariables>;
+export const StopFieldDocument = gql`
+    mutation StopField($fieldId: Int!) {
+  stopField(fieldId: $fieldId) {
+    endTime
+  }
+}
+    `;
+export type StopFieldMutationFn = Apollo.MutationFunction<StopFieldMutation, StopFieldMutationVariables>;
+
+/**
+ * __useStopFieldMutation__
+ *
+ * To run a mutation, you first call `useStopFieldMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStopFieldMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [stopFieldMutation, { data, loading, error }] = useStopFieldMutation({
+ *   variables: {
+ *      fieldId: // value for 'fieldId'
+ *   },
+ * });
+ */
+export function useStopFieldMutation(baseOptions?: Apollo.MutationHookOptions<StopFieldMutation, StopFieldMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<StopFieldMutation, StopFieldMutationVariables>(StopFieldDocument, options);
+      }
+export type StopFieldMutationHookResult = ReturnType<typeof useStopFieldMutation>;
+export type StopFieldMutationResult = Apollo.MutationResult<StopFieldMutation>;
+export type StopFieldMutationOptions = Apollo.BaseMutationOptions<StopFieldMutation, StopFieldMutationVariables>;
 export const ResetAutonDocument = gql`
     mutation ResetAuton($fieldId: Int!) {
   resetAuton(fieldId: $fieldId) {
@@ -912,6 +977,7 @@ export const GetCompetitionFieldsDocument = gql`
       }
     }
     fieldControl {
+      fieldId
       endTime
     }
   }
@@ -949,3 +1015,35 @@ export type GetCompetitionFieldsQueryHookResult = ReturnType<typeof useGetCompet
 export type GetCompetitionFieldsLazyQueryHookResult = ReturnType<typeof useGetCompetitionFieldsLazyQuery>;
 export type GetCompetitionFieldsSuspenseQueryHookResult = ReturnType<typeof useGetCompetitionFieldsSuspenseQuery>;
 export type GetCompetitionFieldsQueryResult = Apollo.QueryResult<GetCompetitionFieldsQuery, GetCompetitionFieldsQueryVariables>;
+export const FieldControlDocument = gql`
+    subscription FieldControl($fieldId: Int!) {
+  fieldControl(fieldId: $fieldId) {
+    fieldId
+    endTime
+    mode
+  }
+}
+    `;
+
+/**
+ * __useFieldControlSubscription__
+ *
+ * To run a query within a React component, call `useFieldControlSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useFieldControlSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFieldControlSubscription({
+ *   variables: {
+ *      fieldId: // value for 'fieldId'
+ *   },
+ * });
+ */
+export function useFieldControlSubscription(baseOptions: Apollo.SubscriptionHookOptions<FieldControlSubscription, FieldControlSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<FieldControlSubscription, FieldControlSubscriptionVariables>(FieldControlDocument, options);
+      }
+export type FieldControlSubscriptionHookResult = ReturnType<typeof useFieldControlSubscription>;
+export type FieldControlSubscriptionResult = Apollo.SubscriptionResult<FieldControlSubscription>;

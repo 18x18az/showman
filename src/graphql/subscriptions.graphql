@@ -1,0 +1,7 @@
+subscription FieldControl($fieldId: Int!) {
+    fieldControl(fieldId: $fieldId) {
+        fieldId
+        endTime
+        mode
+    }
+}

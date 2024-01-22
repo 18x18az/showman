@@ -81,6 +81,7 @@ query GetCompetitionFields {
       }
     }
     fieldControl {
+      fieldId
       endTime
     }
   }
