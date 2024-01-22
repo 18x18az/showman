@@ -8,3 +8,21 @@ fragment SittingInformation on Sitting {
     number
   }
 }
+
+fragment TeamInformation on Team {
+  id
+  number
+  name
+}
+
+fragment SittingWithTeams on Sitting {
+  ...SittingInformation
+  contest {
+    redTeams {
+      ...TeamInformation
+    }
+    blueTeams {
+      ...TeamInformation
+    }
+  }
+}

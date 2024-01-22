@@ -1,10 +1,9 @@
 import { makeShortMatchName } from '@/utils/strings/match'
 import { Button } from '@/components/ui/button'
 import { PlayIcon, StopIcon, TrackNextIcon } from '@radix-ui/react-icons'
-import { SittingIdentifier } from './field-info/interfaces'
-import { MatchStage, useClearLiveMutation, useOnDeckFieldQuery, usePutLiveMutation } from '../../../__generated__/graphql'
+import { MatchStage, SittingInformationFragment, useClearLiveMutation, useOnDeckFieldQuery, usePutLiveMutation } from '../../../__generated__/graphql'
 
-function SittingName (props: { title: string, sitting: SittingIdentifier | null }): JSX.Element {
+function SittingName (props: { title: string, sitting: SittingInformationFragment | null }): JSX.Element {
   let color = 'text-zinc-500'
   let name = '-'
   if (props.sitting !== null) {
@@ -55,7 +54,7 @@ function ForceButton (props: { activeStage: MatchStage, hasOnDeck: boolean }): J
   )
 }
 
-function QueueingContent (props: { activeStage: MatchStage, sitting: SittingIdentifier | null }): JSX.Element {
+function QueueingContent (props: { activeStage: MatchStage, sitting: SittingInformationFragment | null }): JSX.Element {
   const canQueue = (props.activeStage === MatchStage.Queued || props.activeStage === MatchStage.Scoring || props.activeStage === MatchStage.Empty)
   const hasOnDeck = props.sitting !== null
   return (
@@ -89,7 +88,7 @@ interface OnDeckFieldInfo {
   }
 }
 
-function PopulatedQueueing (props: { info: OnDeckFieldInfo, active: LiveFieldInfo | null, sitting: SittingIdentifier }): JSX.Element {
+function PopulatedQueueing (props: { info: OnDeckFieldInfo, active: LiveFieldInfo | null, sitting: SittingInformationFragment }): JSX.Element {
   let stage = MatchStage.Empty
   const { active } = props
 
@@ -105,13 +104,7 @@ export function Queueing (): JSX.Element {
   if (data?.competitionInformation.onDeckField?.competition?.onFieldSitting?.id === undefined) {
     return <EmptyQueueing />
   } else {
-    const sittingRaw = data.competitionInformation.onDeckField.competition.onFieldSitting
-    const sitting = {
-      id: sittingRaw.id,
-      contest: sittingRaw.contest.number,
-      match: sittingRaw.match.number,
-      round: sittingRaw.contest.round
-    }
+    const sitting = data.competitionInformation.onDeckField.competition.onFieldSitting
     return <PopulatedQueueing sitting={sitting} info={data.competitionInformation.onDeckField as OnDeckFieldInfo} active={data.competitionInformation.liveField} />
   }
 }

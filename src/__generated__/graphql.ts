@@ -352,6 +352,10 @@ export type TournamentManagerSetup = {
 
 export type SittingInformationFragment = { __typename?: 'Sitting', id: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } };
 
+export type TeamInformationFragment = { __typename?: 'Team', id: number, number: string, name: string };
+
+export type SittingWithTeamsFragment = { __typename?: 'Sitting', id: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string }> }, match: { __typename?: 'Match', number: number } };
+
 export type QueueSittingMutationVariables = Exact<{
   sittingId: Scalars['Int']['input'];
   fieldId: Scalars['Int']['input'];
@@ -417,6 +421,11 @@ export type OnDeckFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type OnDeckFieldQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', onDeckField: { __typename?: 'Field', id: number, competition: { __typename?: 'CompetitionField', onFieldSitting: { __typename?: 'Sitting', id: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } } | null } | null } | null, liveField: { __typename?: 'Field', id: number, competition: { __typename?: 'CompetitionField', stage: MatchStage } | null } | null } };
 
+export type RefereeInformationQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type RefereeInformationQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', liveField: { __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', id: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string }> }, match: { __typename?: 'Match', number: number } } | null } | null } | null, onDeckField: { __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', onFieldSitting: { __typename?: 'Sitting', id: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string }> }, match: { __typename?: 'Match', number: number } } | null } | null } | null } };
+
 export type LiveFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -461,6 +470,27 @@ export const SittingInformationFragmentDoc = gql`
   }
 }
     `;
+export const TeamInformationFragmentDoc = gql`
+    fragment TeamInformation on Team {
+  id
+  number
+  name
+}
+    `;
+export const SittingWithTeamsFragmentDoc = gql`
+    fragment SittingWithTeams on Sitting {
+  ...SittingInformation
+  contest {
+    redTeams {
+      ...TeamInformation
+    }
+    blueTeams {
+      ...TeamInformation
+    }
+  }
+}
+    ${SittingInformationFragmentDoc}
+${TeamInformationFragmentDoc}`;
 export const QueueSittingDocument = gql`
     mutation QueueSitting($sittingId: Int!, $fieldId: Int!) {
   queueSitting(sittingId: $sittingId, fieldId: $fieldId) {
@@ -820,6 +850,63 @@ export type OnDeckFieldQueryHookResult = ReturnType<typeof useOnDeckFieldQuery>;
 export type OnDeckFieldLazyQueryHookResult = ReturnType<typeof useOnDeckFieldLazyQuery>;
 export type OnDeckFieldSuspenseQueryHookResult = ReturnType<typeof useOnDeckFieldSuspenseQuery>;
 export type OnDeckFieldQueryResult = Apollo.QueryResult<OnDeckFieldQuery, OnDeckFieldQueryVariables>;
+export const RefereeInformationDocument = gql`
+    query RefereeInformation {
+  competitionInformation {
+    liveField {
+      id
+      name
+      competition {
+        stage
+        onFieldSitting {
+          ...SittingWithTeams
+        }
+      }
+    }
+    onDeckField {
+      id
+      name
+      competition {
+        onFieldSitting {
+          ...SittingWithTeams
+        }
+      }
+    }
+  }
+}
+    ${SittingWithTeamsFragmentDoc}`;
+
+/**
+ * __useRefereeInformationQuery__
+ *
+ * To run a query within a React component, call `useRefereeInformationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRefereeInformationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRefereeInformationQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useRefereeInformationQuery(baseOptions?: Apollo.QueryHookOptions<RefereeInformationQuery, RefereeInformationQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<RefereeInformationQuery, RefereeInformationQueryVariables>(RefereeInformationDocument, options);
+      }
+export function useRefereeInformationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RefereeInformationQuery, RefereeInformationQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<RefereeInformationQuery, RefereeInformationQueryVariables>(RefereeInformationDocument, options);
+        }
+export function useRefereeInformationSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<RefereeInformationQuery, RefereeInformationQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<RefereeInformationQuery, RefereeInformationQueryVariables>(RefereeInformationDocument, options);
+        }
+export type RefereeInformationQueryHookResult = ReturnType<typeof useRefereeInformationQuery>;
+export type RefereeInformationLazyQueryHookResult = ReturnType<typeof useRefereeInformationLazyQuery>;
+export type RefereeInformationSuspenseQueryHookResult = ReturnType<typeof useRefereeInformationSuspenseQuery>;
+export type RefereeInformationQueryResult = Apollo.QueryResult<RefereeInformationQuery, RefereeInformationQueryVariables>;
 export const LiveFieldDocument = gql`
     query LiveField {
   competitionInformation {

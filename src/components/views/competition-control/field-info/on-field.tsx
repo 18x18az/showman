@@ -1,7 +1,6 @@
 import { CommonFieldInfo, FieldStatus } from './common'
 import { PutOnDeckAction, RemoveAction, ReplayAction } from './actions'
-import { MatchStage } from '../../../../__generated__/graphql'
-import { SittingIdentifier } from './interfaces'
+import { MatchStage, SittingInformationFragment } from '../../../../__generated__/graphql'
 
 function FieldOptions (fieldId: number, sittingId: number | null, stage: MatchStage, isLive: boolean, isOnDeck: boolean): JSX.Element[] {
   const thisField = fieldId
@@ -26,7 +25,7 @@ function FieldOptions (fieldId: number, sittingId: number | null, stage: MatchSt
   return options
 }
 
-export function OnField (props: { fieldId: number, match: SittingIdentifier | null, stage: MatchStage, isLive: boolean, isOnDeck: boolean }): JSX.Element {
+export function OnField (props: { fieldId: number, match: SittingInformationFragment | null, stage: MatchStage, isLive: boolean, isOnDeck: boolean }): JSX.Element {
   const { fieldId, match, isLive, isOnDeck } = props
   const sittingId = match !== null ? match.id : null
   const stage = props.stage

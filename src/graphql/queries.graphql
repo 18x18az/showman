@@ -17,6 +17,30 @@ query OnDeckField {
   }
 }
 
+query RefereeInformation {
+  competitionInformation {
+    liveField {
+      id
+      name
+      competition {
+        stage
+        onFieldSitting {
+          ...SittingWithTeams
+        }
+      }
+    }
+    onDeckField {
+      id
+      name
+      competition {
+        onFieldSitting {
+          ...SittingWithTeams
+        }
+      }
+    }
+  }
+}
+
 query LiveField {
     competitionInformation {
       liveField {

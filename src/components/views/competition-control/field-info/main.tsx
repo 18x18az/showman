@@ -1,14 +1,13 @@
 import { OnDeck } from './on-deck'
 import { OnField } from './on-field'
-import { SittingIdentifier } from './interfaces'
 import { MatchStage, SittingInformationFragment, useGetCompetitionFieldsQuery } from '../../../../__generated__/graphql'
 
 interface FieldInfoProps {
   name: string
   stage: MatchStage
   id: number
-  sOnField: SittingIdentifier | null
-  sOnTable: SittingIdentifier | null
+  sOnField: SittingInformationFragment | null
+  sOnTable: SittingInformationFragment | null
   isLive: boolean
   isOnDeck: boolean
 }
@@ -21,17 +20,6 @@ function FieldInfo (props: FieldInfoProps): JSX.Element {
       <OnDeck fieldId={props.id} match={props.sOnTable} />
     </div>
   )
-}
-
-function makeIdentifier (sitting: SittingInformationFragment | null): SittingIdentifier | null {
-  if (sitting === null) return null
-
-  return {
-    id: sitting.id,
-    round: sitting.contest.round,
-    contest: sitting.contest.number,
-    match: sitting.match.number
-  }
 }
 
 export function FieldInfos (): JSX.Element {
@@ -49,8 +37,8 @@ export function FieldInfos (): JSX.Element {
     const compInfo = field.competition
 
     const stage = compInfo === null ? MatchStage.Empty : compInfo.stage
-    const onField = compInfo === null ? null : makeIdentifier(compInfo.onFieldSitting)
-    const onTable = compInfo === null ? null : makeIdentifier(compInfo.onTableSitting)
+    const onField = compInfo === null ? null : compInfo.onFieldSitting
+    const onTable = compInfo === null ? null : compInfo.onTableSitting
     const isLive = compInfo === null ? false : compInfo.isLive
     const isOnDeck = compInfo === null ? false : compInfo.isOnDeck
 

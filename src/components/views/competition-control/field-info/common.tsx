@@ -1,7 +1,7 @@
 import { makeShortMatchName } from '@/utils/strings/match'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '../../../ui/dropdown-menu'
-import { SittingIdentifier } from './interfaces'
+import { SittingInformationFragment } from '../../../../__generated__/graphql'
 
 function FieldActionMenu (props: { options: JSX.Element[] }): JSX.Element {
   return (
@@ -25,13 +25,13 @@ export enum FieldStatus {
 }
 
 export interface CommonFieldProps {
-  match: SittingIdentifier | null
+  match: SittingInformationFragment | null
   text?: string
   status?: FieldStatus
   options: JSX.Element[]
 }
 
-function MatchName (props: { match: SittingIdentifier | null }): JSX.Element {
+function MatchName (props: { match: SittingInformationFragment | null }): JSX.Element {
   const name = props.match !== null ? makeShortMatchName(props.match) : ''
 
   return <h1 className='text-4xl text-center text-zinc-500 mb-4'>{name}</h1>
@@ -49,7 +49,7 @@ enum OutlineColor {
   ON_DECK_FIELD = 'border-blue-900'
 }
 
-function getOutlineColor (match: SittingIdentifier | null, status: FieldStatus | undefined): OutlineColor {
+function getOutlineColor (match: SittingInformationFragment | null, status: FieldStatus | undefined): OutlineColor {
   if (match === null) {
     return OutlineColor.EMPTY
   } else if (status === FieldStatus.ACTIVE) {

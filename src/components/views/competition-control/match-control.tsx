@@ -3,8 +3,7 @@ import { Button } from '@/components/ui/button'
 import { PlayIcon, ReloadIcon, ResetIcon, StopIcon } from '@radix-ui/react-icons'
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { offsetTimer } from '@/app/display/field/[uuid]/timer'
-import { SittingIdentifier } from './field-info/interfaces'
-import { MatchStage, useFieldControlSubscription, useLiveFieldQuery, useResetAutonMutation, useStartFieldMutation, useStopFieldMutation } from '../../../__generated__/graphql'
+import { MatchStage, SittingInformationFragment, useFieldControlSubscription, useLiveFieldQuery, useResetAutonMutation, useStartFieldMutation, useStopFieldMutation } from '../../../__generated__/graphql'
 
 function makeTime (offset: number, truncate = false): string {
   if (truncate && offset < 0) {
@@ -104,7 +103,7 @@ function ReplayButton (props: { disabled: boolean }): JSX.Element {
   )
 }
 
-function MatchControlContent (props: { sitting: SittingIdentifier | null, stage: MatchStage, endTime: string | null, fieldId: number }): JSX.Element {
+function MatchControlContent (props: { sitting: SittingInformationFragment | null, stage: MatchStage, endTime: string | null, fieldId: number }): JSX.Element {
   const { sitting, stage, endTime, fieldId } = props
   const sittingName = sitting !== null ? makeShortMatchName(sitting) : '-'
 
@@ -158,7 +157,7 @@ function EmptyMatchControl (): JSX.Element {
   return <MatchControlContent sitting={null} stage={MatchStage.Empty} endTime={null} fieldId={0} />
 }
 
-function PopulatedMatchControl (props: { fieldId: number, sitting: SittingIdentifier, stage: MatchStage, endTime: string | null }): JSX.Element {
+function PopulatedMatchControl (props: { fieldId: number, sitting: SittingInformationFragment, stage: MatchStage, endTime: string | null }): JSX.Element {
   const { data } = useFieldControlSubscription({
     variables: {
       fieldId: props.fieldId
@@ -177,14 +176,8 @@ export function MatchControl (): JSX.Element {
   if (field === null || field === undefined || competition === null || competition === undefined || sitting === null || sitting === undefined) {
     return <EmptyMatchControl />
   } else {
-    const sitingIdent = {
-      id: sitting.id,
-      contest: sitting.contest.number,
-      round: sitting.contest.round,
-      match: sitting.match.number
-    }
     const endTime = data?.competitionInformation?.liveField?.fieldControl?.endTime
     const stage = competition.stage
-    return <PopulatedMatchControl fieldId={field.id} sitting={sitingIdent} endTime={endTime} stage={stage} />
+    return <PopulatedMatchControl fieldId={field.id} sitting={sitting} endTime={endTime} stage={stage} />
   }
 }
