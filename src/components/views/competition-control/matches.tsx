@@ -108,7 +108,7 @@ export function UnqueuedMatches (): JSX.Element {
   const sittings = currentBlock.unqueuedSittings.slice(0, 7)
 
   const matches = sittings.map((sitting) => {
-    return <UnqueuedSitting key={sitting.id} sitting={sitting} queueableFields={openFieldInfo} />
+    return <UnqueuedSitting fieldName={sitting.field?.name} key={sitting.id} sitting={sitting} queueableFields={openFieldInfo} />
   })
 
   return <div className='flex gap-8'>{matches}</div>
