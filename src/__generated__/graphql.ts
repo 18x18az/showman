@@ -195,6 +195,7 @@ export type Mutation = {
   putLive: Competition;
   putOnDeck: Competition;
   queueSitting: Sitting;
+  replay: CompetitionField;
   /** Reset the event. Only available in test mode. */
   reset: Stage;
   resetAuton: CompetitionField;
@@ -218,6 +219,11 @@ export type MutationPutOnDeckArgs = {
 
 export type MutationQueueSittingArgs = {
   fieldId: Scalars['Int']['input'];
+  sittingId: Scalars['Int']['input'];
+};
+
+
+export type MutationReplayArgs = {
   sittingId: Scalars['Int']['input'];
 };
 
@@ -326,6 +332,8 @@ export type Team = {
   name: Scalars['String']['output'];
   /** Number of the team */
   number: Scalars['String']['output'];
+  /** Rank of the team */
+  rank: Maybe<Scalars['Int']['output']>;
   /** School of the team */
   school: Scalars['String']['output'];
 };
@@ -389,6 +397,13 @@ export type UnqueueSittingMutationVariables = Exact<{
 
 
 export type UnqueueSittingMutation = { __typename?: 'Mutation', unqueue: { __typename?: 'CompetitionField', onFieldSitting: { __typename?: 'Sitting', id: number } | null, onTableSitting: { __typename?: 'Sitting', id: number } | null } };
+
+export type ReplayMatchMutationVariables = Exact<{
+  sittingId: Scalars['Int']['input'];
+}>;
+
+
+export type ReplayMatchMutation = { __typename?: 'Mutation', replay: { __typename?: 'CompetitionField', onFieldSitting: { __typename?: 'Sitting', id: number } | null, onTableSitting: { __typename?: 'Sitting', id: number } | null } };
 
 export type StartFieldMutationVariables = Exact<{
   fieldId: Scalars['Int']['input'];
@@ -665,6 +680,44 @@ export function useUnqueueSittingMutation(baseOptions?: Apollo.MutationHookOptio
 export type UnqueueSittingMutationHookResult = ReturnType<typeof useUnqueueSittingMutation>;
 export type UnqueueSittingMutationResult = Apollo.MutationResult<UnqueueSittingMutation>;
 export type UnqueueSittingMutationOptions = Apollo.BaseMutationOptions<UnqueueSittingMutation, UnqueueSittingMutationVariables>;
+export const ReplayMatchDocument = gql`
+    mutation ReplayMatch($sittingId: Int!) {
+  replay(sittingId: $sittingId) {
+    onFieldSitting {
+      id
+    }
+    onTableSitting {
+      id
+    }
+  }
+}
+    `;
+export type ReplayMatchMutationFn = Apollo.MutationFunction<ReplayMatchMutation, ReplayMatchMutationVariables>;
+
+/**
+ * __useReplayMatchMutation__
+ *
+ * To run a mutation, you first call `useReplayMatchMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useReplayMatchMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [replayMatchMutation, { data, loading, error }] = useReplayMatchMutation({
+ *   variables: {
+ *      sittingId: // value for 'sittingId'
+ *   },
+ * });
+ */
+export function useReplayMatchMutation(baseOptions?: Apollo.MutationHookOptions<ReplayMatchMutation, ReplayMatchMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ReplayMatchMutation, ReplayMatchMutationVariables>(ReplayMatchDocument, options);
+      }
+export type ReplayMatchMutationHookResult = ReturnType<typeof useReplayMatchMutation>;
+export type ReplayMatchMutationResult = Apollo.MutationResult<ReplayMatchMutation>;
+export type ReplayMatchMutationOptions = Apollo.BaseMutationOptions<ReplayMatchMutation, ReplayMatchMutationVariables>;
 export const StartFieldDocument = gql`
     mutation StartField($fieldId: Int!) {
   startField(fieldId: $fieldId) {

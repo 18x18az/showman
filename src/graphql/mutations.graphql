@@ -37,6 +37,17 @@ mutation UnqueueSitting($sittingId: Int!) {
   }
 }
 
+mutation ReplayMatch($sittingId: Int!) {
+  replay(sittingId: $sittingId) {
+    onFieldSitting {
+      id
+    }
+    onTableSitting {
+      id
+    }
+  }
+}
+
 mutation StartField($fieldId: Int!) {
   startField(fieldId: $fieldId) {
     endTime

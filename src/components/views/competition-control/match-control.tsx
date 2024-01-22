@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { PlayIcon, ReloadIcon, ResetIcon, StopIcon } from '@radix-ui/react-icons'
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { offsetTimer } from '@/app/display/field/[uuid]/timer'
-import { MatchStage, SittingInformationFragment, useFieldControlSubscription, useLiveFieldQuery, useResetAutonMutation, useStartFieldMutation, useStopFieldMutation } from '../../../__generated__/graphql'
+import { MatchStage, SittingInformationFragment, useFieldControlSubscription, useLiveFieldQuery, useReplayMatchMutation, useResetAutonMutation, useStartFieldMutation, useStopFieldMutation } from '../../../__generated__/graphql'
 
 function makeTime (offset: number, truncate = false): string {
   if (truncate && offset < 0) {
@@ -88,12 +88,13 @@ function ResetButton (props: { disabled: boolean, fieldId: number }): JSX.Elemen
   )
 }
 
-function ReplayButton (props: { disabled: boolean }): JSX.Element {
+function ReplayButton (props: { disabled: boolean, sittingId: number }): JSX.Element {
+  const [replay] = useReplayMatchMutation({ variables: { sittingId: props.sittingId } })
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button disabled={props.disabled} variant='secondary' onClick={() => { }}><ReloadIcon /></Button>
+          <Button disabled={props.disabled} variant='secondary' onClick={() => { void replay() }}><ReloadIcon /></Button>
         </TooltipTrigger>
         <TooltipContent>
           <p>Replay</p>
@@ -139,6 +140,8 @@ function MatchControlContent (props: { sitting: SittingInformationFragment | nul
     startStopButton = <StopButton fieldId={fieldId} />
   }
 
+  const sittingId = sitting?.id ?? 0
+
   return (
     <div>
       <h1 className='text-center text-2xl text-zinc-600 mb-3'>Match</h1>
@@ -147,7 +150,7 @@ function MatchControlContent (props: { sitting: SittingInformationFragment | nul
       <div className='flex justify-evenly gap-4'>
         <ResetButton disabled={!canReset} fieldId={props.fieldId} />
         {startStopButton}
-        <ReplayButton disabled={!canReplay} />
+        <ReplayButton disabled={!canReplay} sittingId={sittingId} />
       </div>
     </div>
   )

@@ -1,6 +1,6 @@
 import { DropdownMenuItem } from '../../../ui/dropdown-menu'
 import { toast } from '../../../ui/use-toast'
-import { usePutOnDeckMutation, useUnqueueSittingMutation } from '../../../../__generated__/graphql'
+import { usePutOnDeckMutation, useReplayMatchMutation, useUnqueueSittingMutation } from '../../../../__generated__/graphql'
 
 function BaseAction (props: { text: string, action: () => Promise<void> }): JSX.Element {
   const handleAction = (): void => { void props.action() }
@@ -11,7 +11,8 @@ function BaseAction (props: { text: string, action: () => Promise<void> }): JSX.
   )
 }
 export function ReplayAction (props: { sittingId: number }): JSX.Element {
-  return <BaseAction text='Replay' action={async () => { }} />
+  const [replay] = useReplayMatchMutation({ variables: { sittingId: props.sittingId } })
+  return <BaseAction text='Replay' action={async () => { void replay() }} />
 }
 
 export function PutOnDeckAction (props: { fieldId: number }): JSX.Element {
