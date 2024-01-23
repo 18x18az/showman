@@ -79,3 +79,9 @@ mutation SetAutomationEnabled($enabled : Boolean!) {
     automationEnabled
   }
 }
+
+mutation StartNextBlock {
+  startNextBlock {
+    id
+  }
+}

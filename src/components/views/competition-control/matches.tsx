@@ -3,7 +3,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Button } from '@/components/ui/button'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { toast } from '../../ui/use-toast'
-import { SittingInformationFragment, useGetTableOccupiedQuery, useGetUnqueuedSittingsQuery, useQueueSittingMutation } from '../../../__generated__/graphql'
+import { BlockInformationFragment, SittingInformationFragment, useGetTableOccupiedQuery, useGetUnqueuedSittingsQuery, useQueueSittingMutation, useStartNextBlockMutation } from '../../../__generated__/graphql'
 
 interface QueueableField {
   id: number
@@ -83,21 +83,16 @@ function UnqueuedSitting (props: { sitting: SittingInformationFragment, fieldNam
 //   )
 // }
 
-export function UnqueuedMatches (): JSX.Element {
-  const { data: blockData } = useGetUnqueuedSittingsQuery({
-    pollInterval: 500
-  })
-
+function UnqueuedSittings (props: { block: BlockInformationFragment }): JSX.Element {
   const { data: tableData } = useGetTableOccupiedQuery({
     pollInterval: 500
   })
 
-  if (blockData === undefined || tableData === undefined) {
-    return <>Loading...</>
+  if (tableData === undefined) {
+    return <div />
   }
 
-  const currentBlock = blockData.currentBlock
-
+  const currentBlock = props.block
   const openFields = tableData.fields.filter((field) => { return field.competition?.onTableSitting === null })
   const openFieldInfo = openFields.map((field) => { return { id: field.id, name: field.name } })
 
@@ -112,4 +107,37 @@ export function UnqueuedMatches (): JSX.Element {
   })
 
   return <div className='flex gap-8'>{matches}</div>
+}
+
+export function BottomPanel (): JSX.Element {
+  const { data: blockData } = useGetUnqueuedSittingsQuery({
+    pollInterval: 500
+  })
+
+  const [startNextBlock] = useStartNextBlockMutation({
+    refetchQueries: ['GetUnqueuedMatches']
+  })
+
+  if (blockData === undefined) {
+    return <>Loading...</>
+  }
+
+  const currentBlock = blockData.currentBlock
+
+  if (currentBlock !== null) {
+    return <UnqueuedSittings block={currentBlock} />
+  }
+
+  const nextBlock = blockData.nextBlock
+
+  if (nextBlock !== null) {
+    const text = `Start ${nextBlock.name} Block`
+    return (
+      <div>
+        <Button size='lg' onClick={() => { void startNextBlock() }}>{text}</Button>
+      </div>
+    )
+  }
+
+  return <div>foo</div>
 }

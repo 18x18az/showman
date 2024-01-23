@@ -72,14 +72,11 @@ query GetTableOccupied {
 
 query GetUnqueuedSittings {
   currentBlock {
+    ...BlockInformation
+  }
+  nextBlock {
+    id
     name
-      unqueuedSittings {
-      ...SittingInformation
-      field {
-        id
-        name
-      }
-    }
   }
 }
 

@@ -1,6 +1,6 @@
 import { FieldInfos } from './field-info/main'
 import { MatchControl } from './match-control'
-import { UnqueuedMatches } from './matches'
+import { BottomPanel } from './matches'
 import { Queueing } from './queue-control'
 import { Settings } from './settings'
 // import { Settings } from './settings'
@@ -34,7 +34,7 @@ export function CompetitionControl (): JSX.Element {
       <div className='p-6 flex-col flex justify-evenly h-full grow'>
         <FieldInfos />
         <div className='grow' />
-        <UnqueuedMatches />
+        <BottomPanel />
       </div>
       <RightBar />
     </div>

@@ -372,6 +372,8 @@ export type TeamInformationFragment = { __typename?: 'Team', id: number, number:
 
 export type SittingWithTeamsFragment = { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string }> }, match: { __typename?: 'Match', number: number } };
 
+export type BlockInformationFragment = { __typename?: 'Block', id: number, name: string, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, number: number, field: { __typename?: 'Field', id: number, name: string } | null, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } }> };
+
 export type QueueSittingMutationVariables = Exact<{
   sittingId: Scalars['Int']['input'];
   fieldId: Scalars['Int']['input'];
@@ -446,6 +448,11 @@ export type SetAutomationEnabledMutationVariables = Exact<{
 
 export type SetAutomationEnabledMutation = { __typename?: 'Mutation', setAutomationEnabled: { __typename?: 'Competition', automationEnabled: boolean } };
 
+export type StartNextBlockMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type StartNextBlockMutation = { __typename?: 'Mutation', startNextBlock: { __typename?: 'Block', id: number } };
+
 export type OnDeckFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -469,7 +476,7 @@ export type GetTableOccupiedQuery = { __typename?: 'Query', fields: Array<{ __ty
 export type GetUnqueuedSittingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUnqueuedSittingsQuery = { __typename?: 'Query', currentBlock: { __typename?: 'Block', name: string, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, number: number, field: { __typename?: 'Field', id: number, name: string } | null, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } }> } | null };
+export type GetUnqueuedSittingsQuery = { __typename?: 'Query', currentBlock: { __typename?: 'Block', id: number, name: string, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, number: number, field: { __typename?: 'Field', id: number, name: string } | null, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } }> } | null, nextBlock: { __typename?: 'Block', id: number, name: string } | null };
 
 export type GetEventStageQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -527,6 +534,19 @@ export const SittingWithTeamsFragmentDoc = gql`
 }
     ${SittingInformationFragmentDoc}
 ${TeamInformationFragmentDoc}`;
+export const BlockInformationFragmentDoc = gql`
+    fragment BlockInformation on Block {
+  id
+  name
+  unqueuedSittings {
+    ...SittingInformation
+    field {
+      id
+      name
+    }
+  }
+}
+    ${SittingInformationFragmentDoc}`;
 export const QueueSittingDocument = gql`
     mutation QueueSitting($sittingId: Int!, $fieldId: Int!) {
   queueSitting(sittingId: $sittingId, fieldId: $fieldId) {
@@ -905,6 +925,38 @@ export function useSetAutomationEnabledMutation(baseOptions?: Apollo.MutationHoo
 export type SetAutomationEnabledMutationHookResult = ReturnType<typeof useSetAutomationEnabledMutation>;
 export type SetAutomationEnabledMutationResult = Apollo.MutationResult<SetAutomationEnabledMutation>;
 export type SetAutomationEnabledMutationOptions = Apollo.BaseMutationOptions<SetAutomationEnabledMutation, SetAutomationEnabledMutationVariables>;
+export const StartNextBlockDocument = gql`
+    mutation StartNextBlock {
+  startNextBlock {
+    id
+  }
+}
+    `;
+export type StartNextBlockMutationFn = Apollo.MutationFunction<StartNextBlockMutation, StartNextBlockMutationVariables>;
+
+/**
+ * __useStartNextBlockMutation__
+ *
+ * To run a mutation, you first call `useStartNextBlockMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStartNextBlockMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [startNextBlockMutation, { data, loading, error }] = useStartNextBlockMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useStartNextBlockMutation(baseOptions?: Apollo.MutationHookOptions<StartNextBlockMutation, StartNextBlockMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<StartNextBlockMutation, StartNextBlockMutationVariables>(StartNextBlockDocument, options);
+      }
+export type StartNextBlockMutationHookResult = ReturnType<typeof useStartNextBlockMutation>;
+export type StartNextBlockMutationResult = Apollo.MutationResult<StartNextBlockMutation>;
+export type StartNextBlockMutationOptions = Apollo.BaseMutationOptions<StartNextBlockMutation, StartNextBlockMutationVariables>;
 export const OnDeckFieldDocument = gql`
     query OnDeckField {
   competitionInformation {
@@ -1112,17 +1164,14 @@ export type GetTableOccupiedQueryResult = Apollo.QueryResult<GetTableOccupiedQue
 export const GetUnqueuedSittingsDocument = gql`
     query GetUnqueuedSittings {
   currentBlock {
+    ...BlockInformation
+  }
+  nextBlock {
+    id
     name
-    unqueuedSittings {
-      ...SittingInformation
-      field {
-        id
-        name
-      }
-    }
   }
 }
-    ${SittingInformationFragmentDoc}`;
+    ${BlockInformationFragmentDoc}`;
 
 /**
  * __useGetUnqueuedSittingsQuery__
