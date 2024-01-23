@@ -3,7 +3,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Button } from '@/components/ui/button'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { toast } from '../../ui/use-toast'
-import { BlockInformationFragment, SittingInformationFragment, useGetTableOccupiedQuery, useGetUnqueuedSittingsQuery, useQueueSittingMutation, useStartNextBlockMutation } from '../../../__generated__/graphql'
+import { BlockInformationFragment, SittingInformationFragment, useConcludeBlockMutation, useGetTableOccupiedQuery, useGetUnqueuedSittingsQuery, useQueueSittingMutation, useStartNextBlockMutation } from '../../../__generated__/graphql'
 
 interface QueueableField {
   id: number
@@ -118,6 +118,8 @@ export function BottomPanel (): JSX.Element {
     refetchQueries: ['GetUnqueuedMatches']
   })
 
+  const [concludeBlock] = useConcludeBlockMutation({ refetchQueries: ['GetUnqueuedMatches'] })
+
   if (blockData === undefined) {
     return <>Loading...</>
   }
@@ -125,6 +127,14 @@ export function BottomPanel (): JSX.Element {
   const currentBlock = blockData.currentBlock
 
   if (currentBlock !== null) {
+    if (currentBlock.canConclude) {
+      return (
+        <div>
+          <Button onClick={() => { void concludeBlock() }}>End Block</Button>
+        </div>
+      )
+    }
+
     return <UnqueuedSittings block={currentBlock} />
   }
 

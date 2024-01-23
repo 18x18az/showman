@@ -85,3 +85,9 @@ mutation StartNextBlock {
     id
   }
 }
+
+mutation ConcludeBlock {
+  concludeBlock {
+    id
+  }
+}

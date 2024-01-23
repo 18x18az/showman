@@ -7,7 +7,7 @@ export function Settings (): JSX.Element {
   const stage = EventStage.Qualifications
   const skills = false
 
-  const { data: compData } = useCompetitionMiniSettingsQuery()
+  const { data: compData } = useCompetitionMiniSettingsQuery({ pollInterval: 500 })
   const [setAutomationEnabled] = useSetAutomationEnabledMutation({ refetchQueries: ['CompetitionMiniSettings'] })
 
   if (compData === undefined) {
@@ -27,7 +27,7 @@ export function Settings (): JSX.Element {
     <>
       <div className='flex flex-col gap-4 text-zinc-400'>
         <div className='flex align-center gap-4 justify-between'>
-          <label>Automation</label>
+          <label>Auto-Queue</label>
           <Switch
             onCheckedChange={(checked: boolean) => {
               setAutomationEnabled({ variables: { enabled: checked } })

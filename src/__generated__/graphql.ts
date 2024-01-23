@@ -22,6 +22,8 @@ export type Scalars = {
 /** A block refers to a group of match sittings played in the same stretch of time, e.g. all quals played in the morning before lunch */
 export type Block = {
   __typename?: 'Block';
+  /** Whether the block can be concluded */
+  canConclude: Scalars['Boolean']['output'];
   /** The time the last match is scheduled to start */
   endTime: Maybe<Scalars['DateTime']['output']>;
   /** Unique identifier for the block */
@@ -193,6 +195,7 @@ export enum MatchStatus {
 export type Mutation = {
   __typename?: 'Mutation';
   clearLive: Competition;
+  concludeBlock: Block;
   configureTournamentManager: TournamentManager;
   putLive: Competition;
   putOnDeck: Competition;
@@ -372,7 +375,7 @@ export type TeamInformationFragment = { __typename?: 'Team', id: number, number:
 
 export type SittingWithTeamsFragment = { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string }> }, match: { __typename?: 'Match', number: number } };
 
-export type BlockInformationFragment = { __typename?: 'Block', id: number, name: string, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, number: number, field: { __typename?: 'Field', id: number, name: string } | null, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } }> };
+export type BlockInformationFragment = { __typename?: 'Block', id: number, name: string, canConclude: boolean, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, number: number, field: { __typename?: 'Field', id: number, name: string } | null, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } }> };
 
 export type QueueSittingMutationVariables = Exact<{
   sittingId: Scalars['Int']['input'];
@@ -453,6 +456,11 @@ export type StartNextBlockMutationVariables = Exact<{ [key: string]: never; }>;
 
 export type StartNextBlockMutation = { __typename?: 'Mutation', startNextBlock: { __typename?: 'Block', id: number } };
 
+export type ConcludeBlockMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ConcludeBlockMutation = { __typename?: 'Mutation', concludeBlock: { __typename?: 'Block', id: number } };
+
 export type OnDeckFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -476,7 +484,7 @@ export type GetTableOccupiedQuery = { __typename?: 'Query', fields: Array<{ __ty
 export type GetUnqueuedSittingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUnqueuedSittingsQuery = { __typename?: 'Query', currentBlock: { __typename?: 'Block', id: number, name: string, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, number: number, field: { __typename?: 'Field', id: number, name: string } | null, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } }> } | null, nextBlock: { __typename?: 'Block', id: number, name: string } | null };
+export type GetUnqueuedSittingsQuery = { __typename?: 'Query', currentBlock: { __typename?: 'Block', id: number, name: string, canConclude: boolean, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, number: number, field: { __typename?: 'Field', id: number, name: string } | null, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } }> } | null, nextBlock: { __typename?: 'Block', id: number, name: string } | null };
 
 export type GetEventStageQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -538,6 +546,7 @@ export const BlockInformationFragmentDoc = gql`
     fragment BlockInformation on Block {
   id
   name
+  canConclude
   unqueuedSittings {
     ...SittingInformation
     field {
@@ -957,6 +966,38 @@ export function useStartNextBlockMutation(baseOptions?: Apollo.MutationHookOptio
 export type StartNextBlockMutationHookResult = ReturnType<typeof useStartNextBlockMutation>;
 export type StartNextBlockMutationResult = Apollo.MutationResult<StartNextBlockMutation>;
 export type StartNextBlockMutationOptions = Apollo.BaseMutationOptions<StartNextBlockMutation, StartNextBlockMutationVariables>;
+export const ConcludeBlockDocument = gql`
+    mutation ConcludeBlock {
+  concludeBlock {
+    id
+  }
+}
+    `;
+export type ConcludeBlockMutationFn = Apollo.MutationFunction<ConcludeBlockMutation, ConcludeBlockMutationVariables>;
+
+/**
+ * __useConcludeBlockMutation__
+ *
+ * To run a mutation, you first call `useConcludeBlockMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useConcludeBlockMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [concludeBlockMutation, { data, loading, error }] = useConcludeBlockMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useConcludeBlockMutation(baseOptions?: Apollo.MutationHookOptions<ConcludeBlockMutation, ConcludeBlockMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ConcludeBlockMutation, ConcludeBlockMutationVariables>(ConcludeBlockDocument, options);
+      }
+export type ConcludeBlockMutationHookResult = ReturnType<typeof useConcludeBlockMutation>;
+export type ConcludeBlockMutationResult = Apollo.MutationResult<ConcludeBlockMutation>;
+export type ConcludeBlockMutationOptions = Apollo.BaseMutationOptions<ConcludeBlockMutation, ConcludeBlockMutationVariables>;
 export const OnDeckFieldDocument = gql`
     query OnDeckField {
   competitionInformation {

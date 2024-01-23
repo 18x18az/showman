@@ -30,12 +30,13 @@ fragment SittingWithTeams on Sitting {
 
 fragment BlockInformation on Block {
   id
-    name
-      unqueuedSittings {
-      ...SittingInformation
-      field {
-        id
-        name
-      }
+  name
+  canConclude
+  unqueuedSittings {
+    ...SittingInformation
+    field {
+      id
+      name
     }
+  }
 }
