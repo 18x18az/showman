@@ -20,12 +20,12 @@ export function Settings (): JSX.Element {
 
   let timeoutButton = <></>
   if (stage === EventStage.Elims) {
-    timeoutButton = <Button onClick={() => { }} variant='secondary'><TimerIcon /></Button>
+    timeoutButton = <Button onClick={() => { }}><TimerIcon /></Button>
   }
 
   return (
     <>
-      <div className='flex flex-col gap-4 text-zinc-400'>
+      <div className='flex flex-col gap-4 text-slate-11'>
         <div className='flex align-center gap-4 justify-between'>
           <label>Auto-Queue</label>
           <Switch
@@ -40,8 +40,8 @@ export function Settings (): JSX.Element {
         </div>
         <div className='flex justify-evenly'>
           {timeoutButton}
-          <Button onClick={() => { }} variant='secondary'><ArrowUpFromLine /></Button>
-          <Button onClick={() => { }} variant='secondary'><Eraser /></Button>
+          <Button onClick={() => { }}><ArrowUpFromLine /></Button>
+          <Button onClick={() => { }}><Eraser /></Button>
         </div>
       </div>
     </>

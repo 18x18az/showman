@@ -15,7 +15,7 @@ interface FieldInfoProps {
 function FieldInfo (props: FieldInfoProps): JSX.Element {
   return (
     <div className='flex flex-col gap-8 w-96 mb-8 items-center justify-center h-full'>
-      <h1 className='text-center text-2xl font-sans text-zinc-500'>{props.name}</h1>
+      <h1 className='text-center text-2xl font-sans text-slate-11'>{props.name}</h1>
       <OnField fieldId={props.id} stage={props.stage} match={props.sOnField} isLive={props.isLive} isOnDeck={props.isOnDeck} />
       <OnDeck fieldId={props.id} match={props.sOnTable} />
     </div>

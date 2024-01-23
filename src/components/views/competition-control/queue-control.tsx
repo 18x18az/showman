@@ -4,15 +4,15 @@ import { PlayIcon, StopIcon, TrackNextIcon } from '@radix-ui/react-icons'
 import { MatchStage, SittingInformationFragment, useClearLiveMutation, useOnDeckFieldQuery, usePutLiveMutation } from '../../../__generated__/graphql'
 
 function SittingName (props: { title: string, sitting: SittingInformationFragment | null }): JSX.Element {
-  let color = 'text-zinc-500'
+  let color = 'text-slate-11'
   let name = '-'
   if (props.sitting !== null) {
     name = makeShortMatchName(props.sitting)
-    color = 'text-zinc-400'
+    color = 'text-gold-11'
   }
   return (
     <>
-      <h1 className='text-center text-2xl text-zinc-600 mb-2'>{props.title}</h1>
+      <h1 className='text-center text-2xl text-slate-11 mb-2'>{props.title}</h1>
       <h2 className={`text-center text-4xl ${color}`}>{name}</h2>
     </>
   )
@@ -22,7 +22,7 @@ function ClearLiveButton (props: { hasOnDeck: boolean, canQueue: boolean }): JSX
   const disabled = !props.hasOnDeck || !props.canQueue
   const [clearLive] = useClearLiveMutation({})
   return (
-    <Button variant='secondary' disabled={disabled} onClick={() => { void clearLive() }}>
+    <Button disabled={disabled} onClick={() => { void clearLive() }}>
       <StopIcon />
     </Button>
   )
@@ -34,7 +34,7 @@ function MakeLiveButton (props: { hasOnDeck: boolean, canQueue: boolean }): JSX.
     refetchQueries: ['LiveField', 'OnDeckField']
   })
   return (
-    <Button variant='secondary' onClick={() => { void makeLive() }} disabled={disabled}>
+    <Button onClick={() => { void makeLive() }} disabled={disabled}>
       <PlayIcon />
     </Button>
   )
@@ -48,7 +48,7 @@ function ClearOrPushButton (props: { hasOnDeck: boolean, canQueue: boolean, acti
 function ForceButton (props: { activeStage: MatchStage, hasOnDeck: boolean }): JSX.Element {
   const disabled = !props.hasOnDeck || props.activeStage !== MatchStage.Scoring
   return (
-    <Button variant='secondary' disabled={disabled} onClick={() => { }}>
+    <Button disabled={disabled} onClick={() => { }}>
       <TrackNextIcon />
     </Button>
   )

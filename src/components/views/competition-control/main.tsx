@@ -14,14 +14,14 @@ function RightBar (): JSX.Element {
 
   const submenus = elements.map((element) => {
     return (
-      <div className='border border-zinc-800 p-8 rounded-xl' key={element.name}>
+      <div className='border-l border-b border-slate-6 bg-slate-2 p-8 rounded-sm' key={element.name}>
         {element()}
       </div>
     )
   })
 
   return (
-    <div className='flex flex-col gap-8'>
+    <div className='flex flex-col h-full'>
       {submenus}
     </div>
   )
@@ -30,7 +30,7 @@ function RightBar (): JSX.Element {
 export function CompetitionControl (): JSX.Element {
   console.log('Competition control')
   return (
-    <div className='flex w-full p-8 gap-8 h-screen'>
+    <div className='flex w-full h-full'>
       <div className='p-6 flex-col flex justify-evenly h-full grow'>
         <FieldInfos />
         <div className='grow' />

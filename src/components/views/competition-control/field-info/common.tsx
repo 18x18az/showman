@@ -34,19 +34,19 @@ export interface CommonFieldProps {
 function MatchName (props: { match: SittingInformationFragment | null }): JSX.Element {
   const name = props.match !== null ? makeShortMatchName(props.match) : ''
 
-  return <h1 className='text-4xl text-center text-zinc-500 mb-4'>{name}</h1>
+  return <h1 className='text-4xl text-center text-slate-11 mb-4'>{name}</h1>
 }
 
 function MatchText (props: { text: string | undefined }): JSX.Element {
-  return <h2 className='text-2xl text-center text-zinc-500 mb-8'>{props.text}</h2>
+  return <h2 className='text-2xl text-center text-slate-11 mb-8'>{props.text}</h2>
 }
 
 enum OutlineColor {
-  EMPTY = 'border-zinc-900',
-  NORMAL = 'border-zinc-800',
-  WRONG_FIELD = 'border-yellow-900',
-  LIVE_FIELD = 'border-green-500',
-  ON_DECK_FIELD = 'border-blue-900'
+  EMPTY = 'border-slate-5',
+  NORMAL = 'border-slate-7',
+  WRONG_FIELD = 'border-yellow-7',
+  LIVE_FIELD = 'border-indigo-7',
+  ON_DECK_FIELD = 'border-gold-7'
 }
 
 function getOutlineColor (match: SittingInformationFragment | null, status: FieldStatus | undefined): OutlineColor {
@@ -68,8 +68,10 @@ export function CommonFieldInfo (props: CommonFieldProps): JSX.Element {
   const status = props.status
   const border = getOutlineColor(match, status)
 
+  const bgColor = match === null ? '' : 'bg-slate-2'
+
   return (
-    <div className={`h-72 w-72 border rounded-lg flex flex-col justify-apart' ${border}`}>
+    <div className={`h-72 w-72 border rounded-lg flex flex-col justify-apart' ${border} ${bgColor}`}>
       <FieldActionMenu options={props.options} />
       <MatchName match={props.match} />
       <MatchText text={props.text} />

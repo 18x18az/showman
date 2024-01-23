@@ -62,10 +62,10 @@ function UnqueuedSitting (props: { sitting: SittingInformationFragment, fieldNam
   const name = makeShortMatchName(sitting)
   const fieldName = props.fieldName ?? ''
   return (
-    <div className='border border-zinc-800 text-center rounded-md w-28 h-28 flex flex-col justify-between p-3'>
+    <div className='border border-slate-6 bg-slate-2 text-center rounded-md w-28 h-28 flex flex-col justify-between p-3'>
       <ActionMenu sittingId={sitting?.id} queueableFields={props.queueableFields} />
-      <h1>{name}</h1>
-      <h2>{fieldName}</h2>
+      <h1 className='text-slate-12'>{name}</h1>
+      <h2 className='text-slate-11'>{fieldName}</h2>
     </div>
   )
 }
