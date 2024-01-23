@@ -59,6 +59,8 @@ export enum Checkin {
 
 export type Competition = {
   __typename?: 'Competition';
+  /** Whether automation is currently enabled for match queueing */
+  automationEnabled: Scalars['Boolean']['output'];
   /** The field that is currently live */
   liveField: Maybe<Field>;
   /** The field that is currently on deck */
@@ -199,6 +201,7 @@ export type Mutation = {
   /** Reset the event. Only available in test mode. */
   reset: Stage;
   resetAuton: CompetitionField;
+  setAutomationEnabled: Competition;
   startField: FieldControl;
   startNextBlock: Block;
   stopField: FieldControl;
@@ -230,6 +233,11 @@ export type MutationReplayArgs = {
 
 export type MutationResetAutonArgs = {
   fieldId: Scalars['Int']['input'];
+};
+
+
+export type MutationSetAutomationEnabledArgs = {
+  enabled: Scalars['Boolean']['input'];
 };
 
 
@@ -431,6 +439,13 @@ export type ClearLiveMutationVariables = Exact<{ [key: string]: never; }>;
 
 export type ClearLiveMutation = { __typename?: 'Mutation', clearLive: { __typename?: 'Competition', liveField: { __typename?: 'Field', id: number } | null } };
 
+export type SetAutomationEnabledMutationVariables = Exact<{
+  enabled: Scalars['Boolean']['input'];
+}>;
+
+
+export type SetAutomationEnabledMutation = { __typename?: 'Mutation', setAutomationEnabled: { __typename?: 'Competition', automationEnabled: boolean } };
+
 export type OnDeckFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -465,6 +480,11 @@ export type GetCompetitionFieldsQueryVariables = Exact<{ [key: string]: never; }
 
 
 export type GetCompetitionFieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, isLive: boolean, isOnDeck: boolean, onFieldSitting: { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } } | null, onTableSitting: { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } } | null } | null, fieldControl: { __typename?: 'FieldControl', fieldId: number, endTime: any | null } | null }> };
+
+export type CompetitionMiniSettingsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CompetitionMiniSettingsQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', automationEnabled: boolean } };
 
 export type FieldControlSubscriptionVariables = Exact<{
   fieldId: Scalars['Int']['input'];
@@ -852,6 +872,39 @@ export function useClearLiveMutation(baseOptions?: Apollo.MutationHookOptions<Cl
 export type ClearLiveMutationHookResult = ReturnType<typeof useClearLiveMutation>;
 export type ClearLiveMutationResult = Apollo.MutationResult<ClearLiveMutation>;
 export type ClearLiveMutationOptions = Apollo.BaseMutationOptions<ClearLiveMutation, ClearLiveMutationVariables>;
+export const SetAutomationEnabledDocument = gql`
+    mutation SetAutomationEnabled($enabled: Boolean!) {
+  setAutomationEnabled(enabled: $enabled) {
+    automationEnabled
+  }
+}
+    `;
+export type SetAutomationEnabledMutationFn = Apollo.MutationFunction<SetAutomationEnabledMutation, SetAutomationEnabledMutationVariables>;
+
+/**
+ * __useSetAutomationEnabledMutation__
+ *
+ * To run a mutation, you first call `useSetAutomationEnabledMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetAutomationEnabledMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setAutomationEnabledMutation, { data, loading, error }] = useSetAutomationEnabledMutation({
+ *   variables: {
+ *      enabled: // value for 'enabled'
+ *   },
+ * });
+ */
+export function useSetAutomationEnabledMutation(baseOptions?: Apollo.MutationHookOptions<SetAutomationEnabledMutation, SetAutomationEnabledMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetAutomationEnabledMutation, SetAutomationEnabledMutationVariables>(SetAutomationEnabledDocument, options);
+      }
+export type SetAutomationEnabledMutationHookResult = ReturnType<typeof useSetAutomationEnabledMutation>;
+export type SetAutomationEnabledMutationResult = Apollo.MutationResult<SetAutomationEnabledMutation>;
+export type SetAutomationEnabledMutationOptions = Apollo.BaseMutationOptions<SetAutomationEnabledMutation, SetAutomationEnabledMutationVariables>;
 export const OnDeckFieldDocument = gql`
     query OnDeckField {
   competitionInformation {
@@ -1196,6 +1249,45 @@ export type GetCompetitionFieldsQueryHookResult = ReturnType<typeof useGetCompet
 export type GetCompetitionFieldsLazyQueryHookResult = ReturnType<typeof useGetCompetitionFieldsLazyQuery>;
 export type GetCompetitionFieldsSuspenseQueryHookResult = ReturnType<typeof useGetCompetitionFieldsSuspenseQuery>;
 export type GetCompetitionFieldsQueryResult = Apollo.QueryResult<GetCompetitionFieldsQuery, GetCompetitionFieldsQueryVariables>;
+export const CompetitionMiniSettingsDocument = gql`
+    query CompetitionMiniSettings {
+  competitionInformation {
+    automationEnabled
+  }
+}
+    `;
+
+/**
+ * __useCompetitionMiniSettingsQuery__
+ *
+ * To run a query within a React component, call `useCompetitionMiniSettingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCompetitionMiniSettingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCompetitionMiniSettingsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCompetitionMiniSettingsQuery(baseOptions?: Apollo.QueryHookOptions<CompetitionMiniSettingsQuery, CompetitionMiniSettingsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CompetitionMiniSettingsQuery, CompetitionMiniSettingsQueryVariables>(CompetitionMiniSettingsDocument, options);
+      }
+export function useCompetitionMiniSettingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CompetitionMiniSettingsQuery, CompetitionMiniSettingsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CompetitionMiniSettingsQuery, CompetitionMiniSettingsQueryVariables>(CompetitionMiniSettingsDocument, options);
+        }
+export function useCompetitionMiniSettingsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CompetitionMiniSettingsQuery, CompetitionMiniSettingsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CompetitionMiniSettingsQuery, CompetitionMiniSettingsQueryVariables>(CompetitionMiniSettingsDocument, options);
+        }
+export type CompetitionMiniSettingsQueryHookResult = ReturnType<typeof useCompetitionMiniSettingsQuery>;
+export type CompetitionMiniSettingsLazyQueryHookResult = ReturnType<typeof useCompetitionMiniSettingsLazyQuery>;
+export type CompetitionMiniSettingsSuspenseQueryHookResult = ReturnType<typeof useCompetitionMiniSettingsSuspenseQuery>;
+export type CompetitionMiniSettingsQueryResult = Apollo.QueryResult<CompetitionMiniSettingsQuery, CompetitionMiniSettingsQueryVariables>;
 export const FieldControlDocument = gql`
     subscription FieldControl($fieldId: Int!) {
   fieldControl(fieldId: $fieldId) {

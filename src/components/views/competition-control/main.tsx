@@ -2,13 +2,14 @@ import { FieldInfos } from './field-info/main'
 import { MatchControl } from './match-control'
 import { UnqueuedMatches } from './matches'
 import { Queueing } from './queue-control'
+import { Settings } from './settings'
 // import { Settings } from './settings'
 
 function RightBar (): JSX.Element {
   const elements = [
     MatchControl,
-    Queueing
-    // Settings
+    Queueing,
+    Settings
   ]
 
   const submenus = elements.map((element) => {

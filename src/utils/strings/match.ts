@@ -23,7 +23,7 @@ export function makeShortMatchName (sitting: SittingInformationFragment): string
 
   const roundString = round === Round.Ro16 ? 'R16' : round === Round.Qf ? 'QF' : round === Round.Sf ? 'SF' : round === Round.F ? 'F' : 'Q'
   const numberString = match > 1 ? `${contest}-${match}` : `${contest}`
-  const replayString = replay > 0 ? `R ` : ''
+  const replayString = replay > 0 ? 'R ' : ''
 
   return `${replayString}${roundString} ${numberString}`
 }

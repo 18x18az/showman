@@ -73,3 +73,9 @@ mutation ClearLive {
     }
   }
 }
+
+mutation SetAutomationEnabled($enabled : Boolean!) {
+  setAutomationEnabled(enabled: $enabled) {
+    automationEnabled
+  }
+}

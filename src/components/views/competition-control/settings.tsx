@@ -1,37 +1,49 @@
-// import { Button } from '@/components/ui/button'
-// import { Switch } from '@/components/ui/switch'
-// import { ArrowUpFromLine, Eraser, TimerIcon } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Switch } from '@/components/ui/switch'
+import { ArrowUpFromLine, Eraser, TimerIcon } from 'lucide-react'
+import { EventStage, useCompetitionMiniSettingsQuery, useSetAutomationEnabledMutation } from '../../../__generated__/graphql'
 
 export function Settings (): JSX.Element {
-  return <div>foo</div>
-  // if (automation === undefined || stage === undefined || block === undefined) {
-  //   return <>Loading...</>
-  // }
+  const stage = EventStage.Qualifications
+  const skills = false
 
-  // const inBlock = block !== null
+  const { data: compData } = useCompetitionMiniSettingsQuery()
+  const [setAutomationEnabled] = useSetAutomationEnabledMutation({ refetchQueries: ['CompetitionMiniSettings'] })
 
-  // let timeoutButton = <></>
-  // if (stage === EventStage.ELIMS) {
-  //   timeoutButton = <Button onClick={() => { void callTimeout() }} variant='secondary'><TimerIcon /></Button>
-  // }
+  if (compData === undefined) {
+    return <>Loading...</>
+  }
 
-  // return (
-  //   <>
-  //     <div className='flex flex-col gap-4 text-zinc-400'>
-  //       <div className='flex align-center gap-4 justify-between'>
-  //         <label>Automation</label>
-  //         <Switch onCheckedChange={(checked: boolean) => { void setAutomation(checked) }} checked={automation} />
-  //       </div>
-  //       <div className='flex align-center gap-4 justify-between'>
-  //         <label>Skills</label>
-  //         <Switch onCheckedChange={(checked: boolean) => { void enableSkills(checked) }} checked={skills} disabled={inBlock} />
-  //       </div>
-  //       <div className='flex justify-evenly'>
-  //         {timeoutButton}
-  //         <Button onClick={() => { void pushScore() }} variant='secondary'><ArrowUpFromLine /></Button>
-  //         <Button onClick={() => { void clearScore() }} variant='secondary'><Eraser /></Button>
-  //       </div>
-  //     </div>
-  //   </>
-  // )
+  const automation = compData.competitionInformation.automationEnabled
+
+  const inBlock = true
+
+  let timeoutButton = <></>
+  if (stage === EventStage.Elims) {
+    timeoutButton = <Button onClick={() => { }} variant='secondary'><TimerIcon /></Button>
+  }
+
+  return (
+    <>
+      <div className='flex flex-col gap-4 text-zinc-400'>
+        <div className='flex align-center gap-4 justify-between'>
+          <label>Automation</label>
+          <Switch
+            onCheckedChange={(checked: boolean) => {
+              setAutomationEnabled({ variables: { enabled: checked } })
+            }} checked={automation}
+          />
+        </div>
+        <div className='flex align-center gap-4 justify-between'>
+          <label>Skills</label>
+          <Switch onCheckedChange={(checked: boolean) => { }} checked={skills} disabled={inBlock} />
+        </div>
+        <div className='flex justify-evenly'>
+          {timeoutButton}
+          <Button onClick={() => { }} variant='secondary'><ArrowUpFromLine /></Button>
+          <Button onClick={() => { }} variant='secondary'><Eraser /></Button>
+        </div>
+      </div>
+    </>
+  )
 }

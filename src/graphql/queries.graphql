@@ -110,3 +110,9 @@ query GetCompetitionFields {
     }
   }
 }
+
+query CompetitionMiniSettings {
+  competitionInformation {
+    automationEnabled
+  }
+}
