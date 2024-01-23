@@ -1,7 +1,7 @@
 'use client'
 
 import { offsetTimer } from '@/app/display/field/[uuid]/timer'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 
 interface TimerProps {
   readonly time: string | undefined
@@ -33,9 +33,15 @@ function ActualTimer (props: { time: string, period: 'auto' | 'driver' | 'none' 
 }
 
 export function Timer (props: TimerProps): JSX.Element {
-  if (props.time === undefined) {
-    return <></>
+  let content = <div key='empty' />
+
+  if (props.time !== undefined) {
+    content = <ActualTimer key='timer' period={props.period} time={props.time} />
   }
 
-  return <ActualTimer period={props.period} time={props.time} />
+  return (
+    <AnimatePresence>
+      {content}
+    </AnimatePresence>
+  )
 }
