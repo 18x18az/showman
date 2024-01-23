@@ -113,3 +113,20 @@ query CompetitionMiniSettings {
     automationEnabled
   }
 }
+
+query MatchOverlay {
+  competitionInformation {
+    liveField {
+      id
+      competition {
+        stage
+        onFieldSitting {
+          ...SittingWithTeams
+        }
+      }
+      fieldControl {
+        endTime
+      }
+    }
+  }
+}

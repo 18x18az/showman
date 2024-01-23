@@ -1,8 +1,9 @@
 import { motion } from 'framer-motion'
+import { TeamInformationFragment } from '../../../__generated__/graphql'
 
 interface AllianceIndicatorProps {
   readonly alliance: 'red' | 'blue'
-  readonly teams: string[]
+  readonly teams: TeamInformationFragment[]
 }
 
 export function AllianceIndicator (props: AllianceIndicatorProps): JSX.Element {
@@ -17,7 +18,7 @@ export function AllianceIndicator (props: AllianceIndicatorProps): JSX.Element {
       <motion.div
         className={`px-4 py-2 flex flex-col justify-center ${rounding}`}
         initial={{ backgroundColor: 'rgba(24,24,27,0)' }}
-        animate={{ backgroundColor: 'rgba(24,24,27,.98)' }}
+        animate={{ backgroundColor: 'rgba(24,24,27,.97)' }}
         transition={{ delay: 0.4 + offset, type: 'spring', stiffness: 100, damping: 20 }}
       >
         <motion.div
@@ -30,11 +31,11 @@ export function AllianceIndicator (props: AllianceIndicatorProps): JSX.Element {
             return (
               <motion.div
                 className='text-6xl text-white'
-                key={team}
+                key={team.id}
                 initial={{ opacity: 0, letterSpacing: '-0.5em', width: 0 }}
                 animate={{ opacity: 1, letterSpacing: '0', width: '16rem' }}
                 transition={{ delay: 0.31 + offset, type: 'spring', stiffness: 100, damping: 20 }}
-              >{team}
+              >{team.number}
               </motion.div>
             )
           })}

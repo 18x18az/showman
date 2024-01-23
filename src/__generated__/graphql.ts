@@ -371,9 +371,9 @@ export type TournamentManagerSetup = {
 
 export type SittingInformationFragment = { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } };
 
-export type TeamInformationFragment = { __typename?: 'Team', id: number, number: string, name: string };
+export type TeamInformationFragment = { __typename?: 'Team', id: number, number: string, name: string, rank: number | null };
 
-export type SittingWithTeamsFragment = { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string }> }, match: { __typename?: 'Match', number: number } };
+export type SittingWithTeamsFragment = { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } };
 
 export type BlockInformationFragment = { __typename?: 'Block', id: number, name: string, canConclude: boolean, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, number: number, field: { __typename?: 'Field', id: number, name: string } | null, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } }> };
 
@@ -469,7 +469,7 @@ export type OnDeckFieldQuery = { __typename?: 'Query', competitionInformation: {
 export type RefereeInformationQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type RefereeInformationQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', liveField: { __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string }> }, match: { __typename?: 'Match', number: number } } | null } | null } | null, onDeckField: { __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', onFieldSitting: { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string }> }, match: { __typename?: 'Match', number: number } } | null } | null } | null } };
+export type RefereeInformationQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', liveField: { __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null } | null } | null, onDeckField: { __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', onFieldSitting: { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null } | null } | null } };
 
 export type LiveFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -501,6 +501,11 @@ export type CompetitionMiniSettingsQueryVariables = Exact<{ [key: string]: never
 
 export type CompetitionMiniSettingsQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', automationEnabled: boolean } };
 
+export type MatchOverlayQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MatchOverlayQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', liveField: { __typename?: 'Field', id: number, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null } | null, fieldControl: { __typename?: 'FieldControl', endTime: any | null } | null } | null } };
+
 export type FieldControlSubscriptionVariables = Exact<{
   fieldId: Scalars['Int']['input'];
 }>;
@@ -526,6 +531,7 @@ export const TeamInformationFragmentDoc = gql`
   id
   number
   name
+  rank
 }
     `;
 export const SittingWithTeamsFragmentDoc = gql`
@@ -1378,6 +1384,56 @@ export type CompetitionMiniSettingsQueryHookResult = ReturnType<typeof useCompet
 export type CompetitionMiniSettingsLazyQueryHookResult = ReturnType<typeof useCompetitionMiniSettingsLazyQuery>;
 export type CompetitionMiniSettingsSuspenseQueryHookResult = ReturnType<typeof useCompetitionMiniSettingsSuspenseQuery>;
 export type CompetitionMiniSettingsQueryResult = Apollo.QueryResult<CompetitionMiniSettingsQuery, CompetitionMiniSettingsQueryVariables>;
+export const MatchOverlayDocument = gql`
+    query MatchOverlay {
+  competitionInformation {
+    liveField {
+      id
+      competition {
+        stage
+        onFieldSitting {
+          ...SittingWithTeams
+        }
+      }
+      fieldControl {
+        endTime
+      }
+    }
+  }
+}
+    ${SittingWithTeamsFragmentDoc}`;
+
+/**
+ * __useMatchOverlayQuery__
+ *
+ * To run a query within a React component, call `useMatchOverlayQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMatchOverlayQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMatchOverlayQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMatchOverlayQuery(baseOptions?: Apollo.QueryHookOptions<MatchOverlayQuery, MatchOverlayQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MatchOverlayQuery, MatchOverlayQueryVariables>(MatchOverlayDocument, options);
+      }
+export function useMatchOverlayLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MatchOverlayQuery, MatchOverlayQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MatchOverlayQuery, MatchOverlayQueryVariables>(MatchOverlayDocument, options);
+        }
+export function useMatchOverlaySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<MatchOverlayQuery, MatchOverlayQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<MatchOverlayQuery, MatchOverlayQueryVariables>(MatchOverlayDocument, options);
+        }
+export type MatchOverlayQueryHookResult = ReturnType<typeof useMatchOverlayQuery>;
+export type MatchOverlayLazyQueryHookResult = ReturnType<typeof useMatchOverlayLazyQuery>;
+export type MatchOverlaySuspenseQueryHookResult = ReturnType<typeof useMatchOverlaySuspenseQuery>;
+export type MatchOverlayQueryResult = Apollo.QueryResult<MatchOverlayQuery, MatchOverlayQueryVariables>;
 export const FieldControlDocument = gql`
     subscription FieldControl($fieldId: Int!) {
   fieldControl(fieldId: $fieldId) {

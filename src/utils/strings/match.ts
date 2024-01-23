@@ -7,11 +7,11 @@ export function makeMatchName (sitting: SittingInformationFragment): string {
 
   const replay = sitting.number - 1
 
-  const roundString = round === Round.Ro16 ? 'Round of 16' : round === Round.Qf ? 'Quarterfinals' : round === Round.Sf ? 'Semifinals' : round === Round.F ? 'Finals' : 'Match'
+  const roundString = round === Round.Ro16 ? 'Round of 16' : round === Round.Qf ? 'Quarterfinals' : round === Round.Sf ? 'Semifinals' : round === Round.F ? 'Finals' : 'Qualification'
   const numberString = match > 1 ? `${contest}-${match}` : `${contest}`
   const replayString = replay > 0 ? ' Replay' : ''
 
-  return `${roundString} ${numberString}${replayString}`
+  return `${roundString} Match ${numberString}${replayString}`
 }
 
 export function makeShortMatchName (sitting: SittingInformationFragment): string {

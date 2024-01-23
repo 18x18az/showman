@@ -1,23 +1,18 @@
 'use client'
-import { ScoreDisplay } from './score'
 import { MatchDisplay } from './match'
-import { EventStage, StageSubscription } from '@/contracts/stage'
 import { AllianceSelection } from './alliance'
-import { LiveFieldSubscription } from '../../../contracts/fields'
-import { DisplayStageSubscription, DisplayState } from '../../../contracts/display'
+import { EventStage, useGetEventStageQuery } from '../../../__generated__/graphql'
 
 export default function Page ({ params }: { readonly params: { readonly field: string } }): JSX.Element {
-  // const statuses = JsonTopic<FieldStatus[]>('fieldStatuses')
-  const active = LiveFieldSubscription()
-  const stage = StageSubscription()
-  const displayStage = DisplayStageSubscription()
+  const { data } = useGetEventStageQuery({ pollInterval: 500 })
 
-  if (active === undefined || stage === undefined || displayStage === undefined) return <></>
+  if (data === undefined) return <></>
 
-  if (stage === EventStage.QUALIFICATIONS || stage === EventStage.ELIMS) {
-    if (displayStage === DisplayState.RESULTS) return <ScoreDisplay />
-    else if (displayStage === DisplayState.MATCH && active !== null) return <MatchDisplay field={active} />
-  } else if (stage === EventStage.ALLIANCE_SELECTION) {
+  const stage = data.stage.stage
+
+  if (stage === EventStage.Qualifications || stage === EventStage.Elims) {
+    return <MatchDisplay />
+  } else if (stage === EventStage.AllianceSelection) {
     return <AllianceSelection />
   }
   return <></>

@@ -1,26 +1,32 @@
 import { MatchOverlay, MatchPeriod } from '@/components/objects/match/MatchOverlay'
-import { makeMatchName } from '../field/[uuid]/field'
-import { CompetitionFieldStatusSubscription, FieldControlSubscription, MATCH_STAGE } from '../../../contracts/fields'
+import { MatchStage, useMatchOverlayQuery } from '../../../__generated__/graphql'
+import { makeMatchName } from '../../../utils/strings/match'
 
-interface MatchDisplayProps {
-  field: number
-}
+export function MatchDisplay (): JSX.Element {
+  const { data } = useMatchOverlayQuery({ pollInterval: 250 })
+  const field = data?.competitionInformation.liveField
 
-export function MatchDisplay (props: MatchDisplayProps): JSX.Element {
-  const status = CompetitionFieldStatusSubscription(props.field)
-  const fieldControl = FieldControlSubscription(props.field)
+  if (field === undefined || field === null) return <></>
 
-  if (status === undefined || status.onField === null || fieldControl === undefined) return <></>
-  const match = status.onField
-  const stage = status.stage
+  const compInfo = field.competition
 
-  const matchName = makeMatchName(match)
-  const period = stage === MATCH_STAGE.AUTON ? MatchPeriod.Auto : stage === MATCH_STAGE.DRIVER ? MatchPeriod.Driver : MatchPeriod.None
+  if (compInfo === null) return <></>
 
-  const redTeams = [match.red.team1]
-  if (match.red.team2 !== undefined) redTeams.push(match.red.team2)
-  const blueTeams = [match.blue.team1]
-  if (match.blue.team2 !== undefined) blueTeams.push(match.blue.team2)
+  const sitting = compInfo.onFieldSitting
+
+  if (sitting === null) return <></>
+
+  const fieldControl = field.fieldControl
+
+  if (fieldControl === null) return <></>
+
+  const stage = compInfo.stage
+
+  const matchName = makeMatchName(sitting)
+  const period = stage === MatchStage.Auton ? MatchPeriod.Auto : stage === MatchStage.Driver ? MatchPeriod.Driver : MatchPeriod.None
+
+  const redTeams = sitting.contest.redTeams
+  const blueTeams = sitting.contest.blueTeams
 
   let time: string | undefined
 
