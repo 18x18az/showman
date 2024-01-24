@@ -130,3 +130,20 @@ query MatchOverlay {
     }
   }
 }
+
+query Teams {
+  teams {
+    id
+    name
+    number
+  }
+}
+
+query Fields {
+  fields {
+    id
+    name
+    isEnabled
+    isCompetition
+  }
+}

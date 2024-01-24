@@ -197,6 +197,7 @@ export type Mutation = {
   clearLive: Competition;
   concludeBlock: Block;
   configureTournamentManager: TournamentManager;
+  deleteField: Array<Field>;
   putLive: Competition;
   putOnDeck: Competition;
   queueSitting: Sitting;
@@ -215,6 +216,11 @@ export type Mutation = {
 
 export type MutationConfigureTournamentManagerArgs = {
   settings: TournamentManagerSetup;
+};
+
+
+export type MutationDeleteFieldArgs = {
+  fieldId: Scalars['Int']['input'];
 };
 
 
@@ -461,6 +467,13 @@ export type ConcludeBlockMutationVariables = Exact<{ [key: string]: never; }>;
 
 export type ConcludeBlockMutation = { __typename?: 'Mutation', concludeBlock: { __typename?: 'Block', id: number } };
 
+export type DeleteFieldMutationVariables = Exact<{
+  fieldId: Scalars['Int']['input'];
+}>;
+
+
+export type DeleteFieldMutation = { __typename?: 'Mutation', deleteField: Array<{ __typename?: 'Field', id: number }> };
+
 export type OnDeckFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -505,6 +518,16 @@ export type MatchOverlayQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MatchOverlayQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', liveField: { __typename?: 'Field', id: number, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null } | null, fieldControl: { __typename?: 'FieldControl', endTime: any | null } | null } | null } };
+
+export type TeamsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TeamsQuery = { __typename?: 'Query', teams: Array<{ __typename?: 'Team', id: number, name: string, number: string }> };
+
+export type FieldsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, isEnabled: boolean, isCompetition: boolean }> };
 
 export type FieldControlSubscriptionVariables = Exact<{
   fieldId: Scalars['Int']['input'];
@@ -1004,6 +1027,39 @@ export function useConcludeBlockMutation(baseOptions?: Apollo.MutationHookOption
 export type ConcludeBlockMutationHookResult = ReturnType<typeof useConcludeBlockMutation>;
 export type ConcludeBlockMutationResult = Apollo.MutationResult<ConcludeBlockMutation>;
 export type ConcludeBlockMutationOptions = Apollo.BaseMutationOptions<ConcludeBlockMutation, ConcludeBlockMutationVariables>;
+export const DeleteFieldDocument = gql`
+    mutation DeleteField($fieldId: Int!) {
+  deleteField(fieldId: $fieldId) {
+    id
+  }
+}
+    `;
+export type DeleteFieldMutationFn = Apollo.MutationFunction<DeleteFieldMutation, DeleteFieldMutationVariables>;
+
+/**
+ * __useDeleteFieldMutation__
+ *
+ * To run a mutation, you first call `useDeleteFieldMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteFieldMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteFieldMutation, { data, loading, error }] = useDeleteFieldMutation({
+ *   variables: {
+ *      fieldId: // value for 'fieldId'
+ *   },
+ * });
+ */
+export function useDeleteFieldMutation(baseOptions?: Apollo.MutationHookOptions<DeleteFieldMutation, DeleteFieldMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteFieldMutation, DeleteFieldMutationVariables>(DeleteFieldDocument, options);
+      }
+export type DeleteFieldMutationHookResult = ReturnType<typeof useDeleteFieldMutation>;
+export type DeleteFieldMutationResult = Apollo.MutationResult<DeleteFieldMutation>;
+export type DeleteFieldMutationOptions = Apollo.BaseMutationOptions<DeleteFieldMutation, DeleteFieldMutationVariables>;
 export const OnDeckFieldDocument = gql`
     query OnDeckField {
   competitionInformation {
@@ -1434,6 +1490,89 @@ export type MatchOverlayQueryHookResult = ReturnType<typeof useMatchOverlayQuery
 export type MatchOverlayLazyQueryHookResult = ReturnType<typeof useMatchOverlayLazyQuery>;
 export type MatchOverlaySuspenseQueryHookResult = ReturnType<typeof useMatchOverlaySuspenseQuery>;
 export type MatchOverlayQueryResult = Apollo.QueryResult<MatchOverlayQuery, MatchOverlayQueryVariables>;
+export const TeamsDocument = gql`
+    query Teams {
+  teams {
+    id
+    name
+    number
+  }
+}
+    `;
+
+/**
+ * __useTeamsQuery__
+ *
+ * To run a query within a React component, call `useTeamsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTeamsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTeamsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useTeamsQuery(baseOptions?: Apollo.QueryHookOptions<TeamsQuery, TeamsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TeamsQuery, TeamsQueryVariables>(TeamsDocument, options);
+      }
+export function useTeamsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TeamsQuery, TeamsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TeamsQuery, TeamsQueryVariables>(TeamsDocument, options);
+        }
+export function useTeamsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<TeamsQuery, TeamsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<TeamsQuery, TeamsQueryVariables>(TeamsDocument, options);
+        }
+export type TeamsQueryHookResult = ReturnType<typeof useTeamsQuery>;
+export type TeamsLazyQueryHookResult = ReturnType<typeof useTeamsLazyQuery>;
+export type TeamsSuspenseQueryHookResult = ReturnType<typeof useTeamsSuspenseQuery>;
+export type TeamsQueryResult = Apollo.QueryResult<TeamsQuery, TeamsQueryVariables>;
+export const FieldsDocument = gql`
+    query Fields {
+  fields {
+    id
+    name
+    isEnabled
+    isCompetition
+  }
+}
+    `;
+
+/**
+ * __useFieldsQuery__
+ *
+ * To run a query within a React component, call `useFieldsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFieldsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFieldsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFieldsQuery(baseOptions?: Apollo.QueryHookOptions<FieldsQuery, FieldsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FieldsQuery, FieldsQueryVariables>(FieldsDocument, options);
+      }
+export function useFieldsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FieldsQuery, FieldsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FieldsQuery, FieldsQueryVariables>(FieldsDocument, options);
+        }
+export function useFieldsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<FieldsQuery, FieldsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FieldsQuery, FieldsQueryVariables>(FieldsDocument, options);
+        }
+export type FieldsQueryHookResult = ReturnType<typeof useFieldsQuery>;
+export type FieldsLazyQueryHookResult = ReturnType<typeof useFieldsLazyQuery>;
+export type FieldsSuspenseQueryHookResult = ReturnType<typeof useFieldsSuspenseQuery>;
+export type FieldsQueryResult = Apollo.QueryResult<FieldsQuery, FieldsQueryVariables>;
 export const FieldControlDocument = gql`
     subscription FieldControl($fieldId: Int!) {
   fieldControl(fieldId: $fieldId) {

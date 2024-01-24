@@ -1,11 +1,9 @@
 'use client'
-
-import { BaseStatus, StatusTopic } from '@/utils/maestro'
 import { GetTmConnection } from '../../tmSetup'
 
 export default function Page (): JSX.Element {
-  const tmStatus = StatusTopic('tm')
-  const disabled = (tmStatus === undefined || tmStatus === BaseStatus.NOMINAL)
+  const tmStatus = undefined
+  const disabled = (tmStatus === undefined)
 
   if (disabled) {
     return <>TM already configured</>

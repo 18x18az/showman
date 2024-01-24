@@ -91,3 +91,9 @@ mutation ConcludeBlock {
     id
   }
 }
+
+mutation DeleteField($fieldId: Int!) {
+  deleteField(fieldId: $fieldId) {
+    id
+  }
+}

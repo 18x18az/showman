@@ -1,10 +1,14 @@
 'use client'
 
 import { ColumnDef } from '@tanstack/react-table'
-import { Team } from '@18x18az/maestro-interfaces'
 import { ArrowUpDown } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
+
+interface Team {
+  name: string
+  number: string
+}
 
 export const Columns: Array<ColumnDef<Team>> = [
   {
@@ -23,6 +27,13 @@ export const Columns: Array<ColumnDef<Team>> = [
     },
     cell: ({ row }) => {
       return <div className='font-medium'>{row.original.number}</div>
+    }
+  },
+  {
+    accessorKey: 'name',
+    header: 'Name',
+    cell: ({ row }) => {
+      return <div className='font-medium'>{row.original.name}</div>
     }
   }
 ]

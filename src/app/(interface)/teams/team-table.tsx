@@ -28,7 +28,7 @@ export function TeamTable<TData, TValue> ({
   })
 
   return (
-    <div>
+    <div className='p-12'>
       <DataTable columns={columns} table={table} />
     </div>
   )
