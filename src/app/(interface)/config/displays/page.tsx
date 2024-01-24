@@ -1,21 +1,15 @@
 'use client'
 
-import { DisplayConfig } from '@18x18az/maestro-interfaces'
-import { JsonTopic } from '@/utils/maestro'
+import { useDisplaysQuery } from '../../../../__generated__/graphql'
 import { Columns } from './columns'
 import { DisplayTable } from './display-table'
-import { Field } from '../../interfaces'
 
 export default function Page (): JSX.Element {
-  const displays = JsonTopic<DisplayConfig[]>('displays')
+  const { data } = useDisplaysQuery({ pollInterval: 500 })
 
-  const fields = JsonTopic<Field[]>('fields')
+  if (data === undefined) return <></>
 
-  if (displays === undefined || fields === undefined) return <></>
+  const displays = data.displays
 
-  const displaysWithFields = displays.map((display) => {
-    return { ...display, fields }
-  })
-
-  return <DisplayTable data={displaysWithFields} columns={Columns} />
+  return <DisplayTable data={displays} columns={Columns} />
 }

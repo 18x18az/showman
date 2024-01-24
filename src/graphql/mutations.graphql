@@ -97,3 +97,19 @@ mutation DeleteField($fieldId: Int!) {
     id
   }
 }
+
+mutation RenameDisplay($uuid: String!, $name: String!) {
+  renameDisplay(uuid: $uuid, name: $name) {
+    uuid
+    name
+  }
+}
+
+mutation SetDisplayField($uuid: String!, $fieldId: Int) {
+  setDisplayField(uuid: $uuid, fieldId: $fieldId) {
+    uuid
+    field {
+      id
+    }
+  }
+}

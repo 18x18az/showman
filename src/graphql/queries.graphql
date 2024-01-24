@@ -147,3 +147,21 @@ query Fields {
     isCompetition
   }
 }
+
+query Displays {
+  displays {
+    uuid
+    name
+    field {
+      id
+      name
+    }
+  }
+}
+
+query FieldNames {
+  fields {
+    id
+    name
+  }
+}

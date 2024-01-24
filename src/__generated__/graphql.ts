@@ -101,6 +101,17 @@ export type Contest = {
   round: Round;
 };
 
+/** Control of remote displays */
+export type Display = {
+  __typename?: 'Display';
+  /** The field that the display is currently assigned to */
+  field: Maybe<Field>;
+  /** Name of the display */
+  name: Scalars['String']['output'];
+  /** Unique identifier for the display */
+  uuid: Scalars['String']['output'];
+};
+
 /** The current stage of the event */
 export enum EventStage {
   AllianceSelection = 'ALLIANCE_SELECTION',
@@ -201,11 +212,13 @@ export type Mutation = {
   putLive: Competition;
   putOnDeck: Competition;
   queueSitting: Sitting;
+  renameDisplay: Display;
   replay: CompetitionField;
   /** Reset the event. Only available in test mode. */
   reset: Stage;
   resetAuton: CompetitionField;
   setAutomationEnabled: Competition;
+  setDisplayField: Display;
   startField: FieldControl;
   startNextBlock: Block;
   stopField: FieldControl;
@@ -235,6 +248,12 @@ export type MutationQueueSittingArgs = {
 };
 
 
+export type MutationRenameDisplayArgs = {
+  name: Scalars['String']['input'];
+  uuid: Scalars['String']['input'];
+};
+
+
 export type MutationReplayArgs = {
   sittingId: Scalars['Int']['input'];
 };
@@ -247,6 +266,12 @@ export type MutationResetAutonArgs = {
 
 export type MutationSetAutomationEnabledArgs = {
   enabled: Scalars['Boolean']['input'];
+};
+
+
+export type MutationSetDisplayFieldArgs = {
+  fieldId: InputMaybe<Scalars['Int']['input']>;
+  uuid: Scalars['String']['input'];
 };
 
 
@@ -276,6 +301,8 @@ export type Query = {
   competitionInformation: Competition;
   contests: Array<Contest>;
   currentBlock: Maybe<Block>;
+  display: Display;
+  displays: Array<Display>;
   fields: Array<Field>;
   matches: Array<Match>;
   nextBlock: Maybe<Block>;
@@ -283,6 +310,11 @@ export type Query = {
   stage: Stage;
   teams: Array<Team>;
   tournamentManager: TournamentManager;
+};
+
+
+export type QueryDisplayArgs = {
+  uuid: Scalars['String']['input'];
 };
 
 
@@ -474,6 +506,22 @@ export type DeleteFieldMutationVariables = Exact<{
 
 export type DeleteFieldMutation = { __typename?: 'Mutation', deleteField: Array<{ __typename?: 'Field', id: number }> };
 
+export type RenameDisplayMutationVariables = Exact<{
+  uuid: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+}>;
+
+
+export type RenameDisplayMutation = { __typename?: 'Mutation', renameDisplay: { __typename?: 'Display', uuid: string, name: string } };
+
+export type SetDisplayFieldMutationVariables = Exact<{
+  uuid: Scalars['String']['input'];
+  fieldId: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type SetDisplayFieldMutation = { __typename?: 'Mutation', setDisplayField: { __typename?: 'Display', uuid: string, field: { __typename?: 'Field', id: number } | null } };
+
 export type OnDeckFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -528,6 +576,16 @@ export type FieldsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type FieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, isEnabled: boolean, isCompetition: boolean }> };
+
+export type DisplaysQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DisplaysQuery = { __typename?: 'Query', displays: Array<{ __typename?: 'Display', uuid: string, name: string, field: { __typename?: 'Field', id: number, name: string } | null }> };
+
+export type FieldNamesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FieldNamesQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string }> };
 
 export type FieldControlSubscriptionVariables = Exact<{
   fieldId: Scalars['Int']['input'];
@@ -1060,6 +1118,78 @@ export function useDeleteFieldMutation(baseOptions?: Apollo.MutationHookOptions<
 export type DeleteFieldMutationHookResult = ReturnType<typeof useDeleteFieldMutation>;
 export type DeleteFieldMutationResult = Apollo.MutationResult<DeleteFieldMutation>;
 export type DeleteFieldMutationOptions = Apollo.BaseMutationOptions<DeleteFieldMutation, DeleteFieldMutationVariables>;
+export const RenameDisplayDocument = gql`
+    mutation RenameDisplay($uuid: String!, $name: String!) {
+  renameDisplay(uuid: $uuid, name: $name) {
+    uuid
+    name
+  }
+}
+    `;
+export type RenameDisplayMutationFn = Apollo.MutationFunction<RenameDisplayMutation, RenameDisplayMutationVariables>;
+
+/**
+ * __useRenameDisplayMutation__
+ *
+ * To run a mutation, you first call `useRenameDisplayMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRenameDisplayMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [renameDisplayMutation, { data, loading, error }] = useRenameDisplayMutation({
+ *   variables: {
+ *      uuid: // value for 'uuid'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useRenameDisplayMutation(baseOptions?: Apollo.MutationHookOptions<RenameDisplayMutation, RenameDisplayMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RenameDisplayMutation, RenameDisplayMutationVariables>(RenameDisplayDocument, options);
+      }
+export type RenameDisplayMutationHookResult = ReturnType<typeof useRenameDisplayMutation>;
+export type RenameDisplayMutationResult = Apollo.MutationResult<RenameDisplayMutation>;
+export type RenameDisplayMutationOptions = Apollo.BaseMutationOptions<RenameDisplayMutation, RenameDisplayMutationVariables>;
+export const SetDisplayFieldDocument = gql`
+    mutation SetDisplayField($uuid: String!, $fieldId: Int) {
+  setDisplayField(uuid: $uuid, fieldId: $fieldId) {
+    uuid
+    field {
+      id
+    }
+  }
+}
+    `;
+export type SetDisplayFieldMutationFn = Apollo.MutationFunction<SetDisplayFieldMutation, SetDisplayFieldMutationVariables>;
+
+/**
+ * __useSetDisplayFieldMutation__
+ *
+ * To run a mutation, you first call `useSetDisplayFieldMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetDisplayFieldMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setDisplayFieldMutation, { data, loading, error }] = useSetDisplayFieldMutation({
+ *   variables: {
+ *      uuid: // value for 'uuid'
+ *      fieldId: // value for 'fieldId'
+ *   },
+ * });
+ */
+export function useSetDisplayFieldMutation(baseOptions?: Apollo.MutationHookOptions<SetDisplayFieldMutation, SetDisplayFieldMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetDisplayFieldMutation, SetDisplayFieldMutationVariables>(SetDisplayFieldDocument, options);
+      }
+export type SetDisplayFieldMutationHookResult = ReturnType<typeof useSetDisplayFieldMutation>;
+export type SetDisplayFieldMutationResult = Apollo.MutationResult<SetDisplayFieldMutation>;
+export type SetDisplayFieldMutationOptions = Apollo.BaseMutationOptions<SetDisplayFieldMutation, SetDisplayFieldMutationVariables>;
 export const OnDeckFieldDocument = gql`
     query OnDeckField {
   competitionInformation {
@@ -1573,6 +1703,90 @@ export type FieldsQueryHookResult = ReturnType<typeof useFieldsQuery>;
 export type FieldsLazyQueryHookResult = ReturnType<typeof useFieldsLazyQuery>;
 export type FieldsSuspenseQueryHookResult = ReturnType<typeof useFieldsSuspenseQuery>;
 export type FieldsQueryResult = Apollo.QueryResult<FieldsQuery, FieldsQueryVariables>;
+export const DisplaysDocument = gql`
+    query Displays {
+  displays {
+    uuid
+    name
+    field {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useDisplaysQuery__
+ *
+ * To run a query within a React component, call `useDisplaysQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDisplaysQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDisplaysQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useDisplaysQuery(baseOptions?: Apollo.QueryHookOptions<DisplaysQuery, DisplaysQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<DisplaysQuery, DisplaysQueryVariables>(DisplaysDocument, options);
+      }
+export function useDisplaysLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DisplaysQuery, DisplaysQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<DisplaysQuery, DisplaysQueryVariables>(DisplaysDocument, options);
+        }
+export function useDisplaysSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<DisplaysQuery, DisplaysQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<DisplaysQuery, DisplaysQueryVariables>(DisplaysDocument, options);
+        }
+export type DisplaysQueryHookResult = ReturnType<typeof useDisplaysQuery>;
+export type DisplaysLazyQueryHookResult = ReturnType<typeof useDisplaysLazyQuery>;
+export type DisplaysSuspenseQueryHookResult = ReturnType<typeof useDisplaysSuspenseQuery>;
+export type DisplaysQueryResult = Apollo.QueryResult<DisplaysQuery, DisplaysQueryVariables>;
+export const FieldNamesDocument = gql`
+    query FieldNames {
+  fields {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useFieldNamesQuery__
+ *
+ * To run a query within a React component, call `useFieldNamesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFieldNamesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFieldNamesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFieldNamesQuery(baseOptions?: Apollo.QueryHookOptions<FieldNamesQuery, FieldNamesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FieldNamesQuery, FieldNamesQueryVariables>(FieldNamesDocument, options);
+      }
+export function useFieldNamesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FieldNamesQuery, FieldNamesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FieldNamesQuery, FieldNamesQueryVariables>(FieldNamesDocument, options);
+        }
+export function useFieldNamesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<FieldNamesQuery, FieldNamesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FieldNamesQuery, FieldNamesQueryVariables>(FieldNamesDocument, options);
+        }
+export type FieldNamesQueryHookResult = ReturnType<typeof useFieldNamesQuery>;
+export type FieldNamesLazyQueryHookResult = ReturnType<typeof useFieldNamesLazyQuery>;
+export type FieldNamesSuspenseQueryHookResult = ReturnType<typeof useFieldNamesSuspenseQuery>;
+export type FieldNamesQueryResult = Apollo.QueryResult<FieldNamesQuery, FieldNamesQueryVariables>;
 export const FieldControlDocument = gql`
     subscription FieldControl($fieldId: Int!) {
   fieldControl(fieldId: $fieldId) {
