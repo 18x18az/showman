@@ -165,3 +165,23 @@ query FieldNames {
     name
   }
 }
+
+query FieldDisplay($uuid: String!) {
+  display(uuid: $uuid) {
+    uuid
+    field {
+      id
+      name
+      fieldControl {
+        endTime
+      }
+      competition {
+        stage
+        isLive
+        onFieldSitting {
+          ...SittingWithTeams
+        }
+      }
+    }
+  }
+}

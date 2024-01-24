@@ -587,6 +587,13 @@ export type FieldNamesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type FieldNamesQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string }> };
 
+export type FieldDisplayQueryVariables = Exact<{
+  uuid: Scalars['String']['input'];
+}>;
+
+
+export type FieldDisplayQuery = { __typename?: 'Query', display: { __typename?: 'Display', uuid: string, field: { __typename?: 'Field', id: number, name: string, fieldControl: { __typename?: 'FieldControl', endTime: any | null } | null, competition: { __typename?: 'CompetitionField', stage: MatchStage, isLive: boolean, onFieldSitting: { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null } | null } | null } };
+
 export type FieldControlSubscriptionVariables = Exact<{
   fieldId: Scalars['Int']['input'];
 }>;
@@ -1787,6 +1794,60 @@ export type FieldNamesQueryHookResult = ReturnType<typeof useFieldNamesQuery>;
 export type FieldNamesLazyQueryHookResult = ReturnType<typeof useFieldNamesLazyQuery>;
 export type FieldNamesSuspenseQueryHookResult = ReturnType<typeof useFieldNamesSuspenseQuery>;
 export type FieldNamesQueryResult = Apollo.QueryResult<FieldNamesQuery, FieldNamesQueryVariables>;
+export const FieldDisplayDocument = gql`
+    query FieldDisplay($uuid: String!) {
+  display(uuid: $uuid) {
+    uuid
+    field {
+      id
+      name
+      fieldControl {
+        endTime
+      }
+      competition {
+        stage
+        isLive
+        onFieldSitting {
+          ...SittingWithTeams
+        }
+      }
+    }
+  }
+}
+    ${SittingWithTeamsFragmentDoc}`;
+
+/**
+ * __useFieldDisplayQuery__
+ *
+ * To run a query within a React component, call `useFieldDisplayQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFieldDisplayQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFieldDisplayQuery({
+ *   variables: {
+ *      uuid: // value for 'uuid'
+ *   },
+ * });
+ */
+export function useFieldDisplayQuery(baseOptions: Apollo.QueryHookOptions<FieldDisplayQuery, FieldDisplayQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FieldDisplayQuery, FieldDisplayQueryVariables>(FieldDisplayDocument, options);
+      }
+export function useFieldDisplayLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FieldDisplayQuery, FieldDisplayQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FieldDisplayQuery, FieldDisplayQueryVariables>(FieldDisplayDocument, options);
+        }
+export function useFieldDisplaySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<FieldDisplayQuery, FieldDisplayQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FieldDisplayQuery, FieldDisplayQueryVariables>(FieldDisplayDocument, options);
+        }
+export type FieldDisplayQueryHookResult = ReturnType<typeof useFieldDisplayQuery>;
+export type FieldDisplayLazyQueryHookResult = ReturnType<typeof useFieldDisplayLazyQuery>;
+export type FieldDisplaySuspenseQueryHookResult = ReturnType<typeof useFieldDisplaySuspenseQuery>;
+export type FieldDisplayQueryResult = Apollo.QueryResult<FieldDisplayQuery, FieldDisplayQueryVariables>;
 export const FieldControlDocument = gql`
     subscription FieldControl($fieldId: Int!) {
   fieldControl(fieldId: $fieldId) {
