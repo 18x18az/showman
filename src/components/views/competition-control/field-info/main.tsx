@@ -1,13 +1,13 @@
 import { OnDeck } from './on-deck'
 import { OnField } from './on-field'
-import { MatchStage, SittingInformationFragment, useGetCompetitionFieldsQuery } from '../../../../__generated__/graphql'
+import { MatchStage, SittingWithTeamsFragment, useGetCompetitionFieldsQuery } from '../../../../__generated__/graphql'
 
 interface FieldInfoProps {
   name: string
   stage: MatchStage
   id: number
-  sOnField: SittingInformationFragment | null
-  sOnTable: SittingInformationFragment | null
+  sOnField: SittingWithTeamsFragment | null
+  sOnTable: SittingWithTeamsFragment | null
   isLive: boolean
   isOnDeck: boolean
 }

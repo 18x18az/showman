@@ -70,19 +70,6 @@ function UnqueuedSitting (props: { sitting: SittingInformationFragment, fieldNam
   )
 }
 
-// function ProceedButton (): JSX.Element {
-//   if (block === undefined || skillsEnabled === undefined) return <></>
-//   const hasBlock = block !== null
-
-//   const text = hasBlock ? 'End Block' : 'Proceed'
-
-//   return (
-//     <div>
-//       <Button disabled={skillsEnabled} onClick={() => { void nextBlock() }}>{text}</Button>
-//     </div>
-//   )
-// }
-
 function UnqueuedSittings (props: { block: BlockInformationFragment }): JSX.Element {
   const { data: tableData } = useGetTableOccupiedQuery({
     pollInterval: 500

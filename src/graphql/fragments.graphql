@@ -19,6 +19,7 @@ fragment TeamInformation on Team {
 
 fragment SittingWithTeams on Sitting {
   ...SittingInformation
+  scheduled
   contest {
     redTeams {
       ...TeamInformation

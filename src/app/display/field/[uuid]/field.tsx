@@ -73,16 +73,14 @@ function TimeoutDisplay (props: { match: Match, timeout: string, fieldName: stri
   return body
 }
 
-function CompetitionDisplay (props: { sitting: SittingWithTeamsFragment, stage: MatchStage, fieldName: string, endTime: string | null }): JSX.Element {
-  const { sitting, stage, fieldName, endTime } = props
-
-  const time = undefined
+function CompetitionDisplay (props: { sitting: SittingWithTeamsFragment, stage: MatchStage, fieldName: string, endTime: string | null, time: string | null }): JSX.Element {
+  const { sitting, stage, fieldName, endTime, time } = props
 
   let content = <></>
   let clock = <></>
   switch (stage) {
     case MatchStage.Queued:
-      if (time !== undefined) clock = <Countdown time={time} />
+      if (time !== null) clock = <Countdown time={time} />
       content = <h2 className='text-9xl'>{clock}</h2>
       break
     case MatchStage.Auton:
@@ -125,6 +123,7 @@ function ActualFieldDisplay (props: { field: FieldInterface }): JSX.Element {
   }
 
   const endTime = props.field.fieldControl?.endTime ?? null
+  const time = sitting?.scheduled
 
   const fieldName = props.field.name
 
@@ -140,7 +139,7 @@ function ActualFieldDisplay (props: { field: FieldInterface }): JSX.Element {
   // }
 
   if (sitting !== undefined) {
-    return <CompetitionDisplay sitting={sitting} stage={compStage} fieldName={fieldName} endTime={endTime} />
+    return <CompetitionDisplay sitting={sitting} stage={compStage} fieldName={fieldName} endTime={endTime} time={time} />
   }
 
   return body

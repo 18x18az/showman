@@ -26,7 +26,7 @@ export enum FieldStatus {
 
 export interface CommonFieldProps {
   match: SittingInformationFragment | null
-  text?: string
+  text?: JSX.Element
   status?: FieldStatus
   options: JSX.Element[]
 }
@@ -37,7 +37,7 @@ function MatchName (props: { match: SittingInformationFragment | null }): JSX.El
   return <h1 className='text-4xl text-center text-slate-11 mb-4'>{name}</h1>
 }
 
-function MatchText (props: { text: string | undefined }): JSX.Element {
+function MatchText (props: { text: JSX.Element | undefined }): JSX.Element {
   return <h2 className='text-2xl text-center text-slate-11 mb-8'>{props.text}</h2>
 }
 

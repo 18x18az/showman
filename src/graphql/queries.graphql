@@ -95,10 +95,10 @@ query GetCompetitionFields {
       isLive
       isOnDeck
       onFieldSitting {
-        ...SittingInformation
+        ...SittingWithTeams
       }
       onTableSitting {
-        ...SittingInformation
+        ...SittingWithTeams
       }
     }
     fieldControl {
