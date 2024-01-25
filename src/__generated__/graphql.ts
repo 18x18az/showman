@@ -522,6 +522,14 @@ export type SetDisplayFieldMutationVariables = Exact<{
 
 export type SetDisplayFieldMutation = { __typename?: 'Mutation', setDisplayField: { __typename?: 'Display', uuid: string, field: { __typename?: 'Field', id: number } | null } };
 
+export type UpdateFieldNameMutationVariables = Exact<{
+  fieldId: Scalars['Int']['input'];
+  name: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type UpdateFieldNameMutation = { __typename?: 'Mutation', updateField: { __typename?: 'Field', id: number, name: string, isEnabled: boolean, isCompetition: boolean } };
+
 export type OnDeckFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1198,6 +1206,43 @@ export function useSetDisplayFieldMutation(baseOptions?: Apollo.MutationHookOpti
 export type SetDisplayFieldMutationHookResult = ReturnType<typeof useSetDisplayFieldMutation>;
 export type SetDisplayFieldMutationResult = Apollo.MutationResult<SetDisplayFieldMutation>;
 export type SetDisplayFieldMutationOptions = Apollo.BaseMutationOptions<SetDisplayFieldMutation, SetDisplayFieldMutationVariables>;
+export const UpdateFieldNameDocument = gql`
+    mutation UpdateFieldName($fieldId: Int!, $name: String) {
+  updateField(fieldId: $fieldId, update: {name: $name}) {
+    id
+    name
+    isEnabled
+    isCompetition
+  }
+}
+    `;
+export type UpdateFieldNameMutationFn = Apollo.MutationFunction<UpdateFieldNameMutation, UpdateFieldNameMutationVariables>;
+
+/**
+ * __useUpdateFieldNameMutation__
+ *
+ * To run a mutation, you first call `useUpdateFieldNameMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateFieldNameMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateFieldNameMutation, { data, loading, error }] = useUpdateFieldNameMutation({
+ *   variables: {
+ *      fieldId: // value for 'fieldId'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useUpdateFieldNameMutation(baseOptions?: Apollo.MutationHookOptions<UpdateFieldNameMutation, UpdateFieldNameMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateFieldNameMutation, UpdateFieldNameMutationVariables>(UpdateFieldNameDocument, options);
+      }
+export type UpdateFieldNameMutationHookResult = ReturnType<typeof useUpdateFieldNameMutation>;
+export type UpdateFieldNameMutationResult = Apollo.MutationResult<UpdateFieldNameMutation>;
+export type UpdateFieldNameMutationOptions = Apollo.BaseMutationOptions<UpdateFieldNameMutation, UpdateFieldNameMutationVariables>;
 export const OnDeckFieldDocument = gql`
     query OnDeckField {
   competitionInformation {

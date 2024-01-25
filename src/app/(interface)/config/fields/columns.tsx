@@ -2,15 +2,7 @@ import { TextInput } from '@/components/ui/data-table'
 import { ColumnDef } from '@tanstack/react-table'
 import { Button } from '../../../../components/ui/button'
 import { Trash2 } from 'lucide-react'
-import { useDeleteFieldMutation } from '../../../../__generated__/graphql'
-
-async function updateName (fieldId: number, name: string): Promise<void> {
-  // const url = `field/${fieldId}/name`
-}
-
-async function removeField (fieldId: number): Promise<void> {
-  await remove({ variables: { fieldId }, refetchQueries: ['Fields'] })
-}
+import { useDeleteFieldMutation, useUpdateFieldNameMutation } from '../../../../__generated__/graphql'
 
 interface Field {
   id: number
@@ -24,8 +16,9 @@ export const Columns: Array<ColumnDef<Field>> = [
     accessorKey: 'name',
     header: 'Name',
     cell: ({ row }) => {
+      const [update] = useUpdateFieldNameMutation({ refetchQueries: ['Fields'] })
       return (
-        <TextInput value={row.original.name} updateValue={(name) => { void updateName(row.original.id, name) }} />
+        <TextInput value={row.original.name} updateValue={(name) => { void update({ variables: { fieldId: row.original.id, name } }) }} />
       )
     }
   },

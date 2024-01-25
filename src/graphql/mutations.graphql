@@ -113,3 +113,12 @@ mutation SetDisplayField($uuid: String!, $fieldId: Int) {
     }
   }
 }
+
+mutation UpdateFieldName($fieldId: Int!, $name: String) {
+  updateField(fieldId: $fieldId, update: {name: $name}) {
+    id
+    name
+    isEnabled
+    isCompetition
+  }
+}

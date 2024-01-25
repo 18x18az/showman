@@ -152,7 +152,7 @@ export function FieldDisplay (props: FieldDisplayProps): JSX.Element {
 
   if (field !== undefined && field !== null) body = <ActualFieldDisplay field={field} />
 
-  const isCurrent = (field?.competition === undefined || field.competition === null || field.competition.isLive === true)
+  const isCurrent = (field?.competition === undefined || field.competition === null || field.competition.isLive)
   const background = isCurrent ? 'bg-zinc-700' : 'bg-zinc-900'
 
   return (
