@@ -185,3 +185,25 @@ query FieldDisplay($uuid: String!) {
     }
   }
 }
+
+query Results {
+  results {
+    displayedResults {
+      id
+      number
+      redScore
+      blueScore
+      contest {
+        id
+        round
+        number
+        redTeams {
+          ...TeamInformation
+        }
+        blueTeams {
+          ...TeamInformation
+        }
+      }
+    }
+  }
+}

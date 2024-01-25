@@ -306,6 +306,7 @@ export type Query = {
   fields: Array<Field>;
   matches: Array<Match>;
   nextBlock: Maybe<Block>;
+  results: Results;
   sittings: Array<Sitting>;
   stage: Stage;
   teams: Array<Team>;
@@ -321,6 +322,12 @@ export type QueryDisplayArgs = {
 export type QueryFieldsArgs = {
   isCompetition: InputMaybe<Scalars['Boolean']['input']>;
   isEnabled: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type Results = {
+  __typename?: 'Results';
+  displayedResults: Maybe<Match>;
+  nextResults: Maybe<Match>;
 };
 
 /** The round of the match */
@@ -601,6 +608,11 @@ export type FieldDisplayQueryVariables = Exact<{
 
 
 export type FieldDisplayQuery = { __typename?: 'Query', display: { __typename?: 'Display', uuid: string, field: { __typename?: 'Field', id: number, name: string, fieldControl: { __typename?: 'FieldControl', endTime: any | null } | null, competition: { __typename?: 'CompetitionField', stage: MatchStage, isLive: boolean, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null } | null } | null } };
+
+export type ResultsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ResultsQuery = { __typename?: 'Query', results: { __typename?: 'Results', displayedResults: { __typename?: 'Match', id: number, number: number, redScore: number | null, blueScore: number | null, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> } } | null } };
 
 export type FieldControlSubscriptionVariables = Exact<{
   fieldId: Scalars['Int']['input'];
@@ -1894,6 +1906,61 @@ export type FieldDisplayQueryHookResult = ReturnType<typeof useFieldDisplayQuery
 export type FieldDisplayLazyQueryHookResult = ReturnType<typeof useFieldDisplayLazyQuery>;
 export type FieldDisplaySuspenseQueryHookResult = ReturnType<typeof useFieldDisplaySuspenseQuery>;
 export type FieldDisplayQueryResult = Apollo.QueryResult<FieldDisplayQuery, FieldDisplayQueryVariables>;
+export const ResultsDocument = gql`
+    query Results {
+  results {
+    displayedResults {
+      id
+      number
+      redScore
+      blueScore
+      contest {
+        id
+        round
+        number
+        redTeams {
+          ...TeamInformation
+        }
+        blueTeams {
+          ...TeamInformation
+        }
+      }
+    }
+  }
+}
+    ${TeamInformationFragmentDoc}`;
+
+/**
+ * __useResultsQuery__
+ *
+ * To run a query within a React component, call `useResultsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useResultsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useResultsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useResultsQuery(baseOptions?: Apollo.QueryHookOptions<ResultsQuery, ResultsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ResultsQuery, ResultsQueryVariables>(ResultsDocument, options);
+      }
+export function useResultsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ResultsQuery, ResultsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ResultsQuery, ResultsQueryVariables>(ResultsDocument, options);
+        }
+export function useResultsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ResultsQuery, ResultsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ResultsQuery, ResultsQueryVariables>(ResultsDocument, options);
+        }
+export type ResultsQueryHookResult = ReturnType<typeof useResultsQuery>;
+export type ResultsLazyQueryHookResult = ReturnType<typeof useResultsLazyQuery>;
+export type ResultsSuspenseQueryHookResult = ReturnType<typeof useResultsSuspenseQuery>;
+export type ResultsQueryResult = Apollo.QueryResult<ResultsQuery, ResultsQueryVariables>;
 export const FieldControlDocument = gql`
     subscription FieldControl($fieldId: Int!) {
   fieldControl(fieldId: $fieldId) {
