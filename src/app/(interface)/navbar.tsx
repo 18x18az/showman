@@ -1,5 +1,7 @@
+'use client'
 import { Settings, TowerControl, Users } from 'lucide-react'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
 function Control (): JSX.Element {
   return (
@@ -26,6 +28,24 @@ function Config (): JSX.Element {
 }
 
 export function Navbar (): JSX.Element {
+  const [width, setWidth] = useState<number>(window.innerWidth)
+
+  function handleWindowSizeChange (): void {
+    setWidth(window.innerWidth)
+  }
+  useEffect(() => {
+    window.addEventListener('resize', handleWindowSizeChange)
+    return () => {
+      window.removeEventListener('resize', handleWindowSizeChange)
+    }
+  }, [])
+
+  const isMobile = width <= 768
+
+  if (isMobile) {
+    return <></>
+  }
+
   return (
     <div className='flex bg-slate-1 border-b border-slate-6 gap-2'>
       <Control />

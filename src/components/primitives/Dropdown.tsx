@@ -35,7 +35,7 @@ export function Dropdown (props: DropdownProps): JSX.Element {
 
   return (
     <Select.Root value={props.value} onValueChange={value => props.onChange(value)}>
-      <Select.Trigger disabled={props.locked} className='focus:outline-none'>
+      <Select.Trigger asChild disabled={props.locked} className='focus:outline-none'>
         <ExpandButton size={props.size === 'L' ? 'L' : 'S'} disabled={props.locked}>
           <Select.Value className='w-24 text-lg' placeholder={props.value} />
           {dropDownIcon}

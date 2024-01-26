@@ -225,3 +225,25 @@ query Results {
     }
   }
 }
+
+query SkillsFields {
+  fields(isEnabled: true, skillsEnabled: true) {
+    id
+    name
+  }
+}
+
+query SkillsField($fieldId: Int!) {
+  field(fieldId: $fieldId) {
+    id
+    name
+    fieldControl {
+      mode
+      endTime
+    }
+    skills {
+      fieldId
+      stopTime
+    }
+  }
+}

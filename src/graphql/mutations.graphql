@@ -129,3 +129,15 @@ mutation SetSkillsEnabled($enabled: Boolean!) {
     canRunSkills
   }
 }
+
+mutation QueueDriverSkills($fieldId: Int!) {
+  queueDriverSkills(fieldId: $fieldId) {
+    fieldId
+  }
+}
+
+mutation QueueProgrammingSkills($fieldId: Int!) {
+  queueProgrammingSkills(fieldId: $fieldId) {
+    fieldId
+  }
+}

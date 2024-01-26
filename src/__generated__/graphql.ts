@@ -141,6 +141,8 @@ export type Field = {
   isSkills: Scalars['Boolean']['output'];
   /** Name of the field */
   name: Scalars['String']['output'];
+  /** Information about skills matches associated with this field. Null if the field is not being used for skills matches. */
+  skills: Maybe<Skills>;
 };
 
 export type FieldControl = {
@@ -211,6 +213,8 @@ export type Mutation = {
   deleteField: Array<Field>;
   putLive: Competition;
   putOnDeck: Competition;
+  queueDriverSkills: Skills;
+  queueProgrammingSkills: Skills;
   queueSitting: Sitting;
   renameDisplay: Display;
   replay: CompetitionField;
@@ -239,6 +243,16 @@ export type MutationDeleteFieldArgs = {
 
 
 export type MutationPutOnDeckArgs = {
+  fieldId: Scalars['Int']['input'];
+};
+
+
+export type MutationQueueDriverSkillsArgs = {
+  fieldId: Scalars['Int']['input'];
+};
+
+
+export type MutationQueueProgrammingSkillsArgs = {
   fieldId: Scalars['Int']['input'];
 };
 
@@ -309,6 +323,7 @@ export type Query = {
   currentBlock: Maybe<Block>;
   display: Display;
   displays: Array<Display>;
+  field: Field;
   fields: Array<Field>;
   matches: Array<Match>;
   nextBlock: Maybe<Block>;
@@ -325,9 +340,15 @@ export type QueryDisplayArgs = {
 };
 
 
+export type QueryFieldArgs = {
+  fieldId: Scalars['Int']['input'];
+};
+
+
 export type QueryFieldsArgs = {
   isCompetition: InputMaybe<Scalars['Boolean']['input']>;
   isEnabled: InputMaybe<Scalars['Boolean']['input']>;
+  skillsEnabled: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type Results = {
@@ -364,6 +385,12 @@ export type Sitting = {
   scheduled: Maybe<Scalars['DateTime']['output']>;
   /** The status of the sitting */
   status: MatchStatus;
+};
+
+export type Skills = {
+  __typename?: 'Skills';
+  fieldId: Scalars['Float']['output'];
+  stopTime: Maybe<Scalars['Float']['output']>;
 };
 
 export type Stage = {
@@ -550,6 +577,20 @@ export type SetSkillsEnabledMutationVariables = Exact<{
 
 export type SetSkillsEnabledMutation = { __typename?: 'Mutation', setSkillsEnabled: Array<{ __typename?: 'Field', id: number, canRunSkills: boolean }> };
 
+export type QueueDriverSkillsMutationVariables = Exact<{
+  fieldId: Scalars['Int']['input'];
+}>;
+
+
+export type QueueDriverSkillsMutation = { __typename?: 'Mutation', queueDriverSkills: { __typename?: 'Skills', fieldId: number } };
+
+export type QueueProgrammingSkillsMutationVariables = Exact<{
+  fieldId: Scalars['Int']['input'];
+}>;
+
+
+export type QueueProgrammingSkillsMutation = { __typename?: 'Mutation', queueProgrammingSkills: { __typename?: 'Skills', fieldId: number } };
+
 export type OnDeckFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -626,6 +667,18 @@ export type ResultsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ResultsQuery = { __typename?: 'Query', results: { __typename?: 'Results', displayedResults: { __typename?: 'Match', id: number, number: number, redScore: number | null, blueScore: number | null, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> } } | null } };
+
+export type SkillsFieldsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SkillsFieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string }> };
+
+export type SkillsFieldQueryVariables = Exact<{
+  fieldId: Scalars['Int']['input'];
+}>;
+
+
+export type SkillsFieldQuery = { __typename?: 'Query', field: { __typename?: 'Field', id: number, name: string, fieldControl: { __typename?: 'FieldControl', mode: Control_Mode | null, endTime: any | null } | null, skills: { __typename?: 'Skills', fieldId: number, stopTime: number | null } | null } };
 
 export type FieldControlSubscriptionVariables = Exact<{
   fieldId: Scalars['Int']['input'];
@@ -1302,6 +1355,72 @@ export function useSetSkillsEnabledMutation(baseOptions?: Apollo.MutationHookOpt
 export type SetSkillsEnabledMutationHookResult = ReturnType<typeof useSetSkillsEnabledMutation>;
 export type SetSkillsEnabledMutationResult = Apollo.MutationResult<SetSkillsEnabledMutation>;
 export type SetSkillsEnabledMutationOptions = Apollo.BaseMutationOptions<SetSkillsEnabledMutation, SetSkillsEnabledMutationVariables>;
+export const QueueDriverSkillsDocument = gql`
+    mutation QueueDriverSkills($fieldId: Int!) {
+  queueDriverSkills(fieldId: $fieldId) {
+    fieldId
+  }
+}
+    `;
+export type QueueDriverSkillsMutationFn = Apollo.MutationFunction<QueueDriverSkillsMutation, QueueDriverSkillsMutationVariables>;
+
+/**
+ * __useQueueDriverSkillsMutation__
+ *
+ * To run a mutation, you first call `useQueueDriverSkillsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useQueueDriverSkillsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [queueDriverSkillsMutation, { data, loading, error }] = useQueueDriverSkillsMutation({
+ *   variables: {
+ *      fieldId: // value for 'fieldId'
+ *   },
+ * });
+ */
+export function useQueueDriverSkillsMutation(baseOptions?: Apollo.MutationHookOptions<QueueDriverSkillsMutation, QueueDriverSkillsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<QueueDriverSkillsMutation, QueueDriverSkillsMutationVariables>(QueueDriverSkillsDocument, options);
+      }
+export type QueueDriverSkillsMutationHookResult = ReturnType<typeof useQueueDriverSkillsMutation>;
+export type QueueDriverSkillsMutationResult = Apollo.MutationResult<QueueDriverSkillsMutation>;
+export type QueueDriverSkillsMutationOptions = Apollo.BaseMutationOptions<QueueDriverSkillsMutation, QueueDriverSkillsMutationVariables>;
+export const QueueProgrammingSkillsDocument = gql`
+    mutation QueueProgrammingSkills($fieldId: Int!) {
+  queueProgrammingSkills(fieldId: $fieldId) {
+    fieldId
+  }
+}
+    `;
+export type QueueProgrammingSkillsMutationFn = Apollo.MutationFunction<QueueProgrammingSkillsMutation, QueueProgrammingSkillsMutationVariables>;
+
+/**
+ * __useQueueProgrammingSkillsMutation__
+ *
+ * To run a mutation, you first call `useQueueProgrammingSkillsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useQueueProgrammingSkillsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [queueProgrammingSkillsMutation, { data, loading, error }] = useQueueProgrammingSkillsMutation({
+ *   variables: {
+ *      fieldId: // value for 'fieldId'
+ *   },
+ * });
+ */
+export function useQueueProgrammingSkillsMutation(baseOptions?: Apollo.MutationHookOptions<QueueProgrammingSkillsMutation, QueueProgrammingSkillsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<QueueProgrammingSkillsMutation, QueueProgrammingSkillsMutationVariables>(QueueProgrammingSkillsDocument, options);
+      }
+export type QueueProgrammingSkillsMutationHookResult = ReturnType<typeof useQueueProgrammingSkillsMutation>;
+export type QueueProgrammingSkillsMutationResult = Apollo.MutationResult<QueueProgrammingSkillsMutation>;
+export type QueueProgrammingSkillsMutationOptions = Apollo.BaseMutationOptions<QueueProgrammingSkillsMutation, QueueProgrammingSkillsMutationVariables>;
 export const OnDeckFieldDocument = gql`
     query OnDeckField {
   competitionInformation {
@@ -2026,6 +2145,95 @@ export type ResultsQueryHookResult = ReturnType<typeof useResultsQuery>;
 export type ResultsLazyQueryHookResult = ReturnType<typeof useResultsLazyQuery>;
 export type ResultsSuspenseQueryHookResult = ReturnType<typeof useResultsSuspenseQuery>;
 export type ResultsQueryResult = Apollo.QueryResult<ResultsQuery, ResultsQueryVariables>;
+export const SkillsFieldsDocument = gql`
+    query SkillsFields {
+  fields(isEnabled: true, skillsEnabled: true) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useSkillsFieldsQuery__
+ *
+ * To run a query within a React component, call `useSkillsFieldsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSkillsFieldsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSkillsFieldsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSkillsFieldsQuery(baseOptions?: Apollo.QueryHookOptions<SkillsFieldsQuery, SkillsFieldsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SkillsFieldsQuery, SkillsFieldsQueryVariables>(SkillsFieldsDocument, options);
+      }
+export function useSkillsFieldsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SkillsFieldsQuery, SkillsFieldsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SkillsFieldsQuery, SkillsFieldsQueryVariables>(SkillsFieldsDocument, options);
+        }
+export function useSkillsFieldsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SkillsFieldsQuery, SkillsFieldsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SkillsFieldsQuery, SkillsFieldsQueryVariables>(SkillsFieldsDocument, options);
+        }
+export type SkillsFieldsQueryHookResult = ReturnType<typeof useSkillsFieldsQuery>;
+export type SkillsFieldsLazyQueryHookResult = ReturnType<typeof useSkillsFieldsLazyQuery>;
+export type SkillsFieldsSuspenseQueryHookResult = ReturnType<typeof useSkillsFieldsSuspenseQuery>;
+export type SkillsFieldsQueryResult = Apollo.QueryResult<SkillsFieldsQuery, SkillsFieldsQueryVariables>;
+export const SkillsFieldDocument = gql`
+    query SkillsField($fieldId: Int!) {
+  field(fieldId: $fieldId) {
+    id
+    name
+    fieldControl {
+      mode
+      endTime
+    }
+    skills {
+      fieldId
+      stopTime
+    }
+  }
+}
+    `;
+
+/**
+ * __useSkillsFieldQuery__
+ *
+ * To run a query within a React component, call `useSkillsFieldQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSkillsFieldQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSkillsFieldQuery({
+ *   variables: {
+ *      fieldId: // value for 'fieldId'
+ *   },
+ * });
+ */
+export function useSkillsFieldQuery(baseOptions: Apollo.QueryHookOptions<SkillsFieldQuery, SkillsFieldQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SkillsFieldQuery, SkillsFieldQueryVariables>(SkillsFieldDocument, options);
+      }
+export function useSkillsFieldLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SkillsFieldQuery, SkillsFieldQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SkillsFieldQuery, SkillsFieldQueryVariables>(SkillsFieldDocument, options);
+        }
+export function useSkillsFieldSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SkillsFieldQuery, SkillsFieldQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SkillsFieldQuery, SkillsFieldQueryVariables>(SkillsFieldDocument, options);
+        }
+export type SkillsFieldQueryHookResult = ReturnType<typeof useSkillsFieldQuery>;
+export type SkillsFieldLazyQueryHookResult = ReturnType<typeof useSkillsFieldLazyQuery>;
+export type SkillsFieldSuspenseQueryHookResult = ReturnType<typeof useSkillsFieldSuspenseQuery>;
+export type SkillsFieldQueryResult = Apollo.QueryResult<SkillsFieldQuery, SkillsFieldQueryVariables>;
 export const FieldControlDocument = gql`
     subscription FieldControl($fieldId: Int!) {
   fieldControl(fieldId: $fieldId) {
