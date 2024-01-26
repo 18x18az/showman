@@ -50,7 +50,7 @@ export function Navbar (): JSX.Element {
     }
   }, [])
 
-  const isMobile = width <= 768
+  const isMobile = width <= 1000
 
   if (isMobile) {
     return <></>
