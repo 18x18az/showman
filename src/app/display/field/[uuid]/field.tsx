@@ -76,12 +76,12 @@ function SkillsDisplay (props: { fieldName: string, fieldControl: FieldControl, 
   return body
 }
 
-// function TimeoutDisplay (props: { match: Match, timeout: string, fieldName: string }): JSX.Element {
-//   const clock = <Timer time={props.timeout} />
-//   const content = <h2 className='text-9xl'>{clock}</h2>
-//   const body = <FieldContent content={content} match={props.match} fieldName={props.fieldName} />
-//   return body
-// }
+function TimeoutDisplay (props: { timeout: string, fieldName: string }): JSX.Element {
+  const clock = <Timer time={props.timeout} />
+  const content = <h2 className='text-9xl'>{clock}</h2>
+  const body = <FieldContent content={content} title='Timeout' fieldName={props.fieldName} />
+  return body
+}
 
 function CompetitionDisplay (props: { sitting: SittingWithTeamsFragment, stage: MatchStage, fieldName: string, endTime: string | null, time: string | null }): JSX.Element {
   const { sitting, stage, fieldName, endTime, time } = props
@@ -125,7 +125,7 @@ interface FieldInterface {
   } | null
 }
 
-function ActualFieldDisplay (props: { field: FieldInterface }): JSX.Element {
+function ActualFieldDisplay (props: { field: FieldInterface, timeout: string | null }): JSX.Element {
   const body = <div className='flex flex-col justify-evenly h-full w-full'><div className='flex justify-evenly'><Logo className='mt-14' viewBox='0 0 350.417 279.405' style={{ width: '65%', height: '100%' }} /></div></div>
   const fieldName = props.field.name
 
@@ -146,16 +146,12 @@ function ActualFieldDisplay (props: { field: FieldInterface }): JSX.Element {
     return body
   }
 
+  if (props.timeout !== null) {
+    return <TimeoutDisplay fieldName={fieldName} timeout={props.timeout}/>
+  }
+
   const endTime = props.field.fieldControl?.endTime ?? null
   const time = sitting?.scheduled
-
-  // if (isSkills) {
-  //   return <SkillsDisplay fieldName={fieldName} fieldControl={fieldControl} />
-  // } else if (timeout !== null) {
-  //   return <TimeoutDisplay match={match} timeout={timeout} fieldName={fieldName} />
-  // } else {
-  //   return <CompetitionDisplay sitting={sitting} fieldName={fieldName} />
-  // }
 
   if (sitting !== undefined) {
     return <CompetitionDisplay sitting={sitting} stage={compStage} fieldName={fieldName} endTime={endTime} time={time} />
@@ -169,7 +165,7 @@ export function FieldDisplay (props: FieldDisplayProps): JSX.Element {
   const { data } = useFieldDisplayQuery({ variables: { uuid: props.uuid }, pollInterval: 250 })
   const field = data?.display.field
 
-  if (field !== undefined && field !== null) body = <ActualFieldDisplay field={field} />
+  if (field !== undefined && field !== null) body = <ActualFieldDisplay field={field} timeout={data?.timeout.endTime ?? null} />
 
   const isCurrent = (field?.competition === undefined || field.competition === null || field.competition.isLive)
   const background = isCurrent ? 'bg-zinc-700' : 'bg-zinc-900'

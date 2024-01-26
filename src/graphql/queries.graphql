@@ -188,6 +188,9 @@ query FieldNames {
 }
 
 query FieldDisplay($uuid: String!) {
+  timeout {
+    endTime
+  }
   display(uuid: $uuid) {
     uuid
     field {
