@@ -227,9 +227,11 @@ export type Mutation = {
   allianceSelectionPick: AllianceSelection;
   allianceSelectionUndo: AllianceSelection;
   clearLive: Competition;
+  clearResults: Results;
   concludeBlock: Block;
   configureTournamentManager: TournamentManager;
   deleteField: Array<Field>;
+  promoteResults: Results;
   putLive: Competition;
   putOnDeck: Competition;
   queueDriverSkills: Skills;
@@ -648,6 +650,16 @@ export type AllianceSelectionCancelMutationVariables = Exact<{ [key: string]: ne
 
 
 export type AllianceSelectionCancelMutation = { __typename?: 'Mutation', allianceSelectionCancel: { __typename?: 'AllianceSelection', picking: { __typename?: 'Team', id: number } | null } };
+
+export type ClearResultsMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ClearResultsMutation = { __typename?: 'Mutation', clearResults: { __typename?: 'Results', displayedResults: { __typename?: 'Match', id: number } | null } };
+
+export type PromoteResultsMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PromoteResultsMutation = { __typename?: 'Mutation', promoteResults: { __typename?: 'Results', displayedResults: { __typename?: 'Match', id: number } | null } };
 
 export type OnDeckFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1699,6 +1711,74 @@ export function useAllianceSelectionCancelMutation(baseOptions?: Apollo.Mutation
 export type AllianceSelectionCancelMutationHookResult = ReturnType<typeof useAllianceSelectionCancelMutation>;
 export type AllianceSelectionCancelMutationResult = Apollo.MutationResult<AllianceSelectionCancelMutation>;
 export type AllianceSelectionCancelMutationOptions = Apollo.BaseMutationOptions<AllianceSelectionCancelMutation, AllianceSelectionCancelMutationVariables>;
+export const ClearResultsDocument = gql`
+    mutation ClearResults {
+  clearResults {
+    displayedResults {
+      id
+    }
+  }
+}
+    `;
+export type ClearResultsMutationFn = Apollo.MutationFunction<ClearResultsMutation, ClearResultsMutationVariables>;
+
+/**
+ * __useClearResultsMutation__
+ *
+ * To run a mutation, you first call `useClearResultsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useClearResultsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [clearResultsMutation, { data, loading, error }] = useClearResultsMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useClearResultsMutation(baseOptions?: Apollo.MutationHookOptions<ClearResultsMutation, ClearResultsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ClearResultsMutation, ClearResultsMutationVariables>(ClearResultsDocument, options);
+      }
+export type ClearResultsMutationHookResult = ReturnType<typeof useClearResultsMutation>;
+export type ClearResultsMutationResult = Apollo.MutationResult<ClearResultsMutation>;
+export type ClearResultsMutationOptions = Apollo.BaseMutationOptions<ClearResultsMutation, ClearResultsMutationVariables>;
+export const PromoteResultsDocument = gql`
+    mutation PromoteResults {
+  promoteResults {
+    displayedResults {
+      id
+    }
+  }
+}
+    `;
+export type PromoteResultsMutationFn = Apollo.MutationFunction<PromoteResultsMutation, PromoteResultsMutationVariables>;
+
+/**
+ * __usePromoteResultsMutation__
+ *
+ * To run a mutation, you first call `usePromoteResultsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePromoteResultsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [promoteResultsMutation, { data, loading, error }] = usePromoteResultsMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePromoteResultsMutation(baseOptions?: Apollo.MutationHookOptions<PromoteResultsMutation, PromoteResultsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PromoteResultsMutation, PromoteResultsMutationVariables>(PromoteResultsDocument, options);
+      }
+export type PromoteResultsMutationHookResult = ReturnType<typeof usePromoteResultsMutation>;
+export type PromoteResultsMutationResult = Apollo.MutationResult<PromoteResultsMutation>;
+export type PromoteResultsMutationOptions = Apollo.BaseMutationOptions<PromoteResultsMutation, PromoteResultsMutationVariables>;
 export const OnDeckFieldDocument = gql`
     query OnDeckField {
   competitionInformation {

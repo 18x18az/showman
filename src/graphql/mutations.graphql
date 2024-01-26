@@ -189,3 +189,19 @@ mutation AllianceSelectionCancel {
     }
   }
 }
+
+mutation ClearResults {
+  clearResults {
+    displayedResults {
+      id
+    }
+  }
+}
+
+mutation PromoteResults {
+  promoteResults {
+    displayedResults {
+      id
+    }
+  }
+}

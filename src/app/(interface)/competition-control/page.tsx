@@ -1,6 +1,5 @@
 'use client'
 import { CompetitionControl } from '../../../components/views/competition-control/main'
-import { AllianceSelectionControl } from '../alliance'
 import TmSelector from './tm-connect'
 import UploadMatches from '../upload'
 import { EventStage, useGetEventStageQuery } from '../../../__generated__/graphql'
@@ -20,10 +19,6 @@ export default function Page (): JSX.Element {
 
   if (stage === EventStage.Qualifications || stage === EventStage.Elims) {
     return <CompetitionControl />
-  }
-
-  if (stage === EventStage.AllianceSelection) {
-    return <AllianceSelectionControl />
   }
 
   if (stage === EventStage.WaitingForTeams) {

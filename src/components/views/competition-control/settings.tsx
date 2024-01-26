@@ -1,12 +1,14 @@
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
 import { ArrowUpFromLine, Eraser, TimerIcon } from 'lucide-react'
-import { EventStage, useCompetitionMiniSettingsQuery, useSetAutomationEnabledMutation, useSetSkillsEnabledMutation } from '../../../__generated__/graphql'
+import { EventStage, useClearResultsMutation, useCompetitionMiniSettingsQuery, usePromoteResultsMutation, useSetAutomationEnabledMutation, useSetSkillsEnabledMutation } from '../../../__generated__/graphql'
 
 export function Settings (): JSX.Element {
   const { data: compData } = useCompetitionMiniSettingsQuery({ pollInterval: 500 })
   const [setAutomationEnabled] = useSetAutomationEnabledMutation({ refetchQueries: ['CompetitionMiniSettings'] })
   const [setSkillsEnabled] = useSetSkillsEnabledMutation({ refetchQueries: ['CompetitionMiniSettings'] })
+  const [clearResults] = useClearResultsMutation({ refetchQueries: ['CompetitionMiniSettings'] })
+  const [promoteResults] = usePromoteResultsMutation({ refetchQueries: ['CompetitionMiniSettings'] })
 
   if (compData === undefined) {
     return <>Loading...</>
@@ -44,8 +46,8 @@ export function Settings (): JSX.Element {
         </div>
         <div className='flex justify-evenly'>
           {timeoutButton}
-          <Button onClick={() => { }} disabled={!resultsReady}><ArrowUpFromLine /></Button>
-          <Button onClick={() => { }} disabled={!resultsShowing}><Eraser /></Button>
+          <Button onClick={() => { void promoteResults() }} disabled={!resultsReady}><ArrowUpFromLine /></Button>
+          <Button onClick={() => { void clearResults() }} disabled={!resultsShowing}><Eraser /></Button>
         </div>
       </div>
     </>
