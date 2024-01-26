@@ -742,6 +742,11 @@ export type AllianceSelectionControlQueryVariables = Exact<{ [key: string]: neve
 
 export type AllianceSelectionControlQuery = { __typename?: 'Query', allianceSelection: { __typename?: 'AllianceSelection', picking: { __typename?: 'Team', id: number, number: string } | null, pickable: Array<{ __typename?: 'Team', id: number, number: string }>, alliances: Array<Array<{ __typename?: 'Team', id: number, number: string }>>, picked: { __typename?: 'Team', id: number, number: string } | null } | null };
 
+export type AllianceSelectionResultsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllianceSelectionResultsQuery = { __typename?: 'Query', allianceSelection: { __typename?: 'AllianceSelection', alliances: Array<Array<{ __typename?: 'Team', id: number, number: string }>> } | null };
+
 export type FieldControlSubscriptionVariables = Exact<{
   fieldId: Scalars['Int']['input'];
 }>;
@@ -2571,6 +2576,48 @@ export type AllianceSelectionControlQueryHookResult = ReturnType<typeof useAllia
 export type AllianceSelectionControlLazyQueryHookResult = ReturnType<typeof useAllianceSelectionControlLazyQuery>;
 export type AllianceSelectionControlSuspenseQueryHookResult = ReturnType<typeof useAllianceSelectionControlSuspenseQuery>;
 export type AllianceSelectionControlQueryResult = Apollo.QueryResult<AllianceSelectionControlQuery, AllianceSelectionControlQueryVariables>;
+export const AllianceSelectionResultsDocument = gql`
+    query AllianceSelectionResults {
+  allianceSelection {
+    alliances {
+      id
+      number
+    }
+  }
+}
+    `;
+
+/**
+ * __useAllianceSelectionResultsQuery__
+ *
+ * To run a query within a React component, call `useAllianceSelectionResultsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllianceSelectionResultsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAllianceSelectionResultsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAllianceSelectionResultsQuery(baseOptions?: Apollo.QueryHookOptions<AllianceSelectionResultsQuery, AllianceSelectionResultsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AllianceSelectionResultsQuery, AllianceSelectionResultsQueryVariables>(AllianceSelectionResultsDocument, options);
+      }
+export function useAllianceSelectionResultsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllianceSelectionResultsQuery, AllianceSelectionResultsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AllianceSelectionResultsQuery, AllianceSelectionResultsQueryVariables>(AllianceSelectionResultsDocument, options);
+        }
+export function useAllianceSelectionResultsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<AllianceSelectionResultsQuery, AllianceSelectionResultsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AllianceSelectionResultsQuery, AllianceSelectionResultsQueryVariables>(AllianceSelectionResultsDocument, options);
+        }
+export type AllianceSelectionResultsQueryHookResult = ReturnType<typeof useAllianceSelectionResultsQuery>;
+export type AllianceSelectionResultsLazyQueryHookResult = ReturnType<typeof useAllianceSelectionResultsLazyQuery>;
+export type AllianceSelectionResultsSuspenseQueryHookResult = ReturnType<typeof useAllianceSelectionResultsSuspenseQuery>;
+export type AllianceSelectionResultsQueryResult = Apollo.QueryResult<AllianceSelectionResultsQuery, AllianceSelectionResultsQueryVariables>;
 export const FieldControlDocument = gql`
     subscription FieldControl($fieldId: Int!) {
   fieldControl(fieldId: $fieldId) {

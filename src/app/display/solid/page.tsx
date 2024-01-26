@@ -1,20 +1,21 @@
 'use client'
-import Logo from '../../../components/primitives/logo'
+import { EventStage, useGetEventStageQuery } from '../../../__generated__/graphql'
+import { AllianceDisplay } from './alliance-display'
+import { LogoFallback } from './fallback'
 import { ParticlesBg } from './particles'
 import { ResultDisplay } from './results'
 
-function LogoFallback (): JSX.Element {
-  return (
-    <div className='flex flex-col justify-evenly h-full w-full'>
-      <div className='flex justify-evenly'>
-        <Logo className='bg-zinc-900 rounded-2xl' viewBox='0 0 350.417 279.405' style={{ width: '65%', height: '100%' }} />
-      </div>
-    </div>
-  )
-}
+function getContent (): JSX.Element {
+  const { data } = useGetEventStageQuery({ pollInterval: 500 })
 
-function getContent (): JSX.Element | null {
-  return ResultDisplay()
+  if (data === undefined) return <LogoFallback />
+
+  const stage = data.stage.stage
+
+  if (stage === EventStage.Qualifications || stage === EventStage.Elims) return <ResultDisplay />
+  if (stage === EventStage.AllianceSelection) return <AllianceDisplay />
+
+  return <LogoFallback />
 }
 
 export default function Page (): JSX.Element {

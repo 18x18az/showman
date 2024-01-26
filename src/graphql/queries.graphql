@@ -285,3 +285,12 @@ query AllianceSelectionControl {
     }
   }
 }
+
+query AllianceSelectionResults {
+  allianceSelection {
+    alliances {
+      id
+      number
+    }
+  }
+}

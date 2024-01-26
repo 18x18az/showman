@@ -1,6 +1,7 @@
 'use client'
 import { Round, TeamInformationFragment, useResultsQuery } from '../../../__generated__/graphql'
 import { roundName } from '../../../utils/strings/match'
+import { LogoFallback } from './fallback'
 
 interface TeamInfoProps {
   team: TeamInformationFragment
@@ -90,24 +91,24 @@ function makeMatchName (round: Round, contest: number, match: number): string {
   return `${roundString} Match ${contest}${matchString}`
 }
 
-export function ResultDisplay (): JSX.Element | null {
+export function ResultDisplay (): JSX.Element {
   const { data } = useResultsQuery({ pollInterval: 500 })
 
   if (data === undefined) {
-    return null
+    return <LogoFallback />
   }
 
   const match = data.results.displayedResults
 
   if (match === null) {
-    return null
+    return <LogoFallback />
   }
 
   const redScore = match.redScore
   const blueScore = match.blueScore
 
   if (redScore === null || blueScore === null) {
-    return null
+    return <LogoFallback />
   }
 
   const contest = match.contest
