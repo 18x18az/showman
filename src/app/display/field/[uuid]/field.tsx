@@ -1,5 +1,5 @@
 'use client'
-import { MatchStage, SittingWithTeamsFragment, TeamInformationFragment, useFieldDisplayQuery } from '../../../../__generated__/graphql'
+import { Control_Mode, MatchStage, SittingWithTeamsFragment, TeamInformationFragment, useFieldDisplayQuery } from '../../../../__generated__/graphql'
 import { makeMatchName } from '../../../../utils/strings/match'
 import { Countdown, Timer } from './timer'
 import Logo from '@/components/primitives/logo'
@@ -23,55 +23,65 @@ function AllianceDisplay (props: { alliance: TeamInformationFragment[], color: '
   )
 }
 
-function FieldContent (props: { content: JSX.Element, sitting: SittingWithTeamsFragment, fieldName: string }): JSX.Element {
+function FieldContent (props: { content: JSX.Element, sitting?: SittingWithTeamsFragment, fieldName: string, title: string }): JSX.Element {
   const { content, sitting, fieldName } = props
   let blue = <></>
   let red = <></>
 
-  const title = makeMatchName(sitting)
-  blue = <AllianceDisplay alliance={sitting.contest.blueTeams} color='blue' />
-  red = <AllianceDisplay alliance={sitting.contest.redTeams} color='red' />
+  blue = sitting !== undefined ? <AllianceDisplay alliance={sitting.contest.blueTeams} color='blue' /> : <></>
+  red = sitting !== undefined ? <AllianceDisplay alliance={sitting.contest.redTeams} color='red' /> : <></>
 
   return (
     <>
-      <h1 className='text-7xl text-zinc-300'>{title}</h1>
+      <h1 className='text-7xl text-zinc-300'>{props.title}</h1>
       {content}
       <div className='flex justify-between items-end'>
         {red}
-        <h2 className='text-7xl text-zinc-300'>{fieldName}</h2>
+        <h2 className='text-7xl text-zinc-300 w-full'>{fieldName}</h2>
         {blue}
       </div>
     </>
   )
 }
 
-function SkillsDisplay (props: { fieldName: string, fieldControl: FieldControlStatus }): JSX.Element {
+interface FieldControl {
+  readonly mode: Control_Mode | null
+  readonly endTime: string | null
+}
+
+function SkillsDisplay (props: { fieldName: string, fieldControl: FieldControl, stopTime: number | null }): JSX.Element {
   const mode = props.fieldControl.mode
-  const duration = props.fieldControl.duration
+
   let title = 'Skills Field'
-  if (mode === CONTROL_MODE.AUTO && duration !== null) {
+  if (mode === Control_Mode.Auto) {
     title = 'Programming Skills'
-  } else if (mode === CONTROL_MODE.DRIVER !== null && duration !== null) {
+  } else if (mode === Control_Mode.Driver !== null) {
     title = 'Driver Skills'
   }
 
   const endTime = props.fieldControl.endTime
   let content = <></>
   if (endTime !== undefined && endTime !== null) {
-    const clock = <Countdown time={endTime} />
+    const clock = <Timer time={endTime} />
     content = <h2 className='text-9xl'>{clock}</h2>
   }
 
-  const body = <FieldContent content={content} fieldName={props.fieldName} match={title} />
+  const stopTime = props.stopTime
+  if (stopTime !== null) {
+    const stopTimeSeconds = Math.ceil(stopTime / 1000)
+    content = <h2 className='text-9xl'>0:{stopTimeSeconds}</h2>
+  }
+
+  const body = <FieldContent content={content} fieldName={props.fieldName} title={title} />
   return body
 }
 
-function TimeoutDisplay (props: { match: Match, timeout: string, fieldName: string }): JSX.Element {
-  const clock = <Timer time={props.timeout} />
-  const content = <h2 className='text-9xl'>{clock}</h2>
-  const body = <FieldContent content={content} match={props.match} fieldName={props.fieldName} />
-  return body
-}
+// function TimeoutDisplay (props: { match: Match, timeout: string, fieldName: string }): JSX.Element {
+//   const clock = <Timer time={props.timeout} />
+//   const content = <h2 className='text-9xl'>{clock}</h2>
+//   const body = <FieldContent content={content} match={props.match} fieldName={props.fieldName} />
+//   return body
+// }
 
 function CompetitionDisplay (props: { sitting: SittingWithTeamsFragment, stage: MatchStage, fieldName: string, endTime: string | null, time: string | null }): JSX.Element {
   const { sitting, stage, fieldName, endTime, time } = props
@@ -94,7 +104,8 @@ function CompetitionDisplay (props: { sitting: SittingWithTeamsFragment, stage: 
     case MatchStage.ScoringAuton:
       break
   }
-  const body = <FieldContent content={content} sitting={sitting} fieldName={fieldName} />
+  const title = makeMatchName(sitting)
+  const body = <FieldContent content={content} sitting={sitting} fieldName={fieldName} title={title} />
   return body
 }
 
@@ -102,15 +113,28 @@ interface FieldInterface {
   readonly name: string
   readonly fieldControl: {
     endTime: string | null
+    mode: Control_Mode | null
   } | null
   readonly competition: {
     stage: MatchStage
     onFieldSitting: SittingWithTeamsFragment | null
   } | null
+  readonly skills: {
+    fieldId: number
+    stopTime: number | null
+  } | null
 }
 
 function ActualFieldDisplay (props: { field: FieldInterface }): JSX.Element {
   const body = <div className='flex flex-col justify-evenly h-full w-full'><div className='flex justify-evenly'><Logo className='mt-14' viewBox='0 0 350.417 279.405' style={{ width: '65%', height: '100%' }} /></div></div>
+  const fieldName = props.field.name
+
+  const isSkills = props.field.skills !== null
+  const fieldControl = props.field.fieldControl
+
+  if (isSkills && fieldControl !== null) {
+    return <SkillsDisplay fieldName={fieldName} fieldControl={fieldControl} stopTime={props.field.skills?.stopTime ?? null} />
+  }
 
   const compInfo = props.field.competition
   const compStage = compInfo?.stage
@@ -124,11 +148,6 @@ function ActualFieldDisplay (props: { field: FieldInterface }): JSX.Element {
 
   const endTime = props.field.fieldControl?.endTime ?? null
   const time = sitting?.scheduled
-
-  const fieldName = props.field.name
-
-  const isSkills = false
-  const timeout = null
 
   // if (isSkills) {
   //   return <SkillsDisplay fieldName={fieldName} fieldControl={fieldControl} />

@@ -661,7 +661,7 @@ export type FieldDisplayQueryVariables = Exact<{
 }>;
 
 
-export type FieldDisplayQuery = { __typename?: 'Query', display: { __typename?: 'Display', uuid: string, field: { __typename?: 'Field', id: number, name: string, fieldControl: { __typename?: 'FieldControl', endTime: any | null } | null, competition: { __typename?: 'CompetitionField', stage: MatchStage, isLive: boolean, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null } | null } | null } };
+export type FieldDisplayQuery = { __typename?: 'Query', display: { __typename?: 'Display', uuid: string, field: { __typename?: 'Field', id: number, name: string, fieldControl: { __typename?: 'FieldControl', endTime: any | null, mode: Control_Mode | null } | null, competition: { __typename?: 'CompetitionField', stage: MatchStage, isLive: boolean, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null } | null, skills: { __typename?: 'Skills', fieldId: number, stopTime: number | null } | null } | null } };
 
 export type ResultsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2045,6 +2045,7 @@ export const FieldDisplayDocument = gql`
       name
       fieldControl {
         endTime
+        mode
       }
       competition {
         stage
@@ -2052,6 +2053,10 @@ export const FieldDisplayDocument = gql`
         onFieldSitting {
           ...SittingWithTeams
         }
+      }
+      skills {
+        fieldId
+        stopTime
       }
     }
   }

@@ -192,6 +192,7 @@ query FieldDisplay($uuid: String!) {
       name
       fieldControl {
         endTime
+        mode
       }
       competition {
         stage
@@ -199,6 +200,10 @@ query FieldDisplay($uuid: String!) {
         onFieldSitting {
           ...SittingWithTeams
         }
+      }
+      skills {
+        fieldId
+        stopTime
       }
     }
   }
