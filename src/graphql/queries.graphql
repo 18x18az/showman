@@ -109,8 +109,26 @@ query GetCompetitionFields {
 }
 
 query CompetitionMiniSettings {
+  stage {
+    stage
+  }
   competitionInformation {
     automationEnabled
+  }
+  currentBlock {
+    id
+  }
+  results {
+    displayedResults {
+      id
+    }
+    nextResults {
+      id
+    }
+  }
+  fields(isCompetition: true) {
+    id
+    canRunSkills
   }
 }
 

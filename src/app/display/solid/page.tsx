@@ -1,5 +1,4 @@
 'use client'
-import { result } from 'lodash'
 import Logo from '../../../components/primitives/logo'
 import { ParticlesBg } from './particles'
 import { ResultDisplay } from './results'

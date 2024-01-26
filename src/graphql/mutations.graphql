@@ -122,3 +122,10 @@ mutation UpdateFieldName($fieldId: Int!, $name: String) {
     isCompetition
   }
 }
+
+mutation SetSkillsEnabled($enabled: Boolean!) {
+  setSkillsEnabled(enabled: $enabled) {
+    id
+    canRunSkills
+  }
+}

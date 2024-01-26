@@ -1,22 +1,26 @@
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
 import { ArrowUpFromLine, Eraser, TimerIcon } from 'lucide-react'
-import { EventStage, useCompetitionMiniSettingsQuery, useSetAutomationEnabledMutation } from '../../../__generated__/graphql'
+import { EventStage, useCompetitionMiniSettingsQuery, useSetAutomationEnabledMutation, useSetSkillsEnabledMutation } from '../../../__generated__/graphql'
 
 export function Settings (): JSX.Element {
-  const stage = EventStage.Qualifications
-  const skills = false
-
   const { data: compData } = useCompetitionMiniSettingsQuery({ pollInterval: 500 })
   const [setAutomationEnabled] = useSetAutomationEnabledMutation({ refetchQueries: ['CompetitionMiniSettings'] })
+  const [setSkillsEnabled] = useSetSkillsEnabledMutation({ refetchQueries: ['CompetitionMiniSettings'] })
 
   if (compData === undefined) {
     return <>Loading...</>
   }
 
-  const automation = compData.competitionInformation.automationEnabled
+  const stage = compData.stage.stage
 
-  const inBlock = true
+  const automation = compData.competitionInformation.automationEnabled
+  const inBlock = compData.currentBlock !== null
+  const resultsShowing = compData.results.displayedResults !== null
+  const resultsReady = compData.results.nextResults !== null
+
+  const canEnableSkills = !inBlock && (stage === EventStage.Checkin || stage === EventStage.Qualifications)
+  const isSkillsEnabled = compData.fields[0].canRunSkills
 
   let timeoutButton = <></>
   if (stage === EventStage.Elims) {
@@ -30,18 +34,18 @@ export function Settings (): JSX.Element {
           <label>Auto-Queue</label>
           <Switch
             onCheckedChange={(checked: boolean) => {
-              setAutomationEnabled({ variables: { enabled: checked } })
+              void setAutomationEnabled({ variables: { enabled: checked } })
             }} checked={automation}
           />
         </div>
         <div className='flex align-center gap-4 justify-between'>
           <label>Skills</label>
-          <Switch onCheckedChange={(checked: boolean) => { }} checked={skills} disabled={inBlock} />
+          <Switch onCheckedChange={(checked: boolean) => { void setSkillsEnabled({ variables: { enabled: checked } }) }} checked={isSkillsEnabled} disabled={!canEnableSkills} />
         </div>
         <div className='flex justify-evenly'>
           {timeoutButton}
-          <Button onClick={() => { }}><ArrowUpFromLine /></Button>
-          <Button onClick={() => { }}><Eraser /></Button>
+          <Button onClick={() => { }} disabled={!resultsReady}><ArrowUpFromLine /></Button>
+          <Button onClick={() => { }} disabled={!resultsShowing}><Eraser /></Button>
         </div>
       </div>
     </>

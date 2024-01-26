@@ -136,5 +136,5 @@ export function BottomPanel (): JSX.Element {
     )
   }
 
-  return <div>foo</div>
+  return <div />
 }

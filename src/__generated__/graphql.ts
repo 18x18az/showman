@@ -219,6 +219,7 @@ export type Mutation = {
   resetAuton: CompetitionField;
   setAutomationEnabled: Competition;
   setDisplayField: Display;
+  setSkillsEnabled: Array<Field>;
   startField: FieldControl;
   startNextBlock: Block;
   stopField: FieldControl;
@@ -272,6 +273,11 @@ export type MutationSetAutomationEnabledArgs = {
 export type MutationSetDisplayFieldArgs = {
   fieldId: InputMaybe<Scalars['Int']['input']>;
   uuid: Scalars['String']['input'];
+};
+
+
+export type MutationSetSkillsEnabledArgs = {
+  enabled: Scalars['Boolean']['input'];
 };
 
 
@@ -537,6 +543,13 @@ export type UpdateFieldNameMutationVariables = Exact<{
 
 export type UpdateFieldNameMutation = { __typename?: 'Mutation', updateField: { __typename?: 'Field', id: number, name: string, isEnabled: boolean, isCompetition: boolean } };
 
+export type SetSkillsEnabledMutationVariables = Exact<{
+  enabled: Scalars['Boolean']['input'];
+}>;
+
+
+export type SetSkillsEnabledMutation = { __typename?: 'Mutation', setSkillsEnabled: Array<{ __typename?: 'Field', id: number, canRunSkills: boolean }> };
+
 export type OnDeckFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -575,7 +588,7 @@ export type GetCompetitionFieldsQuery = { __typename?: 'Query', fields: Array<{ 
 export type CompetitionMiniSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CompetitionMiniSettingsQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', automationEnabled: boolean } };
+export type CompetitionMiniSettingsQuery = { __typename?: 'Query', stage: { __typename?: 'Stage', stage: EventStage }, competitionInformation: { __typename?: 'Competition', automationEnabled: boolean }, currentBlock: { __typename?: 'Block', id: number } | null, results: { __typename?: 'Results', displayedResults: { __typename?: 'Match', id: number } | null, nextResults: { __typename?: 'Match', id: number } | null }, fields: Array<{ __typename?: 'Field', id: number, canRunSkills: boolean }> };
 
 export type MatchOverlayQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1255,6 +1268,40 @@ export function useUpdateFieldNameMutation(baseOptions?: Apollo.MutationHookOpti
 export type UpdateFieldNameMutationHookResult = ReturnType<typeof useUpdateFieldNameMutation>;
 export type UpdateFieldNameMutationResult = Apollo.MutationResult<UpdateFieldNameMutation>;
 export type UpdateFieldNameMutationOptions = Apollo.BaseMutationOptions<UpdateFieldNameMutation, UpdateFieldNameMutationVariables>;
+export const SetSkillsEnabledDocument = gql`
+    mutation SetSkillsEnabled($enabled: Boolean!) {
+  setSkillsEnabled(enabled: $enabled) {
+    id
+    canRunSkills
+  }
+}
+    `;
+export type SetSkillsEnabledMutationFn = Apollo.MutationFunction<SetSkillsEnabledMutation, SetSkillsEnabledMutationVariables>;
+
+/**
+ * __useSetSkillsEnabledMutation__
+ *
+ * To run a mutation, you first call `useSetSkillsEnabledMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetSkillsEnabledMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setSkillsEnabledMutation, { data, loading, error }] = useSetSkillsEnabledMutation({
+ *   variables: {
+ *      enabled: // value for 'enabled'
+ *   },
+ * });
+ */
+export function useSetSkillsEnabledMutation(baseOptions?: Apollo.MutationHookOptions<SetSkillsEnabledMutation, SetSkillsEnabledMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetSkillsEnabledMutation, SetSkillsEnabledMutationVariables>(SetSkillsEnabledDocument, options);
+      }
+export type SetSkillsEnabledMutationHookResult = ReturnType<typeof useSetSkillsEnabledMutation>;
+export type SetSkillsEnabledMutationResult = Apollo.MutationResult<SetSkillsEnabledMutation>;
+export type SetSkillsEnabledMutationOptions = Apollo.BaseMutationOptions<SetSkillsEnabledMutation, SetSkillsEnabledMutationVariables>;
 export const OnDeckFieldDocument = gql`
     query OnDeckField {
   competitionInformation {
@@ -1598,8 +1645,26 @@ export type GetCompetitionFieldsSuspenseQueryHookResult = ReturnType<typeof useG
 export type GetCompetitionFieldsQueryResult = Apollo.QueryResult<GetCompetitionFieldsQuery, GetCompetitionFieldsQueryVariables>;
 export const CompetitionMiniSettingsDocument = gql`
     query CompetitionMiniSettings {
+  stage {
+    stage
+  }
   competitionInformation {
     automationEnabled
+  }
+  currentBlock {
+    id
+  }
+  results {
+    displayedResults {
+      id
+    }
+    nextResults {
+      id
+    }
+  }
+  fields(isCompetition: true) {
+    id
+    canRunSkills
   }
 }
     `;
