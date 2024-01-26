@@ -106,8 +106,8 @@ function ResultDisplay (props: ResultInfo): JSX.Element {
   const matchName = makeMatchName(props.round, props.contestNumber, props.matchNumber)
 
   return (
-    <div className='flex flex-col text-center items-center w-full gap-8 text-zinc-200'>
-      <h1 className='bg-zinc-900 w-10/12 text-7xl py-6 mt-16 rounded-lg font-sans mb-16 opacity-[0.97]'>{matchName} Results</h1>
+    <div className='flex flex-col text-center items-center w-full gap-8 text-zinc-200 mt-4'>
+      <h1 className='bg-zinc-900 w-10/12 text-7xl py-6 mt-16 rounded-lg font-sans mb-20 opacity-[0.97]'>{matchName} Results</h1>
       <AlliancesInfo redTeams={props.redTeams} blueTeams={props.blueTeams} />
       <Scores redScore={props.redScore} blueScore={props.blueScore} />
     </div>
