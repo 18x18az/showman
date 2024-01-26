@@ -36,12 +36,14 @@ function Config (): JSX.Element {
 }
 
 export function Navbar (): JSX.Element {
-  const [width, setWidth] = useState<number>(window.innerWidth)
+  const [width, setWidth] = useState<number>(0)
 
   function handleWindowSizeChange (): void {
     setWidth(window.innerWidth)
   }
+
   useEffect(() => {
+    setWidth(window.innerWidth)
     window.addEventListener('resize', handleWindowSizeChange)
     return () => {
       window.removeEventListener('resize', handleWindowSizeChange)

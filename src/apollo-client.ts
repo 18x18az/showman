@@ -6,7 +6,10 @@ import { createClient } from 'graphql-ws'
 const SECURE_HOST = 'l.18x18az.org'
 
 function getHostname (): string {
-  return window.location.hostname
+  if (typeof window !== 'undefined') {
+    return window.location.hostname
+  }
+  return 'localhost'
 }
 
 // function getApiHostname (): string {

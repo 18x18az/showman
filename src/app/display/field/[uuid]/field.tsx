@@ -147,7 +147,7 @@ function ActualFieldDisplay (props: { field: FieldInterface, timeout: string | n
   }
 
   if (props.timeout !== null) {
-    return <TimeoutDisplay fieldName={fieldName} timeout={props.timeout}/>
+    return <TimeoutDisplay fieldName={fieldName} timeout={props.timeout} />
   }
 
   const endTime = props.field.fieldControl?.endTime ?? null

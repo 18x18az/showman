@@ -96,7 +96,7 @@ function Field (props: FieldInfo): JSX.Element {
   )
 }
 
-export default function Page (props: FieldInfo): JSX.Element {
+export default function Page (): JSX.Element {
   const { data } = useQueueDisplayQuery({ pollInterval: 250 })
 
   let content: JSX.Element | JSX.Element[] = <></>
