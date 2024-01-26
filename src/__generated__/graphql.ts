@@ -765,6 +765,11 @@ export type AllianceSelectionResultsQueryVariables = Exact<{ [key: string]: neve
 
 export type AllianceSelectionResultsQuery = { __typename?: 'Query', allianceSelection: { __typename?: 'AllianceSelection', alliances: Array<Array<{ __typename?: 'Team', id: number, number: string }>> } | null };
 
+export type QueueDisplayQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type QueueDisplayQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null, onTableSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null } | null }> };
+
 export type FieldControlSubscriptionVariables = Exact<{
   fieldId: Scalars['Int']['input'];
 }>;
@@ -2738,6 +2743,55 @@ export type AllianceSelectionResultsQueryHookResult = ReturnType<typeof useAllia
 export type AllianceSelectionResultsLazyQueryHookResult = ReturnType<typeof useAllianceSelectionResultsLazyQuery>;
 export type AllianceSelectionResultsSuspenseQueryHookResult = ReturnType<typeof useAllianceSelectionResultsSuspenseQuery>;
 export type AllianceSelectionResultsQueryResult = Apollo.QueryResult<AllianceSelectionResultsQuery, AllianceSelectionResultsQueryVariables>;
+export const QueueDisplayDocument = gql`
+    query QueueDisplay {
+  fields(isEnabled: true, isCompetition: true) {
+    id
+    name
+    competition {
+      stage
+      onFieldSitting {
+        ...SittingWithTeams
+      }
+      onTableSitting {
+        ...SittingWithTeams
+      }
+    }
+  }
+}
+    ${SittingWithTeamsFragmentDoc}`;
+
+/**
+ * __useQueueDisplayQuery__
+ *
+ * To run a query within a React component, call `useQueueDisplayQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQueueDisplayQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQueueDisplayQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useQueueDisplayQuery(baseOptions?: Apollo.QueryHookOptions<QueueDisplayQuery, QueueDisplayQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<QueueDisplayQuery, QueueDisplayQueryVariables>(QueueDisplayDocument, options);
+      }
+export function useQueueDisplayLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<QueueDisplayQuery, QueueDisplayQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<QueueDisplayQuery, QueueDisplayQueryVariables>(QueueDisplayDocument, options);
+        }
+export function useQueueDisplaySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<QueueDisplayQuery, QueueDisplayQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<QueueDisplayQuery, QueueDisplayQueryVariables>(QueueDisplayDocument, options);
+        }
+export type QueueDisplayQueryHookResult = ReturnType<typeof useQueueDisplayQuery>;
+export type QueueDisplayLazyQueryHookResult = ReturnType<typeof useQueueDisplayLazyQuery>;
+export type QueueDisplaySuspenseQueryHookResult = ReturnType<typeof useQueueDisplaySuspenseQuery>;
+export type QueueDisplayQueryResult = Apollo.QueryResult<QueueDisplayQuery, QueueDisplayQueryVariables>;
 export const FieldControlDocument = gql`
     subscription FieldControl($fieldId: Int!) {
   fieldControl(fieldId: $fieldId) {

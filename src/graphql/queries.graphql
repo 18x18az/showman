@@ -294,3 +294,19 @@ query AllianceSelectionResults {
     }
   }
 }
+
+query QueueDisplay {
+  fields(isEnabled: true, isCompetition: true) {
+    id
+    name
+    competition {
+      stage
+      onFieldSitting {
+        ...SittingWithTeams
+      }
+      onTableSitting {
+        ...SittingWithTeams
+      }
+    }
+  }
+}

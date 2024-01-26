@@ -14,7 +14,7 @@ function AllianceDisplay (props: { alliance: TeamInformationFragment[], color: '
     return <div key={team.id} className='text-8xl text-zinc-50 font-bold'>{team.number}</div>
   })
 
-  const color = props.color === 'red' ? 'bg-red-600 text-right' : 'bg-blue-600 text-left'
+  const color = props.color === 'red' ? 'bg-red-600 text-left' : 'bg-blue-600 text-right'
 
   return (
     <div className={`${color} rounded-lg w-96 p-4 font-mono`}>
