@@ -141,3 +141,43 @@ mutation QueueProgrammingSkills($fieldId: Int!) {
     fieldId
   }
 }
+
+mutation StartAllianceSelection {
+  startAllianceSelection {
+    picking {
+      id
+    }
+  }
+}
+
+mutation AllianceSelectionPick($teamId: Int!) {
+  allianceSelectionPick(teamId: $teamId) {
+    picking {
+      id
+    }
+  }
+}
+
+mutation AllianceSelectionAccept {
+  allianceSelectionAccept {
+    picking {
+      id
+    }
+  }
+}
+
+mutation AllianceSelectionDecline {
+  allianceSelectionDecline {
+    picking {
+      id
+    }
+  }
+}
+
+mutation AllianceSelectionUndo {
+  allianceSelectionUndo {
+    picking {
+      id
+    }
+  }
+}

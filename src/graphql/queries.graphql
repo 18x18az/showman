@@ -252,3 +252,36 @@ query SkillsField($fieldId: Int!) {
     }
   }
 }
+
+query CanStartAllianceSelection {
+  stage {
+    stage
+  }
+  currentBlock {
+    id
+  }
+  nextBlock {
+    id
+  }
+}
+
+query AllianceSelectionControl {
+  allianceSelection {
+    picking {
+      id
+      number
+    }
+    pickable {
+      id
+      number
+    }
+    alliances {
+      id
+      number
+    }
+    picked {
+      id
+      number
+    }
+  }
+}
