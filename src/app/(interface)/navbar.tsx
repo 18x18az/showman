@@ -1,5 +1,5 @@
 'use client'
-import { Settings, TowerControl, Users } from 'lucide-react'
+import { HeartHandshake, Settings, TowerControl, Users } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
@@ -15,6 +15,14 @@ function Teams (): JSX.Element {
   return (
     <Link href='/teams' className='flex text-slate-11 text-lg gap-2 p-2 pb-1 font-semibold'>
       <Users className='text-slate-9' /> Teams
+    </Link>
+  )
+}
+
+function AllianceSelection (): JSX.Element {
+  return (
+    <Link href='/alliance-selection' className='flex text-slate-11 text-lg gap-2 p-2 pb-1 font-semibold'>
+      <HeartHandshake className='text-slate-9' /> Alliance Selection
     </Link>
   )
 }
@@ -51,6 +59,7 @@ export function Navbar (): JSX.Element {
       <Control />
       <Teams />
       <Config />
+      <AllianceSelection />
     </div>
   )
 }
