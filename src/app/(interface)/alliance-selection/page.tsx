@@ -1,5 +1,5 @@
 'use client'
-import { EventStage, useAllianceSelectionAcceptMutation, useAllianceSelectionControlQuery, useAllianceSelectionDeclineMutation, useAllianceSelectionPickMutation, useAllianceSelectionUndoMutation, useCanStartAllianceSelectionQuery, useStartAllianceSelectionMutation } from '../../../__generated__/graphql'
+import { EventStage, useAllianceSelectionAcceptMutation, useAllianceSelectionCancelMutation, useAllianceSelectionControlQuery, useAllianceSelectionDeclineMutation, useAllianceSelectionPickMutation, useAllianceSelectionUndoMutation, useCanStartAllianceSelectionQuery, useStartAllianceSelectionMutation } from '../../../__generated__/graphql'
 import { Button } from '../../../components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../../../components/ui/dialog'
 
@@ -9,6 +9,8 @@ function AllianceSelectionControl (): JSX.Element {
   const [accept] = useAllianceSelectionAcceptMutation({ refetchQueries: ['AllianceSelectionControl'] })
   const [decline] = useAllianceSelectionDeclineMutation({ refetchQueries: ['AllianceSelectionControl'] })
   const [undo] = useAllianceSelectionUndoMutation({ refetchQueries: ['AllianceSelectionControl'] })
+  const [cancel] = useAllianceSelectionCancelMutation({ refetchQueries: ['AllianceSelectionControl'] })
+
   if (data === undefined) return <></>
   const status = data.allianceSelection
   if (status === null) return <></>
@@ -34,7 +36,7 @@ function AllianceSelectionControl (): JSX.Element {
       <div className='grid grid-cols-4 gap-4'>{pickOptions}</div>
       <div><Button onClick={() => { void undo() }}>Undo</Button></div>
       <div className='grid grid-cols-4 gap-4'>{alliances}</div>
-      <Dialog open={status.picked !== null} onOpenChange={(state: boolean) => { }}>
+      <Dialog open={status.picked !== null} onOpenChange={(state: boolean) => { if (!state) void cancel() }}>
         <DialogContent>
           <DialogHeader><DialogTitle className='text-center mb-6'>{`Team ${status.picking?.number} has invited team ${status.picked?.number}`}</DialogTitle></DialogHeader>
           <div className='flex gap-4 justify-evenly'>

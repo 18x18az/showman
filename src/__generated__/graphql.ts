@@ -222,6 +222,7 @@ export enum MatchStatus {
 export type Mutation = {
   __typename?: 'Mutation';
   allianceSelectionAccept: AllianceSelection;
+  allianceSelectionCancel: AllianceSelection;
   allianceSelectionDecline: AllianceSelection;
   allianceSelectionPick: AllianceSelection;
   allianceSelectionUndo: AllianceSelection;
@@ -642,6 +643,11 @@ export type AllianceSelectionUndoMutationVariables = Exact<{ [key: string]: neve
 
 
 export type AllianceSelectionUndoMutation = { __typename?: 'Mutation', allianceSelectionUndo: { __typename?: 'AllianceSelection', picking: { __typename?: 'Team', id: number } | null } };
+
+export type AllianceSelectionCancelMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllianceSelectionCancelMutation = { __typename?: 'Mutation', allianceSelectionCancel: { __typename?: 'AllianceSelection', picking: { __typename?: 'Team', id: number } | null } };
 
 export type OnDeckFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1659,6 +1665,40 @@ export function useAllianceSelectionUndoMutation(baseOptions?: Apollo.MutationHo
 export type AllianceSelectionUndoMutationHookResult = ReturnType<typeof useAllianceSelectionUndoMutation>;
 export type AllianceSelectionUndoMutationResult = Apollo.MutationResult<AllianceSelectionUndoMutation>;
 export type AllianceSelectionUndoMutationOptions = Apollo.BaseMutationOptions<AllianceSelectionUndoMutation, AllianceSelectionUndoMutationVariables>;
+export const AllianceSelectionCancelDocument = gql`
+    mutation AllianceSelectionCancel {
+  allianceSelectionCancel {
+    picking {
+      id
+    }
+  }
+}
+    `;
+export type AllianceSelectionCancelMutationFn = Apollo.MutationFunction<AllianceSelectionCancelMutation, AllianceSelectionCancelMutationVariables>;
+
+/**
+ * __useAllianceSelectionCancelMutation__
+ *
+ * To run a mutation, you first call `useAllianceSelectionCancelMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAllianceSelectionCancelMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [allianceSelectionCancelMutation, { data, loading, error }] = useAllianceSelectionCancelMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAllianceSelectionCancelMutation(baseOptions?: Apollo.MutationHookOptions<AllianceSelectionCancelMutation, AllianceSelectionCancelMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AllianceSelectionCancelMutation, AllianceSelectionCancelMutationVariables>(AllianceSelectionCancelDocument, options);
+      }
+export type AllianceSelectionCancelMutationHookResult = ReturnType<typeof useAllianceSelectionCancelMutation>;
+export type AllianceSelectionCancelMutationResult = Apollo.MutationResult<AllianceSelectionCancelMutation>;
+export type AllianceSelectionCancelMutationOptions = Apollo.BaseMutationOptions<AllianceSelectionCancelMutation, AllianceSelectionCancelMutationVariables>;
 export const OnDeckFieldDocument = gql`
     query OnDeckField {
   competitionInformation {

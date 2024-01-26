@@ -181,3 +181,11 @@ mutation AllianceSelectionUndo {
     }
   }
 }
+
+mutation AllianceSelectionCancel {
+  allianceSelectionCancel {
+    picking {
+      id
+    }
+  }
+}
