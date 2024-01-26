@@ -205,3 +205,15 @@ mutation PromoteResults {
     }
   }
 }
+
+mutation StartTimeout {
+  startTimeout {
+    endTime
+  }
+}
+
+mutation cancelTimeout {
+  cancelTimeout {
+    endTime
+  }
+}

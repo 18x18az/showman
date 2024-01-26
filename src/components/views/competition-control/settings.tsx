@@ -1,7 +1,8 @@
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
 import { ArrowUpFromLine, Eraser, TimerIcon } from 'lucide-react'
-import { EventStage, useClearResultsMutation, useCompetitionMiniSettingsQuery, usePromoteResultsMutation, useSetAutomationEnabledMutation, useSetSkillsEnabledMutation } from '../../../__generated__/graphql'
+import { EventStage, useCancelTimeoutMutation, useClearResultsMutation, useCompetitionMiniSettingsQuery, usePromoteResultsMutation, useSetAutomationEnabledMutation, useSetSkillsEnabledMutation, useStartTimeoutMutation } from '../../../__generated__/graphql'
+import { StopIcon } from '@radix-ui/react-icons'
 
 export function Settings (): JSX.Element {
   const { data: compData } = useCompetitionMiniSettingsQuery({ pollInterval: 500 })
@@ -9,6 +10,8 @@ export function Settings (): JSX.Element {
   const [setSkillsEnabled] = useSetSkillsEnabledMutation({ refetchQueries: ['CompetitionMiniSettings'] })
   const [clearResults] = useClearResultsMutation({ refetchQueries: ['CompetitionMiniSettings'] })
   const [promoteResults] = usePromoteResultsMutation({ refetchQueries: ['CompetitionMiniSettings'] })
+  const [startTimeout] = useStartTimeoutMutation({ refetchQueries: ['CompetitionMiniSettings'] })
+  const [cancelTimeout] = useCancelTimeoutMutation({ refetchQueries: ['CompetitionMiniSettings'] })
 
   if (compData === undefined) {
     return <>Loading...</>
@@ -26,7 +29,11 @@ export function Settings (): JSX.Element {
 
   let timeoutButton = <></>
   if (stage === EventStage.Elims) {
-    timeoutButton = <Button onClick={() => { }}><TimerIcon /></Button>
+    if (compData.timeout.endTime === null) {
+      timeoutButton = <Button onClick={() => { void startTimeout() }}><TimerIcon /></Button>
+    } else {
+      timeoutButton = <Button onClick={() => { void cancelTimeout() }}><StopIcon /></Button>
+    }
   }
 
   return (

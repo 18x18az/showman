@@ -226,6 +226,7 @@ export type Mutation = {
   allianceSelectionDecline: AllianceSelection;
   allianceSelectionPick: AllianceSelection;
   allianceSelectionUndo: AllianceSelection;
+  cancelTimeout: Timeout;
   clearLive: Competition;
   clearResults: Results;
   concludeBlock: Block;
@@ -248,6 +249,7 @@ export type Mutation = {
   startAllianceSelection: AllianceSelection;
   startField: FieldControl;
   startNextBlock: Block;
+  startTimeout: Timeout;
   stopField: FieldControl;
   unqueue: CompetitionField;
   updateField: Field;
@@ -359,6 +361,7 @@ export type Query = {
   sittings: Array<Sitting>;
   stage: Stage;
   teams: Array<Team>;
+  timeout: Timeout;
   tournamentManager: TournamentManager;
 };
 
@@ -453,6 +456,12 @@ export type Team = {
   rank: Maybe<Scalars['Int']['output']>;
   /** School of the team */
   school: Scalars['String']['output'];
+};
+
+export type Timeout = {
+  __typename?: 'Timeout';
+  /** The time that the timeout will end, null if there is no timeout. */
+  endTime: Maybe<Scalars['DateTime']['output']>;
 };
 
 export enum TmStatus {
@@ -661,6 +670,16 @@ export type PromoteResultsMutationVariables = Exact<{ [key: string]: never; }>;
 
 export type PromoteResultsMutation = { __typename?: 'Mutation', promoteResults: { __typename?: 'Results', displayedResults: { __typename?: 'Match', id: number } | null } };
 
+export type StartTimeoutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type StartTimeoutMutation = { __typename?: 'Mutation', startTimeout: { __typename?: 'Timeout', endTime: any | null } };
+
+export type CancelTimeoutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CancelTimeoutMutation = { __typename?: 'Mutation', cancelTimeout: { __typename?: 'Timeout', endTime: any | null } };
+
 export type OnDeckFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -699,7 +718,7 @@ export type GetCompetitionFieldsQuery = { __typename?: 'Query', fields: Array<{ 
 export type CompetitionMiniSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CompetitionMiniSettingsQuery = { __typename?: 'Query', stage: { __typename?: 'Stage', stage: EventStage }, competitionInformation: { __typename?: 'Competition', automationEnabled: boolean }, currentBlock: { __typename?: 'Block', id: number } | null, results: { __typename?: 'Results', displayedResults: { __typename?: 'Match', id: number } | null, nextResults: { __typename?: 'Match', id: number } | null }, fields: Array<{ __typename?: 'Field', id: number, canRunSkills: boolean }> };
+export type CompetitionMiniSettingsQuery = { __typename?: 'Query', stage: { __typename?: 'Stage', stage: EventStage }, competitionInformation: { __typename?: 'Competition', automationEnabled: boolean }, currentBlock: { __typename?: 'Block', id: number } | null, results: { __typename?: 'Results', displayedResults: { __typename?: 'Match', id: number } | null, nextResults: { __typename?: 'Match', id: number } | null }, fields: Array<{ __typename?: 'Field', id: number, canRunSkills: boolean }>, timeout: { __typename?: 'Timeout', endTime: any | null } };
 
 export type MatchOverlayQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1784,6 +1803,70 @@ export function usePromoteResultsMutation(baseOptions?: Apollo.MutationHookOptio
 export type PromoteResultsMutationHookResult = ReturnType<typeof usePromoteResultsMutation>;
 export type PromoteResultsMutationResult = Apollo.MutationResult<PromoteResultsMutation>;
 export type PromoteResultsMutationOptions = Apollo.BaseMutationOptions<PromoteResultsMutation, PromoteResultsMutationVariables>;
+export const StartTimeoutDocument = gql`
+    mutation StartTimeout {
+  startTimeout {
+    endTime
+  }
+}
+    `;
+export type StartTimeoutMutationFn = Apollo.MutationFunction<StartTimeoutMutation, StartTimeoutMutationVariables>;
+
+/**
+ * __useStartTimeoutMutation__
+ *
+ * To run a mutation, you first call `useStartTimeoutMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStartTimeoutMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [startTimeoutMutation, { data, loading, error }] = useStartTimeoutMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useStartTimeoutMutation(baseOptions?: Apollo.MutationHookOptions<StartTimeoutMutation, StartTimeoutMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<StartTimeoutMutation, StartTimeoutMutationVariables>(StartTimeoutDocument, options);
+      }
+export type StartTimeoutMutationHookResult = ReturnType<typeof useStartTimeoutMutation>;
+export type StartTimeoutMutationResult = Apollo.MutationResult<StartTimeoutMutation>;
+export type StartTimeoutMutationOptions = Apollo.BaseMutationOptions<StartTimeoutMutation, StartTimeoutMutationVariables>;
+export const CancelTimeoutDocument = gql`
+    mutation cancelTimeout {
+  cancelTimeout {
+    endTime
+  }
+}
+    `;
+export type CancelTimeoutMutationFn = Apollo.MutationFunction<CancelTimeoutMutation, CancelTimeoutMutationVariables>;
+
+/**
+ * __useCancelTimeoutMutation__
+ *
+ * To run a mutation, you first call `useCancelTimeoutMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCancelTimeoutMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [cancelTimeoutMutation, { data, loading, error }] = useCancelTimeoutMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCancelTimeoutMutation(baseOptions?: Apollo.MutationHookOptions<CancelTimeoutMutation, CancelTimeoutMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CancelTimeoutMutation, CancelTimeoutMutationVariables>(CancelTimeoutDocument, options);
+      }
+export type CancelTimeoutMutationHookResult = ReturnType<typeof useCancelTimeoutMutation>;
+export type CancelTimeoutMutationResult = Apollo.MutationResult<CancelTimeoutMutation>;
+export type CancelTimeoutMutationOptions = Apollo.BaseMutationOptions<CancelTimeoutMutation, CancelTimeoutMutationVariables>;
 export const OnDeckFieldDocument = gql`
     query OnDeckField {
   competitionInformation {
@@ -2147,6 +2230,9 @@ export const CompetitionMiniSettingsDocument = gql`
   fields(isCompetition: true) {
     id
     canRunSkills
+  }
+  timeout {
+    endTime
   }
 }
     `;
