@@ -1,4 +1,5 @@
 'use client'
+import { result } from 'lodash'
 import Logo from '../../../components/primitives/logo'
 import { ParticlesBg } from './particles'
 import { ResultDisplay } from './results'
@@ -14,7 +15,7 @@ function LogoFallback (): JSX.Element {
 }
 
 function getContent (): JSX.Element | null {
-  return <ResultDisplay />
+  return ResultDisplay()
 }
 
 export default function Page (): JSX.Element {
@@ -22,8 +23,8 @@ export default function Page (): JSX.Element {
 
   return (
     <div className='h-screen w-full'>
-      <ParticlesBg />
       {content}
+      <ParticlesBg />
     </div>
   )
 }

@@ -1,3 +1,4 @@
+'use client'
 import { Round, TeamInformationFragment, useResultsQuery } from '../../../__generated__/graphql'
 import { roundName } from '../../../utils/strings/match'
 

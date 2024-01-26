@@ -2,7 +2,6 @@ import { loadSlim } from '@tsparticles/slim'
 import { useEffect, useMemo, useState } from 'react'
 import Particles, { initParticlesEngine } from '@tsparticles/react'
 import {
-  type Container,
   type ISourceOptions
 } from '@tsparticles/engine'
 
@@ -17,11 +16,6 @@ export function ParticlesBg (): JSX.Element {
       setInit(true)
     })
   }, [])
-
-  const particlesLoaded = async (container?: Container): Promise<void> => {
-    console.log('particles loaded')
-    console.log(container)
-  }
 
   const options: ISourceOptions = useMemo(
     () => ({
@@ -64,7 +58,6 @@ export function ParticlesBg (): JSX.Element {
     return (
       <Particles
         id='tsparticles'
-        particlesLoaded={particlesLoaded}
         options={options}
       />
     )
