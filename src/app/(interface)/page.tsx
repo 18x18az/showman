@@ -1,7 +1,7 @@
 'use client'
 import { useTheme } from 'next-themes'
+import { redirect } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { LandingPage } from './landing'
 
 export default function Home (): JSX.Element | null {
   const [mounted, setMounted] = useState(false)
@@ -16,7 +16,9 @@ export default function Home (): JSX.Element | null {
     setTheme('dark')
   }
 
+  redirect('/competition-control')
+
   return (
-    <LandingPage />
+    <div />
   )
 }

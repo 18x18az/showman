@@ -1,30 +1,32 @@
 'use client'
 import { useState } from 'react'
 import { Dropdown } from '../../../components/primitives/Dropdown'
-import { CONTROL_MODE, Field, FieldControlSubscription, FieldsSubscription } from '@/contracts/fields'
 import { Button } from '../../../components/ui/button'
-import { StopTimeSubscription, queueDriverSkillsMatch, queueProgrammingSkillsMatch, startSkillsMatch, stopSkillsMatch } from '@/contracts/skills'
+import { Control_Mode, useQueueDriverSkillsMutation, useQueueProgrammingSkillsMutation, useSkillsFieldQuery, useSkillsFieldsQuery, useStartFieldMutation, useStopFieldMutation } from '../../../__generated__/graphql'
 
-function StartButton (props: { mode: CONTROL_MODE | undefined, fieldId: number, duration: number | null }): JSX.Element {
+function StartButton (props: { mode: Control_Mode | null, fieldId: number, duration: number | null }): JSX.Element {
+  const [startSkillsMatch] = useStartFieldMutation({ variables: { fieldId: props.fieldId }, refetchQueries: ['SkillsField'] })
   const { mode, duration } = props
 
-  const canStart = mode !== undefined && duration !== null
+  const canStart = mode !== null && duration !== null
 
   let startText = ''
 
-  if (mode === CONTROL_MODE.AUTO && canStart) {
+  if (mode === Control_Mode.Auto && canStart) {
     startText = 'Auto'
-  } else if (mode === CONTROL_MODE.DRIVER && canStart) {
+  } else if (mode === Control_Mode.Driver && canStart) {
     startText = 'Driver'
   }
 
-  return <Button disabled={!canStart} className='w-44 h-12' onClick={() => { void startSkillsMatch(props.fieldId) }}>Start {startText}</Button>
+  return <Button disabled={!canStart} className='w-44 h-12' onClick={() => { void startSkillsMatch() }}>Start {startText}</Button>
 }
 
 function EndButton (props: { fieldId: number }): JSX.Element {
-  return <Button className='w-44 h-12' onClick={() => { void stopSkillsMatch(props.fieldId) }}>End Early</Button>
+  const [stopSkillsMatch] = useStopFieldMutation({ variables: { fieldId: props.fieldId }, refetchQueries: ['SkillsField'] })
+  return <Button className='w-44 h-12' onClick={() => { void stopSkillsMatch() }}>End Early</Button>
 }
-function StartStopButton (props: { mode: CONTROL_MODE | undefined, endTime: string | null, fieldId: number, duration: number | null }): JSX.Element {
+
+function StartStopButton (props: { mode: Control_Mode | null, endTime: string | null, fieldId: number, duration: number | null }): JSX.Element {
   if (props.endTime === null) {
     return <StartButton mode={props.mode} duration={props.duration} fieldId={props.fieldId} />
   } else {
@@ -32,51 +34,71 @@ function StartStopButton (props: { mode: CONTROL_MODE | undefined, endTime: stri
   }
 }
 
-function SkillsControl (props: { field: Field }): JSX.Element {
-  const { field } = props
-  const fieldId = field.id
+function SkillsControl (props: { field: number }): JSX.Element {
+  const { data } = useSkillsFieldQuery({ pollInterval: 500, variables: { fieldId: props.field } })
+  const [queueDriverSkillsMatch] = useQueueDriverSkillsMutation({ variables: { fieldId: props.field }, refetchQueries: ['SkillsField'] })
+  const [queueProgrammingSkillsMatch] = useQueueProgrammingSkillsMutation({ variables: { fieldId: props.field }, refetchQueries: ['SkillsField'] })
 
-  const fieldControl = FieldControlSubscription(field.id) ?? null
-  const stopTime = StopTimeSubscription(field.id) ?? null
-  const mode = fieldControl?.mode
-  const endTime = fieldControl?.endTime ?? null
-  const duration = fieldControl?.duration ?? null
+  if (data === undefined) {
+    return <>Loading...</>
+  }
+
+  const endTime = data.field.fieldControl?.endTime ?? null
+  let mode = data.field.fieldControl?.mode ?? null
+
+  const stopTime = data.field.skills?.stopTime ?? null
 
   const canChange = endTime === null
 
+  if (stopTime !== null) {
+    mode = null
+  }
+
+  let stopTimeText = ''
+  if (stopTime !== null) {
+    const stopTimeSeconds = Math.ceil(stopTime / 1000)
+    stopTimeText = stopTimeSeconds.toString()
+  }
+
   return (
-    <div className='flex flex-col gap-8 w-full items-center'>
-      <h1 className='text-4xl'>{field.name}</h1>
+    <div className='flex flex-col gap-8 w-full items-center mt-8'>
+      <h1 className='text-4xl'>{data.field.name}</h1>
       <div className='flex gap-4'>
-        <Button disabled={!canChange} className='w-32 h-12' onClick={() => { void queueDriverSkillsMatch(fieldId) }}>Driver</Button>
-        <Button disabled={!canChange} className='w-32 h-12' onClick={() => { void queueProgrammingSkillsMatch(fieldId) }}>Programming</Button>
+        <Button disabled={!canChange} className='w-32 h-12' onClick={() => { queueDriverSkillsMatch() }}>Driver</Button>
+        <Button disabled={!canChange} className='w-32 h-12' onClick={() => { queueProgrammingSkillsMatch() }}>Programming</Button>
       </div>
-      <StartStopButton mode={mode} endTime={endTime} duration={duration} fieldId={fieldId} />
-      <h2 className='text-2xl'>{stopTime}</h2>
+      <StartStopButton mode={mode} endTime={endTime} duration={60} fieldId={data.field.id} />
+      <h2 className='text-2xl'>{stopTimeText}</h2>
     </div>
   )
 }
 
-function SkillsMenu (props: { fields: Field[] }): JSX.Element {
+interface FieldInfo {
+  id: number
+  name: string
+}
+
+function SkillsMenu (props: { fields: FieldInfo[] }): JSX.Element {
   const fieldOptions = props.fields.map((field) => field.name)
   const [field, setField] = useState(fieldOptions[0])
   const fullField = props.fields.find(option => { return option.name === field })
   if (fullField === undefined) return <></>
+
   return (
-    <div className='w-full'>
-      <Dropdown options={fieldOptions} value={field} onChange={setField} />
-      <SkillsControl field={fullField} />
+    <div className='w-full h-screen flex flex-col items-center py-8'>
+      <Dropdown size='L' options={fieldOptions} value={field} onChange={setField} />
+      <SkillsControl field={fullField.id} />
     </div>
   )
 }
 export default function Page (): JSX.Element {
-  const fields = FieldsSubscription()
+  const { data } = useSkillsFieldsQuery({ pollInterval: 500 })
 
-  if (fields === undefined) {
+  if (data === undefined) {
     return <>Loading</>
   }
 
-  const skillsFields = fields.filter(field => { return field.isSkills })
+  const skillsFields = data.fields
 
   return <SkillsMenu fields={skillsFields} />
 }

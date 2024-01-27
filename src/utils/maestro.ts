@@ -1,7 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { Client } from 'paho-mqtt'
 import axios from 'axios'
 
 const SECURE_HOST = 'l.18x18az.org'
@@ -15,56 +13,8 @@ function getApiHostname (): string {
   if (host === SECURE_HOST) {
     return `https://${host}`
   } else {
-    return `http://${host}:2000`
+    return `http://${host}:3002`
   }
-}
-
-function getMqttHost (): string {
-  const host = getHostname()
-  if (host === SECURE_HOST) {
-    return `wss://${host}/mqtt`
-  } else {
-    return `ws://${host}:1883/`
-  }
-}
-
-function BaseTopic (topic: string | undefined): string | undefined {
-  const [variable, setVariable] = useState<string | undefined>(undefined)
-  useEffect(() => {
-    if (topic === undefined) {
-      return
-    }
-    const client = new Client(getMqttHost(), Math.random().toString(16))
-    console.log(`Connecting to ${getMqttHost()}`)
-    client.connect({
-      onSuccess: () => {
-        client.subscribe(topic)
-      },
-      reconnect: true
-    })
-
-    client.onMessageArrived = (message) => {
-      setVariable(message.payloadString)
-    }
-
-    return () => {
-      try {
-        client.disconnect()
-      } catch (e) {
-        console.log(e)
-      }
-    }
-  }, [topic])
-
-  return variable
-}
-
-export function JsonTopic<Type> (topic: string | undefined): Type | undefined {
-  const raw = BaseTopic(topic)
-  if (raw === undefined) {
-    return undefined
-  }
-  return JSON.parse(raw)
 }
 
 export enum BaseStatus {
@@ -72,16 +22,6 @@ export enum BaseStatus {
   OFFLINE = 'OFFLINE',
   NOMINAL = 'NOMINAL',
   DEGRADED = 'DEGRADED'
-}
-
-export function StatusTopic (topic: string): BaseStatus | undefined {
-  const topicName = `status/${topic}`
-  const raw = JsonTopic<{ status: BaseStatus }>(topicName)
-  if (raw === undefined) {
-    return undefined
-  }
-
-  return raw.status
 }
 
 function makeUrl (resource: string): string {

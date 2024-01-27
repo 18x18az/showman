@@ -1,44 +1,60 @@
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
-import { EventStage, StageSubscription } from '@/contracts/stage'
 import { ArrowUpFromLine, Eraser, TimerIcon } from 'lucide-react'
-import { AutomationSubscription, setAutomation } from '@/contracts/automation'
-import { SkillsEnabledSubscription, callTimeout, enableSkills } from '@/contracts/match-control'
-import { clearScore, pushScore } from '@/contracts/stream-control'
-import { BlockSubscription } from '@/contracts/matches'
+import { EventStage, useCancelTimeoutMutation, useClearResultsMutation, useCompetitionMiniSettingsQuery, usePromoteResultsMutation, useSetAutomationEnabledMutation, useSetSkillsEnabledMutation, useStartTimeoutMutation } from '../../../__generated__/graphql'
+import { StopIcon } from '@radix-ui/react-icons'
 
 export function Settings (): JSX.Element {
-  const automation = AutomationSubscription()
-  const stage = StageSubscription()
-  const block = BlockSubscription()
-  const skills = SkillsEnabledSubscription()
+  const { data: compData } = useCompetitionMiniSettingsQuery({ pollInterval: 500 })
+  const [setAutomationEnabled] = useSetAutomationEnabledMutation({ refetchQueries: ['CompetitionMiniSettings'] })
+  const [setSkillsEnabled] = useSetSkillsEnabledMutation({ refetchQueries: ['CompetitionMiniSettings'] })
+  const [clearResults] = useClearResultsMutation({ refetchQueries: ['CompetitionMiniSettings'] })
+  const [promoteResults] = usePromoteResultsMutation({ refetchQueries: ['CompetitionMiniSettings'] })
+  const [startTimeout] = useStartTimeoutMutation({ refetchQueries: ['CompetitionMiniSettings'] })
+  const [cancelTimeout] = useCancelTimeoutMutation({ refetchQueries: ['CompetitionMiniSettings'] })
 
-  if (automation === undefined || stage === undefined || block === undefined) {
+  if (compData === undefined) {
     return <>Loading...</>
   }
 
-  const inBlock = block !== null
+  const stage = compData.stage.stage
+
+  const automation = compData.competitionInformation.automationEnabled
+  const inBlock = compData.currentBlock !== null
+  const resultsShowing = compData.results.displayedResults !== null
+  const resultsReady = compData.results.nextResults !== null
+
+  const canEnableSkills = !inBlock && (stage === EventStage.Checkin || stage === EventStage.Qualifications)
+  const isSkillsEnabled = compData.fields[0].canRunSkills
 
   let timeoutButton = <></>
-  if (stage === EventStage.ELIMS) {
-    timeoutButton = <Button onClick={() => { void callTimeout() }} variant='secondary'><TimerIcon /></Button>
+  if (stage === EventStage.Elims) {
+    if (compData.timeout.endTime === null) {
+      timeoutButton = <Button onClick={() => { void startTimeout() }}><TimerIcon /></Button>
+    } else {
+      timeoutButton = <Button onClick={() => { void cancelTimeout() }}><StopIcon /></Button>
+    }
   }
 
   return (
     <>
-      <div className='flex flex-col gap-4 text-zinc-400'>
+      <div className='flex flex-col gap-4 text-slate-11'>
         <div className='flex align-center gap-4 justify-between'>
-          <label>Automation</label>
-          <Switch onCheckedChange={(checked: boolean) => { void setAutomation(checked) }} checked={automation} />
+          <label>Auto-Queue</label>
+          <Switch
+            onCheckedChange={(checked: boolean) => {
+              void setAutomationEnabled({ variables: { enabled: checked } })
+            }} checked={automation}
+          />
         </div>
         <div className='flex align-center gap-4 justify-between'>
           <label>Skills</label>
-          <Switch onCheckedChange={(checked: boolean) => { void enableSkills(checked) }} checked={skills} disabled={inBlock} />
+          <Switch onCheckedChange={(checked: boolean) => { void setSkillsEnabled({ variables: { enabled: checked } }) }} checked={isSkillsEnabled} disabled={!canEnableSkills} />
         </div>
         <div className='flex justify-evenly'>
           {timeoutButton}
-          <Button onClick={() => { void pushScore() }} variant='secondary'><ArrowUpFromLine /></Button>
-          <Button onClick={() => { void clearScore() }} variant='secondary'><Eraser /></Button>
+          <Button onClick={() => { void promoteResults() }} disabled={!resultsReady}><ArrowUpFromLine /></Button>
+          <Button onClick={() => { void clearResults() }} disabled={!resultsShowing}><Eraser /></Button>
         </div>
       </div>
     </>

@@ -1,7 +1,6 @@
-import { Match } from '@/contracts/match'
-import { putFieldOnDeck, removeMatch, replayMatch } from '@/contracts/match-control'
 import { DropdownMenuItem } from '../../../ui/dropdown-menu'
-import { Field } from '@/contracts/fields'
+import { toast } from '../../../ui/use-toast'
+import { usePutOnDeckMutation, useReplayMatchMutation, useUnqueueSittingMutation } from '../../../../__generated__/graphql'
 
 function BaseAction (props: { text: string, action: () => Promise<void> }): JSX.Element {
   const handleAction = (): void => { void props.action() }
@@ -11,14 +10,53 @@ function BaseAction (props: { text: string, action: () => Promise<void> }): JSX.
     </DropdownMenuItem>
   )
 }
-export function ReplayAction (props: { match: Match }): JSX.Element {
-  return <BaseAction text='Replay' action={async () => { await replayMatch(props.match.id) }} />
+export function ReplayAction (props: { sittingId: number }): JSX.Element {
+  const [replay] = useReplayMatchMutation({ variables: { sittingId: props.sittingId } })
+  return <BaseAction text='Replay' action={async () => { void replay() }} />
 }
 
-export function PutOnDeckAction (props: { field: Field }): JSX.Element {
-  return <BaseAction text='Queue' action={async () => { await putFieldOnDeck(props.field.id) }} />
+export function PutOnDeckAction (props: { fieldId: number }): JSX.Element {
+  const [putOnDeck, { error }] = usePutOnDeckMutation({
+    refetchQueries: ['OnDeckField']
+  })
+
+  if (error !== undefined) {
+    toast({
+      duration: 3000,
+      description: (
+        <div className='text-xl flex gap-4 content-center align-center'>{error.message}</div>
+      )
+    })
+  }
+
+  return (
+    <BaseAction
+      text='Queue' action={async () => {
+        void putOnDeck({ variables: { fieldId: props.fieldId } })
+      }}
+    />
+  )
 }
 
-export function RemoveAction (props: { match: Match }): JSX.Element {
-  return <BaseAction text='Remove' action={async () => { await removeMatch(props.match.id) }} />
+export function RemoveAction (props: { sittingId: number }): JSX.Element {
+  const [unqueue, { error }] = useUnqueueSittingMutation({
+    refetchQueries: ['GetCompetitionFields']
+  })
+
+  if (error !== undefined) {
+    toast({
+      duration: 3000,
+      description: (
+        <div className='text-xl flex gap-4 content-center align-center'>{error.message}</div>
+      )
+    })
+  }
+
+  return (
+    <BaseAction
+      text='Remove' action={async () => {
+        void unqueue({ variables: { sittingId: props.sittingId } })
+      }}
+    />
+  )
 }

@@ -1,47 +1,58 @@
-import { DropdownHeader, TextInput } from '@/components/ui/data-table'
-import { Post } from '@/utils/maestro'
-import { DisplayConfig, FieldInfoBroadcast } from '@18x18az/maestro-interfaces'
+import { TextInput } from '@/components/ui/data-table'
 import { ColumnDef } from '@tanstack/react-table'
-import { Field } from '../../interfaces'
+import { useFieldNamesQuery, useRenameDisplayMutation, useSetDisplayFieldMutation } from '../../../../__generated__/graphql'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from '../../../../components/ui/dropdown-menu'
+import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
 
-interface DisplayConfigWithFields extends DisplayConfig {
-  fields: Field[]
+interface Display {
+  readonly uuid: string
+  readonly name: string
+  readonly field: {
+    id: number
+    name: string
+  } | null
 }
 
-async function updateName (uuid: string, name: string): Promise<void> {
-  const url = `displays/${uuid}/name`
-  await Post(url, { name })
-}
-
-async function assignField (uuid: string, fieldId: number): Promise<void> {
-  const url = `displays/${uuid}/assign`
-  await Post(url, { fieldId })
-}
-
-export const Columns: Array<ColumnDef<DisplayConfigWithFields>> = [
+export const Columns: Array<ColumnDef<Display>> = [
   {
     accessorKey: 'name',
     header: 'Name',
-    cell: ({ row }) => <TextInput value={row.original.name} updateValue={(name) => { void updateName(row.original.uuid, name) }} />
+    cell: ({ row }) => {
+      const [rename] = useRenameDisplayMutation({ refetchQueries: ['Displays'] })
+      return (
+        <TextInput value={row.original.name} updateValue={(name) => { void rename({ variables: { name, uuid: row.original.uuid } }) }} />
+      )
+    }
   },
   {
     accessorKey: 'field',
     header: 'Field',
-    cell: ({ row, table }) => {
-      const currentId = row.original.fieldId
-      let currentFieldName = 'Unassigned'
+    cell: ({ row }) => {
+      const field = row.original.field
+      const uuid = row.original.uuid
 
-      if (currentId !== null) currentFieldName = row.original.fields.find((field) => { return field.id === currentId })?.name ?? 'Unassigned'
+      const current = field === null ? 'None' : field.name
 
-      const fieldNames = row.original.fields.map((field) => { return field.name })
+      const { data } = useFieldNamesQuery({ pollInterval: 500 })
+      const [setField] = useSetDisplayFieldMutation({ refetchQueries: ['Displays'] })
 
-      function handleAssignField (name: string): void {
-        const field = row.original.fields.find((field) => { return field.name === name })
-        if (field === undefined) return
-        void assignField(row.original.uuid, field.id)
-      }
+      if (data === undefined) return <></>
 
-      return <DropdownHeader updateValue={handleAssignField} current={currentFieldName} options={fieldNames} stringGetter={(v) => v} />
+      const dropDownMenuItems = [<DropdownMenuItem key={0} onClick={() => { void setField({ variables: { uuid, fieldId: null } }) }}>None</DropdownMenuItem>]
+
+      data.fields.forEach(field => {
+        dropDownMenuItems.push(<DropdownMenuItem key={field.id} onClick={() => { void setField({ variables: { uuid, fieldId: field.id } }) }}>{field.name}</DropdownMenuItem>)
+      })
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger>{current}</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            {dropDownMenuItems}
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+      )
     }
   }
 

@@ -1,0 +1,318 @@
+query OnDeckField {
+  competitionInformation {
+    onDeckField {
+      id
+      competition {
+        onFieldSitting {
+          ...SittingInformation
+        }
+      }
+    }
+    liveField {
+      id
+      competition {
+        stage
+      }
+    }
+  }
+}
+
+query RefereeInformation {
+  competitionInformation {
+    liveField {
+      id
+      name
+      competition {
+        stage
+        onFieldSitting {
+          ...SittingWithTeams
+        }
+      }
+    }
+    onDeckField {
+      id
+      name
+      competition {
+        onFieldSitting {
+          ...SittingWithTeams
+        }
+      }
+    }
+  }
+}
+
+query LiveField {
+    competitionInformation {
+      liveField {
+        id
+        fieldControl {
+          endTime
+        }
+        competition {
+          stage
+          onFieldSitting {
+            ...SittingInformation
+          }
+        }
+      }
+    }
+  }
+
+query GetTableOccupied {
+  fields(isEnabled: true, isCompetition: true) {
+    id
+    name
+    competition {
+      onTableSitting {
+        id
+      }
+    }
+  }
+}
+
+query GetUnqueuedSittings {
+  currentBlock {
+    ...BlockInformation
+  }
+  nextBlock {
+    id
+    name
+  }
+}
+
+query GetEventStage {
+  stage {
+    stage
+  }
+}
+
+query GetCompetitionFields {
+  fields(isEnabled: true, isCompetition: true) {
+  id
+    name
+    competition {
+      stage
+      isLive
+      isOnDeck
+      onFieldSitting {
+        ...SittingWithTeams
+      }
+      onTableSitting {
+        ...SittingWithTeams
+      }
+    }
+    fieldControl {
+      fieldId
+      endTime
+    }
+  }
+}
+
+query CompetitionMiniSettings {
+  stage {
+    stage
+  }
+  competitionInformation {
+    automationEnabled
+  }
+  currentBlock {
+    id
+  }
+  results {
+    displayedResults {
+      id
+    }
+    nextResults {
+      id
+    }
+  }
+  fields(isCompetition: true) {
+    id
+    canRunSkills
+  }
+  timeout {
+    endTime
+  }
+}
+
+query MatchOverlay {
+  competitionInformation {
+    liveField {
+      id
+      competition {
+        stage
+        onFieldSitting {
+          ...SittingWithTeams
+        }
+      }
+      fieldControl {
+        endTime
+      }
+    }
+  }
+}
+
+query Teams {
+  teams {
+    id
+    name
+    number
+  }
+}
+
+query Fields {
+  fields {
+    id
+    name
+    isEnabled
+    isCompetition
+  }
+}
+
+query Displays {
+  displays {
+    uuid
+    name
+    field {
+      id
+      name
+    }
+  }
+}
+
+query FieldNames {
+  fields {
+    id
+    name
+  }
+}
+
+query FieldDisplay($uuid: String!) {
+  timeout {
+    endTime
+  }
+  display(uuid: $uuid) {
+    uuid
+    field {
+      id
+      name
+      fieldControl {
+        endTime
+        mode
+      }
+      competition {
+        stage
+        isLive
+        onFieldSitting {
+          ...SittingWithTeams
+        }
+      }
+      skills {
+        fieldId
+        stopTime
+      }
+    }
+  }
+}
+
+query Results {
+  results {
+    displayedResults {
+      id
+      number
+      redScore
+      blueScore
+      contest {
+        id
+        round
+        number
+        redTeams {
+          ...TeamInformation
+        }
+        blueTeams {
+          ...TeamInformation
+        }
+      }
+    }
+  }
+}
+
+query SkillsFields {
+  fields(isEnabled: true, skillsEnabled: true) {
+    id
+    name
+  }
+}
+
+query SkillsField($fieldId: Int!) {
+  field(fieldId: $fieldId) {
+    id
+    name
+    fieldControl {
+      mode
+      endTime
+    }
+    skills {
+      fieldId
+      stopTime
+    }
+  }
+}
+
+query CanStartAllianceSelection {
+  stage {
+    stage
+  }
+  currentBlock {
+    id
+  }
+  nextBlock {
+    id
+  }
+}
+
+query AllianceSelectionControl {
+  allianceSelection {
+    picking {
+      id
+      number
+    }
+    pickable {
+      id
+      number
+    }
+    alliances {
+      id
+      number
+    }
+    picked {
+      id
+      number
+    }
+  }
+}
+
+query AllianceSelectionResults {
+  allianceSelection {
+    alliances {
+      id
+      number
+    }
+  }
+}
+
+query QueueDisplay {
+  fields(isEnabled: true, isCompetition: true) {
+    id
+    name
+    competition {
+      stage
+      onFieldSitting {
+        ...SittingWithTeams
+      }
+      onTableSitting {
+        ...SittingWithTeams
+      }
+    }
+  }
+}

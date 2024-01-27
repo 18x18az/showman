@@ -1,23 +1,43 @@
 import { makeShortMatchName } from '@/utils/strings/match'
-import { Field, FieldsSubscription, QueueableFieldsSubscription, VacantFieldsSubscription } from '@/contracts/fields'
-import { Match } from '@/contracts/match'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
-import { BlockSubscription, UnqueuedMatchesSubscription, nextBlock } from '@/contracts/matches'
-import { SkillsEnabledSubscription, queueMatch } from '@/contracts/match-control'
+import { toast } from '../../ui/use-toast'
+import { BlockInformationFragment, SittingInformationFragment, useConcludeBlockMutation, useGetTableOccupiedQuery, useGetUnqueuedSittingsQuery, useQueueSittingMutation, useStartNextBlockMutation } from '../../../__generated__/graphql'
+
+interface QueueableField {
+  id: number
+  name: string
+}
 
 interface ActionMenuProps {
-  queueableFields: Field[]
-  match: Match
+  queueableFields: QueueableField[]
+  sittingId: number
 }
+
 function ActionMenu (props: ActionMenuProps): JSX.Element {
+  const [queueSitting, { error }] = useQueueSittingMutation({
+    refetchQueries: ['GetUnqueuedMatches', 'GetCompetitionFields']
+  })
   if (props.queueableFields.length === 0) {
     return <div />
   }
+  if (error !== undefined) {
+    toast({
+      duration: 3000,
+      description: (
+        <div className='text-xl flex gap-4 content-center align-center'>{error.message}</div>
+      )
+    })
+  }
   const options = props.queueableFields.map((field) => {
     return (
-      <DropdownMenuItem key={field.id} onClick={() => { void queueMatch(field.id, props.match.id) }}>
+      <DropdownMenuItem
+        key={field.id} onClick={() => {
+          console.log(`Queueing sitting ${props.sittingId} to field ${field.id}`)
+          void queueSitting({ variables: { sittingId: props.sittingId, fieldId: field.id } })
+        }}
+      >
         {field.name}
       </DropdownMenuItem>
     )
@@ -37,52 +57,84 @@ function ActionMenu (props: ActionMenuProps): JSX.Element {
   )
 }
 
-function UnqueuedMatch (props: { match: Match, queueableFields: Field[] }): JSX.Element {
-  const name = makeShortMatchName(props.match)
-  const fieldName = props.match.fieldName ?? ''
+function UnqueuedSitting (props: { sitting: SittingInformationFragment, fieldName?: string, queueableFields: QueueableField[] }): JSX.Element {
+  const { sitting } = props
+  const name = makeShortMatchName(sitting)
+  const fieldName = props.fieldName ?? ''
   return (
-    <div className='border border-zinc-800 text-center rounded-md w-28 h-28 flex flex-col justify-between p-3'>
-      <ActionMenu match={props.match} queueableFields={props.queueableFields} />
-      <h1>{name}</h1>
-      <h2>{fieldName}</h2>
+    <div className='border border-slate-6 bg-slate-2 text-center rounded-md w-28 h-28 flex flex-col justify-between p-3'>
+      <ActionMenu sittingId={sitting?.id} queueableFields={props.queueableFields} />
+      <h1 className='text-slate-12'>{name}</h1>
+      <h2 className='text-slate-11'>{fieldName}</h2>
     </div>
   )
 }
 
-function ProceedButton (): JSX.Element {
-  const block = BlockSubscription()
-  const skillsEnabled = SkillsEnabledSubscription()
+function UnqueuedSittings (props: { block: BlockInformationFragment }): JSX.Element {
+  const { data: tableData } = useGetTableOccupiedQuery({
+    pollInterval: 500
+  })
 
-  if (block === undefined || skillsEnabled === undefined) return <></>
-  const hasBlock = block !== null
-
-  const text = hasBlock ? 'End Block' : 'Proceed'
-
-  return (
-    <div>
-      <Button disabled={skillsEnabled} onClick={() => { void nextBlock() }}>{text}</Button>
-    </div>
-  )
-}
-export function UnqueuedMatches (): JSX.Element {
-  const unqueued = UnqueuedMatchesSubscription()
-  const queueableFields = QueueableFieldsSubscription()?.sort((a, b) => { return a.id - b.id })
-  const vacantFields = VacantFieldsSubscription()
-  const fields = FieldsSubscription()
-
-  if (unqueued === undefined || queueableFields === undefined || vacantFields === undefined || fields === undefined) {
-    return <>Loading...</>
+  if (tableData === undefined) {
+    return <div />
   }
 
-  const toDisplay = unqueued.slice(0, 7)
+  const currentBlock = props.block
+  const openFields = tableData.fields.filter((field) => { return field.competition?.onTableSitting === null })
+  const openFieldInfo = openFields.map((field) => { return { id: field.id, name: field.name } })
 
-  if (toDisplay.length === 0 && vacantFields.length === fields.length) {
-    return <ProceedButton />
+  if (currentBlock === null) {
+    return <div />
   }
 
-  const matches = toDisplay.map((match) => {
-    return <UnqueuedMatch key={match.id} match={match} queueableFields={queueableFields} />
+  const sittings = currentBlock.unqueuedSittings.slice(0, 7)
+
+  const matches = sittings.map((sitting) => {
+    return <UnqueuedSitting fieldName={sitting.field?.name} key={sitting.id} sitting={sitting} queueableFields={openFieldInfo} />
   })
 
   return <div className='flex gap-8'>{matches}</div>
+}
+
+export function BottomPanel (): JSX.Element {
+  const { data: blockData } = useGetUnqueuedSittingsQuery({
+    pollInterval: 500
+  })
+
+  const [startNextBlock] = useStartNextBlockMutation({
+    refetchQueries: ['GetUnqueuedMatches']
+  })
+
+  const [concludeBlock] = useConcludeBlockMutation({ refetchQueries: ['GetUnqueuedMatches'] })
+
+  if (blockData === undefined) {
+    return <>Loading...</>
+  }
+
+  const currentBlock = blockData.currentBlock
+
+  if (currentBlock !== null) {
+    if (currentBlock.canConclude) {
+      return (
+        <div>
+          <Button onClick={() => { void concludeBlock() }}>End Block</Button>
+        </div>
+      )
+    }
+
+    return <UnqueuedSittings block={currentBlock} />
+  }
+
+  const nextBlock = blockData.nextBlock
+
+  if (nextBlock !== null) {
+    const text = `Start ${nextBlock.name} Block`
+    return (
+      <div>
+        <Button size='lg' onClick={() => { void startNextBlock() }}>{text}</Button>
+      </div>
+    )
+  }
+
+  return <div />
 }

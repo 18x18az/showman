@@ -1,5 +1,4 @@
-import { JsonTopic } from '@/utils/maestro'
-
+import { useAllianceSelectionControlQuery } from '../../../__generated__/graphql'
 export interface AllianceSelectionStatus {
   picking: string | null
   picked: string | null
@@ -9,22 +8,26 @@ export interface AllianceSelectionStatus {
 }
 
 export function AllianceSelection (): JSX.Element {
-  const status = JsonTopic<AllianceSelectionStatus>('allianceSelection')
+  const { data } = useAllianceSelectionControlQuery({ pollInterval: 500 })
 
-  if (status === undefined) return <></>
+  if (data === undefined) return <></>
+
+  const status = data.allianceSelection
+
+  if (status === null) return <></>
 
   const alliances = status.alliances
 
   if (alliances.length === 0) return <></>
 
-  const allianceDisplays = alliances.map((alliance, index) => {
+  const allianceDisplays = alliances.map((alliance, index: number) => {
     // index with padding 0
     const indexString = (index + 1).toString().padStart(2, '0')
     return (
-      <div key={alliance[0]} className='flex gap-4'>
+      <div key={alliance[0].id} className='flex gap-4'>
         <div className='text-2xl text-zinc-950 font-bold font-sans bg-zinc-50 p-2  px-4 rounded-md rounded-br-3xl'>{indexString}</div>
-        <div className='text-2xl text-zinc-50 font-semibold font-sans p-2'>{alliance[0]}</div>
-        <div className='text-2xl text-zinc-400 font-semibold font-sans p-2'>{alliance[1]}</div>
+        <div className='text-2xl text-zinc-50 font-semibold font-sans p-2'>{alliance[0].number}</div>
+        <div className='text-2xl text-zinc-400 font-semibold font-sans p-2'>{alliance[1].number}</div>
       </div>
     )
   })

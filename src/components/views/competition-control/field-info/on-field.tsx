@@ -1,51 +1,54 @@
-import { Field, LiveFieldSubscription, MATCH_STAGE, OnDeckFieldSubscription, SelectedField } from '@/contracts/fields'
-import { Match } from '@/contracts/match'
 import { CommonFieldInfo, FieldStatus } from './common'
 import { PutOnDeckAction, RemoveAction, ReplayAction } from './actions'
+import { MatchStage, SittingWithTeamsFragment } from '../../../../__generated__/graphql'
+import { Countdown } from '../../../../app/display/field/[uuid]/timer'
 
-function FieldOptions (field: Field, match: Match | null, stage: MATCH_STAGE, liveField: SelectedField, onDeckField: SelectedField): JSX.Element[] {
-  const thisField = field.id
-
-  if (liveField === undefined || onDeckField === undefined || match === null) {
+function FieldOptions (fieldId: number, sittingId: number | null, stage: MatchStage, isLive: boolean, isOnDeck: boolean): JSX.Element[] {
+  const thisField = fieldId
+  if (sittingId === null) {
     return []
   }
 
   const options: JSX.Element[] = []
 
-  if (liveField !== thisField && onDeckField !== thisField && stage === MATCH_STAGE.QUEUED) {
-    options.push(<PutOnDeckAction field={field} key='push' />)
+  if (!isLive && !isOnDeck && stage === MatchStage.Queued) {
+    options.push(<PutOnDeckAction fieldId={thisField} key='push' />)
   }
 
-  if (stage === MATCH_STAGE.SCORING || stage === MATCH_STAGE.OUTRO) {
-    options.push(<ReplayAction match={match} key='replay' />)
+  if (stage === MatchStage.Scoring) {
+    options.push(<ReplayAction sittingId={sittingId} key='replay' />)
   }
 
-  if (liveField !== thisField && stage === MATCH_STAGE.QUEUED) {
-    options.push(<RemoveAction match={match} key='remove' />)
+  if (!isLive && stage === MatchStage.Queued) {
+    options.push(<RemoveAction sittingId={sittingId} key='remove' />)
   }
 
   return options
 }
-export function OnField (props: { field: Field, match: Match | null, stage: MATCH_STAGE }): JSX.Element {
-  const liveField = LiveFieldSubscription()
-  const onDeckField = OnDeckFieldSubscription()
+
+export function OnField (props: { fieldId: number, match: SittingWithTeamsFragment | null, stage: MatchStage, isLive: boolean, isOnDeck: boolean }): JSX.Element {
+  const { fieldId, match, isLive, isOnDeck } = props
+  const sittingId = match !== null ? match.id : null
   const stage = props.stage
-  const fieldId = props.field.id
-  const options = FieldOptions(props.field, props.match, stage, liveField, onDeckField)
+  const time = match?.scheduled
+
+  const options = FieldOptions(fieldId, sittingId, stage, isLive, isOnDeck)
 
   let status: FieldStatus | undefined
 
-  if (liveField === fieldId) {
+  if (isLive) {
     status = FieldStatus.ACTIVE
-  } else if (onDeckField === fieldId) {
+  } else if (isOnDeck) {
     status = FieldStatus.ON_DECK
   }
 
-  let text: string | undefined
+  let text: JSX.Element | undefined
 
-  if (props.stage === MATCH_STAGE.SCORING || stage === MATCH_STAGE.OUTRO) {
-    text = 'SCORING'
+  if (stage === MatchStage.Scoring) {
+    text = <>Scoring</>
+  } else if (stage === MatchStage.Queued && time !== null) {
+    text = <Countdown time={time} />
   }
 
-  return <CommonFieldInfo match={props.match} options={options} text={text} status={status} />
+  return <CommonFieldInfo match={match} options={options} text={text} status={status} />
 }

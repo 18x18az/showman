@@ -1,3 +1,4 @@
+import { TeamInformationFragment } from '../../../__generated__/graphql'
 import { AllianceIndicator } from './AllianceIndicator'
 import { MatchName } from './MatchName'
 import { PeriodIndicator } from './PeriodIndicator'
@@ -10,9 +11,8 @@ export enum MatchPeriod {
 }
 
 interface MatchOverlayProps {
-  readonly redTeams: string[]
-  readonly blueTeams: string[]
-  // readonly autoWinner: 'red' | 'blue' | 'tie' | null
+  readonly redTeams: TeamInformationFragment[]
+  readonly blueTeams: TeamInformationFragment[]
   readonly time: string | undefined
   readonly period: MatchPeriod
   readonly title: string

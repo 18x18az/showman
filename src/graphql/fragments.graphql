@@ -1,0 +1,44 @@
+fragment SittingInformation on Sitting {
+  id
+  number
+  contest {
+  	round
+  	number
+  }
+  match {
+    number
+  }
+}
+
+fragment TeamInformation on Team {
+  id
+  number
+  name
+  rank
+}
+
+fragment SittingWithTeams on Sitting {
+  ...SittingInformation
+  scheduled
+  contest {
+    redTeams {
+      ...TeamInformation
+    }
+    blueTeams {
+      ...TeamInformation
+    }
+  }
+}
+
+fragment BlockInformation on Block {
+  id
+  name
+  canConclude
+  unqueuedSittings {
+    ...SittingInformation
+    field {
+      id
+      name
+    }
+  }
+}

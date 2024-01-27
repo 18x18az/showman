@@ -1,16 +1,37 @@
-import { Match, Round } from '@/app/(interface)/interfaces'
+import { Round, SittingInformationFragment } from '../../__generated__/graphql'
 
-export function makeMatchName (match: Match): string {
-  const round = match.round === Round.Ro16 ? 'Round of 16' : match.round === Round.QF ? 'Quarterfinals' : match.round === Round.SF ? 'Semifinals' : match.round === Round.F ? 'Finals' : ''
-
-  const number = match.sitting > 0 ? `${match.number}-${match.sitting}` : `${match.number}`
-
-  return `${round} ${number}`
+export function shortRoundName (round: Round): string {
+  return round === Round.Ro16 ? 'R16' : round === Round.Qf ? 'QF' : round === Round.Sf ? 'SF' : round === Round.F ? 'F' : 'Q'
 }
 
-export function makeShortMatchName (match: Match): string {
-  const round = match.round === Round.Ro16 ? 'R16' : match.round === Round.QF ? 'QF' : match.round === Round.SF ? 'SF' : match.round === Round.F ? 'F' : 'Q'
-  const number = match.sitting > 0 ? `${match.number}-${match.sitting}` : `${match.number}`
+export function roundName (round: Round): string {
+  return round === Round.Ro16 ? 'Round of 16' : round === Round.Qf ? 'Quarterfinals' : round === Round.Sf ? 'Semifinals' : round === Round.F ? 'Finals' : 'Qualification'
+}
 
-  return `${round} ${number}`
+export function makeMatchName (sitting: SittingInformationFragment): string {
+  const round = sitting.contest.round
+  const contest = sitting.contest.number
+  const match = sitting.match.number
+
+  const replay = sitting.number - 1
+
+  const roundString = roundName(round)
+  const numberString = match > 1 ? `${contest}-${match}` : `${contest}`
+  const replayString = replay > 0 ? ' Replay' : ''
+
+  return `${roundString} Match ${numberString}${replayString}`
+}
+
+export function makeShortMatchName (sitting: SittingInformationFragment): string {
+  const round = sitting.contest.round
+  const contest = sitting.contest.number
+  const match = sitting.match.number
+
+  const replay = sitting.number - 1
+
+  const roundString = shortRoundName(round)
+  const numberString = match > 1 ? `${contest}-${match}` : `${contest}`
+  const replayString = replay > 0 ? 'R ' : ''
+
+  return `${replayString}${roundString} ${numberString}`
 }

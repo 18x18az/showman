@@ -1,98 +1,149 @@
 'use client'
-import { Alliance } from '../interfaces'
 import Logo from '@/components/primitives/logo'
-import { makeMatchName } from '@/app/display/field/[uuid]/field'
 import { Button } from '@/components/ui/button'
 import { EyeIcon, PlayIcon } from 'lucide-react'
-import { pushLive, startMatch } from '@/contracts/match-control'
-import { CompetitionFieldStatusSubscription, Field, LiveFieldSubscription, MATCH_STAGE, OnDeckFieldSubscription } from '@/contracts/fields'
-import { TeamInformation, TeamsInformationSubscription } from '@/contracts/teams'
-import { Match } from '../../../contracts/match'
+import { MatchStage, SittingInformationFragment, SittingWithTeamsFragment, usePutLiveMutation, useRefereeInformationQuery, useStartFieldMutation } from '../../../__generated__/graphql'
+import { makeMatchName } from '../../../utils/strings/match'
 
-function StartButton (props: { disabled: boolean }): JSX.Element {
+function StartButton (props: { disabled: boolean, fieldId: number }): JSX.Element {
+  const [startMatch] = useStartFieldMutation({
+    variables: {
+      fieldId: props.fieldId
+    }
+  })
   return <Button className='p-8' disabled={props.disabled} onClick={() => { void startMatch() }}><PlayIcon size={48} /></Button>
 }
 
 function DisplayButton (props: { disabled: boolean }): JSX.Element {
-  return <Button className='p-8' disabled={props.disabled} onClick={() => { void pushLive() }}><EyeIcon size={48} /></Button>
+  const [putLive] = usePutLiveMutation()
+  return <Button className='p-8' disabled={props.disabled} onClick={() => { void putLive() }}><EyeIcon size={48} /></Button>
 }
 
-function TeamDisplay (props: { team: string | undefined, teams: TeamInformation[] }): JSX.Element {
-  if (props.team === undefined) return <></>
-  const match = props.teams.find((team) => team.number === props.team)
-  if (match === undefined) return <></>
+interface TeamInformation {
+  number: string
+  name: string
+}
+
+function TeamDisplay (props: TeamInformation): JSX.Element {
   return (
     <div>
-      <h4 className='text-center text-2xl'>{match.number}</h4>
-      <h5 className='text-center text-xl text-slate-400'>{match.name}</h5>
+      <h4 className='text-center text-2xl'>{props.number}</h4>
+      <h5 className='text-center text-xl text-slate-400'>{props.name}</h5>
     </div>
   )
 }
 
-function AllianceDisplay (props: { alliance: Alliance, color: 'red' | 'blue', teams: TeamInformation[] }): JSX.Element {
+function AllianceDisplay (props: { teams: TeamInformation[], color: 'red' | 'blue' }): JSX.Element {
   const title = props.color === 'red' ? 'Red Alliance' : 'Blue Alliance'
   const fontColor = props.color === 'red' ? 'text-red-500' : 'text-blue-500'
+
+  const teams = props.teams.map((team) => {
+    return <TeamDisplay number={team.number} name={team.name} key={team.number} />
+  })
+
   return (
     <div className='flex flex-col gap-2 mb-6'>
       <h3 className={`text-lg ${fontColor}`}>{title}</h3>
-      <TeamDisplay team={props.alliance.team1} teams={props.teams} />
-      <TeamDisplay team={props.alliance.team2} teams={props.teams} />
+      {teams}
     </div>
   )
 }
 
-function PageContent (props: { match: Match, teams: TeamInformation[], field: Field, live: boolean, stage: MATCH_STAGE }): JSX.Element {
-  const { match, teams, field, live, stage } = props
-  const name = makeMatchName(match)
+interface SittingInformation {
+  identifier: SittingInformationFragment
+  red: TeamInformation[]
+  blue: TeamInformation[]
+}
 
-  const canStart = live && (stage === MATCH_STAGE.QUEUED || stage === MATCH_STAGE.SCORING_AUTON)
+interface FieldInfo {
+  id: number
+  name: string
+}
+
+function PageContent (props: { sitting: SittingInformation, field: FieldInfo, isLive: boolean, stage: MatchStage }): JSX.Element {
+  const { sitting, isLive, stage, field } = props
+  const name = makeMatchName(sitting.identifier)
+
+  const canStart = isLive && (stage === MatchStage.Queued || stage === MatchStage.ScoringAuton)
 
   return (
     <div className='flex flex-col gap-2 text-center p-4 justify-between h-full'>
       <h1 className='my-2 text-3xl text-slate-100'>{name}</h1>
       <h2 className='text-2xl mb-4 text-slate-500'>{field.name}</h2>
-      <AllianceDisplay alliance={match.red} color='red' teams={teams} />
-      <AllianceDisplay alliance={match.blue} color='blue' teams={teams} />
+      <AllianceDisplay teams={sitting.red} color='red' />
+      <AllianceDisplay teams={sitting.blue} color='blue' />
       <div className='flex-1 grow' />
       <div className='flex justify-evenly mb-12'>
-        <DisplayButton disabled={live} />
-        <StartButton disabled={!canStart} />
+        <DisplayButton disabled={isLive} />
+        <StartButton fieldId={props.field.id} disabled={!canStart} />
       </div>
     </div>
   )
 }
 
-function LiveFieldControl (props: { liveField: number, teams: TeamInformation[] }): JSX.Element {
-  const liveFieldInfo = CompetitionFieldStatusSubscription(props.liveField)
-
-  if (liveFieldInfo === undefined || liveFieldInfo.onField === null) {
-    return <></>
-  }
-
-  return <PageContent match={liveFieldInfo.onField} teams={props.teams} field={liveFieldInfo.field} stage={liveFieldInfo.stage} live />
+interface LiveFieldControlInformation extends FieldControlInformation {
+  stage: MatchStage
 }
 
-function NextFieldControl (props: { onDeckField: number, teams: TeamInformation[] }): JSX.Element {
-  const onDeckFieldInfo = CompetitionFieldStatusSubscription(props.onDeckField)
+interface FieldControlInformation {
+  sitting: SittingInformation
+  field: FieldInfo
+}
 
-  if (onDeckFieldInfo === undefined || onDeckFieldInfo.onField === null) {
-    return <></>
+function LiveFieldControl (props: LiveFieldControlInformation): JSX.Element {
+  return <PageContent sitting={props.sitting} field={props.field} stage={props.stage} isLive />
+}
+
+function NextFieldControl (props: FieldControlInformation): JSX.Element {
+  return <PageContent sitting={props.sitting} field={props.field} stage={MatchStage.Queued} isLive={false} />
+}
+
+function makeSittingInformation (sitting: SittingWithTeamsFragment): SittingInformation {
+  const identifier = sitting
+  const red = sitting.contest.redTeams.map((team) => {
+    return {
+      number: team.number,
+      name: team.name
+    }
+  })
+  const blue = sitting.contest.blueTeams.map((team) => {
+    return {
+      number: team.number,
+      name: team.name
+    }
+  })
+  return {
+    identifier,
+    red,
+    blue
   }
-
-  return <PageContent match={onDeckFieldInfo.onField} teams={props.teams} field={onDeckFieldInfo.field} stage={onDeckFieldInfo.stage} live={false} />
 }
 
 export default function Page (): JSX.Element {
-  const liveField = LiveFieldSubscription()
-  const onDeckField = OnDeckFieldSubscription()
-  const teams = TeamsInformationSubscription()
+  const { data } = useRefereeInformationQuery({
+    pollInterval: 200
+  })
 
-  if (liveField === undefined || onDeckField === undefined || teams === undefined) return <Logo />
+  if (data === undefined || data.competitionInformation === null) return <Logo />
 
-  if (liveField !== null) {
-    return <LiveFieldControl liveField={liveField} teams={teams} />
-  } else if (onDeckField !== null) {
-    return <NextFieldControl onDeckField={onDeckField} teams={teams} />
+  const { liveField, onDeckField } = data.competitionInformation
+  const liveComp = liveField?.competition
+  const liveSitting = liveComp?.onFieldSitting
+  const onDeckComp = onDeckField?.competition
+  const onDeckSitting = onDeckComp?.onFieldSitting
+
+  if (liveField !== null && liveComp !== null && liveComp !== undefined && liveSitting !== null && liveSitting !== undefined) {
+    const field = {
+      id: liveField.id,
+      name: liveField.name
+    }
+    return <LiveFieldControl stage={liveComp.stage} field={field} sitting={makeSittingInformation(liveSitting)} />
+  } else if (onDeckField !== null && onDeckComp !== null && onDeckComp !== undefined && onDeckSitting !== null && onDeckSitting !== undefined) {
+    const field = {
+      id: onDeckField.id,
+      name: onDeckField.name
+    }
+    return <NextFieldControl field={field} sitting={makeSittingInformation(onDeckSitting)} />
   } else {
     return <Logo />
   }

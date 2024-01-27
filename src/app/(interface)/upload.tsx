@@ -3,13 +3,12 @@
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import { uploadMatches } from '@/contracts/matches'
-import { Post } from '@/utils/maestro'
 import { useState } from 'react'
 
 export default function UploadMatches (): JSX.Element {
   const [file, setFile] = useState<File | null>(null)
 
-  const handleFileUpload = async () => {
+  const handleFileUpload = async (): Promise<void> => {
     if (file != null) {
       await uploadMatches(file)
     } else {
@@ -22,7 +21,7 @@ export default function UploadMatches (): JSX.Element {
     }
   }
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.files != null) {
       setFile(event.target.files[0])
     }

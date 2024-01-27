@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Providers from '@/lib/providers'
 import { Toaster } from '@/components/ui/toaster'
+import { Navbar } from './navbar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,9 +19,12 @@ export default function RootLayout ({
 }): JSX.IntrinsicElements['html'] {
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className={`${inter.className} bg-zinc-950`}>
+      <body className={`${inter.className} bg-slate-1 h-screen`}>
         <Providers>
-          {children}
+          <div className='flex flex-col h-full w-full'>
+            <Navbar />
+            {children}
+          </div>
           <Toaster />
         </Providers>
       </body>
