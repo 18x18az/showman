@@ -22,7 +22,7 @@ function SittingName (props: { title: string, sitting: SittingInformationFragmen
 function ClearLiveButton (props: { hasOnDeck: boolean, canQueue: boolean }): JSX.Element {
   const disabled = !props.hasOnDeck || !props.canQueue
   return (
-    <ErrorableButton mutation={useClearLiveMutation} options={{ refetchQueries: ['LiveField', 'OnDeckField'] }} disabled={disabled} className='w-44 h-12'>
+    <ErrorableButton tooltip='Clear Live Field' mutation={useClearLiveMutation} options={{ refetchQueries: ['LiveField', 'OnDeckField'] }} disabled={disabled}>
       <StopIcon />
     </ErrorableButton>
   )
@@ -31,7 +31,7 @@ function ClearLiveButton (props: { hasOnDeck: boolean, canQueue: boolean }): JSX
 function MakeLiveButton (props: { hasOnDeck: boolean, canQueue: boolean }): JSX.Element {
   const disabled = !props.hasOnDeck || !props.canQueue
   return (
-    <ErrorableButton mutation={usePutLiveMutation} options={{ refetchQueries: ['LiveField', 'OnDeckField'] }} disabled={disabled} className='w-44 h-12'>
+    <ErrorableButton tooltip='Push Live Field' mutation={usePutLiveMutation} options={{ refetchQueries: ['LiveField', 'OnDeckField'] }} disabled={disabled}>
       <PlayIcon />
     </ErrorableButton>
   )

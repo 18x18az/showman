@@ -35,7 +35,7 @@ export const Columns: Array<ColumnDef<Field>> = [
   {
     id: 'actions',
     cell: ({ row }) => {
-      return <ErrorableButton variant='ghost' mutation={useDeleteFieldMutation} options={{ variables: { fieldId: row.original.id }, refetchQueries: ['Fields'] }}><Trash2 /></ErrorableButton>
+      return <ErrorableButton tooltip='Delete Field' variant='ghost' mutation={useDeleteFieldMutation} options={{ variables: { fieldId: row.original.id }, refetchQueries: ['Fields'] }}><Trash2 /></ErrorableButton>
     }
   }
 ]

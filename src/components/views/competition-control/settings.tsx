@@ -28,9 +28,9 @@ export function Settings (): JSX.Element {
   let timeoutButton = <></>
   if (stage === EventStage.Elims) {
     if (compData.timeout.endTime === null) {
-      timeoutButton = <ErrorableButton mutation={useStartTimeoutMutation} options={refetch}> <TimerIcon /></ErrorableButton>
+      timeoutButton = <ErrorableButton tooltip='Start Timeout' mutation={useStartTimeoutMutation} options={refetch}> <TimerIcon /></ErrorableButton>
     } else {
-      timeoutButton = <ErrorableButton mutation={useCancelTimeoutMutation} options={refetch}><StopIcon /></ErrorableButton>
+      timeoutButton = <ErrorableButton tooltip='End Timeout' mutation={useCancelTimeoutMutation} options={refetch}><StopIcon /></ErrorableButton>
     }
   }
 
@@ -51,8 +51,8 @@ export function Settings (): JSX.Element {
         </div>
         <div className='flex justify-evenly'>
           {timeoutButton}
-          <ErrorableButton mutation={usePromoteResultsMutation} options={refetch} disabled={!resultsReady}><ArrowUpFromLine /></ErrorableButton>
-          <ErrorableButton mutation={useClearResultsMutation} options={refetch} disabled={!resultsShowing}><Eraser /></ErrorableButton>
+          <ErrorableButton tooltip='Display Results' mutation={usePromoteResultsMutation} options={refetch} disabled={!resultsReady}><ArrowUpFromLine /></ErrorableButton>
+          <ErrorableButton tooltip='Clear Results' mutation={useClearResultsMutation} options={refetch} disabled={!resultsShowing}><Eraser /></ErrorableButton>
         </div>
       </div>
     </>

@@ -60,8 +60,8 @@ function PageContent (props: { sitting: SittingInformation, field: FieldInfo, is
       <AllianceDisplay teams={sitting.blue} color='blue' />
       <div className='flex-1 grow' />
       <div className='flex justify-evenly mb-12'>
-        <ErrorableButton className='p-8' mutation={usePutLiveMutation} disabled={isLive}><EyeIcon size={48} /></ErrorableButton>
-        <ErrorableButton className='p-8' mutation={useStartFieldMutation} options={{ variables: { fieldId: field.id } }} disabled={!canStart}><PlayIcon size={48} /></ErrorableButton>
+        <ErrorableButton tooltip='Push Field Live' className='p-8' mutation={usePutLiveMutation} disabled={isLive}><EyeIcon size={48} /></ErrorableButton>
+        <ErrorableButton tooltip='Start Field' className='p-8' mutation={useStartFieldMutation} options={{ variables: { fieldId: field.id } }} disabled={!canStart}><PlayIcon size={48} /></ErrorableButton>
       </div>
     </div>
   )
