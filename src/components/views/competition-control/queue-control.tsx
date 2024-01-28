@@ -2,6 +2,7 @@ import { makeShortMatchName } from '@/utils/strings/match'
 import { PlayIcon, StopIcon, TrackNextIcon } from '@radix-ui/react-icons'
 import { MatchStage, SittingInformationFragment, useClearLiveMutation, useOnDeckFieldQuery, usePutLiveMutation } from '../../../__generated__/graphql'
 import { Button } from '../../../primitives/button/Button'
+import ErrorableButton from '../../errorable-button/ErrorableButton'
 
 function SittingName (props: { title: string, sitting: SittingInformationFragment | null }): JSX.Element {
   let color = 'text-slate-11'
@@ -20,23 +21,19 @@ function SittingName (props: { title: string, sitting: SittingInformationFragmen
 
 function ClearLiveButton (props: { hasOnDeck: boolean, canQueue: boolean }): JSX.Element {
   const disabled = !props.hasOnDeck || !props.canQueue
-  const [clearLive] = useClearLiveMutation({})
   return (
-    <Button disabled={disabled} onClick={() => { void clearLive() }}>
+    <ErrorableButton mutation={useClearLiveMutation} options={{ refetchQueries: ['LiveField', 'OnDeckField'] }} disabled={disabled} className='w-44 h-12'>
       <StopIcon />
-    </Button>
+    </ErrorableButton>
   )
 }
 
 function MakeLiveButton (props: { hasOnDeck: boolean, canQueue: boolean }): JSX.Element {
   const disabled = !props.hasOnDeck || !props.canQueue
-  const [makeLive] = usePutLiveMutation({
-    refetchQueries: ['LiveField', 'OnDeckField']
-  })
   return (
-    <Button onClick={() => { void makeLive() }} disabled={disabled}>
+    <ErrorableButton mutation={usePutLiveMutation} options={{ refetchQueries: ['LiveField', 'OnDeckField'] }} disabled={disabled} className='w-44 h-12'>
       <PlayIcon />
-    </Button>
+    </ErrorableButton>
   )
 }
 

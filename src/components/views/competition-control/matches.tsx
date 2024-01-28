@@ -4,6 +4,7 @@ import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { toast } from '../../../primitives/toast/useToast'
 import { BlockInformationFragment, SittingInformationFragment, useConcludeBlockMutation, useGetTableOccupiedQuery, useGetUnqueuedSittingsQuery, useQueueSittingMutation, useStartNextBlockMutation } from '../../../__generated__/graphql'
 import { Button } from '../../../primitives/button/Button'
+import ErrorableButton from '../../errorable-button/ErrorableButton'
 
 interface QueueableField {
   id: number
@@ -101,12 +102,6 @@ export function BottomPanel (): JSX.Element {
     pollInterval: 500
   })
 
-  const [startNextBlock] = useStartNextBlockMutation({
-    refetchQueries: ['GetUnqueuedMatches']
-  })
-
-  const [concludeBlock] = useConcludeBlockMutation({ refetchQueries: ['GetUnqueuedMatches'] })
-
   if (blockData === undefined) {
     return <>Loading...</>
   }
@@ -117,7 +112,7 @@ export function BottomPanel (): JSX.Element {
     if (currentBlock.canConclude) {
       return (
         <div>
-          <Button onClick={() => { void concludeBlock() }}>End Block</Button>
+          <ErrorableButton options={{ refetchQueries: ['GetUnqueuedMatches'] }} mutation={useConcludeBlockMutation}>End Block</ErrorableButton>
         </div>
       )
     }
@@ -131,7 +126,7 @@ export function BottomPanel (): JSX.Element {
     const text = `Start ${nextBlock.name} Block`
     return (
       <div>
-        <Button size='lg' onClick={() => { void startNextBlock() }}>{text}</Button>
+        <ErrorableButton size='lg' mutation={useStartNextBlockMutation}>{text}</ErrorableButton>
       </div>
     )
   }

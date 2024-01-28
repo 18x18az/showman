@@ -1,11 +1,10 @@
 'use client'
 import { useState } from 'react'
 import { Dropdown } from '../../../components/primitives/Dropdown'
-import { Button } from '../../../primitives/button/Button'
 import { Control_Mode, useQueueDriverSkillsMutation, useQueueProgrammingSkillsMutation, useSkillsFieldQuery, useSkillsFieldsQuery, useStartFieldMutation, useStopFieldMutation } from '../../../__generated__/graphql'
+import ErrorableButton from '../../../components/errorable-button/ErrorableButton'
 
 function StartButton (props: { mode: Control_Mode | null, fieldId: number, duration: number | null }): JSX.Element {
-  const [startSkillsMatch] = useStartFieldMutation({ variables: { fieldId: props.fieldId }, refetchQueries: ['SkillsField'] })
   const { mode, duration } = props
 
   const canStart = mode !== null && duration !== null
@@ -18,12 +17,11 @@ function StartButton (props: { mode: Control_Mode | null, fieldId: number, durat
     startText = 'Driver'
   }
 
-  return <Button disabled={!canStart} className='w-44 h-12' onClick={() => { void startSkillsMatch() }}>Start {startText}</Button>
+  return <ErrorableButton mutation={useStartFieldMutation} options={{ variables: { fieldId: props.fieldId }, refetchQueries: ['SkillsField'] }} disabled={!canStart} className='w-44 h-12'>Start {startText}</ErrorableButton>
 }
 
 function EndButton (props: { fieldId: number }): JSX.Element {
-  const [stopSkillsMatch] = useStopFieldMutation({ variables: { fieldId: props.fieldId }, refetchQueries: ['SkillsField'] })
-  return <Button className='w-44 h-12' onClick={() => { void stopSkillsMatch() }}>End Early</Button>
+  return <ErrorableButton mutation={useStopFieldMutation} options={{ variables: { fieldId: props.fieldId }, refetchQueries: ['SkillsField'] }} className='w-44 h-12'>End Early</ErrorableButton>
 }
 
 function StartStopButton (props: { mode: Control_Mode | null, endTime: string | null, fieldId: number, duration: number | null }): JSX.Element {
@@ -36,8 +34,6 @@ function StartStopButton (props: { mode: Control_Mode | null, endTime: string | 
 
 function SkillsControl (props: { field: number }): JSX.Element {
   const { data } = useSkillsFieldQuery({ pollInterval: 500, variables: { fieldId: props.field } })
-  const [queueDriverSkillsMatch] = useQueueDriverSkillsMutation({ variables: { fieldId: props.field }, refetchQueries: ['SkillsField'] })
-  const [queueProgrammingSkillsMatch] = useQueueProgrammingSkillsMutation({ variables: { fieldId: props.field }, refetchQueries: ['SkillsField'] })
 
   if (data === undefined) {
     return <>Loading...</>
@@ -64,8 +60,8 @@ function SkillsControl (props: { field: number }): JSX.Element {
     <div className='flex flex-col gap-8 w-full items-center mt-8'>
       <h1 className='text-4xl'>{data.field.name}</h1>
       <div className='flex gap-4'>
-        <Button disabled={!canChange} className='w-32 h-12' onClick={() => { void queueDriverSkillsMatch() }}>Driver</Button>
-        <Button disabled={!canChange} className='w-32 h-12' onClick={() => { void queueProgrammingSkillsMatch() }}>Programming</Button>
+        <ErrorableButton mutation={useQueueDriverSkillsMutation} options={{ variables: { fieldId: data.field.id }, refetchQueries: ['SkillsField'] }} disabled={!canChange} className='w-32 h-12'>Driver</ErrorableButton>
+        <ErrorableButton mutation={useQueueProgrammingSkillsMutation} options={{ variables: { fieldId: data.field.id }, refetchQueries: ['SkillsField'] }} disabled={!canChange} className='w-32 h-12'>Programming</ErrorableButton>
       </div>
       <StartStopButton mode={mode} endTime={endTime} duration={60} fieldId={data.field.id} />
       <h2 className='text-2xl'>{stopTimeText}</h2>

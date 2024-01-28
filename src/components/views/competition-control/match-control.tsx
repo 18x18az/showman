@@ -3,7 +3,7 @@ import { PlayIcon, ReloadIcon, ResetIcon, StopIcon } from '@radix-ui/react-icons
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { useOffsetTimer } from '@/app/display/field/[uuid]/timer'
 import { MatchStage, SittingInformationFragment, useFieldControlSubscription, useLiveFieldQuery, useReplayMatchMutation, useResetAutonMutation, useStartFieldMutation, useStopFieldMutation } from '../../../__generated__/graphql'
-import { Button } from '../../../primitives/button/Button'
+import ErrorableButton from '../../errorable-button/ErrorableButton'
 
 function makeTime (offset: number, truncate = false): string {
   if (truncate && offset < 0) {
@@ -18,21 +18,14 @@ function makeTime (offset: number, truncate = false): string {
 }
 
 function StartButton (props: { disabled: boolean, fieldId: number }): JSX.Element {
-  const [startMatch] = useStartFieldMutation()
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button
-            disabled={props.disabled} onClick={() => {
-              void startMatch({
-                variables: {
-                  fieldId: props.fieldId
-                }
-              })
-            }}
+          <ErrorableButton
+            disabled={props.disabled} mutation={useStartFieldMutation} options={{ variables: { fieldId: props.fieldId } }}
           ><PlayIcon />
-          </Button>
+          </ErrorableButton>
         </TooltipTrigger>
         <TooltipContent>
           <p>Start Match</p>
@@ -43,21 +36,14 @@ function StartButton (props: { disabled: boolean, fieldId: number }): JSX.Elemen
 }
 
 function StopButton (props: { fieldId: number }): JSX.Element {
-  const [stopMatch] = useStopFieldMutation()
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button
-            onClick={() => {
-              void stopMatch({
-                variables: {
-                  fieldId: props.fieldId
-                }
-              })
-            }}
+          <ErrorableButton
+            mutation={useStopFieldMutation} options={{ variables: { fieldId: props.fieldId } }}
           ><StopIcon />
-          </Button>
+          </ErrorableButton>
         </TooltipTrigger>
         <TooltipContent>
           <p>End Early</p>
@@ -68,17 +54,14 @@ function StopButton (props: { fieldId: number }): JSX.Element {
 }
 
 function ResetButton (props: { disabled: boolean, fieldId: number }): JSX.Element {
-  const [resetAuton] = useResetAutonMutation()
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button
-            disabled={props.disabled} onClick={() => {
-              void resetAuton({ variables: { fieldId: props.fieldId } })
-            }}
+          <ErrorableButton
+            disabled={props.disabled} mutation={useResetAutonMutation} options={{ variables: { fieldId: props.fieldId } }}
           ><ResetIcon />
-          </Button>
+          </ErrorableButton>
         </TooltipTrigger>
         <TooltipContent>
           <p>Reset Match</p>
@@ -89,12 +72,14 @@ function ResetButton (props: { disabled: boolean, fieldId: number }): JSX.Elemen
 }
 
 function ReplayButton (props: { disabled: boolean, sittingId: number }): JSX.Element {
-  const [replay] = useReplayMatchMutation({ variables: { sittingId: props.sittingId } })
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button disabled={props.disabled} onClick={() => { void replay() }}><ReloadIcon /></Button>
+          <ErrorableButton
+            disabled={props.disabled} mutation={useReplayMatchMutation}
+          ><ReloadIcon />
+          </ErrorableButton>
         </TooltipTrigger>
         <TooltipContent>
           <p>Replay</p>
