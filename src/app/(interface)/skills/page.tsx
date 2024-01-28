@@ -64,8 +64,8 @@ function SkillsControl (props: { field: number }): JSX.Element {
     <div className='flex flex-col gap-8 w-full items-center mt-8'>
       <h1 className='text-4xl'>{data.field.name}</h1>
       <div className='flex gap-4'>
-        <Button disabled={!canChange} className='w-32 h-12' onClick={() => { queueDriverSkillsMatch() }}>Driver</Button>
-        <Button disabled={!canChange} className='w-32 h-12' onClick={() => { queueProgrammingSkillsMatch() }}>Programming</Button>
+        <Button disabled={!canChange} className='w-32 h-12' onClick={() => { void queueDriverSkillsMatch() }}>Driver</Button>
+        <Button disabled={!canChange} className='w-32 h-12' onClick={() => { void queueProgrammingSkillsMatch() }}>Programming</Button>
       </div>
       <StartStopButton mode={mode} endTime={endTime} duration={60} fieldId={data.field.id} />
       <h2 className='text-2xl'>{stopTimeText}</h2>

@@ -17,7 +17,7 @@ function AllianceSelectionControl (): JSX.Element {
 
   const picking = status.picking?.number ?? ''
   const pickOptions = status.pickable.map((team) => {
-    return <Button key={team.number} onClick={() => { pick({ variables: { teamId: team.id } }) }}>{team.number}</Button>
+    return <Button key={team.number} onClick={() => { void pick({ variables: { teamId: team.id } }) }}>{team.number}</Button>
   })
 
   const alliances = status.alliances.map((alliance) => {
@@ -29,6 +29,9 @@ function AllianceSelectionControl (): JSX.Element {
     )
   })
 
+  const pickingTeamString = status.picking?.number ?? ''
+  const pickedTeamString = status.picked?.number ?? ''
+
   return (
     <>
       <div className='flex justify-center'><h1 className='text-lg'>Alliance Selection</h1></div>
@@ -36,9 +39,10 @@ function AllianceSelectionControl (): JSX.Element {
       <div className='grid grid-cols-4 gap-4'>{pickOptions}</div>
       <div><Button onClick={() => { void undo() }}>Undo</Button></div>
       <div className='grid grid-cols-4 gap-4'>{alliances}</div>
+
       <Dialog open={status.picked !== null} onOpenChange={(state: boolean) => { if (!state) void cancel() }}>
         <DialogContent>
-          <DialogHeader><DialogTitle className='text-center mb-6'>{`Team ${status.picking?.number} has invited team ${status.picked?.number}`}</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle className='text-center mb-6'>{`Team ${pickingTeamString} has invited team ${pickedTeamString}`}</DialogTitle></DialogHeader>
           <div className='flex gap-4 justify-evenly'>
             <Button onClick={() => { void accept() }}>Accept</Button>
             <Button onClick={() => { void decline() }}>Decline</Button>
