@@ -1,5 +1,5 @@
 import { DropdownMenuItem } from '../../../ui/dropdown-menu'
-import { toast } from '../../../ui/use-toast'
+import { toast } from '../../../../primitives/useToast'
 import { usePutOnDeckMutation, useReplayMatchMutation, useUnqueueSittingMutation } from '../../../../__generated__/graphql'
 
 function BaseAction (props: { text: string, action: () => Promise<void> }): JSX.Element {
