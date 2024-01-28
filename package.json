@@ -70,7 +70,7 @@
     "tailwindcss-radix": "^2.8.0",
     "typescript": "5.2.2",
     "webpack": "^5.89.0",
-    "windy-radix-palette": "^1.0.0-rc.0",
+    "windy-radix-palette": "^2.0.0-beta.7 ",
     "zod": "^3.22.4"
   },
   "devDependencies": {
