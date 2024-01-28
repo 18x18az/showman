@@ -1,7 +1,5 @@
 // 'use client'
 
-import { Header } from '@radix-ui/react-accordion'
-
 // import { useSelector } from 'react-redux'
 // import { selectIsSetupStage } from '@/lib/redux/slices/stageSlice/selectors'
 // import { redirect } from 'next/navigation'

@@ -25,7 +25,7 @@ function StartButton (props: { disabled: boolean, fieldId: number }): JSX.Elemen
         <TooltipTrigger asChild>
           <Button
             disabled={props.disabled} onClick={() => {
-              startMatch({
+              void startMatch({
                 variables: {
                   fieldId: props.fieldId
                 }
@@ -50,7 +50,7 @@ function StopButton (props: { fieldId: number }): JSX.Element {
         <TooltipTrigger asChild>
           <Button
             onClick={() => {
-              stopMatch({
+              void stopMatch({
                 variables: {
                   fieldId: props.fieldId
                 }
@@ -161,12 +161,11 @@ function EmptyMatchControl (): JSX.Element {
 }
 
 function PopulatedMatchControl (props: { fieldId: number, sitting: SittingInformationFragment, stage: MatchStage, endTime: string | null }): JSX.Element {
-  const { data } = useFieldControlSubscription({
+  useFieldControlSubscription({
     variables: {
       fieldId: props.fieldId
     }
   })
-  const subEndTIme = data?.fieldControl?.endTime
   return <MatchControlContent sitting={props.sitting} stage={props.stage} endTime={props.endTime} fieldId={props.fieldId} />
 }
 

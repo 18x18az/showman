@@ -23,7 +23,7 @@ interface TimerProps {
   time: string
 }
 
-export function Countdown (props: TimerProps) {
+export function Countdown (props: TimerProps): JSX.Element {
   const offset = offsetTimer(props.time)
   const sign = offset < 0 ? '+' : '-'
   const magnitude = Math.abs(offset) / 1000
@@ -34,7 +34,7 @@ export function Countdown (props: TimerProps) {
   return <>{time}</>
 }
 
-export function Timer (props: TimerProps) {
+export function Timer (props: TimerProps): JSX.Element {
   let offset = offsetTimer(props.time)
   if (offset < 0) offset = 0
 
