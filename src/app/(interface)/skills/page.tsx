@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { Dropdown } from '../../../components/primitives/Dropdown'
-import { Button } from '../../../primitives/Button'
+import { Button } from '../../../primitives/button/Button'
 import { Control_Mode, useQueueDriverSkillsMutation, useQueueProgrammingSkillsMutation, useSkillsFieldQuery, useSkillsFieldsQuery, useStartFieldMutation, useStopFieldMutation } from '../../../__generated__/graphql'
 
 function StartButton (props: { mode: Control_Mode | null, fieldId: number, duration: number | null }): JSX.Element {

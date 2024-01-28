@@ -3,7 +3,7 @@
 import { FieldTable } from './field-table'
 import { Columns } from './columns'
 import { useFieldsQuery } from '../../../../__generated__/graphql'
-import { Button } from '../../../../primitives/Button'
+import { Button } from '../../../../primitives/button/Button'
 
 export default function Page (): JSX.Element {
   const { data } = useFieldsQuery()

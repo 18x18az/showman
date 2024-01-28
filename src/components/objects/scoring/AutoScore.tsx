@@ -1,5 +1,5 @@
 import { LabelledSection } from '../../primitives/LabelledSection'
-import { CheckBox } from '../../../primitives/CheckBox'
+import { CheckBox } from '../../../primitives/check-box/CheckBox'
 import { Label } from '../../primitives/Label'
 
 interface AutoScoreProps {

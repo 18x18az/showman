@@ -1,9 +1,9 @@
 import { makeShortMatchName } from '@/utils/strings/match'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
-import { toast } from '../../../primitives/useToast'
+import { toast } from '../../../primitives/toast/useToast'
 import { BlockInformationFragment, SittingInformationFragment, useConcludeBlockMutation, useGetTableOccupiedQuery, useGetUnqueuedSittingsQuery, useQueueSittingMutation, useStartNextBlockMutation } from '../../../__generated__/graphql'
-import { Button } from '../../../primitives/Button'
+import { Button } from '../../../primitives/button/Button'
 
 interface QueueableField {
   id: number

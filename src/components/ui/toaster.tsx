@@ -1,7 +1,7 @@
 "use client"
 
-import { Toast, ToastClose, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from "../../primitives/Toast"
-import { useToast } from "../../primitives/useToast"
+import { Toast, ToastClose, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from "../../primitives/toast/Toast"
+import { useToast } from "../../primitives/toast/useToast"
 
 export function Toaster() {
   const { toasts } = useToast()

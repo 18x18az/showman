@@ -2,8 +2,8 @@
 import { Input } from '@/components/ui/input'
 import { useState } from 'react'
 import { useConfigureTournamentManagerMutation } from '../../../__generated__/graphql'
-import { Button } from '../../../primitives/Button'
-import { toast } from '../../../primitives/useToast'
+import { Button } from '../../../primitives/button/Button'
+import { toast } from '../../../primitives/toast/useToast'
 
 export default function TmSelector (): JSX.Element {
   const [input, setInput] = useState('')

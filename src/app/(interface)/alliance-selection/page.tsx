@@ -1,6 +1,6 @@
 'use client'
 import { EventStage, useAllianceSelectionAcceptMutation, useAllianceSelectionCancelMutation, useAllianceSelectionControlQuery, useAllianceSelectionDeclineMutation, useAllianceSelectionPickMutation, useAllianceSelectionUndoMutation, useCanStartAllianceSelectionQuery, useStartAllianceSelectionMutation } from '../../../__generated__/graphql'
-import { Button } from '../../../primitives/Button'
+import { Button } from '../../../primitives/button/Button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../../../components/ui/dialog'
 
 function AllianceSelectionControl (): JSX.Element {
