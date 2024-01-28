@@ -55,7 +55,7 @@ function SkillsDisplay (props: { fieldName: string, fieldControl: FieldControl, 
   let title = 'Skills Field'
   if (mode === Control_Mode.Auto) {
     title = 'Programming Skills'
-  } else if (mode === Control_Mode.Driver !== null) {
+  } else if (mode === Control_Mode.Driver) {
     title = 'Driver Skills'
   }
 
