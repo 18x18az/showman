@@ -1,8 +1,8 @@
 'use client'
-import { CompetitionControl } from '../../../components/views/competition-control/main'
 import TmSelector from './tm-connect'
 import UploadMatches from '../upload'
 import { EventStage, useGetEventStageQuery } from '../../../__generated__/graphql'
+import { CompetitionControl } from '../../../views/competition-control/main'
 
 export default function Page (): JSX.Element {
   const { data } = useGetEventStageQuery(
