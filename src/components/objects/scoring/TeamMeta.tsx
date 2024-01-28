@@ -1,4 +1,4 @@
-import { CheckBox } from '../../primitives/CheckBox'
+import { CheckBox } from '../../../primitives/CheckBox'
 import { Label } from '../../primitives/Label'
 import { Popover } from '../../primitives/Popover'
 

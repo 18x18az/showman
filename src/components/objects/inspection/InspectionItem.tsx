@@ -1,4 +1,4 @@
-import { CheckBox } from '../../primitives/CheckBox'
+import { CheckBox } from '../../../primitives/CheckBox'
 
 interface InspectionItemProps {
   readonly description: string
