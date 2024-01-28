@@ -1,6 +1,6 @@
 'use client'
 
-import { offsetTimer } from '@/app/display/field/[uuid]/timer'
+import { useOffsetTimer } from '@/app/display/field/[uuid]/timer'
 import { AnimatePresence, motion } from 'framer-motion'
 
 interface TimerProps {
@@ -9,7 +9,7 @@ interface TimerProps {
 }
 
 function ActualTimer (props: { time: string, period: 'auto' | 'driver' | 'none' }): JSX.Element {
-  let offset = offsetTimer(props.time)
+  let offset = useOffsetTimer(props.time)
   if (offset < 0) offset = 0
 
   const roundedSeconds = Math.ceil(offset / 1000)

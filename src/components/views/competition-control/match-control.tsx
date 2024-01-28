@@ -2,7 +2,7 @@ import { makeShortMatchName } from '@/utils/strings/match'
 import { Button } from '@/components/ui/button'
 import { PlayIcon, ReloadIcon, ResetIcon, StopIcon } from '@radix-ui/react-icons'
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { offsetTimer } from '@/app/display/field/[uuid]/timer'
+import { useOffsetTimer } from '@/app/display/field/[uuid]/timer'
 import { MatchStage, SittingInformationFragment, useFieldControlSubscription, useLiveFieldQuery, useReplayMatchMutation, useResetAutonMutation, useStartFieldMutation, useStopFieldMutation } from '../../../__generated__/graphql'
 
 function makeTime (offset: number, truncate = false): string {
@@ -131,7 +131,7 @@ function MatchControlContent (props: { sitting: SittingInformationFragment | nul
   let timeText = <>-:--</>
 
   if (endTime !== null) {
-    const offset = offsetTimer(endTime)
+    const offset = useOffsetTimer(endTime)
     timeText = <>{makeTime(offset)}</>
   }
 

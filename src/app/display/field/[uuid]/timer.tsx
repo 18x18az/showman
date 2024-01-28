@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-export function offsetTimer (time: string): number {
+export function useOffsetTimer (time: string): number {
   const realDate = new Date(time)
   const initialOffset = realDate.getTime() - Date.now()
   const [offset, setOffset] = useState(initialOffset)
@@ -24,7 +24,7 @@ interface TimerProps {
 }
 
 export function Countdown (props: TimerProps): JSX.Element {
-  const offset = offsetTimer(props.time)
+  const offset = useOffsetTimer(props.time)
   const sign = offset < 0 ? '+' : '-'
   const magnitude = Math.abs(offset) / 1000
   const seconds = Math.floor(magnitude % 60).toString().padStart(2, '0')
@@ -35,7 +35,7 @@ export function Countdown (props: TimerProps): JSX.Element {
 }
 
 export function Timer (props: TimerProps): JSX.Element {
-  let offset = offsetTimer(props.time)
+  let offset = useOffsetTimer(props.time)
   if (offset < 0) offset = 0
 
   const roundedSeconds = Math.ceil(offset / 1000)
