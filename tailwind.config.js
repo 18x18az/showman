@@ -23,7 +23,8 @@ module.exports = {
         slate: generateScale('slate'),
         indigo: generateScale('indigo'),
         red: generateScale('red'),
-        green: generateScale('gold')
+        green: generateScale('gold'),
+        iris: generateScale('iris')
       },
       keyframes: {
         'accordion-down': {
