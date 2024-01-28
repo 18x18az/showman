@@ -1,7 +1,7 @@
 import { makeShortMatchName } from '@/utils/strings/match'
-import { Button } from '@/components/ui/button'
 import { PlayIcon, StopIcon, TrackNextIcon } from '@radix-ui/react-icons'
 import { MatchStage, SittingInformationFragment, useClearLiveMutation, useOnDeckFieldQuery, usePutLiveMutation } from '../../../__generated__/graphql'
+import { Button } from '../../../primitives/Button'
 
 function SittingName (props: { title: string, sitting: SittingInformationFragment | null }): JSX.Element {
   let color = 'text-slate-11'

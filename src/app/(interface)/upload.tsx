@@ -1,9 +1,9 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
 import { uploadMatches } from '@/contracts/matches'
 import { useState } from 'react'
+import { Button } from '../../primitives/Button'
 
 export default function UploadMatches (): JSX.Element {
   const [file, setFile] = useState<File | null>(null)

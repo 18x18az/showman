@@ -14,8 +14,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-
-import { Button } from '@/components/ui/button'
+import { Button } from '../../../primitives/Button'
 
 interface DataTableProps<TData, TValue> {
   readonly columns: Array<ColumnDef<TData, TValue>>

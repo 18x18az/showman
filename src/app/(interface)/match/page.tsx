@@ -1,9 +1,9 @@
 'use client'
 import Logo from '@/components/primitives/logo'
-import { Button } from '@/components/ui/button'
 import { EyeIcon, PlayIcon } from 'lucide-react'
 import { MatchStage, SittingInformationFragment, SittingWithTeamsFragment, usePutLiveMutation, useRefereeInformationQuery, useStartFieldMutation } from '../../../__generated__/graphql'
 import { makeMatchName } from '../../../utils/strings/match'
+import { Button } from '../../../primitives/Button'
 
 function StartButton (props: { disabled: boolean, fieldId: number }): JSX.Element {
   const [startMatch] = useStartFieldMutation({

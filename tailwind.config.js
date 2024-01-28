@@ -20,7 +20,9 @@ module.exports = {
     },
     extend: {
       colors: {
-        slate: generateScale('slate')
+        slate: generateScale('slate'),
+        indigo: generateScale('indigo'),
+        red: generateScale('red')
       },
       keyframes: {
         'accordion-down': {

@@ -2,8 +2,8 @@
 
 import { FieldTable } from './field-table'
 import { Columns } from './columns'
-import { Button } from '@/components/ui/button'
 import { useFieldsQuery } from '../../../../__generated__/graphql'
+import { Button } from '../../../../primitives/Button'
 
 export default function Page (): JSX.Element {
   const { data } = useFieldsQuery()

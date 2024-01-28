@@ -1,6 +1,6 @@
 import { TextInput } from '@/components/ui/data-table'
 import { ColumnDef } from '@tanstack/react-table'
-import { Button } from '../../../../components/ui/button'
+import { Button } from '../../../../primitives/Button'
 import { Trash2 } from 'lucide-react'
 import { useDeleteFieldMutation, useUpdateFieldNameMutation } from '../../../../__generated__/graphql'
 

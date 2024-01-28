@@ -1,9 +1,9 @@
 import { makeShortMatchName } from '@/utils/strings/match'
-import { Button } from '@/components/ui/button'
 import { PlayIcon, ReloadIcon, ResetIcon, StopIcon } from '@radix-ui/react-icons'
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { useOffsetTimer } from '@/app/display/field/[uuid]/timer'
 import { MatchStage, SittingInformationFragment, useFieldControlSubscription, useLiveFieldQuery, useReplayMatchMutation, useResetAutonMutation, useStartFieldMutation, useStopFieldMutation } from '../../../__generated__/graphql'
+import { Button } from '../../../primitives/Button'
 
 function makeTime (offset: number, truncate = false): string {
   if (truncate && offset < 0) {
