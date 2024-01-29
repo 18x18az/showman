@@ -3,7 +3,6 @@ import { MatchControl } from './match-control'
 import { BottomPanel } from './matches'
 import { Queueing } from './queue-control'
 import { Settings } from './settings'
-// import { Settings } from './settings'
 
 function RightBar (): JSX.Element {
   const elements = [

@@ -67,7 +67,14 @@ function ReplayButton (props: SittingButtonProps): JSX.Element {
   )
 }
 
-function MatchControlContent (props: { sitting: SittingInformationFragment | null, stage: MatchStage, endTime: string | null, fieldId: number }): JSX.Element {
+interface MatchControlContentProps {
+  readonly sitting: SittingInformationFragment | null
+  readonly stage: MatchStage
+  readonly endTime: string | null
+  readonly fieldId: number
+}
+
+function MatchControlContent (props: MatchControlContentProps): JSX.Element {
   const { sitting, stage, endTime, fieldId } = props
   const sittingName = sitting !== null ? makeShortMatchName(sitting) : '-'
 
@@ -123,7 +130,14 @@ function EmptyMatchControl (): JSX.Element {
   return <MatchControlContent sitting={null} stage={MatchStage.Empty} endTime={null} fieldId={0} />
 }
 
-function PopulatedMatchControl (props: { fieldId: number, sitting: SittingInformationFragment, stage: MatchStage, endTime: string | null }): JSX.Element {
+interface PopulatedMatchControlProps {
+  readonly fieldId: number
+  readonly sitting: SittingInformationFragment
+  readonly stage: MatchStage
+  readonly endTime: string | null
+}
+
+function PopulatedMatchControl (props: PopulatedMatchControlProps): JSX.Element {
   useFieldControlSubscription({
     variables: {
       fieldId: props.fieldId

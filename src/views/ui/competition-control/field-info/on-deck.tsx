@@ -12,7 +12,7 @@ function onDeckOptions (match: SittingInformationFragment | null): JSX.Element[]
   return options
 }
 
-export function OnDeck (props: { readonly fieldId: number, readonly match: SittingInformationFragment | null }): JSX.Element {
+export function OnDeck (props: { readonly match: SittingInformationFragment | null }): JSX.Element {
   const options = onDeckOptions(props.match)
   const text = undefined
 
