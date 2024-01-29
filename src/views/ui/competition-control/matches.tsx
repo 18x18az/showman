@@ -7,13 +7,13 @@ import { Button } from '@/primitives/button/Button'
 import ErrorableButton from '@/components/errorable-button/ErrorableButton'
 
 interface QueueableField {
-  id: number
-  name: string
+  readonly id: number
+  readonly name: string
 }
 
 interface ActionMenuProps {
-  queueableFields: QueueableField[]
-  sittingId: number
+  readonly queueableFields: QueueableField[]
+  readonly sittingId: number
 }
 
 function ActionMenu (props: ActionMenuProps): JSX.Element {
@@ -58,7 +58,13 @@ function ActionMenu (props: ActionMenuProps): JSX.Element {
   )
 }
 
-function UnqueuedSitting (props: { sitting: SittingInformationFragment, fieldName?: string, queueableFields: QueueableField[] }): JSX.Element {
+interface UnqueuedSittingProps {
+  readonly sitting: SittingInformationFragment
+  readonly fieldName?: string
+  readonly queueableFields: QueueableField[]
+}
+
+function UnqueuedSitting (props: UnqueuedSittingProps): JSX.Element {
   const { sitting } = props
   const name = makeShortMatchName(sitting)
   const fieldName = props.fieldName ?? ''
@@ -71,7 +77,11 @@ function UnqueuedSitting (props: { sitting: SittingInformationFragment, fieldNam
   )
 }
 
-function UnqueuedSittings (props: { block: BlockInformationFragment }): JSX.Element {
+interface UnqueuedSittingsProps {
+  readonly block: BlockInformationFragment
+}
+
+function UnqueuedSittings (props: UnqueuedSittingsProps): JSX.Element {
   const { data: tableData } = useGetTableOccupiedQuery({
     pollInterval: 500
   })

@@ -3,7 +3,12 @@ import { toast } from '@/primitives/toast/useToast'
 import { usePutOnDeckMutation, useReplayMatchMutation, useUnqueueSittingMutation } from '@/__generated__/graphql'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
-function BaseAction (props: { text: string, action: () => Promise<void> }): JSX.Element {
+interface BaseActionProps {
+  readonly text: string
+  readonly action: () => Promise<void>
+}
+
+function BaseAction (props: BaseActionProps): JSX.Element {
   const handleAction = (): void => { void props.action() }
   return (
     <DropdownMenuItem onClick={handleAction}>
@@ -11,12 +16,13 @@ function BaseAction (props: { text: string, action: () => Promise<void> }): JSX.
     </DropdownMenuItem>
   )
 }
-export function ReplayAction (props: { sittingId: number }): JSX.Element {
+
+export function ReplayAction (props: { readonly sittingId: number }): JSX.Element {
   const [replay] = useReplayMatchMutation({ variables: { sittingId: props.sittingId } })
   return <BaseAction text='Replay' action={async () => { void replay() }} />
 }
 
-export function PutOnDeckAction (props: { fieldId: number }): JSX.Element {
+export function PutOnDeckAction (props: { readonly fieldId: number }): JSX.Element {
   const [putOnDeck, { error }] = usePutOnDeckMutation({
     refetchQueries: ['OnDeckField']
   })
@@ -39,7 +45,7 @@ export function PutOnDeckAction (props: { fieldId: number }): JSX.Element {
   )
 }
 
-export function RemoveAction (props: { sittingId: number }): JSX.Element {
+export function RemoveAction (props: { readonly sittingId: number }): JSX.Element {
   const [unqueue, { error }] = useUnqueueSittingMutation({
     refetchQueries: ['GetCompetitionFields']
   })

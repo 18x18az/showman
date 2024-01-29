@@ -16,7 +16,18 @@ function makeTime (offset: number, truncate = false): string {
   return `${minutes}:${seconds}`
 }
 
-function StartButton (props: { disabled: boolean, fieldId: number }): JSX.Element {
+interface ButtonProps {
+  readonly disabled: boolean
+}
+interface FieldButtonProps extends ButtonProps {
+  readonly fieldId: number
+}
+
+interface SittingButtonProps extends ButtonProps {
+  readonly sittingId: number
+}
+
+function StartButton (props: FieldButtonProps): JSX.Element {
   return (
     <ErrorableButton
       tooltip='Start Match'
@@ -26,7 +37,7 @@ function StartButton (props: { disabled: boolean, fieldId: number }): JSX.Elemen
   )
 }
 
-function StopButton (props: { fieldId: number }): JSX.Element {
+function StopButton (props: FieldButtonProps): JSX.Element {
   return (
     <ErrorableButton
       tooltip='End Match'
@@ -36,7 +47,7 @@ function StopButton (props: { fieldId: number }): JSX.Element {
   )
 }
 
-function ResetButton (props: { disabled: boolean, fieldId: number }): JSX.Element {
+function ResetButton (props: FieldButtonProps): JSX.Element {
   return (
     <ErrorableButton
       tooltip='Reset Auton'
@@ -46,7 +57,7 @@ function ResetButton (props: { disabled: boolean, fieldId: number }): JSX.Elemen
   )
 }
 
-function ReplayButton (props: { disabled: boolean, sittingId: number }): JSX.Element {
+function ReplayButton (props: SittingButtonProps): JSX.Element {
   return (
     <ErrorableButton
       tooltip='Replay Match'
@@ -89,7 +100,7 @@ function MatchControlContent (props: { sitting: SittingInformationFragment | nul
 
   let startStopButton = <StartButton disabled={!canStart} fieldId={fieldId} />
   if (canEnd) {
-    startStopButton = <StopButton fieldId={fieldId} />
+    startStopButton = <StopButton disabled={false} fieldId={fieldId} />
   }
 
   const sittingId = sitting?.id ?? 0

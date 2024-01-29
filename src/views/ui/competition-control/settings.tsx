@@ -35,26 +35,24 @@ export function Settings (): JSX.Element {
   }
 
   return (
-    <>
-      <div className='flex flex-col gap-4 text-slate-11'>
-        <div className='flex align-center gap-4 justify-between'>
-          <label>Auto-Queue</label>
-          <Switch
-            onCheckedChange={(checked: boolean) => {
-              void setAutomationEnabled({ variables: { enabled: checked } })
-            }} checked={automation}
-          />
-        </div>
-        <div className='flex align-center gap-4 justify-between'>
-          <label>Skills</label>
-          <Switch onCheckedChange={(checked: boolean) => { void setSkillsEnabled({ variables: { enabled: checked } }) }} checked={isSkillsEnabled} disabled={!canEnableSkills} />
-        </div>
-        <div className='flex justify-evenly'>
-          {timeoutButton}
-          <ErrorableButton tooltip='Display Results' mutation={usePromoteResultsMutation} options={refetch} disabled={!resultsReady}><ArrowUpFromLine /></ErrorableButton>
-          <ErrorableButton tooltip='Clear Results' mutation={useClearResultsMutation} options={refetch} disabled={!resultsShowing}><Eraser /></ErrorableButton>
-        </div>
+    <div className='flex flex-col gap-4 text-slate-11'>
+      <div className='flex align-center gap-4 justify-between'>
+        <div>Auto-Queue</div>
+        <Switch
+          onCheckedChange={(checked: boolean) => {
+            void setAutomationEnabled({ variables: { enabled: checked } })
+          }} checked={automation}
+        />
       </div>
-    </>
+      <div className='flex align-center gap-4 justify-between'>
+        <div>Skills</div>
+        <Switch onCheckedChange={(checked: boolean) => { void setSkillsEnabled({ variables: { enabled: checked } }) }} checked={isSkillsEnabled} disabled={!canEnableSkills} />
+      </div>
+      <div className='flex justify-evenly'>
+        {timeoutButton}
+        <ErrorableButton tooltip='Display Results' mutation={usePromoteResultsMutation} options={refetch} disabled={!resultsReady}><ArrowUpFromLine /></ErrorableButton>
+        <ErrorableButton tooltip='Clear Results' mutation={useClearResultsMutation} options={refetch} disabled={!resultsShowing}><Eraser /></ErrorableButton>
+      </div>
+    </div>
   )
 }

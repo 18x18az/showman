@@ -3,7 +3,7 @@ import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { SittingInformationFragment } from '@/__generated__/graphql'
 
-function FieldActionMenu (props: { options: JSX.Element[] }): JSX.Element {
+function FieldActionMenu (props: { readonly options: JSX.Element[] }): JSX.Element {
   return (
     <div className='flex justify-end'>
       <DropdownMenu>
@@ -25,19 +25,19 @@ export enum FieldStatus {
 }
 
 export interface CommonFieldProps {
-  match: SittingInformationFragment | null
-  text?: JSX.Element
-  status?: FieldStatus
-  options: JSX.Element[]
+  readonly match: SittingInformationFragment | null
+  readonly text?: JSX.Element
+  readonly status?: FieldStatus
+  readonly options: JSX.Element[]
 }
 
-function MatchName (props: { match: SittingInformationFragment | null }): JSX.Element {
+function MatchName (props: { readonly match: SittingInformationFragment | null }): JSX.Element {
   const name = props.match !== null ? makeShortMatchName(props.match) : ''
 
   return <h1 className='text-4xl text-center text-slate-11 mb-4'>{name}</h1>
 }
 
-function MatchText (props: { text: JSX.Element | undefined }): JSX.Element {
+function MatchText (props: { readonly text: JSX.Element | undefined }): JSX.Element {
   return <h2 className='text-2xl text-center text-slate-11 mb-8'>{props.text}</h2>
 }
 

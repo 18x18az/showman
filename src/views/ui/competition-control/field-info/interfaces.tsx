@@ -1,15 +1,15 @@
 import { Round } from '@/__generated__/graphql'
 
 export interface FieldInfo {
-  id: number
-  name: string
+  readonly id: number
+  readonly name: string
 }
 
 export interface SittingIdentifier {
-  id: number
-  round: Round
-  contest: number
-  match: number
+  readonly id: number
+  readonly round: Round
+  readonly contest: number
+  readonly match: number
 }
 
 export type SelectedField = number | null

@@ -26,7 +26,15 @@ function FieldOptions (fieldId: number, sittingId: number | null, stage: MatchSt
   return options
 }
 
-export function OnField (props: { fieldId: number, match: SittingWithTeamsFragment | null, stage: MatchStage, isLive: boolean, isOnDeck: boolean }): JSX.Element {
+interface OnFieldProps {
+  readonly fieldId: number
+  readonly match: SittingWithTeamsFragment | null
+  readonly stage: MatchStage
+  readonly isLive: boolean
+  readonly isOnDeck: boolean
+}
+
+export function OnField (props: OnFieldProps): JSX.Element {
   const { fieldId, match, isLive, isOnDeck } = props
   const sittingId = match !== null ? match.id : null
   const stage = props.stage

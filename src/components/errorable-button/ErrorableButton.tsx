@@ -5,9 +5,9 @@ import TooltipButton, { TooltipButtonProps } from '../tooltip-button/TooltipButt
 type MutationFunction<Mutation, MutationVariables> = (baseOptions?: Apollo.BaseMutationOptions<Mutation, MutationVariables>) => ReturnType<typeof Apollo.useMutation<Mutation, MutationVariables>>
 
 export interface ButtonProps<Mutation, MutationVariables> extends TooltipButtonProps {
-  asChild?: boolean
-  mutation: MutationFunction<Mutation, MutationVariables>
-  options?: Apollo.BaseMutationOptions<Mutation, MutationVariables>
+  readonly asChild?: boolean
+  readonly mutation: MutationFunction<Mutation, MutationVariables>
+  readonly options?: Apollo.BaseMutationOptions<Mutation, MutationVariables>
 }
 
 export default function ErrorableButton<Mutation, MutationVariables> (props: ButtonProps<Mutation, MutationVariables>): JSX.Element {
