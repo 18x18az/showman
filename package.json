@@ -40,7 +40,7 @@
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.1.0",
     "@types/node": "20.11.7",
-    "@types/react": "18.2.21",
+    "@types/react": "18.2.48",
     "@types/react-dom": "18.2.13",
     "@types/react-redux": "^7.1.27",
     "autoprefixer": "10.4.15",
