@@ -1,4 +1,4 @@
-import { Round } from '../../../../__generated__/graphql'
+import { Round } from '@/__generated__/graphql'
 
 export interface FieldInfo {
   id: number

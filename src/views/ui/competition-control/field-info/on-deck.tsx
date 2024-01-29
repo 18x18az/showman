@@ -1,6 +1,6 @@
 import { CommonFieldInfo } from './common'
 import { RemoveAction } from './actions'
-import { SittingInformationFragment } from '../../../../__generated__/graphql'
+import { SittingInformationFragment } from '@/__generated__/graphql'
 
 // function isOnWrongField (field: Field, match: Match | null): boolean {
 //   const expectedFieldId = match?.fieldId

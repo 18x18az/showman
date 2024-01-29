@@ -1,7 +1,7 @@
 import { makeShortMatchName } from '@/utils/strings/match'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '../../../ui/dropdown-menu'
-import { SittingInformationFragment } from '../../../../__generated__/graphql'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { SittingInformationFragment } from '@/__generated__/graphql'
 
 function FieldActionMenu (props: { options: JSX.Element[] }): JSX.Element {
   return (

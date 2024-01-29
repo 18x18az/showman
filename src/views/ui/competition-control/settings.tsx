@@ -1,8 +1,8 @@
 import { Switch } from '@/components/ui/switch'
 import { ArrowUpFromLine, Eraser, TimerIcon } from 'lucide-react'
-import { EventStage, useCancelTimeoutMutation, useClearResultsMutation, useCompetitionMiniSettingsQuery, usePromoteResultsMutation, useSetAutomationEnabledMutation, useSetSkillsEnabledMutation, useStartTimeoutMutation } from '../../../__generated__/graphql'
+import { EventStage, useCancelTimeoutMutation, useClearResultsMutation, useCompetitionMiniSettingsQuery, usePromoteResultsMutation, useSetAutomationEnabledMutation, useSetSkillsEnabledMutation, useStartTimeoutMutation } from '@/__generated__/graphql'
 import { StopIcon } from '@radix-ui/react-icons'
-import ErrorableButton from '../../errorable-button/ErrorableButton'
+import ErrorableButton from '@/components/errorable-button/ErrorableButton'
 
 export function Settings (): JSX.Element {
   const { data: compData } = useCompetitionMiniSettingsQuery({ pollInterval: 500 })

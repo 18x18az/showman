@@ -1,6 +1,6 @@
+import { MatchStage, SittingWithTeamsFragment, useGetCompetitionFieldsQuery } from '@/__generated__/graphql'
 import { OnDeck } from './on-deck'
 import { OnField } from './on-field'
-import { MatchStage, SittingWithTeamsFragment, useGetCompetitionFieldsQuery } from '../../../../__generated__/graphql'
 
 interface FieldInfoProps {
   name: string

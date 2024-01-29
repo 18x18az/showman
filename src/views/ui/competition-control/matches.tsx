@@ -1,10 +1,10 @@
 import { makeShortMatchName } from '@/utils/strings/match'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
-import { BlockInformationFragment, SittingInformationFragment, useConcludeBlockMutation, useGetTableOccupiedQuery, useGetUnqueuedSittingsQuery, useQueueSittingMutation, useStartNextBlockMutation } from '../../__generated__/graphql'
-import { toast } from '../../primitives/toast/useToast'
-import { Button } from '../../primitives/button/Button'
-import ErrorableButton from '../../components/errorable-button/ErrorableButton'
+import { BlockInformationFragment, SittingInformationFragment, useConcludeBlockMutation, useGetTableOccupiedQuery, useGetUnqueuedSittingsQuery, useQueueSittingMutation, useStartNextBlockMutation } from '@/__generated__/graphql'
+import { toast } from '@/primitives/toast/useToast'
+import { Button } from '@/primitives/button/Button'
+import ErrorableButton from '@/components/errorable-button/ErrorableButton'
 
 interface QueueableField {
   id: number

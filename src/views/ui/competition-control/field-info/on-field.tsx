@@ -1,7 +1,7 @@
 import { CommonFieldInfo, FieldStatus } from './common'
 import { PutOnDeckAction, RemoveAction, ReplayAction } from './actions'
-import { MatchStage, SittingWithTeamsFragment } from '../../../../__generated__/graphql'
-import { Countdown } from '../../../../app/display/field/[uuid]/timer'
+import { MatchStage, SittingWithTeamsFragment } from '@/__generated__/graphql'
+import { Countdown } from '@/app/display/field/[uuid]/timer'
 
 function FieldOptions (fieldId: number, sittingId: number | null, stage: MatchStage, isLive: boolean, isOnDeck: boolean): JSX.Element[] {
   const thisField = fieldId

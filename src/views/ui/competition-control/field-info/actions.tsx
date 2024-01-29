@@ -1,6 +1,7 @@
-import { DropdownMenuItem } from '../../../ui/dropdown-menu'
-import { toast } from '../../../../primitives/toast/useToast'
-import { usePutOnDeckMutation, useReplayMatchMutation, useUnqueueSittingMutation } from '../../../../__generated__/graphql'
+
+import { toast } from '@/primitives/toast/useToast'
+import { usePutOnDeckMutation, useReplayMatchMutation, useUnqueueSittingMutation } from '@/__generated__/graphql'
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
 function BaseAction (props: { text: string, action: () => Promise<void> }): JSX.Element {
   const handleAction = (): void => { void props.action() }
