@@ -22,6 +22,20 @@ mutation DeleteField($fieldId: Int!) {
   }
 }
 
+mutation SetFieldEnabled($fieldId: Int!, $isEnabled: Boolean!) {
+  updateField(fieldId: $fieldId, update: {isEnabled: $isEnabled}) {
+    id
+    isEnabled
+  }
+}
+
+mutation SetFieldIsCompetition($fieldId: Int!, $isCompetition: Boolean!) {
+  updateField(fieldId: $fieldId, update: {isCompetition: $isCompetition}) {
+    id
+    isCompetition
+  }
+}
+
 query OnDeckField {
   competitionInformation {
     onDeckField {
@@ -43,6 +57,13 @@ query OnDeckField {
 
 query FieldNames {
   fields {
+    id
+    name
+  }
+}
+
+mutation addField {
+  addField {
     id
     name
   }

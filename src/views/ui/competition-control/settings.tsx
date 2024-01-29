@@ -1,13 +1,14 @@
-import { Switch } from '@/components/ui/switch'
 import { ArrowUpFromLine, Eraser, TimerIcon } from 'lucide-react'
 import { EventStage, useCancelTimeoutMutation, useClearResultsMutation, useCompetitionMiniSettingsQuery, usePromoteResultsMutation, useSetAutomationEnabledMutation, useSetSkillsEnabledMutation, useStartTimeoutMutation } from '@/__generated__/graphql'
 import { StopIcon } from '@radix-ui/react-icons'
 import ErrorableButton from '@/components/errorable-button/ErrorableButton'
+import { Switch } from '@/primitives/switch/Switch'
+import { useErrorableMutation } from '@/hooks/useErrorableMutation'
 
 export function Settings (): JSX.Element {
   const { data: compData } = useCompetitionMiniSettingsQuery({ pollInterval: 500 })
-  const [setAutomationEnabled] = useSetAutomationEnabledMutation({ refetchQueries: ['CompetitionMiniSettings'] })
-  const [setSkillsEnabled] = useSetSkillsEnabledMutation({ refetchQueries: ['CompetitionMiniSettings'] })
+  const setAutomationEnabled = useErrorableMutation(useSetAutomationEnabledMutation, { refetchQueries: ['CompetitionMiniSettings'] })
+  const setSkillsEnabled = useErrorableMutation(useSetSkillsEnabledMutation, { refetchQueries: ['CompetitionMiniSettings'] })
 
   const refetch = { refetchQueries: ['CompetitionMiniSettings'] }
 
