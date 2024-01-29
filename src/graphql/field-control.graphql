@@ -1,0 +1,37 @@
+mutation StartField($fieldId: Int!) {
+  startField(fieldId: $fieldId) {
+    endTime
+  }
+}
+
+mutation StopField($fieldId: Int!) {
+  stopField(fieldId: $fieldId) {
+    endTime
+  }
+}
+
+mutation ResetAuton($fieldId: Int!) {
+  resetAuton(fieldId: $fieldId) {
+    stage
+  }
+}
+
+mutation QueueDriverSkills($fieldId: Int!) {
+  queueDriverSkills(fieldId: $fieldId) {
+    fieldId
+  }
+}
+
+mutation QueueProgrammingSkills($fieldId: Int!) {
+  queueProgrammingSkills(fieldId: $fieldId) {
+    fieldId
+  }
+}
+
+subscription FieldControl($fieldId: Int!) {
+    fieldControl(fieldId: $fieldId) {
+        fieldId
+        endTime
+        mode
+    }
+}

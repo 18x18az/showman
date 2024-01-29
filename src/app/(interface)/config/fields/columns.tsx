@@ -1,8 +1,8 @@
 import { TextInput } from '@/components/ui/data-table'
 import { ColumnDef } from '@tanstack/react-table'
-import { Button } from '../../../../components/ui/button'
 import { Trash2 } from 'lucide-react'
 import { useDeleteFieldMutation, useUpdateFieldNameMutation } from '../../../../__generated__/graphql'
+import ErrorableButton from '../../../../components/errorable-button/ErrorableButton'
 
 interface Field {
   id: number
@@ -35,10 +35,7 @@ export const Columns: Array<ColumnDef<Field>> = [
   {
     id: 'actions',
     cell: ({ row }) => {
-      const [remove] = useDeleteFieldMutation({ variables: { fieldId: row.original.id }, refetchQueries: ['Fields'] })
-      return (
-        <Button onClick={() => { void remove() }} variant='ghost'><Trash2 /></Button>
-      )
+      return <ErrorableButton tooltip='Delete Field' variant='ghost' mutation={useDeleteFieldMutation} options={{ variables: { fieldId: row.original.id }, refetchQueries: ['Fields'] }}><Trash2 /></ErrorableButton>
     }
   }
 ]

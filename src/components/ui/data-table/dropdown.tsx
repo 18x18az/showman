@@ -1,4 +1,4 @@
-import { Button } from "../button"
+import { Button } from "../../../primitives/button/Button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../dropdown-menu"
 
 export type DropdownOption<T> = T & string

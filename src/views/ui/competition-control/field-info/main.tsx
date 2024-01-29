@@ -1,15 +1,15 @@
+import { MatchStage, SittingWithTeamsFragment, useGetCompetitionFieldsQuery } from '@/__generated__/graphql'
 import { OnDeck } from './on-deck'
 import { OnField } from './on-field'
-import { MatchStage, SittingWithTeamsFragment, useGetCompetitionFieldsQuery } from '../../../../__generated__/graphql'
 
 interface FieldInfoProps {
-  name: string
-  stage: MatchStage
-  id: number
-  sOnField: SittingWithTeamsFragment | null
-  sOnTable: SittingWithTeamsFragment | null
-  isLive: boolean
-  isOnDeck: boolean
+  readonly name: string
+  readonly stage: MatchStage
+  readonly id: number
+  readonly sOnField: SittingWithTeamsFragment | null
+  readonly sOnTable: SittingWithTeamsFragment | null
+  readonly isLive: boolean
+  readonly isOnDeck: boolean
 }
 
 function FieldInfo (props: FieldInfoProps): JSX.Element {
@@ -17,7 +17,7 @@ function FieldInfo (props: FieldInfoProps): JSX.Element {
     <div className='flex flex-col gap-8 w-96 mb-8 items-center justify-center h-full'>
       <h1 className='text-center text-2xl font-sans text-slate-11'>{props.name}</h1>
       <OnField fieldId={props.id} stage={props.stage} match={props.sOnField} isLive={props.isLive} isOnDeck={props.isOnDeck} />
-      <OnDeck fieldId={props.id} match={props.sOnTable} />
+      <OnDeck match={props.sOnTable} />
     </div>
   )
 }

@@ -1,0 +1,21 @@
+mutation StartNextBlock {
+  startNextBlock {
+    id
+  }
+}
+
+mutation ConcludeBlock {
+  concludeBlock {
+    id
+  }
+}
+
+query GetUnqueuedSittings {
+  currentBlock {
+    ...BlockInformation
+  }
+  nextBlock {
+    id
+    name
+  }
+}

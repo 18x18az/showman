@@ -1,23 +1,9 @@
 'use client'
 import Logo from '@/components/primitives/logo'
-import { Button } from '@/components/ui/button'
 import { EyeIcon, PlayIcon } from 'lucide-react'
 import { MatchStage, SittingInformationFragment, SittingWithTeamsFragment, usePutLiveMutation, useRefereeInformationQuery, useStartFieldMutation } from '../../../__generated__/graphql'
 import { makeMatchName } from '../../../utils/strings/match'
-
-function StartButton (props: { disabled: boolean, fieldId: number }): JSX.Element {
-  const [startMatch] = useStartFieldMutation({
-    variables: {
-      fieldId: props.fieldId
-    }
-  })
-  return <Button className='p-8' disabled={props.disabled} onClick={() => { void startMatch() }}><PlayIcon size={48} /></Button>
-}
-
-function DisplayButton (props: { disabled: boolean }): JSX.Element {
-  const [putLive] = usePutLiveMutation()
-  return <Button className='p-8' disabled={props.disabled} onClick={() => { void putLive() }}><EyeIcon size={48} /></Button>
-}
+import ErrorableButton from '../../../components/errorable-button/ErrorableButton'
 
 interface TeamInformation {
   number: string
@@ -74,8 +60,8 @@ function PageContent (props: { sitting: SittingInformation, field: FieldInfo, is
       <AllianceDisplay teams={sitting.blue} color='blue' />
       <div className='flex-1 grow' />
       <div className='flex justify-evenly mb-12'>
-        <DisplayButton disabled={isLive} />
-        <StartButton fieldId={props.field.id} disabled={!canStart} />
+        <ErrorableButton tooltip='Push Field Live' className='p-8' mutation={usePutLiveMutation} disabled={isLive}><EyeIcon size={48} /></ErrorableButton>
+        <ErrorableButton tooltip='Start Field' className='p-8' mutation={useStartFieldMutation} options={{ variables: { fieldId: field.id } }} disabled={!canStart}><PlayIcon size={48} /></ErrorableButton>
       </div>
     </div>
   )

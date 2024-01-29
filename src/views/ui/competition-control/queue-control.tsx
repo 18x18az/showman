@@ -1,9 +1,15 @@
 import { makeShortMatchName } from '@/utils/strings/match'
-import { Button } from '@/components/ui/button'
 import { PlayIcon, StopIcon, TrackNextIcon } from '@radix-ui/react-icons'
-import { MatchStage, SittingInformationFragment, useClearLiveMutation, useOnDeckFieldQuery, usePutLiveMutation } from '../../../__generated__/graphql'
+import { MatchStage, SittingInformationFragment, useClearLiveMutation, useOnDeckFieldQuery, usePutLiveMutation } from '@/__generated__/graphql'
+import ErrorableButton from '@/components/errorable-button/ErrorableButton'
+import { Button } from '@/primitives/button/Button'
 
-function SittingName (props: { title: string, sitting: SittingInformationFragment | null }): JSX.Element {
+interface SittingNameProps {
+  readonly title: string
+  readonly sitting: SittingInformationFragment | null
+}
+
+function SittingName (props: SittingNameProps): JSX.Element {
   let color = 'text-slate-11'
   let name = '-'
   if (props.sitting !== null) {
@@ -18,34 +24,51 @@ function SittingName (props: { title: string, sitting: SittingInformationFragmen
   )
 }
 
-function ClearLiveButton (props: { hasOnDeck: boolean, canQueue: boolean }): JSX.Element {
+interface ClearLiveButtonProps {
+  readonly hasOnDeck: boolean
+  readonly canQueue: boolean
+}
+
+function ClearLiveButton (props: ClearLiveButtonProps): JSX.Element {
   const disabled = !props.hasOnDeck || !props.canQueue
-  const [clearLive] = useClearLiveMutation({})
   return (
-    <Button disabled={disabled} onClick={() => { void clearLive() }}>
+    <ErrorableButton tooltip='Clear Live Field' mutation={useClearLiveMutation} options={{ refetchQueries: ['LiveField', 'OnDeckField'] }} disabled={disabled}>
       <StopIcon />
-    </Button>
+    </ErrorableButton>
   )
 }
 
-function MakeLiveButton (props: { hasOnDeck: boolean, canQueue: boolean }): JSX.Element {
+interface MakeLiveButtonProps {
+  readonly hasOnDeck: boolean
+  readonly canQueue: boolean
+}
+
+function MakeLiveButton (props: MakeLiveButtonProps): JSX.Element {
   const disabled = !props.hasOnDeck || !props.canQueue
-  const [makeLive] = usePutLiveMutation({
-    refetchQueries: ['LiveField', 'OnDeckField']
-  })
   return (
-    <Button onClick={() => { void makeLive() }} disabled={disabled}>
+    <ErrorableButton tooltip='Push Live Field' mutation={usePutLiveMutation} options={{ refetchQueries: ['LiveField', 'OnDeckField'] }} disabled={disabled}>
       <PlayIcon />
-    </Button>
+    </ErrorableButton>
   )
 }
 
-function ClearOrPushButton (props: { hasOnDeck: boolean, canQueue: boolean, activeStage: MatchStage }): JSX.Element {
+interface ClearOrPushButtonProps {
+  readonly hasOnDeck: boolean
+  readonly canQueue: boolean
+  readonly activeStage: MatchStage
+}
+
+function ClearOrPushButton (props: ClearOrPushButtonProps): JSX.Element {
   const hasActive = props.activeStage !== MatchStage.Empty
   return hasActive ? <ClearLiveButton hasOnDeck={props.hasOnDeck} canQueue={props.canQueue} /> : <MakeLiveButton canQueue={props.canQueue} hasOnDeck={props.hasOnDeck} />
 }
 
-function ForceButton (props: { activeStage: MatchStage, hasOnDeck: boolean }): JSX.Element {
+interface ForceButtonProps {
+  readonly hasOnDeck: boolean
+  readonly activeStage: MatchStage
+}
+
+function ForceButton (props: ForceButtonProps): JSX.Element {
   const disabled = !props.hasOnDeck || props.activeStage !== MatchStage.Scoring
   return (
     <Button disabled={disabled} onClick={() => { }}>
@@ -54,7 +77,12 @@ function ForceButton (props: { activeStage: MatchStage, hasOnDeck: boolean }): J
   )
 }
 
-function QueueingContent (props: { activeStage: MatchStage, sitting: SittingInformationFragment | null }): JSX.Element {
+interface QueueingContentProps {
+  readonly activeStage: MatchStage
+  readonly sitting: SittingInformationFragment | null
+}
+
+function QueueingContent (props: QueueingContentProps): JSX.Element {
   const canQueue = (props.activeStage === MatchStage.Queued || props.activeStage === MatchStage.Scoring || props.activeStage === MatchStage.Empty)
   const hasOnDeck = props.sitting !== null
   return (
@@ -73,22 +101,18 @@ function EmptyQueueing (): JSX.Element {
 }
 
 interface LiveFieldInfo {
-  id: number
-  competition: {
-    stage: MatchStage
+  readonly id: number
+  readonly competition: {
+    readonly stage: MatchStage
   } | null
 }
 
-interface OnDeckFieldInfo {
-  id: number
-  competition: {
-    onFieldSitting: {
-      id: number
-    }
-  }
+interface PopulatedQueueingProps {
+  readonly active: LiveFieldInfo | null
+  readonly sitting: SittingInformationFragment
 }
 
-function PopulatedQueueing (props: { info: OnDeckFieldInfo, active: LiveFieldInfo | null, sitting: SittingInformationFragment }): JSX.Element {
+function PopulatedQueueing (props: PopulatedQueueingProps): JSX.Element {
   let stage = MatchStage.Empty
   const { active } = props
 
@@ -105,6 +129,6 @@ export function Queueing (): JSX.Element {
     return <EmptyQueueing />
   } else {
     const sitting = data.competitionInformation.onDeckField.competition.onFieldSitting
-    return <PopulatedQueueing sitting={sitting} info={data.competitionInformation.onDeckField as OnDeckFieldInfo} active={data.competitionInformation.liveField} />
+    return <PopulatedQueueing sitting={sitting} active={data.competitionInformation.liveField} />
   }
 }

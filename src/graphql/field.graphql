@@ -1,0 +1,49 @@
+query Fields {
+  fields {
+    id
+    name
+    isEnabled
+    isCompetition
+  }
+}
+
+mutation UpdateFieldName($fieldId: Int!, $name: String) {
+  updateField(fieldId: $fieldId, update: {name: $name}) {
+    id
+    name
+    isEnabled
+    isCompetition
+  }
+}
+
+mutation DeleteField($fieldId: Int!) {
+  deleteField(fieldId: $fieldId) {
+    id
+  }
+}
+
+query OnDeckField {
+  competitionInformation {
+    onDeckField {
+      id
+      competition {
+        onFieldSitting {
+          ...SittingInformation
+        }
+      }
+    }
+    liveField {
+      id
+      competition {
+        stage
+      }
+    }
+  }
+}
+
+query FieldNames {
+  fields {
+    id
+    name
+  }
+}

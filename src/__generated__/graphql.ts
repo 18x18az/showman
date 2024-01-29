@@ -484,149 +484,20 @@ export type TournamentManagerSetup = {
   url: Scalars['URL']['input'];
 };
 
-export type SittingInformationFragment = { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } };
-
-export type TeamInformationFragment = { __typename?: 'Team', id: number, number: string, name: string, rank: number | null };
-
-export type SittingWithTeamsFragment = { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } };
-
-export type BlockInformationFragment = { __typename?: 'Block', id: number, name: string, canConclude: boolean, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, number: number, field: { __typename?: 'Field', id: number, name: string } | null, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } }> };
-
-export type QueueSittingMutationVariables = Exact<{
-  sittingId: Scalars['Int']['input'];
-  fieldId: Scalars['Int']['input'];
-}>;
+export type AllianceSelectionControlQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type QueueSittingMutation = { __typename?: 'Mutation', queueSitting: { __typename?: 'Sitting', id: number } };
+export type AllianceSelectionControlQuery = { __typename?: 'Query', allianceSelection: { __typename?: 'AllianceSelection', picking: { __typename?: 'Team', id: number, number: string } | null, pickable: Array<{ __typename?: 'Team', id: number, number: string }>, alliances: Array<Array<{ __typename?: 'Team', id: number, number: string }>>, picked: { __typename?: 'Team', id: number, number: string } | null } | null };
 
-export type ConfigureTournamentManagerMutationVariables = Exact<{
-  settings: TournamentManagerSetup;
-}>;
+export type CanStartAllianceSelectionQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ConfigureTournamentManagerMutation = { __typename?: 'Mutation', configureTournamentManager: { __typename?: 'TournamentManager', status: TmStatus } };
+export type CanStartAllianceSelectionQuery = { __typename?: 'Query', stage: { __typename?: 'Stage', stage: EventStage }, currentBlock: { __typename?: 'Block', id: number } | null, nextBlock: { __typename?: 'Block', id: number } | null };
 
-export type PutOnDeckMutationVariables = Exact<{
-  fieldId: Scalars['Int']['input'];
-}>;
+export type AllianceSelectionResultsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PutOnDeckMutation = { __typename?: 'Mutation', putOnDeck: { __typename?: 'Competition', onDeckField: { __typename?: 'Field', id: number } | null } };
-
-export type PutLiveMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type PutLiveMutation = { __typename?: 'Mutation', putLive: { __typename?: 'Competition', liveField: { __typename?: 'Field', id: number } | null } };
-
-export type UnqueueSittingMutationVariables = Exact<{
-  sittingId: Scalars['Int']['input'];
-}>;
-
-
-export type UnqueueSittingMutation = { __typename?: 'Mutation', unqueue: { __typename?: 'CompetitionField', onFieldSitting: { __typename?: 'Sitting', id: number } | null, onTableSitting: { __typename?: 'Sitting', id: number } | null } };
-
-export type ReplayMatchMutationVariables = Exact<{
-  sittingId: Scalars['Int']['input'];
-}>;
-
-
-export type ReplayMatchMutation = { __typename?: 'Mutation', replay: { __typename?: 'CompetitionField', onFieldSitting: { __typename?: 'Sitting', id: number } | null, onTableSitting: { __typename?: 'Sitting', id: number } | null } };
-
-export type StartFieldMutationVariables = Exact<{
-  fieldId: Scalars['Int']['input'];
-}>;
-
-
-export type StartFieldMutation = { __typename?: 'Mutation', startField: { __typename?: 'FieldControl', endTime: any | null } };
-
-export type StopFieldMutationVariables = Exact<{
-  fieldId: Scalars['Int']['input'];
-}>;
-
-
-export type StopFieldMutation = { __typename?: 'Mutation', stopField: { __typename?: 'FieldControl', endTime: any | null } };
-
-export type ResetAutonMutationVariables = Exact<{
-  fieldId: Scalars['Int']['input'];
-}>;
-
-
-export type ResetAutonMutation = { __typename?: 'Mutation', resetAuton: { __typename?: 'CompetitionField', stage: MatchStage } };
-
-export type ClearLiveMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ClearLiveMutation = { __typename?: 'Mutation', clearLive: { __typename?: 'Competition', liveField: { __typename?: 'Field', id: number } | null } };
-
-export type SetAutomationEnabledMutationVariables = Exact<{
-  enabled: Scalars['Boolean']['input'];
-}>;
-
-
-export type SetAutomationEnabledMutation = { __typename?: 'Mutation', setAutomationEnabled: { __typename?: 'Competition', automationEnabled: boolean } };
-
-export type StartNextBlockMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type StartNextBlockMutation = { __typename?: 'Mutation', startNextBlock: { __typename?: 'Block', id: number } };
-
-export type ConcludeBlockMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ConcludeBlockMutation = { __typename?: 'Mutation', concludeBlock: { __typename?: 'Block', id: number } };
-
-export type DeleteFieldMutationVariables = Exact<{
-  fieldId: Scalars['Int']['input'];
-}>;
-
-
-export type DeleteFieldMutation = { __typename?: 'Mutation', deleteField: Array<{ __typename?: 'Field', id: number }> };
-
-export type RenameDisplayMutationVariables = Exact<{
-  uuid: Scalars['String']['input'];
-  name: Scalars['String']['input'];
-}>;
-
-
-export type RenameDisplayMutation = { __typename?: 'Mutation', renameDisplay: { __typename?: 'Display', uuid: string, name: string } };
-
-export type SetDisplayFieldMutationVariables = Exact<{
-  uuid: Scalars['String']['input'];
-  fieldId: InputMaybe<Scalars['Int']['input']>;
-}>;
-
-
-export type SetDisplayFieldMutation = { __typename?: 'Mutation', setDisplayField: { __typename?: 'Display', uuid: string, field: { __typename?: 'Field', id: number } | null } };
-
-export type UpdateFieldNameMutationVariables = Exact<{
-  fieldId: Scalars['Int']['input'];
-  name: InputMaybe<Scalars['String']['input']>;
-}>;
-
-
-export type UpdateFieldNameMutation = { __typename?: 'Mutation', updateField: { __typename?: 'Field', id: number, name: string, isEnabled: boolean, isCompetition: boolean } };
-
-export type SetSkillsEnabledMutationVariables = Exact<{
-  enabled: Scalars['Boolean']['input'];
-}>;
-
-
-export type SetSkillsEnabledMutation = { __typename?: 'Mutation', setSkillsEnabled: Array<{ __typename?: 'Field', id: number, canRunSkills: boolean }> };
-
-export type QueueDriverSkillsMutationVariables = Exact<{
-  fieldId: Scalars['Int']['input'];
-}>;
-
-
-export type QueueDriverSkillsMutation = { __typename?: 'Mutation', queueDriverSkills: { __typename?: 'Skills', fieldId: number } };
-
-export type QueueProgrammingSkillsMutationVariables = Exact<{
-  fieldId: Scalars['Int']['input'];
-}>;
-
-
-export type QueueProgrammingSkillsMutation = { __typename?: 'Mutation', queueProgrammingSkills: { __typename?: 'Skills', fieldId: number } };
+export type AllianceSelectionResultsQuery = { __typename?: 'Query', allianceSelection: { __typename?: 'AllianceSelection', alliances: Array<Array<{ __typename?: 'Team', id: number, number: string }>> } | null };
 
 export type StartAllianceSelectionMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -660,15 +531,176 @@ export type AllianceSelectionCancelMutationVariables = Exact<{ [key: string]: ne
 
 export type AllianceSelectionCancelMutation = { __typename?: 'Mutation', allianceSelectionCancel: { __typename?: 'AllianceSelection', picking: { __typename?: 'Team', id: number } | null } };
 
-export type ClearResultsMutationVariables = Exact<{ [key: string]: never; }>;
+export type LiveFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ClearResultsMutation = { __typename?: 'Mutation', clearResults: { __typename?: 'Results', displayedResults: { __typename?: 'Match', id: number } | null } };
+export type LiveFieldQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', liveField: { __typename?: 'Field', id: number, fieldControl: { __typename?: 'FieldControl', endTime: any | null } | null, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } } | null } | null } | null } };
 
-export type PromoteResultsMutationVariables = Exact<{ [key: string]: never; }>;
+export type GetCompetitionFieldsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type PromoteResultsMutation = { __typename?: 'Mutation', promoteResults: { __typename?: 'Results', displayedResults: { __typename?: 'Match', id: number } | null } };
+export type GetCompetitionFieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, isLive: boolean, isOnDeck: boolean, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null, onTableSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null } | null, fieldControl: { __typename?: 'FieldControl', fieldId: number, endTime: any | null } | null }> };
+
+export type GetTableOccupiedQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetTableOccupiedQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', onTableSitting: { __typename?: 'Sitting', id: number } | null } | null }> };
+
+export type QueueSittingMutationVariables = Exact<{
+  sittingId: Scalars['Int']['input'];
+  fieldId: Scalars['Int']['input'];
+}>;
+
+
+export type QueueSittingMutation = { __typename?: 'Mutation', queueSitting: { __typename?: 'Sitting', id: number } };
+
+export type PutOnDeckMutationVariables = Exact<{
+  fieldId: Scalars['Int']['input'];
+}>;
+
+
+export type PutOnDeckMutation = { __typename?: 'Mutation', putOnDeck: { __typename?: 'Competition', onDeckField: { __typename?: 'Field', id: number } | null } };
+
+export type PutLiveMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PutLiveMutation = { __typename?: 'Mutation', putLive: { __typename?: 'Competition', liveField: { __typename?: 'Field', id: number } | null } };
+
+export type UnqueueSittingMutationVariables = Exact<{
+  sittingId: Scalars['Int']['input'];
+}>;
+
+
+export type UnqueueSittingMutation = { __typename?: 'Mutation', unqueue: { __typename?: 'CompetitionField', onFieldSitting: { __typename?: 'Sitting', id: number } | null, onTableSitting: { __typename?: 'Sitting', id: number } | null } };
+
+export type ClearLiveMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ClearLiveMutation = { __typename?: 'Mutation', clearLive: { __typename?: 'Competition', liveField: { __typename?: 'Field', id: number } | null } };
+
+export type SetAutomationEnabledMutationVariables = Exact<{
+  enabled: Scalars['Boolean']['input'];
+}>;
+
+
+export type SetAutomationEnabledMutation = { __typename?: 'Mutation', setAutomationEnabled: { __typename?: 'Competition', automationEnabled: boolean } };
+
+export type SetSkillsEnabledMutationVariables = Exact<{
+  enabled: Scalars['Boolean']['input'];
+}>;
+
+
+export type SetSkillsEnabledMutation = { __typename?: 'Mutation', setSkillsEnabled: Array<{ __typename?: 'Field', id: number, canRunSkills: boolean }> };
+
+export type ReplayMatchMutationVariables = Exact<{
+  sittingId: Scalars['Int']['input'];
+}>;
+
+
+export type ReplayMatchMutation = { __typename?: 'Mutation', replay: { __typename?: 'CompetitionField', onFieldSitting: { __typename?: 'Sitting', id: number } | null, onTableSitting: { __typename?: 'Sitting', id: number } | null } };
+
+export type StartFieldMutationVariables = Exact<{
+  fieldId: Scalars['Int']['input'];
+}>;
+
+
+export type StartFieldMutation = { __typename?: 'Mutation', startField: { __typename?: 'FieldControl', endTime: any | null } };
+
+export type StopFieldMutationVariables = Exact<{
+  fieldId: Scalars['Int']['input'];
+}>;
+
+
+export type StopFieldMutation = { __typename?: 'Mutation', stopField: { __typename?: 'FieldControl', endTime: any | null } };
+
+export type ResetAutonMutationVariables = Exact<{
+  fieldId: Scalars['Int']['input'];
+}>;
+
+
+export type ResetAutonMutation = { __typename?: 'Mutation', resetAuton: { __typename?: 'CompetitionField', stage: MatchStage } };
+
+export type QueueDriverSkillsMutationVariables = Exact<{
+  fieldId: Scalars['Int']['input'];
+}>;
+
+
+export type QueueDriverSkillsMutation = { __typename?: 'Mutation', queueDriverSkills: { __typename?: 'Skills', fieldId: number } };
+
+export type QueueProgrammingSkillsMutationVariables = Exact<{
+  fieldId: Scalars['Int']['input'];
+}>;
+
+
+export type QueueProgrammingSkillsMutation = { __typename?: 'Mutation', queueProgrammingSkills: { __typename?: 'Skills', fieldId: number } };
+
+export type FieldControlSubscriptionVariables = Exact<{
+  fieldId: Scalars['Int']['input'];
+}>;
+
+
+export type FieldControlSubscription = { __typename?: 'Subscription', fieldControl: { __typename?: 'FieldControl', fieldId: number, endTime: any | null, mode: Control_Mode | null } };
+
+export type FieldsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, isEnabled: boolean, isCompetition: boolean }> };
+
+export type UpdateFieldNameMutationVariables = Exact<{
+  fieldId: Scalars['Int']['input'];
+  name: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type UpdateFieldNameMutation = { __typename?: 'Mutation', updateField: { __typename?: 'Field', id: number, name: string, isEnabled: boolean, isCompetition: boolean } };
+
+export type DeleteFieldMutationVariables = Exact<{
+  fieldId: Scalars['Int']['input'];
+}>;
+
+
+export type DeleteFieldMutation = { __typename?: 'Mutation', deleteField: Array<{ __typename?: 'Field', id: number }> };
+
+export type OnDeckFieldQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OnDeckFieldQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', onDeckField: { __typename?: 'Field', id: number, competition: { __typename?: 'CompetitionField', onFieldSitting: { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } } | null } | null } | null, liveField: { __typename?: 'Field', id: number, competition: { __typename?: 'CompetitionField', stage: MatchStage } | null } | null } };
+
+export type FieldNamesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FieldNamesQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string }> };
+
+export type SittingInformationFragment = { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } };
+
+export type TeamInformationFragment = { __typename?: 'Team', id: number, number: string, name: string, rank: number | null };
+
+export type SittingWithTeamsFragment = { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } };
+
+export type BlockInformationFragment = { __typename?: 'Block', id: number, name: string, canConclude: boolean, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, number: number, field: { __typename?: 'Field', id: number, name: string } | null, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } }> };
+
+export type ConfigureTournamentManagerMutationVariables = Exact<{
+  settings: TournamentManagerSetup;
+}>;
+
+
+export type ConfigureTournamentManagerMutation = { __typename?: 'Mutation', configureTournamentManager: { __typename?: 'TournamentManager', status: TmStatus } };
+
+export type RenameDisplayMutationVariables = Exact<{
+  uuid: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+}>;
+
+
+export type RenameDisplayMutation = { __typename?: 'Mutation', renameDisplay: { __typename?: 'Display', uuid: string, name: string } };
+
+export type SetDisplayFieldMutationVariables = Exact<{
+  uuid: Scalars['String']['input'];
+  fieldId: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type SetDisplayFieldMutation = { __typename?: 'Mutation', setDisplayField: { __typename?: 'Display', uuid: string, field: { __typename?: 'Field', id: number } | null } };
 
 export type StartTimeoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -680,40 +712,15 @@ export type CancelTimeoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 export type CancelTimeoutMutation = { __typename?: 'Mutation', cancelTimeout: { __typename?: 'Timeout', endTime: any | null } };
 
-export type OnDeckFieldQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type OnDeckFieldQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', onDeckField: { __typename?: 'Field', id: number, competition: { __typename?: 'CompetitionField', onFieldSitting: { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } } | null } | null } | null, liveField: { __typename?: 'Field', id: number, competition: { __typename?: 'CompetitionField', stage: MatchStage } | null } | null } };
-
 export type RefereeInformationQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type RefereeInformationQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', liveField: { __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null } | null } | null, onDeckField: { __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null } | null } | null } };
 
-export type LiveFieldQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type LiveFieldQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', liveField: { __typename?: 'Field', id: number, fieldControl: { __typename?: 'FieldControl', endTime: any | null } | null, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } } | null } | null } | null } };
-
-export type GetTableOccupiedQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetTableOccupiedQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', onTableSitting: { __typename?: 'Sitting', id: number } | null } | null }> };
-
-export type GetUnqueuedSittingsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetUnqueuedSittingsQuery = { __typename?: 'Query', currentBlock: { __typename?: 'Block', id: number, name: string, canConclude: boolean, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, number: number, field: { __typename?: 'Field', id: number, name: string } | null, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } }> } | null, nextBlock: { __typename?: 'Block', id: number, name: string } | null };
-
 export type GetEventStageQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetEventStageQuery = { __typename?: 'Query', stage: { __typename?: 'Stage', stage: EventStage } };
-
-export type GetCompetitionFieldsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetCompetitionFieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, isLive: boolean, isOnDeck: boolean, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null, onTableSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null } | null, fieldControl: { __typename?: 'FieldControl', fieldId: number, endTime: any | null } | null }> };
 
 export type CompetitionMiniSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -730,20 +737,10 @@ export type TeamsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type TeamsQuery = { __typename?: 'Query', teams: Array<{ __typename?: 'Team', id: number, name: string, number: string }> };
 
-export type FieldsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type FieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, isEnabled: boolean, isCompetition: boolean }> };
-
 export type DisplaysQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type DisplaysQuery = { __typename?: 'Query', displays: Array<{ __typename?: 'Display', uuid: string, name: string, field: { __typename?: 'Field', id: number, name: string } | null }> };
-
-export type FieldNamesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type FieldNamesQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string }> };
 
 export type FieldDisplayQueryVariables = Exact<{
   uuid: Scalars['String']['input'];
@@ -751,11 +748,6 @@ export type FieldDisplayQueryVariables = Exact<{
 
 
 export type FieldDisplayQuery = { __typename?: 'Query', timeout: { __typename?: 'Timeout', endTime: any | null }, display: { __typename?: 'Display', uuid: string, field: { __typename?: 'Field', id: number, name: string, fieldControl: { __typename?: 'FieldControl', endTime: any | null, mode: Control_Mode | null } | null, competition: { __typename?: 'CompetitionField', stage: MatchStage, isLive: boolean, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null } | null, skills: { __typename?: 'Skills', fieldId: number, stopTime: number | null } | null } | null } };
-
-export type ResultsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ResultsQuery = { __typename?: 'Query', results: { __typename?: 'Results', displayedResults: { __typename?: 'Match', id: number, number: number, redScore: number | null, blueScore: number | null, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> } } | null } };
 
 export type SkillsFieldsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -769,32 +761,40 @@ export type SkillsFieldQueryVariables = Exact<{
 
 export type SkillsFieldQuery = { __typename?: 'Query', field: { __typename?: 'Field', id: number, name: string, fieldControl: { __typename?: 'FieldControl', mode: Control_Mode | null, endTime: any | null } | null, skills: { __typename?: 'Skills', fieldId: number, stopTime: number | null } | null } };
 
-export type CanStartAllianceSelectionQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type CanStartAllianceSelectionQuery = { __typename?: 'Query', stage: { __typename?: 'Stage', stage: EventStage }, currentBlock: { __typename?: 'Block', id: number } | null, nextBlock: { __typename?: 'Block', id: number } | null };
-
-export type AllianceSelectionControlQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type AllianceSelectionControlQuery = { __typename?: 'Query', allianceSelection: { __typename?: 'AllianceSelection', picking: { __typename?: 'Team', id: number, number: string } | null, pickable: Array<{ __typename?: 'Team', id: number, number: string }>, alliances: Array<Array<{ __typename?: 'Team', id: number, number: string }>>, picked: { __typename?: 'Team', id: number, number: string } | null } | null };
-
-export type AllianceSelectionResultsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type AllianceSelectionResultsQuery = { __typename?: 'Query', allianceSelection: { __typename?: 'AllianceSelection', alliances: Array<Array<{ __typename?: 'Team', id: number, number: string }>> } | null };
-
 export type QueueDisplayQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type QueueDisplayQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null, onTableSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null } | null }> };
 
-export type FieldControlSubscriptionVariables = Exact<{
-  fieldId: Scalars['Int']['input'];
-}>;
+export type ClearResultsMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FieldControlSubscription = { __typename?: 'Subscription', fieldControl: { __typename?: 'FieldControl', fieldId: number, endTime: any | null, mode: Control_Mode | null } };
+export type ClearResultsMutation = { __typename?: 'Mutation', clearResults: { __typename?: 'Results', displayedResults: { __typename?: 'Match', id: number } | null } };
+
+export type PromoteResultsMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PromoteResultsMutation = { __typename?: 'Mutation', promoteResults: { __typename?: 'Results', displayedResults: { __typename?: 'Match', id: number } | null } };
+
+export type ResultsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ResultsQuery = { __typename?: 'Query', results: { __typename?: 'Results', displayedResults: { __typename?: 'Match', id: number, number: number, redScore: number | null, blueScore: number | null, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> } } | null } };
+
+export type StartNextBlockMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type StartNextBlockMutation = { __typename?: 'Mutation', startNextBlock: { __typename?: 'Block', id: number } };
+
+export type ConcludeBlockMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ConcludeBlockMutation = { __typename?: 'Mutation', concludeBlock: { __typename?: 'Block', id: number } };
+
+export type GetUnqueuedSittingsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUnqueuedSittingsQuery = { __typename?: 'Query', currentBlock: { __typename?: 'Block', id: number, name: string, canConclude: boolean, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, number: number, field: { __typename?: 'Field', id: number, name: string } | null, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } }> } | null, nextBlock: { __typename?: 'Block', id: number, name: string } | null };
 
 export const SittingInformationFragmentDoc = gql`
     fragment SittingInformation on Sitting {
@@ -846,690 +846,147 @@ export const BlockInformationFragmentDoc = gql`
   }
 }
     ${SittingInformationFragmentDoc}`;
-export const QueueSittingDocument = gql`
-    mutation QueueSitting($sittingId: Int!, $fieldId: Int!) {
-  queueSitting(sittingId: $sittingId, fieldId: $fieldId) {
-    id
-  }
-}
-    `;
-export type QueueSittingMutationFn = Apollo.MutationFunction<QueueSittingMutation, QueueSittingMutationVariables>;
-
-/**
- * __useQueueSittingMutation__
- *
- * To run a mutation, you first call `useQueueSittingMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useQueueSittingMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [queueSittingMutation, { data, loading, error }] = useQueueSittingMutation({
- *   variables: {
- *      sittingId: // value for 'sittingId'
- *      fieldId: // value for 'fieldId'
- *   },
- * });
- */
-export function useQueueSittingMutation(baseOptions?: Apollo.MutationHookOptions<QueueSittingMutation, QueueSittingMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<QueueSittingMutation, QueueSittingMutationVariables>(QueueSittingDocument, options);
-      }
-export type QueueSittingMutationHookResult = ReturnType<typeof useQueueSittingMutation>;
-export type QueueSittingMutationResult = Apollo.MutationResult<QueueSittingMutation>;
-export type QueueSittingMutationOptions = Apollo.BaseMutationOptions<QueueSittingMutation, QueueSittingMutationVariables>;
-export const ConfigureTournamentManagerDocument = gql`
-    mutation configureTournamentManager($settings: TournamentManagerSetup!) {
-  configureTournamentManager(settings: $settings) {
-    status
-  }
-}
-    `;
-export type ConfigureTournamentManagerMutationFn = Apollo.MutationFunction<ConfigureTournamentManagerMutation, ConfigureTournamentManagerMutationVariables>;
-
-/**
- * __useConfigureTournamentManagerMutation__
- *
- * To run a mutation, you first call `useConfigureTournamentManagerMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useConfigureTournamentManagerMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [configureTournamentManagerMutation, { data, loading, error }] = useConfigureTournamentManagerMutation({
- *   variables: {
- *      settings: // value for 'settings'
- *   },
- * });
- */
-export function useConfigureTournamentManagerMutation(baseOptions?: Apollo.MutationHookOptions<ConfigureTournamentManagerMutation, ConfigureTournamentManagerMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ConfigureTournamentManagerMutation, ConfigureTournamentManagerMutationVariables>(ConfigureTournamentManagerDocument, options);
-      }
-export type ConfigureTournamentManagerMutationHookResult = ReturnType<typeof useConfigureTournamentManagerMutation>;
-export type ConfigureTournamentManagerMutationResult = Apollo.MutationResult<ConfigureTournamentManagerMutation>;
-export type ConfigureTournamentManagerMutationOptions = Apollo.BaseMutationOptions<ConfigureTournamentManagerMutation, ConfigureTournamentManagerMutationVariables>;
-export const PutOnDeckDocument = gql`
-    mutation PutOnDeck($fieldId: Int!) {
-  putOnDeck(fieldId: $fieldId) {
-    onDeckField {
+export const AllianceSelectionControlDocument = gql`
+    query AllianceSelectionControl {
+  allianceSelection {
+    picking {
       id
+      number
+    }
+    pickable {
+      id
+      number
+    }
+    alliances {
+      id
+      number
+    }
+    picked {
+      id
+      number
     }
   }
 }
     `;
-export type PutOnDeckMutationFn = Apollo.MutationFunction<PutOnDeckMutation, PutOnDeckMutationVariables>;
 
 /**
- * __usePutOnDeckMutation__
+ * __useAllianceSelectionControlQuery__
  *
- * To run a mutation, you first call `usePutOnDeckMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `usePutOnDeckMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
+ * To run a query within a React component, call `useAllianceSelectionControlQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllianceSelectionControlQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [putOnDeckMutation, { data, loading, error }] = usePutOnDeckMutation({
- *   variables: {
- *      fieldId: // value for 'fieldId'
- *   },
- * });
- */
-export function usePutOnDeckMutation(baseOptions?: Apollo.MutationHookOptions<PutOnDeckMutation, PutOnDeckMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<PutOnDeckMutation, PutOnDeckMutationVariables>(PutOnDeckDocument, options);
-      }
-export type PutOnDeckMutationHookResult = ReturnType<typeof usePutOnDeckMutation>;
-export type PutOnDeckMutationResult = Apollo.MutationResult<PutOnDeckMutation>;
-export type PutOnDeckMutationOptions = Apollo.BaseMutationOptions<PutOnDeckMutation, PutOnDeckMutationVariables>;
-export const PutLiveDocument = gql`
-    mutation PutLive {
-  putLive {
-    liveField {
-      id
-    }
-  }
-}
-    `;
-export type PutLiveMutationFn = Apollo.MutationFunction<PutLiveMutation, PutLiveMutationVariables>;
-
-/**
- * __usePutLiveMutation__
- *
- * To run a mutation, you first call `usePutLiveMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `usePutLiveMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const [putLiveMutation, { data, loading, error }] = usePutLiveMutation({
+ * const { data, loading, error } = useAllianceSelectionControlQuery({
  *   variables: {
  *   },
  * });
  */
-export function usePutLiveMutation(baseOptions?: Apollo.MutationHookOptions<PutLiveMutation, PutLiveMutationVariables>) {
+export function useAllianceSelectionControlQuery(baseOptions?: Apollo.QueryHookOptions<AllianceSelectionControlQuery, AllianceSelectionControlQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<PutLiveMutation, PutLiveMutationVariables>(PutLiveDocument, options);
+        return Apollo.useQuery<AllianceSelectionControlQuery, AllianceSelectionControlQueryVariables>(AllianceSelectionControlDocument, options);
       }
-export type PutLiveMutationHookResult = ReturnType<typeof usePutLiveMutation>;
-export type PutLiveMutationResult = Apollo.MutationResult<PutLiveMutation>;
-export type PutLiveMutationOptions = Apollo.BaseMutationOptions<PutLiveMutation, PutLiveMutationVariables>;
-export const UnqueueSittingDocument = gql`
-    mutation UnqueueSitting($sittingId: Int!) {
-  unqueue(sittingId: $sittingId) {
-    onFieldSitting {
-      id
-    }
-    onTableSitting {
-      id
-    }
-  }
-}
-    `;
-export type UnqueueSittingMutationFn = Apollo.MutationFunction<UnqueueSittingMutation, UnqueueSittingMutationVariables>;
-
-/**
- * __useUnqueueSittingMutation__
- *
- * To run a mutation, you first call `useUnqueueSittingMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUnqueueSittingMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [unqueueSittingMutation, { data, loading, error }] = useUnqueueSittingMutation({
- *   variables: {
- *      sittingId: // value for 'sittingId'
- *   },
- * });
- */
-export function useUnqueueSittingMutation(baseOptions?: Apollo.MutationHookOptions<UnqueueSittingMutation, UnqueueSittingMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UnqueueSittingMutation, UnqueueSittingMutationVariables>(UnqueueSittingDocument, options);
-      }
-export type UnqueueSittingMutationHookResult = ReturnType<typeof useUnqueueSittingMutation>;
-export type UnqueueSittingMutationResult = Apollo.MutationResult<UnqueueSittingMutation>;
-export type UnqueueSittingMutationOptions = Apollo.BaseMutationOptions<UnqueueSittingMutation, UnqueueSittingMutationVariables>;
-export const ReplayMatchDocument = gql`
-    mutation ReplayMatch($sittingId: Int!) {
-  replay(sittingId: $sittingId) {
-    onFieldSitting {
-      id
-    }
-    onTableSitting {
-      id
-    }
-  }
-}
-    `;
-export type ReplayMatchMutationFn = Apollo.MutationFunction<ReplayMatchMutation, ReplayMatchMutationVariables>;
-
-/**
- * __useReplayMatchMutation__
- *
- * To run a mutation, you first call `useReplayMatchMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useReplayMatchMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [replayMatchMutation, { data, loading, error }] = useReplayMatchMutation({
- *   variables: {
- *      sittingId: // value for 'sittingId'
- *   },
- * });
- */
-export function useReplayMatchMutation(baseOptions?: Apollo.MutationHookOptions<ReplayMatchMutation, ReplayMatchMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ReplayMatchMutation, ReplayMatchMutationVariables>(ReplayMatchDocument, options);
-      }
-export type ReplayMatchMutationHookResult = ReturnType<typeof useReplayMatchMutation>;
-export type ReplayMatchMutationResult = Apollo.MutationResult<ReplayMatchMutation>;
-export type ReplayMatchMutationOptions = Apollo.BaseMutationOptions<ReplayMatchMutation, ReplayMatchMutationVariables>;
-export const StartFieldDocument = gql`
-    mutation StartField($fieldId: Int!) {
-  startField(fieldId: $fieldId) {
-    endTime
-  }
-}
-    `;
-export type StartFieldMutationFn = Apollo.MutationFunction<StartFieldMutation, StartFieldMutationVariables>;
-
-/**
- * __useStartFieldMutation__
- *
- * To run a mutation, you first call `useStartFieldMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useStartFieldMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [startFieldMutation, { data, loading, error }] = useStartFieldMutation({
- *   variables: {
- *      fieldId: // value for 'fieldId'
- *   },
- * });
- */
-export function useStartFieldMutation(baseOptions?: Apollo.MutationHookOptions<StartFieldMutation, StartFieldMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<StartFieldMutation, StartFieldMutationVariables>(StartFieldDocument, options);
-      }
-export type StartFieldMutationHookResult = ReturnType<typeof useStartFieldMutation>;
-export type StartFieldMutationResult = Apollo.MutationResult<StartFieldMutation>;
-export type StartFieldMutationOptions = Apollo.BaseMutationOptions<StartFieldMutation, StartFieldMutationVariables>;
-export const StopFieldDocument = gql`
-    mutation StopField($fieldId: Int!) {
-  stopField(fieldId: $fieldId) {
-    endTime
-  }
-}
-    `;
-export type StopFieldMutationFn = Apollo.MutationFunction<StopFieldMutation, StopFieldMutationVariables>;
-
-/**
- * __useStopFieldMutation__
- *
- * To run a mutation, you first call `useStopFieldMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useStopFieldMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [stopFieldMutation, { data, loading, error }] = useStopFieldMutation({
- *   variables: {
- *      fieldId: // value for 'fieldId'
- *   },
- * });
- */
-export function useStopFieldMutation(baseOptions?: Apollo.MutationHookOptions<StopFieldMutation, StopFieldMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<StopFieldMutation, StopFieldMutationVariables>(StopFieldDocument, options);
-      }
-export type StopFieldMutationHookResult = ReturnType<typeof useStopFieldMutation>;
-export type StopFieldMutationResult = Apollo.MutationResult<StopFieldMutation>;
-export type StopFieldMutationOptions = Apollo.BaseMutationOptions<StopFieldMutation, StopFieldMutationVariables>;
-export const ResetAutonDocument = gql`
-    mutation ResetAuton($fieldId: Int!) {
-  resetAuton(fieldId: $fieldId) {
+export function useAllianceSelectionControlLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllianceSelectionControlQuery, AllianceSelectionControlQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AllianceSelectionControlQuery, AllianceSelectionControlQueryVariables>(AllianceSelectionControlDocument, options);
+        }
+export function useAllianceSelectionControlSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<AllianceSelectionControlQuery, AllianceSelectionControlQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AllianceSelectionControlQuery, AllianceSelectionControlQueryVariables>(AllianceSelectionControlDocument, options);
+        }
+export type AllianceSelectionControlQueryHookResult = ReturnType<typeof useAllianceSelectionControlQuery>;
+export type AllianceSelectionControlLazyQueryHookResult = ReturnType<typeof useAllianceSelectionControlLazyQuery>;
+export type AllianceSelectionControlSuspenseQueryHookResult = ReturnType<typeof useAllianceSelectionControlSuspenseQuery>;
+export type AllianceSelectionControlQueryResult = Apollo.QueryResult<AllianceSelectionControlQuery, AllianceSelectionControlQueryVariables>;
+export const CanStartAllianceSelectionDocument = gql`
+    query CanStartAllianceSelection {
+  stage {
     stage
   }
+  currentBlock {
+    id
+  }
+  nextBlock {
+    id
+  }
 }
     `;
-export type ResetAutonMutationFn = Apollo.MutationFunction<ResetAutonMutation, ResetAutonMutationVariables>;
 
 /**
- * __useResetAutonMutation__
+ * __useCanStartAllianceSelectionQuery__
  *
- * To run a mutation, you first call `useResetAutonMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useResetAutonMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
+ * To run a query within a React component, call `useCanStartAllianceSelectionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCanStartAllianceSelectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const [resetAutonMutation, { data, loading, error }] = useResetAutonMutation({
+ * const { data, loading, error } = useCanStartAllianceSelectionQuery({
  *   variables: {
- *      fieldId: // value for 'fieldId'
  *   },
  * });
  */
-export function useResetAutonMutation(baseOptions?: Apollo.MutationHookOptions<ResetAutonMutation, ResetAutonMutationVariables>) {
+export function useCanStartAllianceSelectionQuery(baseOptions?: Apollo.QueryHookOptions<CanStartAllianceSelectionQuery, CanStartAllianceSelectionQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ResetAutonMutation, ResetAutonMutationVariables>(ResetAutonDocument, options);
+        return Apollo.useQuery<CanStartAllianceSelectionQuery, CanStartAllianceSelectionQueryVariables>(CanStartAllianceSelectionDocument, options);
       }
-export type ResetAutonMutationHookResult = ReturnType<typeof useResetAutonMutation>;
-export type ResetAutonMutationResult = Apollo.MutationResult<ResetAutonMutation>;
-export type ResetAutonMutationOptions = Apollo.BaseMutationOptions<ResetAutonMutation, ResetAutonMutationVariables>;
-export const ClearLiveDocument = gql`
-    mutation ClearLive {
-  clearLive {
-    liveField {
+export function useCanStartAllianceSelectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CanStartAllianceSelectionQuery, CanStartAllianceSelectionQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CanStartAllianceSelectionQuery, CanStartAllianceSelectionQueryVariables>(CanStartAllianceSelectionDocument, options);
+        }
+export function useCanStartAllianceSelectionSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CanStartAllianceSelectionQuery, CanStartAllianceSelectionQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CanStartAllianceSelectionQuery, CanStartAllianceSelectionQueryVariables>(CanStartAllianceSelectionDocument, options);
+        }
+export type CanStartAllianceSelectionQueryHookResult = ReturnType<typeof useCanStartAllianceSelectionQuery>;
+export type CanStartAllianceSelectionLazyQueryHookResult = ReturnType<typeof useCanStartAllianceSelectionLazyQuery>;
+export type CanStartAllianceSelectionSuspenseQueryHookResult = ReturnType<typeof useCanStartAllianceSelectionSuspenseQuery>;
+export type CanStartAllianceSelectionQueryResult = Apollo.QueryResult<CanStartAllianceSelectionQuery, CanStartAllianceSelectionQueryVariables>;
+export const AllianceSelectionResultsDocument = gql`
+    query AllianceSelectionResults {
+  allianceSelection {
+    alliances {
       id
+      number
     }
   }
 }
     `;
-export type ClearLiveMutationFn = Apollo.MutationFunction<ClearLiveMutation, ClearLiveMutationVariables>;
 
 /**
- * __useClearLiveMutation__
+ * __useAllianceSelectionResultsQuery__
  *
- * To run a mutation, you first call `useClearLiveMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useClearLiveMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
+ * To run a query within a React component, call `useAllianceSelectionResultsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllianceSelectionResultsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
  *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const [clearLiveMutation, { data, loading, error }] = useClearLiveMutation({
+ * const { data, loading, error } = useAllianceSelectionResultsQuery({
  *   variables: {
  *   },
  * });
  */
-export function useClearLiveMutation(baseOptions?: Apollo.MutationHookOptions<ClearLiveMutation, ClearLiveMutationVariables>) {
+export function useAllianceSelectionResultsQuery(baseOptions?: Apollo.QueryHookOptions<AllianceSelectionResultsQuery, AllianceSelectionResultsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ClearLiveMutation, ClearLiveMutationVariables>(ClearLiveDocument, options);
+        return Apollo.useQuery<AllianceSelectionResultsQuery, AllianceSelectionResultsQueryVariables>(AllianceSelectionResultsDocument, options);
       }
-export type ClearLiveMutationHookResult = ReturnType<typeof useClearLiveMutation>;
-export type ClearLiveMutationResult = Apollo.MutationResult<ClearLiveMutation>;
-export type ClearLiveMutationOptions = Apollo.BaseMutationOptions<ClearLiveMutation, ClearLiveMutationVariables>;
-export const SetAutomationEnabledDocument = gql`
-    mutation SetAutomationEnabled($enabled: Boolean!) {
-  setAutomationEnabled(enabled: $enabled) {
-    automationEnabled
-  }
-}
-    `;
-export type SetAutomationEnabledMutationFn = Apollo.MutationFunction<SetAutomationEnabledMutation, SetAutomationEnabledMutationVariables>;
-
-/**
- * __useSetAutomationEnabledMutation__
- *
- * To run a mutation, you first call `useSetAutomationEnabledMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSetAutomationEnabledMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [setAutomationEnabledMutation, { data, loading, error }] = useSetAutomationEnabledMutation({
- *   variables: {
- *      enabled: // value for 'enabled'
- *   },
- * });
- */
-export function useSetAutomationEnabledMutation(baseOptions?: Apollo.MutationHookOptions<SetAutomationEnabledMutation, SetAutomationEnabledMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SetAutomationEnabledMutation, SetAutomationEnabledMutationVariables>(SetAutomationEnabledDocument, options);
-      }
-export type SetAutomationEnabledMutationHookResult = ReturnType<typeof useSetAutomationEnabledMutation>;
-export type SetAutomationEnabledMutationResult = Apollo.MutationResult<SetAutomationEnabledMutation>;
-export type SetAutomationEnabledMutationOptions = Apollo.BaseMutationOptions<SetAutomationEnabledMutation, SetAutomationEnabledMutationVariables>;
-export const StartNextBlockDocument = gql`
-    mutation StartNextBlock {
-  startNextBlock {
-    id
-  }
-}
-    `;
-export type StartNextBlockMutationFn = Apollo.MutationFunction<StartNextBlockMutation, StartNextBlockMutationVariables>;
-
-/**
- * __useStartNextBlockMutation__
- *
- * To run a mutation, you first call `useStartNextBlockMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useStartNextBlockMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [startNextBlockMutation, { data, loading, error }] = useStartNextBlockMutation({
- *   variables: {
- *   },
- * });
- */
-export function useStartNextBlockMutation(baseOptions?: Apollo.MutationHookOptions<StartNextBlockMutation, StartNextBlockMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<StartNextBlockMutation, StartNextBlockMutationVariables>(StartNextBlockDocument, options);
-      }
-export type StartNextBlockMutationHookResult = ReturnType<typeof useStartNextBlockMutation>;
-export type StartNextBlockMutationResult = Apollo.MutationResult<StartNextBlockMutation>;
-export type StartNextBlockMutationOptions = Apollo.BaseMutationOptions<StartNextBlockMutation, StartNextBlockMutationVariables>;
-export const ConcludeBlockDocument = gql`
-    mutation ConcludeBlock {
-  concludeBlock {
-    id
-  }
-}
-    `;
-export type ConcludeBlockMutationFn = Apollo.MutationFunction<ConcludeBlockMutation, ConcludeBlockMutationVariables>;
-
-/**
- * __useConcludeBlockMutation__
- *
- * To run a mutation, you first call `useConcludeBlockMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useConcludeBlockMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [concludeBlockMutation, { data, loading, error }] = useConcludeBlockMutation({
- *   variables: {
- *   },
- * });
- */
-export function useConcludeBlockMutation(baseOptions?: Apollo.MutationHookOptions<ConcludeBlockMutation, ConcludeBlockMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ConcludeBlockMutation, ConcludeBlockMutationVariables>(ConcludeBlockDocument, options);
-      }
-export type ConcludeBlockMutationHookResult = ReturnType<typeof useConcludeBlockMutation>;
-export type ConcludeBlockMutationResult = Apollo.MutationResult<ConcludeBlockMutation>;
-export type ConcludeBlockMutationOptions = Apollo.BaseMutationOptions<ConcludeBlockMutation, ConcludeBlockMutationVariables>;
-export const DeleteFieldDocument = gql`
-    mutation DeleteField($fieldId: Int!) {
-  deleteField(fieldId: $fieldId) {
-    id
-  }
-}
-    `;
-export type DeleteFieldMutationFn = Apollo.MutationFunction<DeleteFieldMutation, DeleteFieldMutationVariables>;
-
-/**
- * __useDeleteFieldMutation__
- *
- * To run a mutation, you first call `useDeleteFieldMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteFieldMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteFieldMutation, { data, loading, error }] = useDeleteFieldMutation({
- *   variables: {
- *      fieldId: // value for 'fieldId'
- *   },
- * });
- */
-export function useDeleteFieldMutation(baseOptions?: Apollo.MutationHookOptions<DeleteFieldMutation, DeleteFieldMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteFieldMutation, DeleteFieldMutationVariables>(DeleteFieldDocument, options);
-      }
-export type DeleteFieldMutationHookResult = ReturnType<typeof useDeleteFieldMutation>;
-export type DeleteFieldMutationResult = Apollo.MutationResult<DeleteFieldMutation>;
-export type DeleteFieldMutationOptions = Apollo.BaseMutationOptions<DeleteFieldMutation, DeleteFieldMutationVariables>;
-export const RenameDisplayDocument = gql`
-    mutation RenameDisplay($uuid: String!, $name: String!) {
-  renameDisplay(uuid: $uuid, name: $name) {
-    uuid
-    name
-  }
-}
-    `;
-export type RenameDisplayMutationFn = Apollo.MutationFunction<RenameDisplayMutation, RenameDisplayMutationVariables>;
-
-/**
- * __useRenameDisplayMutation__
- *
- * To run a mutation, you first call `useRenameDisplayMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRenameDisplayMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [renameDisplayMutation, { data, loading, error }] = useRenameDisplayMutation({
- *   variables: {
- *      uuid: // value for 'uuid'
- *      name: // value for 'name'
- *   },
- * });
- */
-export function useRenameDisplayMutation(baseOptions?: Apollo.MutationHookOptions<RenameDisplayMutation, RenameDisplayMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<RenameDisplayMutation, RenameDisplayMutationVariables>(RenameDisplayDocument, options);
-      }
-export type RenameDisplayMutationHookResult = ReturnType<typeof useRenameDisplayMutation>;
-export type RenameDisplayMutationResult = Apollo.MutationResult<RenameDisplayMutation>;
-export type RenameDisplayMutationOptions = Apollo.BaseMutationOptions<RenameDisplayMutation, RenameDisplayMutationVariables>;
-export const SetDisplayFieldDocument = gql`
-    mutation SetDisplayField($uuid: String!, $fieldId: Int) {
-  setDisplayField(uuid: $uuid, fieldId: $fieldId) {
-    uuid
-    field {
-      id
-    }
-  }
-}
-    `;
-export type SetDisplayFieldMutationFn = Apollo.MutationFunction<SetDisplayFieldMutation, SetDisplayFieldMutationVariables>;
-
-/**
- * __useSetDisplayFieldMutation__
- *
- * To run a mutation, you first call `useSetDisplayFieldMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSetDisplayFieldMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [setDisplayFieldMutation, { data, loading, error }] = useSetDisplayFieldMutation({
- *   variables: {
- *      uuid: // value for 'uuid'
- *      fieldId: // value for 'fieldId'
- *   },
- * });
- */
-export function useSetDisplayFieldMutation(baseOptions?: Apollo.MutationHookOptions<SetDisplayFieldMutation, SetDisplayFieldMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SetDisplayFieldMutation, SetDisplayFieldMutationVariables>(SetDisplayFieldDocument, options);
-      }
-export type SetDisplayFieldMutationHookResult = ReturnType<typeof useSetDisplayFieldMutation>;
-export type SetDisplayFieldMutationResult = Apollo.MutationResult<SetDisplayFieldMutation>;
-export type SetDisplayFieldMutationOptions = Apollo.BaseMutationOptions<SetDisplayFieldMutation, SetDisplayFieldMutationVariables>;
-export const UpdateFieldNameDocument = gql`
-    mutation UpdateFieldName($fieldId: Int!, $name: String) {
-  updateField(fieldId: $fieldId, update: {name: $name}) {
-    id
-    name
-    isEnabled
-    isCompetition
-  }
-}
-    `;
-export type UpdateFieldNameMutationFn = Apollo.MutationFunction<UpdateFieldNameMutation, UpdateFieldNameMutationVariables>;
-
-/**
- * __useUpdateFieldNameMutation__
- *
- * To run a mutation, you first call `useUpdateFieldNameMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateFieldNameMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateFieldNameMutation, { data, loading, error }] = useUpdateFieldNameMutation({
- *   variables: {
- *      fieldId: // value for 'fieldId'
- *      name: // value for 'name'
- *   },
- * });
- */
-export function useUpdateFieldNameMutation(baseOptions?: Apollo.MutationHookOptions<UpdateFieldNameMutation, UpdateFieldNameMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateFieldNameMutation, UpdateFieldNameMutationVariables>(UpdateFieldNameDocument, options);
-      }
-export type UpdateFieldNameMutationHookResult = ReturnType<typeof useUpdateFieldNameMutation>;
-export type UpdateFieldNameMutationResult = Apollo.MutationResult<UpdateFieldNameMutation>;
-export type UpdateFieldNameMutationOptions = Apollo.BaseMutationOptions<UpdateFieldNameMutation, UpdateFieldNameMutationVariables>;
-export const SetSkillsEnabledDocument = gql`
-    mutation SetSkillsEnabled($enabled: Boolean!) {
-  setSkillsEnabled(enabled: $enabled) {
-    id
-    canRunSkills
-  }
-}
-    `;
-export type SetSkillsEnabledMutationFn = Apollo.MutationFunction<SetSkillsEnabledMutation, SetSkillsEnabledMutationVariables>;
-
-/**
- * __useSetSkillsEnabledMutation__
- *
- * To run a mutation, you first call `useSetSkillsEnabledMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSetSkillsEnabledMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [setSkillsEnabledMutation, { data, loading, error }] = useSetSkillsEnabledMutation({
- *   variables: {
- *      enabled: // value for 'enabled'
- *   },
- * });
- */
-export function useSetSkillsEnabledMutation(baseOptions?: Apollo.MutationHookOptions<SetSkillsEnabledMutation, SetSkillsEnabledMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SetSkillsEnabledMutation, SetSkillsEnabledMutationVariables>(SetSkillsEnabledDocument, options);
-      }
-export type SetSkillsEnabledMutationHookResult = ReturnType<typeof useSetSkillsEnabledMutation>;
-export type SetSkillsEnabledMutationResult = Apollo.MutationResult<SetSkillsEnabledMutation>;
-export type SetSkillsEnabledMutationOptions = Apollo.BaseMutationOptions<SetSkillsEnabledMutation, SetSkillsEnabledMutationVariables>;
-export const QueueDriverSkillsDocument = gql`
-    mutation QueueDriverSkills($fieldId: Int!) {
-  queueDriverSkills(fieldId: $fieldId) {
-    fieldId
-  }
-}
-    `;
-export type QueueDriverSkillsMutationFn = Apollo.MutationFunction<QueueDriverSkillsMutation, QueueDriverSkillsMutationVariables>;
-
-/**
- * __useQueueDriverSkillsMutation__
- *
- * To run a mutation, you first call `useQueueDriverSkillsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useQueueDriverSkillsMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [queueDriverSkillsMutation, { data, loading, error }] = useQueueDriverSkillsMutation({
- *   variables: {
- *      fieldId: // value for 'fieldId'
- *   },
- * });
- */
-export function useQueueDriverSkillsMutation(baseOptions?: Apollo.MutationHookOptions<QueueDriverSkillsMutation, QueueDriverSkillsMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<QueueDriverSkillsMutation, QueueDriverSkillsMutationVariables>(QueueDriverSkillsDocument, options);
-      }
-export type QueueDriverSkillsMutationHookResult = ReturnType<typeof useQueueDriverSkillsMutation>;
-export type QueueDriverSkillsMutationResult = Apollo.MutationResult<QueueDriverSkillsMutation>;
-export type QueueDriverSkillsMutationOptions = Apollo.BaseMutationOptions<QueueDriverSkillsMutation, QueueDriverSkillsMutationVariables>;
-export const QueueProgrammingSkillsDocument = gql`
-    mutation QueueProgrammingSkills($fieldId: Int!) {
-  queueProgrammingSkills(fieldId: $fieldId) {
-    fieldId
-  }
-}
-    `;
-export type QueueProgrammingSkillsMutationFn = Apollo.MutationFunction<QueueProgrammingSkillsMutation, QueueProgrammingSkillsMutationVariables>;
-
-/**
- * __useQueueProgrammingSkillsMutation__
- *
- * To run a mutation, you first call `useQueueProgrammingSkillsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useQueueProgrammingSkillsMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [queueProgrammingSkillsMutation, { data, loading, error }] = useQueueProgrammingSkillsMutation({
- *   variables: {
- *      fieldId: // value for 'fieldId'
- *   },
- * });
- */
-export function useQueueProgrammingSkillsMutation(baseOptions?: Apollo.MutationHookOptions<QueueProgrammingSkillsMutation, QueueProgrammingSkillsMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<QueueProgrammingSkillsMutation, QueueProgrammingSkillsMutationVariables>(QueueProgrammingSkillsDocument, options);
-      }
-export type QueueProgrammingSkillsMutationHookResult = ReturnType<typeof useQueueProgrammingSkillsMutation>;
-export type QueueProgrammingSkillsMutationResult = Apollo.MutationResult<QueueProgrammingSkillsMutation>;
-export type QueueProgrammingSkillsMutationOptions = Apollo.BaseMutationOptions<QueueProgrammingSkillsMutation, QueueProgrammingSkillsMutationVariables>;
+export function useAllianceSelectionResultsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllianceSelectionResultsQuery, AllianceSelectionResultsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AllianceSelectionResultsQuery, AllianceSelectionResultsQueryVariables>(AllianceSelectionResultsDocument, options);
+        }
+export function useAllianceSelectionResultsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<AllianceSelectionResultsQuery, AllianceSelectionResultsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AllianceSelectionResultsQuery, AllianceSelectionResultsQueryVariables>(AllianceSelectionResultsDocument, options);
+        }
+export type AllianceSelectionResultsQueryHookResult = ReturnType<typeof useAllianceSelectionResultsQuery>;
+export type AllianceSelectionResultsLazyQueryHookResult = ReturnType<typeof useAllianceSelectionResultsLazyQuery>;
+export type AllianceSelectionResultsSuspenseQueryHookResult = ReturnType<typeof useAllianceSelectionResultsSuspenseQuery>;
+export type AllianceSelectionResultsQueryResult = Apollo.QueryResult<AllianceSelectionResultsQuery, AllianceSelectionResultsQueryVariables>;
 export const StartAllianceSelectionDocument = gql`
     mutation StartAllianceSelection {
   startAllianceSelection {
@@ -1735,74 +1192,942 @@ export function useAllianceSelectionCancelMutation(baseOptions?: Apollo.Mutation
 export type AllianceSelectionCancelMutationHookResult = ReturnType<typeof useAllianceSelectionCancelMutation>;
 export type AllianceSelectionCancelMutationResult = Apollo.MutationResult<AllianceSelectionCancelMutation>;
 export type AllianceSelectionCancelMutationOptions = Apollo.BaseMutationOptions<AllianceSelectionCancelMutation, AllianceSelectionCancelMutationVariables>;
-export const ClearResultsDocument = gql`
-    mutation ClearResults {
-  clearResults {
-    displayedResults {
+export const LiveFieldDocument = gql`
+    query LiveField {
+  competitionInformation {
+    liveField {
       id
+      fieldControl {
+        endTime
+      }
+      competition {
+        stage
+        onFieldSitting {
+          ...SittingInformation
+        }
+      }
+    }
+  }
+}
+    ${SittingInformationFragmentDoc}`;
+
+/**
+ * __useLiveFieldQuery__
+ *
+ * To run a query within a React component, call `useLiveFieldQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLiveFieldQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useLiveFieldQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useLiveFieldQuery(baseOptions?: Apollo.QueryHookOptions<LiveFieldQuery, LiveFieldQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<LiveFieldQuery, LiveFieldQueryVariables>(LiveFieldDocument, options);
+      }
+export function useLiveFieldLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LiveFieldQuery, LiveFieldQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<LiveFieldQuery, LiveFieldQueryVariables>(LiveFieldDocument, options);
+        }
+export function useLiveFieldSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<LiveFieldQuery, LiveFieldQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<LiveFieldQuery, LiveFieldQueryVariables>(LiveFieldDocument, options);
+        }
+export type LiveFieldQueryHookResult = ReturnType<typeof useLiveFieldQuery>;
+export type LiveFieldLazyQueryHookResult = ReturnType<typeof useLiveFieldLazyQuery>;
+export type LiveFieldSuspenseQueryHookResult = ReturnType<typeof useLiveFieldSuspenseQuery>;
+export type LiveFieldQueryResult = Apollo.QueryResult<LiveFieldQuery, LiveFieldQueryVariables>;
+export const GetCompetitionFieldsDocument = gql`
+    query GetCompetitionFields {
+  fields(isEnabled: true, isCompetition: true) {
+    id
+    name
+    competition {
+      stage
+      isLive
+      isOnDeck
+      onFieldSitting {
+        ...SittingWithTeams
+      }
+      onTableSitting {
+        ...SittingWithTeams
+      }
+    }
+    fieldControl {
+      fieldId
+      endTime
+    }
+  }
+}
+    ${SittingWithTeamsFragmentDoc}`;
+
+/**
+ * __useGetCompetitionFieldsQuery__
+ *
+ * To run a query within a React component, call `useGetCompetitionFieldsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCompetitionFieldsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCompetitionFieldsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCompetitionFieldsQuery(baseOptions?: Apollo.QueryHookOptions<GetCompetitionFieldsQuery, GetCompetitionFieldsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCompetitionFieldsQuery, GetCompetitionFieldsQueryVariables>(GetCompetitionFieldsDocument, options);
+      }
+export function useGetCompetitionFieldsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCompetitionFieldsQuery, GetCompetitionFieldsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCompetitionFieldsQuery, GetCompetitionFieldsQueryVariables>(GetCompetitionFieldsDocument, options);
+        }
+export function useGetCompetitionFieldsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetCompetitionFieldsQuery, GetCompetitionFieldsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCompetitionFieldsQuery, GetCompetitionFieldsQueryVariables>(GetCompetitionFieldsDocument, options);
+        }
+export type GetCompetitionFieldsQueryHookResult = ReturnType<typeof useGetCompetitionFieldsQuery>;
+export type GetCompetitionFieldsLazyQueryHookResult = ReturnType<typeof useGetCompetitionFieldsLazyQuery>;
+export type GetCompetitionFieldsSuspenseQueryHookResult = ReturnType<typeof useGetCompetitionFieldsSuspenseQuery>;
+export type GetCompetitionFieldsQueryResult = Apollo.QueryResult<GetCompetitionFieldsQuery, GetCompetitionFieldsQueryVariables>;
+export const GetTableOccupiedDocument = gql`
+    query GetTableOccupied {
+  fields(isEnabled: true, isCompetition: true) {
+    id
+    name
+    competition {
+      onTableSitting {
+        id
+      }
     }
   }
 }
     `;
-export type ClearResultsMutationFn = Apollo.MutationFunction<ClearResultsMutation, ClearResultsMutationVariables>;
 
 /**
- * __useClearResultsMutation__
+ * __useGetTableOccupiedQuery__
  *
- * To run a mutation, you first call `useClearResultsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useClearResultsMutation` returns a tuple that includes:
+ * To run a query within a React component, call `useGetTableOccupiedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTableOccupiedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTableOccupiedQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetTableOccupiedQuery(baseOptions?: Apollo.QueryHookOptions<GetTableOccupiedQuery, GetTableOccupiedQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetTableOccupiedQuery, GetTableOccupiedQueryVariables>(GetTableOccupiedDocument, options);
+      }
+export function useGetTableOccupiedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTableOccupiedQuery, GetTableOccupiedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetTableOccupiedQuery, GetTableOccupiedQueryVariables>(GetTableOccupiedDocument, options);
+        }
+export function useGetTableOccupiedSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetTableOccupiedQuery, GetTableOccupiedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetTableOccupiedQuery, GetTableOccupiedQueryVariables>(GetTableOccupiedDocument, options);
+        }
+export type GetTableOccupiedQueryHookResult = ReturnType<typeof useGetTableOccupiedQuery>;
+export type GetTableOccupiedLazyQueryHookResult = ReturnType<typeof useGetTableOccupiedLazyQuery>;
+export type GetTableOccupiedSuspenseQueryHookResult = ReturnType<typeof useGetTableOccupiedSuspenseQuery>;
+export type GetTableOccupiedQueryResult = Apollo.QueryResult<GetTableOccupiedQuery, GetTableOccupiedQueryVariables>;
+export const QueueSittingDocument = gql`
+    mutation QueueSitting($sittingId: Int!, $fieldId: Int!) {
+  queueSitting(sittingId: $sittingId, fieldId: $fieldId) {
+    id
+  }
+}
+    `;
+export type QueueSittingMutationFn = Apollo.MutationFunction<QueueSittingMutation, QueueSittingMutationVariables>;
+
+/**
+ * __useQueueSittingMutation__
+ *
+ * To run a mutation, you first call `useQueueSittingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useQueueSittingMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [clearResultsMutation, { data, loading, error }] = useClearResultsMutation({
+ * const [queueSittingMutation, { data, loading, error }] = useQueueSittingMutation({
  *   variables: {
+ *      sittingId: // value for 'sittingId'
+ *      fieldId: // value for 'fieldId'
  *   },
  * });
  */
-export function useClearResultsMutation(baseOptions?: Apollo.MutationHookOptions<ClearResultsMutation, ClearResultsMutationVariables>) {
+export function useQueueSittingMutation(baseOptions?: Apollo.MutationHookOptions<QueueSittingMutation, QueueSittingMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ClearResultsMutation, ClearResultsMutationVariables>(ClearResultsDocument, options);
+        return Apollo.useMutation<QueueSittingMutation, QueueSittingMutationVariables>(QueueSittingDocument, options);
       }
-export type ClearResultsMutationHookResult = ReturnType<typeof useClearResultsMutation>;
-export type ClearResultsMutationResult = Apollo.MutationResult<ClearResultsMutation>;
-export type ClearResultsMutationOptions = Apollo.BaseMutationOptions<ClearResultsMutation, ClearResultsMutationVariables>;
-export const PromoteResultsDocument = gql`
-    mutation PromoteResults {
-  promoteResults {
-    displayedResults {
+export type QueueSittingMutationHookResult = ReturnType<typeof useQueueSittingMutation>;
+export type QueueSittingMutationResult = Apollo.MutationResult<QueueSittingMutation>;
+export type QueueSittingMutationOptions = Apollo.BaseMutationOptions<QueueSittingMutation, QueueSittingMutationVariables>;
+export const PutOnDeckDocument = gql`
+    mutation PutOnDeck($fieldId: Int!) {
+  putOnDeck(fieldId: $fieldId) {
+    onDeckField {
       id
     }
   }
 }
     `;
-export type PromoteResultsMutationFn = Apollo.MutationFunction<PromoteResultsMutation, PromoteResultsMutationVariables>;
+export type PutOnDeckMutationFn = Apollo.MutationFunction<PutOnDeckMutation, PutOnDeckMutationVariables>;
 
 /**
- * __usePromoteResultsMutation__
+ * __usePutOnDeckMutation__
  *
- * To run a mutation, you first call `usePromoteResultsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `usePromoteResultsMutation` returns a tuple that includes:
+ * To run a mutation, you first call `usePutOnDeckMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePutOnDeckMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [promoteResultsMutation, { data, loading, error }] = usePromoteResultsMutation({
+ * const [putOnDeckMutation, { data, loading, error }] = usePutOnDeckMutation({
+ *   variables: {
+ *      fieldId: // value for 'fieldId'
+ *   },
+ * });
+ */
+export function usePutOnDeckMutation(baseOptions?: Apollo.MutationHookOptions<PutOnDeckMutation, PutOnDeckMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PutOnDeckMutation, PutOnDeckMutationVariables>(PutOnDeckDocument, options);
+      }
+export type PutOnDeckMutationHookResult = ReturnType<typeof usePutOnDeckMutation>;
+export type PutOnDeckMutationResult = Apollo.MutationResult<PutOnDeckMutation>;
+export type PutOnDeckMutationOptions = Apollo.BaseMutationOptions<PutOnDeckMutation, PutOnDeckMutationVariables>;
+export const PutLiveDocument = gql`
+    mutation PutLive {
+  putLive {
+    liveField {
+      id
+    }
+  }
+}
+    `;
+export type PutLiveMutationFn = Apollo.MutationFunction<PutLiveMutation, PutLiveMutationVariables>;
+
+/**
+ * __usePutLiveMutation__
+ *
+ * To run a mutation, you first call `usePutLiveMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePutLiveMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [putLiveMutation, { data, loading, error }] = usePutLiveMutation({
  *   variables: {
  *   },
  * });
  */
-export function usePromoteResultsMutation(baseOptions?: Apollo.MutationHookOptions<PromoteResultsMutation, PromoteResultsMutationVariables>) {
+export function usePutLiveMutation(baseOptions?: Apollo.MutationHookOptions<PutLiveMutation, PutLiveMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<PromoteResultsMutation, PromoteResultsMutationVariables>(PromoteResultsDocument, options);
+        return Apollo.useMutation<PutLiveMutation, PutLiveMutationVariables>(PutLiveDocument, options);
       }
-export type PromoteResultsMutationHookResult = ReturnType<typeof usePromoteResultsMutation>;
-export type PromoteResultsMutationResult = Apollo.MutationResult<PromoteResultsMutation>;
-export type PromoteResultsMutationOptions = Apollo.BaseMutationOptions<PromoteResultsMutation, PromoteResultsMutationVariables>;
+export type PutLiveMutationHookResult = ReturnType<typeof usePutLiveMutation>;
+export type PutLiveMutationResult = Apollo.MutationResult<PutLiveMutation>;
+export type PutLiveMutationOptions = Apollo.BaseMutationOptions<PutLiveMutation, PutLiveMutationVariables>;
+export const UnqueueSittingDocument = gql`
+    mutation UnqueueSitting($sittingId: Int!) {
+  unqueue(sittingId: $sittingId) {
+    onFieldSitting {
+      id
+    }
+    onTableSitting {
+      id
+    }
+  }
+}
+    `;
+export type UnqueueSittingMutationFn = Apollo.MutationFunction<UnqueueSittingMutation, UnqueueSittingMutationVariables>;
+
+/**
+ * __useUnqueueSittingMutation__
+ *
+ * To run a mutation, you first call `useUnqueueSittingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnqueueSittingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unqueueSittingMutation, { data, loading, error }] = useUnqueueSittingMutation({
+ *   variables: {
+ *      sittingId: // value for 'sittingId'
+ *   },
+ * });
+ */
+export function useUnqueueSittingMutation(baseOptions?: Apollo.MutationHookOptions<UnqueueSittingMutation, UnqueueSittingMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UnqueueSittingMutation, UnqueueSittingMutationVariables>(UnqueueSittingDocument, options);
+      }
+export type UnqueueSittingMutationHookResult = ReturnType<typeof useUnqueueSittingMutation>;
+export type UnqueueSittingMutationResult = Apollo.MutationResult<UnqueueSittingMutation>;
+export type UnqueueSittingMutationOptions = Apollo.BaseMutationOptions<UnqueueSittingMutation, UnqueueSittingMutationVariables>;
+export const ClearLiveDocument = gql`
+    mutation ClearLive {
+  clearLive {
+    liveField {
+      id
+    }
+  }
+}
+    `;
+export type ClearLiveMutationFn = Apollo.MutationFunction<ClearLiveMutation, ClearLiveMutationVariables>;
+
+/**
+ * __useClearLiveMutation__
+ *
+ * To run a mutation, you first call `useClearLiveMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useClearLiveMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [clearLiveMutation, { data, loading, error }] = useClearLiveMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useClearLiveMutation(baseOptions?: Apollo.MutationHookOptions<ClearLiveMutation, ClearLiveMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ClearLiveMutation, ClearLiveMutationVariables>(ClearLiveDocument, options);
+      }
+export type ClearLiveMutationHookResult = ReturnType<typeof useClearLiveMutation>;
+export type ClearLiveMutationResult = Apollo.MutationResult<ClearLiveMutation>;
+export type ClearLiveMutationOptions = Apollo.BaseMutationOptions<ClearLiveMutation, ClearLiveMutationVariables>;
+export const SetAutomationEnabledDocument = gql`
+    mutation SetAutomationEnabled($enabled: Boolean!) {
+  setAutomationEnabled(enabled: $enabled) {
+    automationEnabled
+  }
+}
+    `;
+export type SetAutomationEnabledMutationFn = Apollo.MutationFunction<SetAutomationEnabledMutation, SetAutomationEnabledMutationVariables>;
+
+/**
+ * __useSetAutomationEnabledMutation__
+ *
+ * To run a mutation, you first call `useSetAutomationEnabledMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetAutomationEnabledMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setAutomationEnabledMutation, { data, loading, error }] = useSetAutomationEnabledMutation({
+ *   variables: {
+ *      enabled: // value for 'enabled'
+ *   },
+ * });
+ */
+export function useSetAutomationEnabledMutation(baseOptions?: Apollo.MutationHookOptions<SetAutomationEnabledMutation, SetAutomationEnabledMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetAutomationEnabledMutation, SetAutomationEnabledMutationVariables>(SetAutomationEnabledDocument, options);
+      }
+export type SetAutomationEnabledMutationHookResult = ReturnType<typeof useSetAutomationEnabledMutation>;
+export type SetAutomationEnabledMutationResult = Apollo.MutationResult<SetAutomationEnabledMutation>;
+export type SetAutomationEnabledMutationOptions = Apollo.BaseMutationOptions<SetAutomationEnabledMutation, SetAutomationEnabledMutationVariables>;
+export const SetSkillsEnabledDocument = gql`
+    mutation SetSkillsEnabled($enabled: Boolean!) {
+  setSkillsEnabled(enabled: $enabled) {
+    id
+    canRunSkills
+  }
+}
+    `;
+export type SetSkillsEnabledMutationFn = Apollo.MutationFunction<SetSkillsEnabledMutation, SetSkillsEnabledMutationVariables>;
+
+/**
+ * __useSetSkillsEnabledMutation__
+ *
+ * To run a mutation, you first call `useSetSkillsEnabledMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetSkillsEnabledMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setSkillsEnabledMutation, { data, loading, error }] = useSetSkillsEnabledMutation({
+ *   variables: {
+ *      enabled: // value for 'enabled'
+ *   },
+ * });
+ */
+export function useSetSkillsEnabledMutation(baseOptions?: Apollo.MutationHookOptions<SetSkillsEnabledMutation, SetSkillsEnabledMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetSkillsEnabledMutation, SetSkillsEnabledMutationVariables>(SetSkillsEnabledDocument, options);
+      }
+export type SetSkillsEnabledMutationHookResult = ReturnType<typeof useSetSkillsEnabledMutation>;
+export type SetSkillsEnabledMutationResult = Apollo.MutationResult<SetSkillsEnabledMutation>;
+export type SetSkillsEnabledMutationOptions = Apollo.BaseMutationOptions<SetSkillsEnabledMutation, SetSkillsEnabledMutationVariables>;
+export const ReplayMatchDocument = gql`
+    mutation ReplayMatch($sittingId: Int!) {
+  replay(sittingId: $sittingId) {
+    onFieldSitting {
+      id
+    }
+    onTableSitting {
+      id
+    }
+  }
+}
+    `;
+export type ReplayMatchMutationFn = Apollo.MutationFunction<ReplayMatchMutation, ReplayMatchMutationVariables>;
+
+/**
+ * __useReplayMatchMutation__
+ *
+ * To run a mutation, you first call `useReplayMatchMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useReplayMatchMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [replayMatchMutation, { data, loading, error }] = useReplayMatchMutation({
+ *   variables: {
+ *      sittingId: // value for 'sittingId'
+ *   },
+ * });
+ */
+export function useReplayMatchMutation(baseOptions?: Apollo.MutationHookOptions<ReplayMatchMutation, ReplayMatchMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ReplayMatchMutation, ReplayMatchMutationVariables>(ReplayMatchDocument, options);
+      }
+export type ReplayMatchMutationHookResult = ReturnType<typeof useReplayMatchMutation>;
+export type ReplayMatchMutationResult = Apollo.MutationResult<ReplayMatchMutation>;
+export type ReplayMatchMutationOptions = Apollo.BaseMutationOptions<ReplayMatchMutation, ReplayMatchMutationVariables>;
+export const StartFieldDocument = gql`
+    mutation StartField($fieldId: Int!) {
+  startField(fieldId: $fieldId) {
+    endTime
+  }
+}
+    `;
+export type StartFieldMutationFn = Apollo.MutationFunction<StartFieldMutation, StartFieldMutationVariables>;
+
+/**
+ * __useStartFieldMutation__
+ *
+ * To run a mutation, you first call `useStartFieldMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStartFieldMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [startFieldMutation, { data, loading, error }] = useStartFieldMutation({
+ *   variables: {
+ *      fieldId: // value for 'fieldId'
+ *   },
+ * });
+ */
+export function useStartFieldMutation(baseOptions?: Apollo.MutationHookOptions<StartFieldMutation, StartFieldMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<StartFieldMutation, StartFieldMutationVariables>(StartFieldDocument, options);
+      }
+export type StartFieldMutationHookResult = ReturnType<typeof useStartFieldMutation>;
+export type StartFieldMutationResult = Apollo.MutationResult<StartFieldMutation>;
+export type StartFieldMutationOptions = Apollo.BaseMutationOptions<StartFieldMutation, StartFieldMutationVariables>;
+export const StopFieldDocument = gql`
+    mutation StopField($fieldId: Int!) {
+  stopField(fieldId: $fieldId) {
+    endTime
+  }
+}
+    `;
+export type StopFieldMutationFn = Apollo.MutationFunction<StopFieldMutation, StopFieldMutationVariables>;
+
+/**
+ * __useStopFieldMutation__
+ *
+ * To run a mutation, you first call `useStopFieldMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStopFieldMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [stopFieldMutation, { data, loading, error }] = useStopFieldMutation({
+ *   variables: {
+ *      fieldId: // value for 'fieldId'
+ *   },
+ * });
+ */
+export function useStopFieldMutation(baseOptions?: Apollo.MutationHookOptions<StopFieldMutation, StopFieldMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<StopFieldMutation, StopFieldMutationVariables>(StopFieldDocument, options);
+      }
+export type StopFieldMutationHookResult = ReturnType<typeof useStopFieldMutation>;
+export type StopFieldMutationResult = Apollo.MutationResult<StopFieldMutation>;
+export type StopFieldMutationOptions = Apollo.BaseMutationOptions<StopFieldMutation, StopFieldMutationVariables>;
+export const ResetAutonDocument = gql`
+    mutation ResetAuton($fieldId: Int!) {
+  resetAuton(fieldId: $fieldId) {
+    stage
+  }
+}
+    `;
+export type ResetAutonMutationFn = Apollo.MutationFunction<ResetAutonMutation, ResetAutonMutationVariables>;
+
+/**
+ * __useResetAutonMutation__
+ *
+ * To run a mutation, you first call `useResetAutonMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResetAutonMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resetAutonMutation, { data, loading, error }] = useResetAutonMutation({
+ *   variables: {
+ *      fieldId: // value for 'fieldId'
+ *   },
+ * });
+ */
+export function useResetAutonMutation(baseOptions?: Apollo.MutationHookOptions<ResetAutonMutation, ResetAutonMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ResetAutonMutation, ResetAutonMutationVariables>(ResetAutonDocument, options);
+      }
+export type ResetAutonMutationHookResult = ReturnType<typeof useResetAutonMutation>;
+export type ResetAutonMutationResult = Apollo.MutationResult<ResetAutonMutation>;
+export type ResetAutonMutationOptions = Apollo.BaseMutationOptions<ResetAutonMutation, ResetAutonMutationVariables>;
+export const QueueDriverSkillsDocument = gql`
+    mutation QueueDriverSkills($fieldId: Int!) {
+  queueDriverSkills(fieldId: $fieldId) {
+    fieldId
+  }
+}
+    `;
+export type QueueDriverSkillsMutationFn = Apollo.MutationFunction<QueueDriverSkillsMutation, QueueDriverSkillsMutationVariables>;
+
+/**
+ * __useQueueDriverSkillsMutation__
+ *
+ * To run a mutation, you first call `useQueueDriverSkillsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useQueueDriverSkillsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [queueDriverSkillsMutation, { data, loading, error }] = useQueueDriverSkillsMutation({
+ *   variables: {
+ *      fieldId: // value for 'fieldId'
+ *   },
+ * });
+ */
+export function useQueueDriverSkillsMutation(baseOptions?: Apollo.MutationHookOptions<QueueDriverSkillsMutation, QueueDriverSkillsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<QueueDriverSkillsMutation, QueueDriverSkillsMutationVariables>(QueueDriverSkillsDocument, options);
+      }
+export type QueueDriverSkillsMutationHookResult = ReturnType<typeof useQueueDriverSkillsMutation>;
+export type QueueDriverSkillsMutationResult = Apollo.MutationResult<QueueDriverSkillsMutation>;
+export type QueueDriverSkillsMutationOptions = Apollo.BaseMutationOptions<QueueDriverSkillsMutation, QueueDriverSkillsMutationVariables>;
+export const QueueProgrammingSkillsDocument = gql`
+    mutation QueueProgrammingSkills($fieldId: Int!) {
+  queueProgrammingSkills(fieldId: $fieldId) {
+    fieldId
+  }
+}
+    `;
+export type QueueProgrammingSkillsMutationFn = Apollo.MutationFunction<QueueProgrammingSkillsMutation, QueueProgrammingSkillsMutationVariables>;
+
+/**
+ * __useQueueProgrammingSkillsMutation__
+ *
+ * To run a mutation, you first call `useQueueProgrammingSkillsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useQueueProgrammingSkillsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [queueProgrammingSkillsMutation, { data, loading, error }] = useQueueProgrammingSkillsMutation({
+ *   variables: {
+ *      fieldId: // value for 'fieldId'
+ *   },
+ * });
+ */
+export function useQueueProgrammingSkillsMutation(baseOptions?: Apollo.MutationHookOptions<QueueProgrammingSkillsMutation, QueueProgrammingSkillsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<QueueProgrammingSkillsMutation, QueueProgrammingSkillsMutationVariables>(QueueProgrammingSkillsDocument, options);
+      }
+export type QueueProgrammingSkillsMutationHookResult = ReturnType<typeof useQueueProgrammingSkillsMutation>;
+export type QueueProgrammingSkillsMutationResult = Apollo.MutationResult<QueueProgrammingSkillsMutation>;
+export type QueueProgrammingSkillsMutationOptions = Apollo.BaseMutationOptions<QueueProgrammingSkillsMutation, QueueProgrammingSkillsMutationVariables>;
+export const FieldControlDocument = gql`
+    subscription FieldControl($fieldId: Int!) {
+  fieldControl(fieldId: $fieldId) {
+    fieldId
+    endTime
+    mode
+  }
+}
+    `;
+
+/**
+ * __useFieldControlSubscription__
+ *
+ * To run a query within a React component, call `useFieldControlSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useFieldControlSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFieldControlSubscription({
+ *   variables: {
+ *      fieldId: // value for 'fieldId'
+ *   },
+ * });
+ */
+export function useFieldControlSubscription(baseOptions: Apollo.SubscriptionHookOptions<FieldControlSubscription, FieldControlSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<FieldControlSubscription, FieldControlSubscriptionVariables>(FieldControlDocument, options);
+      }
+export type FieldControlSubscriptionHookResult = ReturnType<typeof useFieldControlSubscription>;
+export type FieldControlSubscriptionResult = Apollo.SubscriptionResult<FieldControlSubscription>;
+export const FieldsDocument = gql`
+    query Fields {
+  fields {
+    id
+    name
+    isEnabled
+    isCompetition
+  }
+}
+    `;
+
+/**
+ * __useFieldsQuery__
+ *
+ * To run a query within a React component, call `useFieldsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFieldsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFieldsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFieldsQuery(baseOptions?: Apollo.QueryHookOptions<FieldsQuery, FieldsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FieldsQuery, FieldsQueryVariables>(FieldsDocument, options);
+      }
+export function useFieldsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FieldsQuery, FieldsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FieldsQuery, FieldsQueryVariables>(FieldsDocument, options);
+        }
+export function useFieldsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<FieldsQuery, FieldsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FieldsQuery, FieldsQueryVariables>(FieldsDocument, options);
+        }
+export type FieldsQueryHookResult = ReturnType<typeof useFieldsQuery>;
+export type FieldsLazyQueryHookResult = ReturnType<typeof useFieldsLazyQuery>;
+export type FieldsSuspenseQueryHookResult = ReturnType<typeof useFieldsSuspenseQuery>;
+export type FieldsQueryResult = Apollo.QueryResult<FieldsQuery, FieldsQueryVariables>;
+export const UpdateFieldNameDocument = gql`
+    mutation UpdateFieldName($fieldId: Int!, $name: String) {
+  updateField(fieldId: $fieldId, update: {name: $name}) {
+    id
+    name
+    isEnabled
+    isCompetition
+  }
+}
+    `;
+export type UpdateFieldNameMutationFn = Apollo.MutationFunction<UpdateFieldNameMutation, UpdateFieldNameMutationVariables>;
+
+/**
+ * __useUpdateFieldNameMutation__
+ *
+ * To run a mutation, you first call `useUpdateFieldNameMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateFieldNameMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateFieldNameMutation, { data, loading, error }] = useUpdateFieldNameMutation({
+ *   variables: {
+ *      fieldId: // value for 'fieldId'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useUpdateFieldNameMutation(baseOptions?: Apollo.MutationHookOptions<UpdateFieldNameMutation, UpdateFieldNameMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateFieldNameMutation, UpdateFieldNameMutationVariables>(UpdateFieldNameDocument, options);
+      }
+export type UpdateFieldNameMutationHookResult = ReturnType<typeof useUpdateFieldNameMutation>;
+export type UpdateFieldNameMutationResult = Apollo.MutationResult<UpdateFieldNameMutation>;
+export type UpdateFieldNameMutationOptions = Apollo.BaseMutationOptions<UpdateFieldNameMutation, UpdateFieldNameMutationVariables>;
+export const DeleteFieldDocument = gql`
+    mutation DeleteField($fieldId: Int!) {
+  deleteField(fieldId: $fieldId) {
+    id
+  }
+}
+    `;
+export type DeleteFieldMutationFn = Apollo.MutationFunction<DeleteFieldMutation, DeleteFieldMutationVariables>;
+
+/**
+ * __useDeleteFieldMutation__
+ *
+ * To run a mutation, you first call `useDeleteFieldMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteFieldMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteFieldMutation, { data, loading, error }] = useDeleteFieldMutation({
+ *   variables: {
+ *      fieldId: // value for 'fieldId'
+ *   },
+ * });
+ */
+export function useDeleteFieldMutation(baseOptions?: Apollo.MutationHookOptions<DeleteFieldMutation, DeleteFieldMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteFieldMutation, DeleteFieldMutationVariables>(DeleteFieldDocument, options);
+      }
+export type DeleteFieldMutationHookResult = ReturnType<typeof useDeleteFieldMutation>;
+export type DeleteFieldMutationResult = Apollo.MutationResult<DeleteFieldMutation>;
+export type DeleteFieldMutationOptions = Apollo.BaseMutationOptions<DeleteFieldMutation, DeleteFieldMutationVariables>;
+export const OnDeckFieldDocument = gql`
+    query OnDeckField {
+  competitionInformation {
+    onDeckField {
+      id
+      competition {
+        onFieldSitting {
+          ...SittingInformation
+        }
+      }
+    }
+    liveField {
+      id
+      competition {
+        stage
+      }
+    }
+  }
+}
+    ${SittingInformationFragmentDoc}`;
+
+/**
+ * __useOnDeckFieldQuery__
+ *
+ * To run a query within a React component, call `useOnDeckFieldQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOnDeckFieldQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnDeckFieldQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOnDeckFieldQuery(baseOptions?: Apollo.QueryHookOptions<OnDeckFieldQuery, OnDeckFieldQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OnDeckFieldQuery, OnDeckFieldQueryVariables>(OnDeckFieldDocument, options);
+      }
+export function useOnDeckFieldLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnDeckFieldQuery, OnDeckFieldQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OnDeckFieldQuery, OnDeckFieldQueryVariables>(OnDeckFieldDocument, options);
+        }
+export function useOnDeckFieldSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<OnDeckFieldQuery, OnDeckFieldQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<OnDeckFieldQuery, OnDeckFieldQueryVariables>(OnDeckFieldDocument, options);
+        }
+export type OnDeckFieldQueryHookResult = ReturnType<typeof useOnDeckFieldQuery>;
+export type OnDeckFieldLazyQueryHookResult = ReturnType<typeof useOnDeckFieldLazyQuery>;
+export type OnDeckFieldSuspenseQueryHookResult = ReturnType<typeof useOnDeckFieldSuspenseQuery>;
+export type OnDeckFieldQueryResult = Apollo.QueryResult<OnDeckFieldQuery, OnDeckFieldQueryVariables>;
+export const FieldNamesDocument = gql`
+    query FieldNames {
+  fields {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useFieldNamesQuery__
+ *
+ * To run a query within a React component, call `useFieldNamesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFieldNamesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFieldNamesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFieldNamesQuery(baseOptions?: Apollo.QueryHookOptions<FieldNamesQuery, FieldNamesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FieldNamesQuery, FieldNamesQueryVariables>(FieldNamesDocument, options);
+      }
+export function useFieldNamesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FieldNamesQuery, FieldNamesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FieldNamesQuery, FieldNamesQueryVariables>(FieldNamesDocument, options);
+        }
+export function useFieldNamesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<FieldNamesQuery, FieldNamesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FieldNamesQuery, FieldNamesQueryVariables>(FieldNamesDocument, options);
+        }
+export type FieldNamesQueryHookResult = ReturnType<typeof useFieldNamesQuery>;
+export type FieldNamesLazyQueryHookResult = ReturnType<typeof useFieldNamesLazyQuery>;
+export type FieldNamesSuspenseQueryHookResult = ReturnType<typeof useFieldNamesSuspenseQuery>;
+export type FieldNamesQueryResult = Apollo.QueryResult<FieldNamesQuery, FieldNamesQueryVariables>;
+export const ConfigureTournamentManagerDocument = gql`
+    mutation configureTournamentManager($settings: TournamentManagerSetup!) {
+  configureTournamentManager(settings: $settings) {
+    status
+  }
+}
+    `;
+export type ConfigureTournamentManagerMutationFn = Apollo.MutationFunction<ConfigureTournamentManagerMutation, ConfigureTournamentManagerMutationVariables>;
+
+/**
+ * __useConfigureTournamentManagerMutation__
+ *
+ * To run a mutation, you first call `useConfigureTournamentManagerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useConfigureTournamentManagerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [configureTournamentManagerMutation, { data, loading, error }] = useConfigureTournamentManagerMutation({
+ *   variables: {
+ *      settings: // value for 'settings'
+ *   },
+ * });
+ */
+export function useConfigureTournamentManagerMutation(baseOptions?: Apollo.MutationHookOptions<ConfigureTournamentManagerMutation, ConfigureTournamentManagerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ConfigureTournamentManagerMutation, ConfigureTournamentManagerMutationVariables>(ConfigureTournamentManagerDocument, options);
+      }
+export type ConfigureTournamentManagerMutationHookResult = ReturnType<typeof useConfigureTournamentManagerMutation>;
+export type ConfigureTournamentManagerMutationResult = Apollo.MutationResult<ConfigureTournamentManagerMutation>;
+export type ConfigureTournamentManagerMutationOptions = Apollo.BaseMutationOptions<ConfigureTournamentManagerMutation, ConfigureTournamentManagerMutationVariables>;
+export const RenameDisplayDocument = gql`
+    mutation RenameDisplay($uuid: String!, $name: String!) {
+  renameDisplay(uuid: $uuid, name: $name) {
+    uuid
+    name
+  }
+}
+    `;
+export type RenameDisplayMutationFn = Apollo.MutationFunction<RenameDisplayMutation, RenameDisplayMutationVariables>;
+
+/**
+ * __useRenameDisplayMutation__
+ *
+ * To run a mutation, you first call `useRenameDisplayMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRenameDisplayMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [renameDisplayMutation, { data, loading, error }] = useRenameDisplayMutation({
+ *   variables: {
+ *      uuid: // value for 'uuid'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useRenameDisplayMutation(baseOptions?: Apollo.MutationHookOptions<RenameDisplayMutation, RenameDisplayMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RenameDisplayMutation, RenameDisplayMutationVariables>(RenameDisplayDocument, options);
+      }
+export type RenameDisplayMutationHookResult = ReturnType<typeof useRenameDisplayMutation>;
+export type RenameDisplayMutationResult = Apollo.MutationResult<RenameDisplayMutation>;
+export type RenameDisplayMutationOptions = Apollo.BaseMutationOptions<RenameDisplayMutation, RenameDisplayMutationVariables>;
+export const SetDisplayFieldDocument = gql`
+    mutation SetDisplayField($uuid: String!, $fieldId: Int) {
+  setDisplayField(uuid: $uuid, fieldId: $fieldId) {
+    uuid
+    field {
+      id
+    }
+  }
+}
+    `;
+export type SetDisplayFieldMutationFn = Apollo.MutationFunction<SetDisplayFieldMutation, SetDisplayFieldMutationVariables>;
+
+/**
+ * __useSetDisplayFieldMutation__
+ *
+ * To run a mutation, you first call `useSetDisplayFieldMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetDisplayFieldMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setDisplayFieldMutation, { data, loading, error }] = useSetDisplayFieldMutation({
+ *   variables: {
+ *      uuid: // value for 'uuid'
+ *      fieldId: // value for 'fieldId'
+ *   },
+ * });
+ */
+export function useSetDisplayFieldMutation(baseOptions?: Apollo.MutationHookOptions<SetDisplayFieldMutation, SetDisplayFieldMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetDisplayFieldMutation, SetDisplayFieldMutationVariables>(SetDisplayFieldDocument, options);
+      }
+export type SetDisplayFieldMutationHookResult = ReturnType<typeof useSetDisplayFieldMutation>;
+export type SetDisplayFieldMutationResult = Apollo.MutationResult<SetDisplayFieldMutation>;
+export type SetDisplayFieldMutationOptions = Apollo.BaseMutationOptions<SetDisplayFieldMutation, SetDisplayFieldMutationVariables>;
 export const StartTimeoutDocument = gql`
     mutation StartTimeout {
   startTimeout {
@@ -1867,58 +2192,6 @@ export function useCancelTimeoutMutation(baseOptions?: Apollo.MutationHookOption
 export type CancelTimeoutMutationHookResult = ReturnType<typeof useCancelTimeoutMutation>;
 export type CancelTimeoutMutationResult = Apollo.MutationResult<CancelTimeoutMutation>;
 export type CancelTimeoutMutationOptions = Apollo.BaseMutationOptions<CancelTimeoutMutation, CancelTimeoutMutationVariables>;
-export const OnDeckFieldDocument = gql`
-    query OnDeckField {
-  competitionInformation {
-    onDeckField {
-      id
-      competition {
-        onFieldSitting {
-          ...SittingInformation
-        }
-      }
-    }
-    liveField {
-      id
-      competition {
-        stage
-      }
-    }
-  }
-}
-    ${SittingInformationFragmentDoc}`;
-
-/**
- * __useOnDeckFieldQuery__
- *
- * To run a query within a React component, call `useOnDeckFieldQuery` and pass it any options that fit your needs.
- * When your component renders, `useOnDeckFieldQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useOnDeckFieldQuery({
- *   variables: {
- *   },
- * });
- */
-export function useOnDeckFieldQuery(baseOptions?: Apollo.QueryHookOptions<OnDeckFieldQuery, OnDeckFieldQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<OnDeckFieldQuery, OnDeckFieldQueryVariables>(OnDeckFieldDocument, options);
-      }
-export function useOnDeckFieldLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnDeckFieldQuery, OnDeckFieldQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<OnDeckFieldQuery, OnDeckFieldQueryVariables>(OnDeckFieldDocument, options);
-        }
-export function useOnDeckFieldSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<OnDeckFieldQuery, OnDeckFieldQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<OnDeckFieldQuery, OnDeckFieldQueryVariables>(OnDeckFieldDocument, options);
-        }
-export type OnDeckFieldQueryHookResult = ReturnType<typeof useOnDeckFieldQuery>;
-export type OnDeckFieldLazyQueryHookResult = ReturnType<typeof useOnDeckFieldLazyQuery>;
-export type OnDeckFieldSuspenseQueryHookResult = ReturnType<typeof useOnDeckFieldSuspenseQuery>;
-export type OnDeckFieldQueryResult = Apollo.QueryResult<OnDeckFieldQuery, OnDeckFieldQueryVariables>;
 export const RefereeInformationDocument = gql`
     query RefereeInformation {
   competitionInformation {
@@ -1976,144 +2249,6 @@ export type RefereeInformationQueryHookResult = ReturnType<typeof useRefereeInfo
 export type RefereeInformationLazyQueryHookResult = ReturnType<typeof useRefereeInformationLazyQuery>;
 export type RefereeInformationSuspenseQueryHookResult = ReturnType<typeof useRefereeInformationSuspenseQuery>;
 export type RefereeInformationQueryResult = Apollo.QueryResult<RefereeInformationQuery, RefereeInformationQueryVariables>;
-export const LiveFieldDocument = gql`
-    query LiveField {
-  competitionInformation {
-    liveField {
-      id
-      fieldControl {
-        endTime
-      }
-      competition {
-        stage
-        onFieldSitting {
-          ...SittingInformation
-        }
-      }
-    }
-  }
-}
-    ${SittingInformationFragmentDoc}`;
-
-/**
- * __useLiveFieldQuery__
- *
- * To run a query within a React component, call `useLiveFieldQuery` and pass it any options that fit your needs.
- * When your component renders, `useLiveFieldQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useLiveFieldQuery({
- *   variables: {
- *   },
- * });
- */
-export function useLiveFieldQuery(baseOptions?: Apollo.QueryHookOptions<LiveFieldQuery, LiveFieldQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<LiveFieldQuery, LiveFieldQueryVariables>(LiveFieldDocument, options);
-      }
-export function useLiveFieldLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LiveFieldQuery, LiveFieldQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<LiveFieldQuery, LiveFieldQueryVariables>(LiveFieldDocument, options);
-        }
-export function useLiveFieldSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<LiveFieldQuery, LiveFieldQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<LiveFieldQuery, LiveFieldQueryVariables>(LiveFieldDocument, options);
-        }
-export type LiveFieldQueryHookResult = ReturnType<typeof useLiveFieldQuery>;
-export type LiveFieldLazyQueryHookResult = ReturnType<typeof useLiveFieldLazyQuery>;
-export type LiveFieldSuspenseQueryHookResult = ReturnType<typeof useLiveFieldSuspenseQuery>;
-export type LiveFieldQueryResult = Apollo.QueryResult<LiveFieldQuery, LiveFieldQueryVariables>;
-export const GetTableOccupiedDocument = gql`
-    query GetTableOccupied {
-  fields(isEnabled: true, isCompetition: true) {
-    id
-    name
-    competition {
-      onTableSitting {
-        id
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useGetTableOccupiedQuery__
- *
- * To run a query within a React component, call `useGetTableOccupiedQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetTableOccupiedQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetTableOccupiedQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetTableOccupiedQuery(baseOptions?: Apollo.QueryHookOptions<GetTableOccupiedQuery, GetTableOccupiedQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetTableOccupiedQuery, GetTableOccupiedQueryVariables>(GetTableOccupiedDocument, options);
-      }
-export function useGetTableOccupiedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTableOccupiedQuery, GetTableOccupiedQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetTableOccupiedQuery, GetTableOccupiedQueryVariables>(GetTableOccupiedDocument, options);
-        }
-export function useGetTableOccupiedSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetTableOccupiedQuery, GetTableOccupiedQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetTableOccupiedQuery, GetTableOccupiedQueryVariables>(GetTableOccupiedDocument, options);
-        }
-export type GetTableOccupiedQueryHookResult = ReturnType<typeof useGetTableOccupiedQuery>;
-export type GetTableOccupiedLazyQueryHookResult = ReturnType<typeof useGetTableOccupiedLazyQuery>;
-export type GetTableOccupiedSuspenseQueryHookResult = ReturnType<typeof useGetTableOccupiedSuspenseQuery>;
-export type GetTableOccupiedQueryResult = Apollo.QueryResult<GetTableOccupiedQuery, GetTableOccupiedQueryVariables>;
-export const GetUnqueuedSittingsDocument = gql`
-    query GetUnqueuedSittings {
-  currentBlock {
-    ...BlockInformation
-  }
-  nextBlock {
-    id
-    name
-  }
-}
-    ${BlockInformationFragmentDoc}`;
-
-/**
- * __useGetUnqueuedSittingsQuery__
- *
- * To run a query within a React component, call `useGetUnqueuedSittingsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetUnqueuedSittingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetUnqueuedSittingsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetUnqueuedSittingsQuery(baseOptions?: Apollo.QueryHookOptions<GetUnqueuedSittingsQuery, GetUnqueuedSittingsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetUnqueuedSittingsQuery, GetUnqueuedSittingsQueryVariables>(GetUnqueuedSittingsDocument, options);
-      }
-export function useGetUnqueuedSittingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUnqueuedSittingsQuery, GetUnqueuedSittingsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetUnqueuedSittingsQuery, GetUnqueuedSittingsQueryVariables>(GetUnqueuedSittingsDocument, options);
-        }
-export function useGetUnqueuedSittingsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetUnqueuedSittingsQuery, GetUnqueuedSittingsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetUnqueuedSittingsQuery, GetUnqueuedSittingsQueryVariables>(GetUnqueuedSittingsDocument, options);
-        }
-export type GetUnqueuedSittingsQueryHookResult = ReturnType<typeof useGetUnqueuedSittingsQuery>;
-export type GetUnqueuedSittingsLazyQueryHookResult = ReturnType<typeof useGetUnqueuedSittingsLazyQuery>;
-export type GetUnqueuedSittingsSuspenseQueryHookResult = ReturnType<typeof useGetUnqueuedSittingsSuspenseQuery>;
-export type GetUnqueuedSittingsQueryResult = Apollo.QueryResult<GetUnqueuedSittingsQuery, GetUnqueuedSittingsQueryVariables>;
 export const GetEventStageDocument = gql`
     query GetEventStage {
   stage {
@@ -2153,61 +2288,6 @@ export type GetEventStageQueryHookResult = ReturnType<typeof useGetEventStageQue
 export type GetEventStageLazyQueryHookResult = ReturnType<typeof useGetEventStageLazyQuery>;
 export type GetEventStageSuspenseQueryHookResult = ReturnType<typeof useGetEventStageSuspenseQuery>;
 export type GetEventStageQueryResult = Apollo.QueryResult<GetEventStageQuery, GetEventStageQueryVariables>;
-export const GetCompetitionFieldsDocument = gql`
-    query GetCompetitionFields {
-  fields(isEnabled: true, isCompetition: true) {
-    id
-    name
-    competition {
-      stage
-      isLive
-      isOnDeck
-      onFieldSitting {
-        ...SittingWithTeams
-      }
-      onTableSitting {
-        ...SittingWithTeams
-      }
-    }
-    fieldControl {
-      fieldId
-      endTime
-    }
-  }
-}
-    ${SittingWithTeamsFragmentDoc}`;
-
-/**
- * __useGetCompetitionFieldsQuery__
- *
- * To run a query within a React component, call `useGetCompetitionFieldsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCompetitionFieldsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetCompetitionFieldsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetCompetitionFieldsQuery(baseOptions?: Apollo.QueryHookOptions<GetCompetitionFieldsQuery, GetCompetitionFieldsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetCompetitionFieldsQuery, GetCompetitionFieldsQueryVariables>(GetCompetitionFieldsDocument, options);
-      }
-export function useGetCompetitionFieldsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCompetitionFieldsQuery, GetCompetitionFieldsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetCompetitionFieldsQuery, GetCompetitionFieldsQueryVariables>(GetCompetitionFieldsDocument, options);
-        }
-export function useGetCompetitionFieldsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetCompetitionFieldsQuery, GetCompetitionFieldsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetCompetitionFieldsQuery, GetCompetitionFieldsQueryVariables>(GetCompetitionFieldsDocument, options);
-        }
-export type GetCompetitionFieldsQueryHookResult = ReturnType<typeof useGetCompetitionFieldsQuery>;
-export type GetCompetitionFieldsLazyQueryHookResult = ReturnType<typeof useGetCompetitionFieldsLazyQuery>;
-export type GetCompetitionFieldsSuspenseQueryHookResult = ReturnType<typeof useGetCompetitionFieldsSuspenseQuery>;
-export type GetCompetitionFieldsQueryResult = Apollo.QueryResult<GetCompetitionFieldsQuery, GetCompetitionFieldsQueryVariables>;
 export const CompetitionMiniSettingsDocument = gql`
     query CompetitionMiniSettings {
   stage {
@@ -2359,48 +2439,6 @@ export type TeamsQueryHookResult = ReturnType<typeof useTeamsQuery>;
 export type TeamsLazyQueryHookResult = ReturnType<typeof useTeamsLazyQuery>;
 export type TeamsSuspenseQueryHookResult = ReturnType<typeof useTeamsSuspenseQuery>;
 export type TeamsQueryResult = Apollo.QueryResult<TeamsQuery, TeamsQueryVariables>;
-export const FieldsDocument = gql`
-    query Fields {
-  fields {
-    id
-    name
-    isEnabled
-    isCompetition
-  }
-}
-    `;
-
-/**
- * __useFieldsQuery__
- *
- * To run a query within a React component, call `useFieldsQuery` and pass it any options that fit your needs.
- * When your component renders, `useFieldsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useFieldsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useFieldsQuery(baseOptions?: Apollo.QueryHookOptions<FieldsQuery, FieldsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<FieldsQuery, FieldsQueryVariables>(FieldsDocument, options);
-      }
-export function useFieldsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FieldsQuery, FieldsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<FieldsQuery, FieldsQueryVariables>(FieldsDocument, options);
-        }
-export function useFieldsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<FieldsQuery, FieldsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<FieldsQuery, FieldsQueryVariables>(FieldsDocument, options);
-        }
-export type FieldsQueryHookResult = ReturnType<typeof useFieldsQuery>;
-export type FieldsLazyQueryHookResult = ReturnType<typeof useFieldsLazyQuery>;
-export type FieldsSuspenseQueryHookResult = ReturnType<typeof useFieldsSuspenseQuery>;
-export type FieldsQueryResult = Apollo.QueryResult<FieldsQuery, FieldsQueryVariables>;
 export const DisplaysDocument = gql`
     query Displays {
   displays {
@@ -2445,46 +2483,6 @@ export type DisplaysQueryHookResult = ReturnType<typeof useDisplaysQuery>;
 export type DisplaysLazyQueryHookResult = ReturnType<typeof useDisplaysLazyQuery>;
 export type DisplaysSuspenseQueryHookResult = ReturnType<typeof useDisplaysSuspenseQuery>;
 export type DisplaysQueryResult = Apollo.QueryResult<DisplaysQuery, DisplaysQueryVariables>;
-export const FieldNamesDocument = gql`
-    query FieldNames {
-  fields {
-    id
-    name
-  }
-}
-    `;
-
-/**
- * __useFieldNamesQuery__
- *
- * To run a query within a React component, call `useFieldNamesQuery` and pass it any options that fit your needs.
- * When your component renders, `useFieldNamesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useFieldNamesQuery({
- *   variables: {
- *   },
- * });
- */
-export function useFieldNamesQuery(baseOptions?: Apollo.QueryHookOptions<FieldNamesQuery, FieldNamesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<FieldNamesQuery, FieldNamesQueryVariables>(FieldNamesDocument, options);
-      }
-export function useFieldNamesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FieldNamesQuery, FieldNamesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<FieldNamesQuery, FieldNamesQueryVariables>(FieldNamesDocument, options);
-        }
-export function useFieldNamesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<FieldNamesQuery, FieldNamesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<FieldNamesQuery, FieldNamesQueryVariables>(FieldNamesDocument, options);
-        }
-export type FieldNamesQueryHookResult = ReturnType<typeof useFieldNamesQuery>;
-export type FieldNamesLazyQueryHookResult = ReturnType<typeof useFieldNamesLazyQuery>;
-export type FieldNamesSuspenseQueryHookResult = ReturnType<typeof useFieldNamesSuspenseQuery>;
-export type FieldNamesQueryResult = Apollo.QueryResult<FieldNamesQuery, FieldNamesQueryVariables>;
 export const FieldDisplayDocument = gql`
     query FieldDisplay($uuid: String!) {
   timeout {
@@ -2547,61 +2545,6 @@ export type FieldDisplayQueryHookResult = ReturnType<typeof useFieldDisplayQuery
 export type FieldDisplayLazyQueryHookResult = ReturnType<typeof useFieldDisplayLazyQuery>;
 export type FieldDisplaySuspenseQueryHookResult = ReturnType<typeof useFieldDisplaySuspenseQuery>;
 export type FieldDisplayQueryResult = Apollo.QueryResult<FieldDisplayQuery, FieldDisplayQueryVariables>;
-export const ResultsDocument = gql`
-    query Results {
-  results {
-    displayedResults {
-      id
-      number
-      redScore
-      blueScore
-      contest {
-        id
-        round
-        number
-        redTeams {
-          ...TeamInformation
-        }
-        blueTeams {
-          ...TeamInformation
-        }
-      }
-    }
-  }
-}
-    ${TeamInformationFragmentDoc}`;
-
-/**
- * __useResultsQuery__
- *
- * To run a query within a React component, call `useResultsQuery` and pass it any options that fit your needs.
- * When your component renders, `useResultsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useResultsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useResultsQuery(baseOptions?: Apollo.QueryHookOptions<ResultsQuery, ResultsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ResultsQuery, ResultsQueryVariables>(ResultsDocument, options);
-      }
-export function useResultsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ResultsQuery, ResultsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ResultsQuery, ResultsQueryVariables>(ResultsDocument, options);
-        }
-export function useResultsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ResultsQuery, ResultsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ResultsQuery, ResultsQueryVariables>(ResultsDocument, options);
-        }
-export type ResultsQueryHookResult = ReturnType<typeof useResultsQuery>;
-export type ResultsLazyQueryHookResult = ReturnType<typeof useResultsLazyQuery>;
-export type ResultsSuspenseQueryHookResult = ReturnType<typeof useResultsSuspenseQuery>;
-export type ResultsQueryResult = Apollo.QueryResult<ResultsQuery, ResultsQueryVariables>;
 export const SkillsFieldsDocument = gql`
     query SkillsFields {
   fields(isEnabled: true, skillsEnabled: true) {
@@ -2691,147 +2634,6 @@ export type SkillsFieldQueryHookResult = ReturnType<typeof useSkillsFieldQuery>;
 export type SkillsFieldLazyQueryHookResult = ReturnType<typeof useSkillsFieldLazyQuery>;
 export type SkillsFieldSuspenseQueryHookResult = ReturnType<typeof useSkillsFieldSuspenseQuery>;
 export type SkillsFieldQueryResult = Apollo.QueryResult<SkillsFieldQuery, SkillsFieldQueryVariables>;
-export const CanStartAllianceSelectionDocument = gql`
-    query CanStartAllianceSelection {
-  stage {
-    stage
-  }
-  currentBlock {
-    id
-  }
-  nextBlock {
-    id
-  }
-}
-    `;
-
-/**
- * __useCanStartAllianceSelectionQuery__
- *
- * To run a query within a React component, call `useCanStartAllianceSelectionQuery` and pass it any options that fit your needs.
- * When your component renders, `useCanStartAllianceSelectionQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCanStartAllianceSelectionQuery({
- *   variables: {
- *   },
- * });
- */
-export function useCanStartAllianceSelectionQuery(baseOptions?: Apollo.QueryHookOptions<CanStartAllianceSelectionQuery, CanStartAllianceSelectionQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<CanStartAllianceSelectionQuery, CanStartAllianceSelectionQueryVariables>(CanStartAllianceSelectionDocument, options);
-      }
-export function useCanStartAllianceSelectionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CanStartAllianceSelectionQuery, CanStartAllianceSelectionQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<CanStartAllianceSelectionQuery, CanStartAllianceSelectionQueryVariables>(CanStartAllianceSelectionDocument, options);
-        }
-export function useCanStartAllianceSelectionSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CanStartAllianceSelectionQuery, CanStartAllianceSelectionQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<CanStartAllianceSelectionQuery, CanStartAllianceSelectionQueryVariables>(CanStartAllianceSelectionDocument, options);
-        }
-export type CanStartAllianceSelectionQueryHookResult = ReturnType<typeof useCanStartAllianceSelectionQuery>;
-export type CanStartAllianceSelectionLazyQueryHookResult = ReturnType<typeof useCanStartAllianceSelectionLazyQuery>;
-export type CanStartAllianceSelectionSuspenseQueryHookResult = ReturnType<typeof useCanStartAllianceSelectionSuspenseQuery>;
-export type CanStartAllianceSelectionQueryResult = Apollo.QueryResult<CanStartAllianceSelectionQuery, CanStartAllianceSelectionQueryVariables>;
-export const AllianceSelectionControlDocument = gql`
-    query AllianceSelectionControl {
-  allianceSelection {
-    picking {
-      id
-      number
-    }
-    pickable {
-      id
-      number
-    }
-    alliances {
-      id
-      number
-    }
-    picked {
-      id
-      number
-    }
-  }
-}
-    `;
-
-/**
- * __useAllianceSelectionControlQuery__
- *
- * To run a query within a React component, call `useAllianceSelectionControlQuery` and pass it any options that fit your needs.
- * When your component renders, `useAllianceSelectionControlQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAllianceSelectionControlQuery({
- *   variables: {
- *   },
- * });
- */
-export function useAllianceSelectionControlQuery(baseOptions?: Apollo.QueryHookOptions<AllianceSelectionControlQuery, AllianceSelectionControlQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<AllianceSelectionControlQuery, AllianceSelectionControlQueryVariables>(AllianceSelectionControlDocument, options);
-      }
-export function useAllianceSelectionControlLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllianceSelectionControlQuery, AllianceSelectionControlQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<AllianceSelectionControlQuery, AllianceSelectionControlQueryVariables>(AllianceSelectionControlDocument, options);
-        }
-export function useAllianceSelectionControlSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<AllianceSelectionControlQuery, AllianceSelectionControlQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<AllianceSelectionControlQuery, AllianceSelectionControlQueryVariables>(AllianceSelectionControlDocument, options);
-        }
-export type AllianceSelectionControlQueryHookResult = ReturnType<typeof useAllianceSelectionControlQuery>;
-export type AllianceSelectionControlLazyQueryHookResult = ReturnType<typeof useAllianceSelectionControlLazyQuery>;
-export type AllianceSelectionControlSuspenseQueryHookResult = ReturnType<typeof useAllianceSelectionControlSuspenseQuery>;
-export type AllianceSelectionControlQueryResult = Apollo.QueryResult<AllianceSelectionControlQuery, AllianceSelectionControlQueryVariables>;
-export const AllianceSelectionResultsDocument = gql`
-    query AllianceSelectionResults {
-  allianceSelection {
-    alliances {
-      id
-      number
-    }
-  }
-}
-    `;
-
-/**
- * __useAllianceSelectionResultsQuery__
- *
- * To run a query within a React component, call `useAllianceSelectionResultsQuery` and pass it any options that fit your needs.
- * When your component renders, `useAllianceSelectionResultsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAllianceSelectionResultsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useAllianceSelectionResultsQuery(baseOptions?: Apollo.QueryHookOptions<AllianceSelectionResultsQuery, AllianceSelectionResultsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<AllianceSelectionResultsQuery, AllianceSelectionResultsQueryVariables>(AllianceSelectionResultsDocument, options);
-      }
-export function useAllianceSelectionResultsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllianceSelectionResultsQuery, AllianceSelectionResultsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<AllianceSelectionResultsQuery, AllianceSelectionResultsQueryVariables>(AllianceSelectionResultsDocument, options);
-        }
-export function useAllianceSelectionResultsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<AllianceSelectionResultsQuery, AllianceSelectionResultsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<AllianceSelectionResultsQuery, AllianceSelectionResultsQueryVariables>(AllianceSelectionResultsDocument, options);
-        }
-export type AllianceSelectionResultsQueryHookResult = ReturnType<typeof useAllianceSelectionResultsQuery>;
-export type AllianceSelectionResultsLazyQueryHookResult = ReturnType<typeof useAllianceSelectionResultsLazyQuery>;
-export type AllianceSelectionResultsSuspenseQueryHookResult = ReturnType<typeof useAllianceSelectionResultsSuspenseQuery>;
-export type AllianceSelectionResultsQueryResult = Apollo.QueryResult<AllianceSelectionResultsQuery, AllianceSelectionResultsQueryVariables>;
 export const QueueDisplayDocument = gql`
     query QueueDisplay {
   fields(isEnabled: true, isCompetition: true) {
@@ -2881,35 +2683,233 @@ export type QueueDisplayQueryHookResult = ReturnType<typeof useQueueDisplayQuery
 export type QueueDisplayLazyQueryHookResult = ReturnType<typeof useQueueDisplayLazyQuery>;
 export type QueueDisplaySuspenseQueryHookResult = ReturnType<typeof useQueueDisplaySuspenseQuery>;
 export type QueueDisplayQueryResult = Apollo.QueryResult<QueueDisplayQuery, QueueDisplayQueryVariables>;
-export const FieldControlDocument = gql`
-    subscription FieldControl($fieldId: Int!) {
-  fieldControl(fieldId: $fieldId) {
-    fieldId
-    endTime
-    mode
+export const ClearResultsDocument = gql`
+    mutation ClearResults {
+  clearResults {
+    displayedResults {
+      id
+    }
   }
 }
     `;
+export type ClearResultsMutationFn = Apollo.MutationFunction<ClearResultsMutation, ClearResultsMutationVariables>;
 
 /**
- * __useFieldControlSubscription__
+ * __useClearResultsMutation__
  *
- * To run a query within a React component, call `useFieldControlSubscription` and pass it any options that fit your needs.
- * When your component renders, `useFieldControlSubscription` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
+ * To run a mutation, you first call `useClearResultsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useClearResultsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const { data, loading, error } = useFieldControlSubscription({
+ * const [clearResultsMutation, { data, loading, error }] = useClearResultsMutation({
  *   variables: {
- *      fieldId: // value for 'fieldId'
  *   },
  * });
  */
-export function useFieldControlSubscription(baseOptions: Apollo.SubscriptionHookOptions<FieldControlSubscription, FieldControlSubscriptionVariables>) {
+export function useClearResultsMutation(baseOptions?: Apollo.MutationHookOptions<ClearResultsMutation, ClearResultsMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useSubscription<FieldControlSubscription, FieldControlSubscriptionVariables>(FieldControlDocument, options);
+        return Apollo.useMutation<ClearResultsMutation, ClearResultsMutationVariables>(ClearResultsDocument, options);
       }
-export type FieldControlSubscriptionHookResult = ReturnType<typeof useFieldControlSubscription>;
-export type FieldControlSubscriptionResult = Apollo.SubscriptionResult<FieldControlSubscription>;
+export type ClearResultsMutationHookResult = ReturnType<typeof useClearResultsMutation>;
+export type ClearResultsMutationResult = Apollo.MutationResult<ClearResultsMutation>;
+export type ClearResultsMutationOptions = Apollo.BaseMutationOptions<ClearResultsMutation, ClearResultsMutationVariables>;
+export const PromoteResultsDocument = gql`
+    mutation PromoteResults {
+  promoteResults {
+    displayedResults {
+      id
+    }
+  }
+}
+    `;
+export type PromoteResultsMutationFn = Apollo.MutationFunction<PromoteResultsMutation, PromoteResultsMutationVariables>;
+
+/**
+ * __usePromoteResultsMutation__
+ *
+ * To run a mutation, you first call `usePromoteResultsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePromoteResultsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [promoteResultsMutation, { data, loading, error }] = usePromoteResultsMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePromoteResultsMutation(baseOptions?: Apollo.MutationHookOptions<PromoteResultsMutation, PromoteResultsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PromoteResultsMutation, PromoteResultsMutationVariables>(PromoteResultsDocument, options);
+      }
+export type PromoteResultsMutationHookResult = ReturnType<typeof usePromoteResultsMutation>;
+export type PromoteResultsMutationResult = Apollo.MutationResult<PromoteResultsMutation>;
+export type PromoteResultsMutationOptions = Apollo.BaseMutationOptions<PromoteResultsMutation, PromoteResultsMutationVariables>;
+export const ResultsDocument = gql`
+    query Results {
+  results {
+    displayedResults {
+      id
+      number
+      redScore
+      blueScore
+      contest {
+        id
+        round
+        number
+        redTeams {
+          ...TeamInformation
+        }
+        blueTeams {
+          ...TeamInformation
+        }
+      }
+    }
+  }
+}
+    ${TeamInformationFragmentDoc}`;
+
+/**
+ * __useResultsQuery__
+ *
+ * To run a query within a React component, call `useResultsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useResultsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useResultsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useResultsQuery(baseOptions?: Apollo.QueryHookOptions<ResultsQuery, ResultsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ResultsQuery, ResultsQueryVariables>(ResultsDocument, options);
+      }
+export function useResultsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ResultsQuery, ResultsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ResultsQuery, ResultsQueryVariables>(ResultsDocument, options);
+        }
+export function useResultsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ResultsQuery, ResultsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ResultsQuery, ResultsQueryVariables>(ResultsDocument, options);
+        }
+export type ResultsQueryHookResult = ReturnType<typeof useResultsQuery>;
+export type ResultsLazyQueryHookResult = ReturnType<typeof useResultsLazyQuery>;
+export type ResultsSuspenseQueryHookResult = ReturnType<typeof useResultsSuspenseQuery>;
+export type ResultsQueryResult = Apollo.QueryResult<ResultsQuery, ResultsQueryVariables>;
+export const StartNextBlockDocument = gql`
+    mutation StartNextBlock {
+  startNextBlock {
+    id
+  }
+}
+    `;
+export type StartNextBlockMutationFn = Apollo.MutationFunction<StartNextBlockMutation, StartNextBlockMutationVariables>;
+
+/**
+ * __useStartNextBlockMutation__
+ *
+ * To run a mutation, you first call `useStartNextBlockMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStartNextBlockMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [startNextBlockMutation, { data, loading, error }] = useStartNextBlockMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useStartNextBlockMutation(baseOptions?: Apollo.MutationHookOptions<StartNextBlockMutation, StartNextBlockMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<StartNextBlockMutation, StartNextBlockMutationVariables>(StartNextBlockDocument, options);
+      }
+export type StartNextBlockMutationHookResult = ReturnType<typeof useStartNextBlockMutation>;
+export type StartNextBlockMutationResult = Apollo.MutationResult<StartNextBlockMutation>;
+export type StartNextBlockMutationOptions = Apollo.BaseMutationOptions<StartNextBlockMutation, StartNextBlockMutationVariables>;
+export const ConcludeBlockDocument = gql`
+    mutation ConcludeBlock {
+  concludeBlock {
+    id
+  }
+}
+    `;
+export type ConcludeBlockMutationFn = Apollo.MutationFunction<ConcludeBlockMutation, ConcludeBlockMutationVariables>;
+
+/**
+ * __useConcludeBlockMutation__
+ *
+ * To run a mutation, you first call `useConcludeBlockMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useConcludeBlockMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [concludeBlockMutation, { data, loading, error }] = useConcludeBlockMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useConcludeBlockMutation(baseOptions?: Apollo.MutationHookOptions<ConcludeBlockMutation, ConcludeBlockMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ConcludeBlockMutation, ConcludeBlockMutationVariables>(ConcludeBlockDocument, options);
+      }
+export type ConcludeBlockMutationHookResult = ReturnType<typeof useConcludeBlockMutation>;
+export type ConcludeBlockMutationResult = Apollo.MutationResult<ConcludeBlockMutation>;
+export type ConcludeBlockMutationOptions = Apollo.BaseMutationOptions<ConcludeBlockMutation, ConcludeBlockMutationVariables>;
+export const GetUnqueuedSittingsDocument = gql`
+    query GetUnqueuedSittings {
+  currentBlock {
+    ...BlockInformation
+  }
+  nextBlock {
+    id
+    name
+  }
+}
+    ${BlockInformationFragmentDoc}`;
+
+/**
+ * __useGetUnqueuedSittingsQuery__
+ *
+ * To run a query within a React component, call `useGetUnqueuedSittingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUnqueuedSittingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUnqueuedSittingsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUnqueuedSittingsQuery(baseOptions?: Apollo.QueryHookOptions<GetUnqueuedSittingsQuery, GetUnqueuedSittingsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUnqueuedSittingsQuery, GetUnqueuedSittingsQueryVariables>(GetUnqueuedSittingsDocument, options);
+      }
+export function useGetUnqueuedSittingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUnqueuedSittingsQuery, GetUnqueuedSittingsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUnqueuedSittingsQuery, GetUnqueuedSittingsQueryVariables>(GetUnqueuedSittingsDocument, options);
+        }
+export function useGetUnqueuedSittingsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetUnqueuedSittingsQuery, GetUnqueuedSittingsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetUnqueuedSittingsQuery, GetUnqueuedSittingsQueryVariables>(GetUnqueuedSittingsDocument, options);
+        }
+export type GetUnqueuedSittingsQueryHookResult = ReturnType<typeof useGetUnqueuedSittingsQuery>;
+export type GetUnqueuedSittingsLazyQueryHookResult = ReturnType<typeof useGetUnqueuedSittingsLazyQuery>;
+export type GetUnqueuedSittingsSuspenseQueryHookResult = ReturnType<typeof useGetUnqueuedSittingsSuspenseQuery>;
+export type GetUnqueuedSittingsQueryResult = Apollo.QueryResult<GetUnqueuedSittingsQuery, GetUnqueuedSittingsQueryVariables>;

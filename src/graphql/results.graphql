@@ -1,0 +1,37 @@
+mutation ClearResults {
+  clearResults {
+    displayedResults {
+      id
+    }
+  }
+}
+
+mutation PromoteResults {
+  promoteResults {
+    displayedResults {
+      id
+    }
+  }
+}
+
+query Results {
+  results {
+    displayedResults {
+      id
+      number
+      redScore
+      blueScore
+      contest {
+        id
+        round
+        number
+        redTeams {
+          ...TeamInformation
+        }
+        blueTeams {
+          ...TeamInformation
+        }
+      }
+    }
+  }
+}

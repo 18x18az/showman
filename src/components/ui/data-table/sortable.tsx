@@ -1,5 +1,5 @@
 import { Column } from "@tanstack/react-table";
-import { Button } from "../button";
+import { Button } from "../../../primitives/button/Button";
 import { ArrowUpDown } from "lucide-react";
 
 interface SortableHeaderProps<T> {

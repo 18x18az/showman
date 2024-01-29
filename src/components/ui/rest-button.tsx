@@ -1,6 +1,6 @@
 'use client'
 import { EmptyPost } from "@/utils/maestro"
-import { Button } from "./button"
+import { Button } from "../../primitives/button/Button"
 import { useState } from "react"
 
 interface RestButtonProps {

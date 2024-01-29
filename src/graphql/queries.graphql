@@ -1,22 +1,3 @@
-query OnDeckField {
-  competitionInformation {
-    onDeckField {
-      id
-      competition {
-        onFieldSitting {
-          ...SittingInformation
-        }
-      }
-    }
-    liveField {
-      id
-      competition {
-        stage
-      }
-    }
-  }
-}
-
 query RefereeInformation {
   competitionInformation {
     liveField {
@@ -41,70 +22,9 @@ query RefereeInformation {
   }
 }
 
-query LiveField {
-    competitionInformation {
-      liveField {
-        id
-        fieldControl {
-          endTime
-        }
-        competition {
-          stage
-          onFieldSitting {
-            ...SittingInformation
-          }
-        }
-      }
-    }
-  }
-
-query GetTableOccupied {
-  fields(isEnabled: true, isCompetition: true) {
-    id
-    name
-    competition {
-      onTableSitting {
-        id
-      }
-    }
-  }
-}
-
-query GetUnqueuedSittings {
-  currentBlock {
-    ...BlockInformation
-  }
-  nextBlock {
-    id
-    name
-  }
-}
-
 query GetEventStage {
   stage {
     stage
-  }
-}
-
-query GetCompetitionFields {
-  fields(isEnabled: true, isCompetition: true) {
-  id
-    name
-    competition {
-      stage
-      isLive
-      isOnDeck
-      onFieldSitting {
-        ...SittingWithTeams
-      }
-      onTableSitting {
-        ...SittingWithTeams
-      }
-    }
-    fieldControl {
-      fieldId
-      endTime
-    }
   }
 }
 
@@ -160,15 +80,6 @@ query Teams {
   }
 }
 
-query Fields {
-  fields {
-    id
-    name
-    isEnabled
-    isCompetition
-  }
-}
-
 query Displays {
   displays {
     uuid
@@ -177,13 +88,6 @@ query Displays {
       id
       name
     }
-  }
-}
-
-query FieldNames {
-  fields {
-    id
-    name
   }
 }
 
@@ -215,28 +119,6 @@ query FieldDisplay($uuid: String!) {
   }
 }
 
-query Results {
-  results {
-    displayedResults {
-      id
-      number
-      redScore
-      blueScore
-      contest {
-        id
-        round
-        number
-        redTeams {
-          ...TeamInformation
-        }
-        blueTeams {
-          ...TeamInformation
-        }
-      }
-    }
-  }
-}
-
 query SkillsFields {
   fields(isEnabled: true, skillsEnabled: true) {
     id
@@ -255,48 +137,6 @@ query SkillsField($fieldId: Int!) {
     skills {
       fieldId
       stopTime
-    }
-  }
-}
-
-query CanStartAllianceSelection {
-  stage {
-    stage
-  }
-  currentBlock {
-    id
-  }
-  nextBlock {
-    id
-  }
-}
-
-query AllianceSelectionControl {
-  allianceSelection {
-    picking {
-      id
-      number
-    }
-    pickable {
-      id
-      number
-    }
-    alliances {
-      id
-      number
-    }
-    picked {
-      id
-      number
-    }
-  }
-}
-
-query AllianceSelectionResults {
-  allianceSelection {
-    alliances {
-      id
-      number
     }
   }
 }
