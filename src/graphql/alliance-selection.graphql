@@ -1,0 +1,89 @@
+query AllianceSelectionControl {
+  allianceSelection {
+    picking {
+      id
+      number
+    }
+    pickable {
+      id
+      number
+    }
+    alliances {
+      id
+      number
+    }
+    picked {
+      id
+      number
+    }
+  }
+}
+
+query CanStartAllianceSelection {
+  stage {
+    stage
+  }
+  currentBlock {
+    id
+  }
+  nextBlock {
+    id
+  }
+}
+
+query AllianceSelectionResults {
+  allianceSelection {
+    alliances {
+      id
+      number
+    }
+  }
+}
+
+mutation StartAllianceSelection {
+  startAllianceSelection {
+    picking {
+      id
+    }
+  }
+}
+
+mutation AllianceSelectionPick($teamId: Int!) {
+  allianceSelectionPick(teamId: $teamId) {
+    picking {
+      id
+    }
+  }
+}
+
+mutation AllianceSelectionAccept {
+  allianceSelectionAccept {
+    picking {
+      id
+    }
+  }
+}
+
+mutation AllianceSelectionDecline {
+  allianceSelectionDecline {
+    picking {
+      id
+    }
+  }
+}
+
+mutation AllianceSelectionUndo {
+  allianceSelectionUndo {
+    picking {
+      id
+    }
+  }
+}
+
+mutation AllianceSelectionCancel {
+  allianceSelectionCancel {
+    picking {
+      id
+    }
+  }
+}

@@ -1,0 +1,115 @@
+query LiveField {
+    competitionInformation {
+      liveField {
+        id
+        fieldControl {
+          endTime
+        }
+        competition {
+          stage
+          onFieldSitting {
+            ...SittingInformation
+          }
+        }
+      }
+    }
+}
+
+query GetCompetitionFields {
+  fields(isEnabled: true, isCompetition: true) {
+  id
+    name
+    competition {
+      stage
+      isLive
+      isOnDeck
+      onFieldSitting {
+        ...SittingWithTeams
+      }
+      onTableSitting {
+        ...SittingWithTeams
+      }
+    }
+    fieldControl {
+      fieldId
+      endTime
+    }
+  }
+}
+
+query GetTableOccupied {
+  fields(isEnabled: true, isCompetition: true) {
+    id
+    name
+    competition {
+      onTableSitting {
+        id
+      }
+    }
+  }
+}
+
+mutation QueueSitting($sittingId: Int!, $fieldId: Int!) {
+    queueSitting(sittingId: $sittingId, fieldId: $fieldId) {
+      id
+    }
+}
+
+mutation PutOnDeck($fieldId: Int!) {
+  putOnDeck(fieldId: $fieldId) {
+    onDeckField {
+      id
+    }
+  }
+}
+
+mutation PutLive {
+  putLive {
+    liveField {
+      id
+    }
+  }
+}
+
+mutation UnqueueSitting($sittingId: Int!) {
+  unqueue(sittingId: $sittingId) {
+    onFieldSitting {
+      id
+    }
+    onTableSitting {
+      id
+    }
+  }
+}
+
+mutation ClearLive {
+  clearLive {
+    liveField {
+      id
+    }
+  }
+}
+
+mutation SetAutomationEnabled($enabled : Boolean!) {
+  setAutomationEnabled(enabled: $enabled) {
+    automationEnabled
+  }
+}
+
+mutation SetSkillsEnabled($enabled: Boolean!) {
+  setSkillsEnabled(enabled: $enabled) {
+    id
+    canRunSkills
+  }
+}
+
+mutation ReplayMatch($sittingId: Int!) {
+  replay(sittingId: $sittingId) {
+    onFieldSitting {
+      id
+    }
+    onTableSitting {
+      id
+    }
+  }
+}
