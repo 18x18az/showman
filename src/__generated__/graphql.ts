@@ -221,6 +221,7 @@ export enum MatchStatus {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addField: Field;
   allianceSelectionAccept: AllianceSelection;
   allianceSelectionCancel: AllianceSelection;
   allianceSelectionDecline: AllianceSelection;
@@ -670,6 +671,11 @@ export type FieldNamesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type FieldNamesQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string }> };
+
+export type AddFieldMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AddFieldMutation = { __typename?: 'Mutation', addField: { __typename?: 'Field', id: number, name: string } };
 
 export type SittingInformationFragment = { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } };
 
@@ -2023,6 +2029,39 @@ export type FieldNamesQueryHookResult = ReturnType<typeof useFieldNamesQuery>;
 export type FieldNamesLazyQueryHookResult = ReturnType<typeof useFieldNamesLazyQuery>;
 export type FieldNamesSuspenseQueryHookResult = ReturnType<typeof useFieldNamesSuspenseQuery>;
 export type FieldNamesQueryResult = Apollo.QueryResult<FieldNamesQuery, FieldNamesQueryVariables>;
+export const AddFieldDocument = gql`
+    mutation addField {
+  addField {
+    id
+    name
+  }
+}
+    `;
+export type AddFieldMutationFn = Apollo.MutationFunction<AddFieldMutation, AddFieldMutationVariables>;
+
+/**
+ * __useAddFieldMutation__
+ *
+ * To run a mutation, you first call `useAddFieldMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddFieldMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addFieldMutation, { data, loading, error }] = useAddFieldMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAddFieldMutation(baseOptions?: Apollo.MutationHookOptions<AddFieldMutation, AddFieldMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddFieldMutation, AddFieldMutationVariables>(AddFieldDocument, options);
+      }
+export type AddFieldMutationHookResult = ReturnType<typeof useAddFieldMutation>;
+export type AddFieldMutationResult = Apollo.MutationResult<AddFieldMutation>;
+export type AddFieldMutationOptions = Apollo.BaseMutationOptions<AddFieldMutation, AddFieldMutationVariables>;
 export const ConfigureTournamentManagerDocument = gql`
     mutation configureTournamentManager($settings: TournamentManagerSetup!) {
   configureTournamentManager(settings: $settings) {

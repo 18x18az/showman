@@ -47,3 +47,10 @@ query FieldNames {
     name
   }
 }
+
+mutation addField {
+  addField {
+    id
+    name
+  }
+}
