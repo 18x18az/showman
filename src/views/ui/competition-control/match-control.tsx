@@ -1,8 +1,8 @@
 import { makeShortMatchName } from '@/utils/strings/match'
 import { PlayIcon, ReloadIcon, ResetIcon, StopIcon } from '@radix-ui/react-icons'
-import { useOffsetTimer } from '@/app/display/field/[uuid]/timer'
 import { MatchStage, SittingInformationFragment, useFieldControlSubscription, useLiveFieldQuery, useReplayMatchMutation, useResetAutonMutation, useStartFieldMutation, useStopFieldMutation } from '@/__generated__/graphql'
 import ErrorableButton from '@/components/errorable-button/ErrorableButton'
+import { useOffsetTimer } from '@/hooks/useOffsetTimer'
 
 function makeTime (offset: number, truncate = false): string {
   if (truncate && offset < 0) {

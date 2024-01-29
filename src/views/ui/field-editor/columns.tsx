@@ -1,14 +1,14 @@
 import { TextInput } from '@/components/ui/data-table'
 import { ColumnDef } from '@tanstack/react-table'
 import { Trash2 } from 'lucide-react'
-import { useDeleteFieldMutation, useUpdateFieldNameMutation } from '../../../__generated__/graphql'
-import ErrorableButton from '../../../components/errorable-button/ErrorableButton'
+import { useDeleteFieldMutation, useUpdateFieldNameMutation } from '@/__generated__/graphql'
+import ErrorableButton from '@/components/errorable-button/ErrorableButton'
 
 interface Field {
-  id: number
-  name: string
-  isCompetition: boolean
-  isEnabled: boolean
+  readonly id: number
+  readonly name: string
+  readonly isCompetition: boolean
+  readonly isEnabled: boolean
 }
 
 export const Columns: Array<ColumnDef<Field>> = [

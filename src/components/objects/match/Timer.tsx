@@ -1,7 +1,7 @@
 'use client'
 
-import { useOffsetTimer } from '@/app/display/field/[uuid]/timer'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useOffsetTimer } from '@/hooks/useOffsetTimer'
 
 interface TimerProps {
   readonly time: string | undefined
