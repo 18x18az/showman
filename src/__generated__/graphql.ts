@@ -662,6 +662,22 @@ export type DeleteFieldMutationVariables = Exact<{
 
 export type DeleteFieldMutation = { __typename?: 'Mutation', deleteField: Array<{ __typename?: 'Field', id: number }> };
 
+export type SetFieldEnabledMutationVariables = Exact<{
+  fieldId: Scalars['Int']['input'];
+  isEnabled: Scalars['Boolean']['input'];
+}>;
+
+
+export type SetFieldEnabledMutation = { __typename?: 'Mutation', updateField: { __typename?: 'Field', id: number, isEnabled: boolean } };
+
+export type SetFieldIsCompetitionMutationVariables = Exact<{
+  fieldId: Scalars['Int']['input'];
+  isCompetition: Scalars['Boolean']['input'];
+}>;
+
+
+export type SetFieldIsCompetitionMutation = { __typename?: 'Mutation', updateField: { __typename?: 'Field', id: number, isCompetition: boolean } };
+
 export type OnDeckFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1937,6 +1953,76 @@ export function useDeleteFieldMutation(baseOptions?: Apollo.MutationHookOptions<
 export type DeleteFieldMutationHookResult = ReturnType<typeof useDeleteFieldMutation>;
 export type DeleteFieldMutationResult = Apollo.MutationResult<DeleteFieldMutation>;
 export type DeleteFieldMutationOptions = Apollo.BaseMutationOptions<DeleteFieldMutation, DeleteFieldMutationVariables>;
+export const SetFieldEnabledDocument = gql`
+    mutation SetFieldEnabled($fieldId: Int!, $isEnabled: Boolean!) {
+  updateField(fieldId: $fieldId, update: {isEnabled: $isEnabled}) {
+    id
+    isEnabled
+  }
+}
+    `;
+export type SetFieldEnabledMutationFn = Apollo.MutationFunction<SetFieldEnabledMutation, SetFieldEnabledMutationVariables>;
+
+/**
+ * __useSetFieldEnabledMutation__
+ *
+ * To run a mutation, you first call `useSetFieldEnabledMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetFieldEnabledMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setFieldEnabledMutation, { data, loading, error }] = useSetFieldEnabledMutation({
+ *   variables: {
+ *      fieldId: // value for 'fieldId'
+ *      isEnabled: // value for 'isEnabled'
+ *   },
+ * });
+ */
+export function useSetFieldEnabledMutation(baseOptions?: Apollo.MutationHookOptions<SetFieldEnabledMutation, SetFieldEnabledMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetFieldEnabledMutation, SetFieldEnabledMutationVariables>(SetFieldEnabledDocument, options);
+      }
+export type SetFieldEnabledMutationHookResult = ReturnType<typeof useSetFieldEnabledMutation>;
+export type SetFieldEnabledMutationResult = Apollo.MutationResult<SetFieldEnabledMutation>;
+export type SetFieldEnabledMutationOptions = Apollo.BaseMutationOptions<SetFieldEnabledMutation, SetFieldEnabledMutationVariables>;
+export const SetFieldIsCompetitionDocument = gql`
+    mutation SetFieldIsCompetition($fieldId: Int!, $isCompetition: Boolean!) {
+  updateField(fieldId: $fieldId, update: {isCompetition: $isCompetition}) {
+    id
+    isCompetition
+  }
+}
+    `;
+export type SetFieldIsCompetitionMutationFn = Apollo.MutationFunction<SetFieldIsCompetitionMutation, SetFieldIsCompetitionMutationVariables>;
+
+/**
+ * __useSetFieldIsCompetitionMutation__
+ *
+ * To run a mutation, you first call `useSetFieldIsCompetitionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetFieldIsCompetitionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setFieldIsCompetitionMutation, { data, loading, error }] = useSetFieldIsCompetitionMutation({
+ *   variables: {
+ *      fieldId: // value for 'fieldId'
+ *      isCompetition: // value for 'isCompetition'
+ *   },
+ * });
+ */
+export function useSetFieldIsCompetitionMutation(baseOptions?: Apollo.MutationHookOptions<SetFieldIsCompetitionMutation, SetFieldIsCompetitionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetFieldIsCompetitionMutation, SetFieldIsCompetitionMutationVariables>(SetFieldIsCompetitionDocument, options);
+      }
+export type SetFieldIsCompetitionMutationHookResult = ReturnType<typeof useSetFieldIsCompetitionMutation>;
+export type SetFieldIsCompetitionMutationResult = Apollo.MutationResult<SetFieldIsCompetitionMutation>;
+export type SetFieldIsCompetitionMutationOptions = Apollo.BaseMutationOptions<SetFieldIsCompetitionMutation, SetFieldIsCompetitionMutationVariables>;
 export const OnDeckFieldDocument = gql`
     query OnDeckField {
   competitionInformation {
