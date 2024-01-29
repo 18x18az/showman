@@ -24,7 +24,8 @@ module.exports = {
         indigo: generateScale('indigo'),
         red: generateScale('red'),
         green: generateScale('gold'),
-        iris: generateScale('iris')
+        iris: generateScale('iris'),
+        blue: generateScale('blue')
       },
       keyframes: {
         'accordion-down': {
