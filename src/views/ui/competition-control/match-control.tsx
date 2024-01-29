@@ -151,7 +151,7 @@ export function MatchControl (): JSX.Element {
   const field = data?.competitionInformation?.liveField
   const competition = field?.competition
   const sitting = competition?.onFieldSitting
-  if (sitting === null || sitting === undefined) {
+  if (field === null || field === undefined || competition === null || competition === undefined || sitting === null || sitting === undefined) {
     return <EmptyMatchControl />
   } else {
     const endTime = data?.competitionInformation?.liveField?.fieldControl?.endTime
