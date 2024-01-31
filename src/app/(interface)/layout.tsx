@@ -9,7 +9,15 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Event Orchestrator',
-  description: 'Tournament management for the 21st century'
+  description: 'Tournament management for the 21st century',
+  generator: 'Next.js',
+  manifest: '/manifest.json',
+  themeColor: [{ media: '(prefers-color-scheme: dark)', color: '#fff' }],
+  viewport:
+    'minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover',
+  icons: [
+    { rel: 'icon', url: 'maskable-icon.png' }
+  ]
 }
 
 export default function RootLayout ({
