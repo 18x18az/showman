@@ -1,0 +1,25 @@
+{
+    "name": "18x18AZ Event Orchestrator",
+    "short_name": "Event Orchestrator",
+    "theme_color": "#5b5bd6",
+    "background_color": "#111113",
+    "display": "standalone",
+    "orientation": "portrait",
+    "scope": "/",
+    "start_url": "/",
+    "icons": [
+    {
+        "src": "maskable-icon.png",
+        "type": "image/png",
+        "sizes": "512x512",
+        "purpose": "any"
+    },
+    {
+        "src": "maskable-icon.png",
+        "type": "image/png",
+        "sizes": "512x512",
+        "purpose": "maskable"
+    }
+    ],
+    "splash_pages": null
+  }
