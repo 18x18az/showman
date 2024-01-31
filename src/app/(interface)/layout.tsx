@@ -1,5 +1,5 @@
 import '../globals.css'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import Providers from '@/lib/providers'
 import { Toaster } from '@/components/ui/toaster'
@@ -12,12 +12,17 @@ export const metadata: Metadata = {
   description: 'Tournament management for the 21st century',
   generator: 'Next.js',
   manifest: '/manifest.json',
-  themeColor: [{ media: '(prefers-color-scheme: dark)', color: '#fff' }],
-  viewport:
-    'minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover',
   icons: [
-    { rel: 'icon', url: 'maskable-icon.png' }
+    { rel: 'icon', url: '/maskable-icon.png' }
   ]
+}
+
+export const viewport: Viewport = {
+  themeColor: '#996c254d',
+  minimumScale: 1,
+  initialScale: 1,
+  width: 'device-width',
+  viewportFit: 'cover'
 }
 
 export default function RootLayout ({

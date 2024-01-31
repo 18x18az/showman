@@ -12,7 +12,13 @@
         "src": "maskable-icon.png",
         "type": "image/png",
         "sizes": "512x512",
-        "purpose": "any maskable"
+        "purpose": "any"
+    },
+    {
+        "src": "maskable-icon.png",
+        "type": "image/png",
+        "sizes": "512x512",
+        "purpose": "maskable"
     }
     ],
     "splash_pages": null
