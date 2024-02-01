@@ -7,12 +7,15 @@ import { Inspection } from '@/__generated__/graphql'
 import { Checkin } from './checkin'
 import { InspectionPopover } from './inspection'
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Popover } from '../../../primitives/popover/Popover'
+import { CheckBox } from '../../../primitives/check-box/CheckBox'
 
 interface Team {
   id: number
   name: string
   number: string
   inspectionStatus: Inspection
+  rank: number | null
 }
 
 export const Columns: Array<ColumnDef<Team>> = [
@@ -43,7 +46,48 @@ export const Columns: Array<ColumnDef<Team>> = [
   },
   {
     accessorKey: 'inspection',
-    header: 'Inspection',
+    accessorFn: row => row.inspectionStatus,
+    filterFn: 'arrIncludesSome',
+    enableColumnFilter: true,
+    header: ({ column }) => {
+      const filter = column.getFilterValue() as string[] | undefined
+      if (filter === undefined) {
+        column.setFilterValue(Object.values(Inspection))
+        return <></>
+      }
+
+      const noShow = filter.includes(Inspection.NoShow)
+      const notHere = filter.includes(Inspection.NotHere)
+      const notStarted = filter.includes(Inspection.CheckedIn)
+      const inProgress = filter.includes(Inspection.InProgress)
+      const complete = filter.includes(Inspection.Completed)
+
+      const toggleFilter = (key: Inspection) => {
+        const value = !filter.includes(key)
+        if (value) {
+          filter.push(key)
+          column.setFilterValue(filter)
+        } else {
+          const index = filter.indexOf(key)
+          if (index !== -1) {
+            filter.splice(index, 1)
+            column.setFilterValue(filter)
+          }
+        }
+      }
+
+      return (
+        <Popover title='Inspection'>
+          <div className='flex flex-col gap-2'>
+            <div className='flex gap-2 items-center'><CheckBox value={noShow} onChange={() => { toggleFilter(Inspection.NoShow) }} /> No Show</div>
+            <div className='flex gap-2 items-center'><CheckBox value={notHere} onChange={() => { toggleFilter(Inspection.NotHere) }} /> Not Here</div>
+            <div className='flex gap-2 items-center'><CheckBox value={notStarted} onChange={() => { toggleFilter(Inspection.CheckedIn) }} /> Not Started</div>
+            <div className='flex gap-2 items-center'><CheckBox value={inProgress} onChange={() => { toggleFilter(Inspection.InProgress) }} /> In Progress</div>
+            <div className='flex gap-2 items-center'><CheckBox value={complete} onChange={() => { toggleFilter(Inspection.Completed) }} /> Complete</div>
+          </div>
+        </Popover>
+      )
+    },
     cell: ({ row }) => {
       const status = row.original.inspectionStatus
       let dialog = <></>
@@ -77,7 +121,7 @@ export const Columns: Array<ColumnDef<Team>> = [
           <DialogTrigger>
             {text}
           </DialogTrigger>
-          <DialogContent className='h-96 flex flex-col'>
+          <DialogContent className='h-full max-h-[90dvh] flex flex-col'>
             <DialogHeader>
               <DialogTitle className='text-center mb-2'>
                 {row.original.number}
@@ -87,6 +131,24 @@ export const Columns: Array<ColumnDef<Team>> = [
           </DialogContent>
         </Dialog>
       )
+    }
+  },
+  {
+    accessorKey: 'rank',
+    header: ({ column }) => {
+      return (
+        <Button
+          className='p-0'
+          variant='ghost'
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Rank
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      )
+    },
+    cell: ({ row }) => {
+      return <div className='font-medium'>{row.original.rank}</div>
     }
   }
 ]

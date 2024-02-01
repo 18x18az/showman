@@ -77,7 +77,8 @@ query Teams {
     id
     name
     number
-    inspectionStatus
+    inspectionStatus,
+    rank
   }
 }
 

@@ -898,7 +898,7 @@ export type MatchOverlayQuery = { __typename?: 'Query', competitionInformation: 
 export type TeamsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type TeamsQuery = { __typename?: 'Query', teams: Array<{ __typename?: 'Team', id: number, name: string, number: string, inspectionStatus: Inspection }> };
+export type TeamsQuery = { __typename?: 'Query', teams: Array<{ __typename?: 'Team', id: number, name: string, number: string, inspectionStatus: Inspection, rank: number | null }> };
 
 export type DisplaysQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2892,6 +2892,7 @@ export const TeamsDocument = gql`
     name
     number
     inspectionStatus
+    rank
   }
 }
     `;
