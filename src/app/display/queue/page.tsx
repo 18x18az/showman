@@ -108,7 +108,7 @@ export default function Page (): JSX.Element {
   }
 
   return (
-    <div className='flex w-full h-screen bg-zinc-800 justify-evenly py-24 text-center'>
+    <div className='flex w-full h-full bg-zinc-800 justify-evenly py-24 text-center'>
       {content}
     </div>
   )

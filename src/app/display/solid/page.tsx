@@ -22,7 +22,7 @@ export default function Page (): JSX.Element {
   const content = getContent() ?? <LogoFallback />
 
   return (
-    <div className='h-screen w-full'>
+    <div className='h-full w-full'>
       {content}
       <ParticlesBg />
     </div>

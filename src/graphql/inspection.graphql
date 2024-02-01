@@ -8,3 +8,25 @@ query InspectableTeams {
         number
     }
 }
+
+query InspectionData($teamId: Int!) {
+    team(teamId: $teamId) {
+        id
+        number
+        inspection {
+            id
+            text
+            points {
+                id
+                text
+                met
+            }
+        }
+    }
+}
+
+mutation SetInspectionPoint($pointId: Int!, $teamId: Int!, $isMet: Boolean!) {
+    setInspectionPoint(pointId: $pointId, teamId: $teamId, isMet: $isMet) {
+        id
+    }
+}

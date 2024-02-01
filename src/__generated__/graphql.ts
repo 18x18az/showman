@@ -813,6 +813,22 @@ export type InspectableTeamsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type InspectableTeamsQuery = { __typename?: 'Query', notStarted: Array<{ __typename?: 'Team', id: number, number: string }>, inProgress: Array<{ __typename?: 'Team', id: number, number: string }> };
 
+export type InspectionDataQueryVariables = Exact<{
+  teamId: Scalars['Int']['input'];
+}>;
+
+
+export type InspectionDataQuery = { __typename?: 'Query', team: { __typename?: 'Team', id: number, number: string, inspection: Array<{ __typename?: 'TeamInspectionGroup', id: number, text: string, points: Array<{ __typename?: 'TeamInspectionPoint', id: number, text: string, met: boolean }> }> } };
+
+export type SetInspectionPointMutationVariables = Exact<{
+  pointId: Scalars['Int']['input'];
+  teamId: Scalars['Int']['input'];
+  isMet: Scalars['Boolean']['input'];
+}>;
+
+
+export type SetInspectionPointMutation = { __typename?: 'Mutation', setInspectionPoint: { __typename?: 'Team', id: number } };
+
 export type ConfigureTournamentManagerMutationVariables = Exact<{
   settings: TournamentManagerSetup;
 }>;
@@ -2317,6 +2333,91 @@ export type InspectableTeamsQueryHookResult = ReturnType<typeof useInspectableTe
 export type InspectableTeamsLazyQueryHookResult = ReturnType<typeof useInspectableTeamsLazyQuery>;
 export type InspectableTeamsSuspenseQueryHookResult = ReturnType<typeof useInspectableTeamsSuspenseQuery>;
 export type InspectableTeamsQueryResult = Apollo.QueryResult<InspectableTeamsQuery, InspectableTeamsQueryVariables>;
+export const InspectionDataDocument = gql`
+    query InspectionData($teamId: Int!) {
+  team(teamId: $teamId) {
+    id
+    number
+    inspection {
+      id
+      text
+      points {
+        id
+        text
+        met
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useInspectionDataQuery__
+ *
+ * To run a query within a React component, call `useInspectionDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useInspectionDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useInspectionDataQuery({
+ *   variables: {
+ *      teamId: // value for 'teamId'
+ *   },
+ * });
+ */
+export function useInspectionDataQuery(baseOptions: Apollo.QueryHookOptions<InspectionDataQuery, InspectionDataQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<InspectionDataQuery, InspectionDataQueryVariables>(InspectionDataDocument, options);
+      }
+export function useInspectionDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<InspectionDataQuery, InspectionDataQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<InspectionDataQuery, InspectionDataQueryVariables>(InspectionDataDocument, options);
+        }
+export function useInspectionDataSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<InspectionDataQuery, InspectionDataQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<InspectionDataQuery, InspectionDataQueryVariables>(InspectionDataDocument, options);
+        }
+export type InspectionDataQueryHookResult = ReturnType<typeof useInspectionDataQuery>;
+export type InspectionDataLazyQueryHookResult = ReturnType<typeof useInspectionDataLazyQuery>;
+export type InspectionDataSuspenseQueryHookResult = ReturnType<typeof useInspectionDataSuspenseQuery>;
+export type InspectionDataQueryResult = Apollo.QueryResult<InspectionDataQuery, InspectionDataQueryVariables>;
+export const SetInspectionPointDocument = gql`
+    mutation SetInspectionPoint($pointId: Int!, $teamId: Int!, $isMet: Boolean!) {
+  setInspectionPoint(pointId: $pointId, teamId: $teamId, isMet: $isMet) {
+    id
+  }
+}
+    `;
+export type SetInspectionPointMutationFn = Apollo.MutationFunction<SetInspectionPointMutation, SetInspectionPointMutationVariables>;
+
+/**
+ * __useSetInspectionPointMutation__
+ *
+ * To run a mutation, you first call `useSetInspectionPointMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetInspectionPointMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setInspectionPointMutation, { data, loading, error }] = useSetInspectionPointMutation({
+ *   variables: {
+ *      pointId: // value for 'pointId'
+ *      teamId: // value for 'teamId'
+ *      isMet: // value for 'isMet'
+ *   },
+ * });
+ */
+export function useSetInspectionPointMutation(baseOptions?: Apollo.MutationHookOptions<SetInspectionPointMutation, SetInspectionPointMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetInspectionPointMutation, SetInspectionPointMutationVariables>(SetInspectionPointDocument, options);
+      }
+export type SetInspectionPointMutationHookResult = ReturnType<typeof useSetInspectionPointMutation>;
+export type SetInspectionPointMutationResult = Apollo.MutationResult<SetInspectionPointMutation>;
+export type SetInspectionPointMutationOptions = Apollo.BaseMutationOptions<SetInspectionPointMutation, SetInspectionPointMutationVariables>;
 export const ConfigureTournamentManagerDocument = gql`
     mutation configureTournamentManager($settings: TournamentManagerSetup!) {
   configureTournamentManager(settings: $settings) {

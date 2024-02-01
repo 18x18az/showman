@@ -1,4 +1,7 @@
-// 'use client'
+'use client'
+
+import { useInspectionDataQuery } from '../../../../__generated__/graphql'
+import { Inspection } from '../../../../views/ui/inspection/inspection'
 
 // import { Inspection } from '@/components/objects/inspection/Inspection'
 // import { Header } from '@/components/primitives/Header'
@@ -41,6 +44,14 @@
 //   )
 // }
 
-export default function Page (): JSX.Element {
-  return <div>Inspection</div>
+export default function Page ({ params }: { readonly params: { readonly teamId: string } }): JSX.Element {
+  const { data } = useInspectionDataQuery({ variables: { teamId: parseInt(params.teamId) }, pollInterval: 500 })
+
+  if (data === undefined) {
+    return <div>Loading...</div>
+  }
+
+  const team = data.team
+
+  return <Inspection team={team} />
 }
