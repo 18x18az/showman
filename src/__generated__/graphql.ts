@@ -33,6 +33,16 @@ export type AllianceSelection = {
   remaining: Array<Team>;
 };
 
+export type Award = {
+  __typename?: 'Award';
+  /** Unique identifier for the award */
+  id: Scalars['Int']['output'];
+  /** Name of the award */
+  name: Scalars['String']['output'];
+  /** The team(s) that won the award */
+  winners: Maybe<Array<Team>>;
+};
+
 /** A block refers to a group of match sittings played in the same stretch of time, e.g. all quals played in the morning before lunch */
 export type Block = {
   __typename?: 'Block';
@@ -64,13 +74,6 @@ export enum BlockStatus {
 export enum Control_Mode {
   Auto = 'AUTO',
   Driver = 'DRIVER'
-}
-
-/** The checkin status of a team */
-export enum Checkin {
-  CheckedIn = 'CHECKED_IN',
-  NotHere = 'NOT_HERE',
-  NoShow = 'NO_SHOW'
 }
 
 export type Competition = {
@@ -184,6 +187,39 @@ export type FieldUpdate = {
   name: InputMaybe<Scalars['String']['input']>;
 };
 
+/** The inspection status of a team */
+export enum Inspection {
+  CheckedIn = 'CHECKED_IN',
+  Completed = 'COMPLETED',
+  InProgress = 'IN_PROGRESS',
+  NotHere = 'NOT_HERE',
+  NoShow = 'NO_SHOW'
+}
+
+export type InspectionGroup = {
+  __typename?: 'InspectionGroup';
+  /** Unique identifier for the inspection group */
+  id: Scalars['Int']['output'];
+  /** All inspection points for the group */
+  points: Array<InspectionPoint>;
+  /** Program the inspection group applies to */
+  program: Program;
+  /** Title of the inspection group */
+  text: Scalars['String']['output'];
+};
+
+export type InspectionPoint = {
+  __typename?: 'InspectionPoint';
+  /** Group the inspection point belongs to */
+  group: InspectionGroup;
+  /** Unique identifier for the inspection point */
+  id: Scalars['Int']['output'];
+  /** Program the inspection point applies to */
+  program: Program;
+  /** Text of the inspection point */
+  text: Scalars['String']['output'];
+};
+
 /** A match refers to a single scored match between two alliances. A match may have multiple sittings if it is replayed e.g. due to a field fault */
 export type Match = {
   __typename?: 'Match';
@@ -233,6 +269,7 @@ export type Mutation = {
   concludeBlock: Block;
   configureTournamentManager: TournamentManager;
   deleteField: Array<Field>;
+  markCheckin: Team;
   promoteResults: Results;
   putLive: Competition;
   putOnDeck: Competition;
@@ -246,6 +283,7 @@ export type Mutation = {
   resetAuton: CompetitionField;
   setAutomationEnabled: Competition;
   setDisplayField: Display;
+  setInspectionPoint: Team;
   setSkillsEnabled: Array<Field>;
   startAllianceSelection: AllianceSelection;
   startField: FieldControl;
@@ -253,6 +291,7 @@ export type Mutation = {
   startTimeout: Timeout;
   stopField: FieldControl;
   unqueue: CompetitionField;
+  updateAwards: Array<Award>;
   updateField: Field;
 };
 
@@ -269,6 +308,12 @@ export type MutationConfigureTournamentManagerArgs = {
 
 export type MutationDeleteFieldArgs = {
   fieldId: Scalars['Int']['input'];
+};
+
+
+export type MutationMarkCheckinArgs = {
+  status: Inspection;
+  teamId: Scalars['Int']['input'];
 };
 
 
@@ -320,6 +365,13 @@ export type MutationSetDisplayFieldArgs = {
 };
 
 
+export type MutationSetInspectionPointArgs = {
+  isMet: Scalars['Boolean']['input'];
+  pointId: Scalars['Int']['input'];
+  teamId: Scalars['Int']['input'];
+};
+
+
 export type MutationSetSkillsEnabledArgs = {
   enabled: Scalars['Boolean']['input'];
 };
@@ -345,9 +397,15 @@ export type MutationUpdateFieldArgs = {
   update: FieldUpdate;
 };
 
+export enum Program {
+  Vexu = 'VEXU',
+  Vrc = 'VRC'
+}
+
 export type Query = {
   __typename?: 'Query';
   allianceSelection: Maybe<AllianceSelection>;
+  awards: Array<Award>;
   blocks: Array<Block>;
   competitionInformation: Competition;
   contests: Array<Contest>;
@@ -356,11 +414,13 @@ export type Query = {
   displays: Array<Display>;
   field: Field;
   fields: Array<Field>;
+  inspectionGroups: Array<InspectionGroup>;
   matches: Array<Match>;
   nextBlock: Maybe<Block>;
   results: Results;
   sittings: Array<Sitting>;
   stage: Stage;
+  team: Team;
   teams: Array<Team>;
   timeout: Timeout;
   tournamentManager: TournamentManager;
@@ -381,6 +441,16 @@ export type QueryFieldsArgs = {
   isCompetition: InputMaybe<Scalars['Boolean']['input']>;
   isEnabled: InputMaybe<Scalars['Boolean']['input']>;
   skillsEnabled: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type QueryTeamArgs = {
+  teamId: Scalars['Int']['input'];
+};
+
+
+export type QueryTeamsArgs = {
+  inspectionStatus: InputMaybe<Inspection>;
 };
 
 export type Results = {
@@ -443,10 +513,12 @@ export type SubscriptionFieldControlArgs = {
 
 export type Team = {
   __typename?: 'Team';
-  /** Checkin status of the team */
-  checkin: Checkin;
   /** Unique identifier for the team */
   id: Scalars['Int']['output'];
+  /** All inspection groups applicable to the team */
+  inspection: Array<TeamInspectionGroup>;
+  /** Inspection status of the team */
+  inspectionStatus: Inspection;
   /** Location of the team */
   location: Scalars['String']['output'];
   /** Name of the team */
@@ -457,6 +529,36 @@ export type Team = {
   rank: Maybe<Scalars['Int']['output']>;
   /** School of the team */
   school: Scalars['String']['output'];
+  /** All inspection groups containing points not met by the team */
+  unmetInspection: Array<TeamInspectionGroup>;
+};
+
+export type TeamInspectionGroup = {
+  __typename?: 'TeamInspectionGroup';
+  /** Unique identifier for the inspection group */
+  id: Scalars['Int']['output'];
+  /** All inspection points applicable to the team */
+  points: Array<TeamInspectionPoint>;
+  /** Program the inspection group applies to */
+  program: Program;
+  /** Title of the inspection group */
+  text: Scalars['String']['output'];
+  /** Unmet inspection points for the team */
+  unmetPoints: Array<TeamInspectionPoint>;
+};
+
+export type TeamInspectionPoint = {
+  __typename?: 'TeamInspectionPoint';
+  /** Group the inspection point belongs to */
+  group: InspectionGroup;
+  /** Unique identifier for the inspection point */
+  id: Scalars['Int']['output'];
+  /** Whether the team has met the inspection point */
+  met: Scalars['Boolean']['output'];
+  /** Program the inspection point applies to */
+  program: Program;
+  /** Text of the inspection point */
+  text: Scalars['String']['output'];
 };
 
 export type Timeout = {
@@ -466,6 +568,7 @@ export type Timeout = {
 };
 
 export enum TmStatus {
+  AuthError = 'AUTH_ERROR',
   Connected = 'CONNECTED',
   Disconnected = 'DISCONNECTED',
   Initializing = 'INITIALIZING',
@@ -474,6 +577,8 @@ export enum TmStatus {
 
 export type TournamentManager = {
   __typename?: 'TournamentManager';
+  /** The password for Tournament Manager */
+  password: Maybe<Scalars['String']['output']>;
   /** The status of the TM server */
   status: TmStatus;
   /** The address of Tournament Manager. IP addresses must start with http e.g. http://192.168.1.42 */
@@ -481,6 +586,8 @@ export type TournamentManager = {
 };
 
 export type TournamentManagerSetup = {
+  /** The password for Tournament Manager */
+  password: Scalars['String']['input'];
   /** The address of Tournament Manager. IP addresses must start with http e.g. http://192.168.1.42 */
   url: Scalars['URL']['input'];
 };
@@ -757,7 +864,7 @@ export type MatchOverlayQuery = { __typename?: 'Query', competitionInformation: 
 export type TeamsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type TeamsQuery = { __typename?: 'Query', teams: Array<{ __typename?: 'Team', id: number, name: string, number: string }> };
+export type TeamsQuery = { __typename?: 'Query', teams: Array<{ __typename?: 'Team', id: number, name: string, number: string, inspectionStatus: Inspection }> };
 
 export type DisplaysQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2529,6 +2636,7 @@ export const TeamsDocument = gql`
     id
     name
     number
+    inspectionStatus
   }
 }
     `;
