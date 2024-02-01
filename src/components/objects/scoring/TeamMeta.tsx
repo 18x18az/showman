@@ -1,6 +1,6 @@
 import { CheckBox } from '../../../primitives/check-box/CheckBox'
 import { Label } from '../../primitives/Label'
-import { Popover } from '../../primitives/Popover'
+import { Popover } from '../../../primitives/popover/Popover'
 
 interface TeamMetaProps {
   readonly team: string
