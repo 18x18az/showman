@@ -4,8 +4,9 @@ import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
 import { Button } from '@/primitives/button/Button'
 import { Inspection } from '@/__generated__/graphql'
-import { Popover } from '@/primitives/popover/Popover'
 import { Checkin } from './checkin'
+import { InspectionPopover } from './inspection'
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
 interface Team {
   id: number
@@ -50,7 +51,7 @@ export const Columns: Array<ColumnDef<Team>> = [
       if (row.original.inspectionStatus === Inspection.NotHere || row.original.inspectionStatus === Inspection.NoShow) {
         dialog = <Checkin teamId={row.original.id} teamNumber={row.original.number} status={status} />
       } else {
-        dialog = <div>Thing for inspection</div>
+        dialog = <InspectionPopover teamId={row.original.id} teamNumber={row.original.number} />
       }
 
       let text = ''
@@ -72,9 +73,19 @@ export const Columns: Array<ColumnDef<Team>> = [
           break
       }
       return (
-        <Popover title={text}>
-          {dialog}
-        </Popover>
+        <Dialog>
+          <DialogTrigger>
+            {text}
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle className='text-center mb-2'>
+                {row.original.number}
+              </DialogTitle>
+            </DialogHeader>
+            {dialog}
+          </DialogContent>
+        </Dialog>
       )
     }
   }

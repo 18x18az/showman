@@ -7,7 +7,7 @@ interface PopoverPops {
   readonly children: React.ReactNode
 }
 
-const CONTENT_STYLE = 'radix-side-top:animate-slide-up radix-side-bottom:animate-slide-down z-50 w-48 rounded-lg p-4 shadow-md md:w-56 bg-slate-5'
+const CONTENT_STYLE = 'radix-side-top:animate-slide-up radix-side-bottom:animate-slide-down z-50 w-fit rounded-lg p-4 shadow-md md:w-56 bg-slate-5'
 
 export function Popover (props: PopoverPops): JSX.Element {
   return (

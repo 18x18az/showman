@@ -37,7 +37,6 @@ export function Checkin (props: CheckinProps): JSX.Element {
 
   return (
     <div className='flex flex-col gap-2 text-slate-11'>
-      <div className='text-center'>{props.teamNumber}</div>
       {options}
     </div>
   )

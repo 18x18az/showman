@@ -1,6 +1,6 @@
-import { useSetInspectionPointMutation } from "../../../__generated__/graphql"
-import { useErrorableMutation } from "../../../hooks/useErrorableMutation"
-import { CheckBox } from "../../../primitives/check-box/CheckBox"
+import { useSetInspectionPointMutation } from '../../../__generated__/graphql'
+import { useErrorableMutation } from '../../../hooks/useErrorableMutation'
+import { CheckBox } from '../../../primitives/check-box/CheckBox'
 
 interface PointInfo {
   id: number
@@ -33,10 +33,10 @@ interface PointProps {
 }
 
 function Point (props: PointProps): JSX.Element {
-  const update = useErrorableMutation(useSetInspectionPointMutation, {refetchQueries: ['InspectionData']})
+  const update = useErrorableMutation(useSetInspectionPointMutation, { refetchQueries: ['InspectionData'] })
   return (
     <div className='flex gap-4'>
-      <CheckBox value={props.point.met} onChange={(value: boolean) => {void update({variables: {pointId: props.point.id, teamId: props.teamId, isMet: value}})}} />
+      <CheckBox value={props.point.met} onChange={(value: boolean) => { void update({ variables: { pointId: props.point.id, teamId: props.teamId, isMet: value } }) }} />
       {props.point.text}
     </div>
   )
