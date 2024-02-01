@@ -1,6 +1,6 @@
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
 import * as Select from '@radix-ui/react-select'
-import { ExpandButton } from './ExpandButton'
+import { ExpandButton } from '../../components/primitives/ExpandButton'
 
 interface DropdownProps {
   readonly value: string

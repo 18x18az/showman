@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { Inspection, useGetNotCheckedInTeamsQuery, useMarkCheckinMutation } from '../../../__generated__/graphql'
-import { Dropdown } from '@/components/primitives/Dropdown'
-import ErrorableButton from '../../../components/errorable-button/ErrorableButton'
+import { Inspection, useGetNotCheckedInTeamsQuery, useMarkCheckinMutation } from '@/__generated__/graphql'
+import ErrorableButton from '@/components/errorable-button/ErrorableButton'
+import { Dropdown } from '@/primitives/dropdown/Dropdown'
 
 export function Checkin (): JSX.Element {
   const { data } = useGetNotCheckedInTeamsQuery({ pollInterval: 500 })
