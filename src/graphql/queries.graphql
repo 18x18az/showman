@@ -157,3 +157,11 @@ query QueueDisplay {
     }
   }
 }
+
+query GetNotCheckedInTeams {
+  teams(inspectionStatus: NOT_HERE) {
+    id
+    name
+    number
+  }
+}

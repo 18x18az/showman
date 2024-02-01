@@ -1,60 +1,53 @@
-// 'use client'
+'use client'
 
-// import { useState } from 'react'
-// import { Dropdown } from '@/components/primitives/Dropdown'
-// import { EmptyPost, JsonTopic } from '@/utils/maestro'
-// import { accessRedirect } from '@/utils/AccessRedirect'
-// import { selectCanAccessCheckin } from '@/lib/redux'
-// import { Button } from '@/components/ui/button'
-// import { toast } from '@/components/ui/use-toast'
-// import { CheckSquare } from 'lucide-react'
+import { useState } from 'react'
+import { Inspection, useGetNotCheckedInTeamsQuery, useMarkCheckinMutation } from '../../../__generated__/graphql'
+import { Dropdown } from '@/components/primitives/Dropdown'
+import ErrorableButton from '../../../components/errorable-button/ErrorableButton'
 
-// interface ExpectedResult {
-//   teams: string[] | undefined
-// }
+export function Checkin (): JSX.Element {
+  const { data } = useGetNotCheckedInTeamsQuery({ pollInterval: 500 })
 
-// export default function CheckInBody (): JSX.Element | null {
-//   accessRedirect(selectCanAccessCheckin)
-//   const notCheckedIn: string[] | undefined = JsonTopic<ExpectedResult>('inspection/stage/NOT_HERE', { teams: undefined }).teams
+  const [selectedTeam, setSelectedTeam] = useState<string | null>(null)
 
-//   const [selected, setSelected] = useState<string | undefined>(undefined)
+  if (data === undefined) {
+    return <>Loading</>
+  }
 
-//   if (notCheckedIn === undefined) {
-//     return <></>
-//   }
+  const options = data.teams.map((team) => {
+    return team.number
+  })
 
-//   if (notCheckedIn.length === 0) {
-//     return (
-//       <div className='text-center my-24'>
-//         <h1 className='text-indigo-9 text-6xl mb-6'>Team Check-In Complete</h1>
-//         <h2 className='text-slate-12 text-4xl'>Please return device to tech operator</h2>
-//       </div>
-//     )
-//   }
+  if (options.length === 0) {
+    return <div className='w-full flex justify-center mt-8 text-6xl'>All teams have been checked in</div>
+  }
 
-//   if (selected === undefined || !(notCheckedIn.some(value => value === selected))) {
-//     setSelected(notCheckedIn[0])
-//   }
+  const selectedInfo = data.teams.find((team) => team.number === selectedTeam)
 
-//   async function sendCheckIn (team: string | undefined): Promise<void> {
-//     if (team === undefined) {
-//       return
-//     }
-//     const resource = `inspection/${team}/checkedIn`
-//     await EmptyPost(resource)
-//     toast({
-//       duration: 3000,
-//       description: (
-//         <div className='text-xl flex gap-4 content-center align-center'><CheckSquare size='28' /> Team {team} checked in</div>
-//       )
-//     })
-//   }
+  let content = <></>
 
-//   return (
-//     <div className='flex flex-col mt-24 mb-24 gap-8 items-center'>
-//       <h1 className='text-6xl text-slate-12 mb-6 text-slate-12'>Team Check-In</h1>
-//       <Dropdown size='L' value={selected ?? ''} options={notCheckedIn} onChange={(value: string) => { setSelected(value) }} />
-//       <Button onClick={() => { void sendCheckIn(selected) }} size='lg'>Check In</Button>
-//     </div>
-//   )
-// }
+  if (selectedInfo !== undefined) {
+    content = (
+      <div className='w-full text-center gap-4 flex-col flex items-center'>
+        <div className='text-6xl text-slate-12'>{selectedInfo.number}</div>
+        <div className='text-4xl text-slate-11 mb-4'>{selectedInfo.name}</div>
+        <ErrorableButton
+          size='lg'
+          mutation={useMarkCheckinMutation}
+          options={{ variables: { teamId: selectedInfo.id, status: Inspection.CheckedIn }, refetchQueries: ['GetNotCheckedInTeams'] }}
+        >
+          Check In
+        </ErrorableButton>
+      </div>
+    )
+  }
+
+  return (
+    <div className='w-full flex justify-center mt-8'>
+      <div className='flex flex-col w-full items-center gap-8'>
+        <Dropdown size='L' options={options} value={selectedTeam ?? ''} onChange={(team: string) => { setSelectedTeam(team) }} />
+        {content}
+      </div>
+    </div>
+  )
+}

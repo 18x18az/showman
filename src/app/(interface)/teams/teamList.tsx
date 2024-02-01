@@ -5,7 +5,7 @@ import { Columns } from './columns'
 import { useTeamsQuery } from '../../../__generated__/graphql'
 
 export function TeamList (): JSX.Element {
-  const { data } = useTeamsQuery()
+  const { data } = useTeamsQuery({ pollInterval: 500 })
 
   if (data === undefined) {
     return (

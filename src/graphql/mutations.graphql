@@ -31,3 +31,10 @@ mutation cancelTimeout {
     endTime
   }
 }
+
+mutation MarkCheckin($teamId: Int!, $status: Inspection!) {
+  markCheckin(teamId: $teamId, status: $status) {
+    id
+    inspectionStatus
+  }
+}

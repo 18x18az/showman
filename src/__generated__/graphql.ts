@@ -841,6 +841,14 @@ export type CancelTimeoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 export type CancelTimeoutMutation = { __typename?: 'Mutation', cancelTimeout: { __typename?: 'Timeout', endTime: any | null } };
 
+export type MarkCheckinMutationVariables = Exact<{
+  teamId: Scalars['Int']['input'];
+  status: Inspection;
+}>;
+
+
+export type MarkCheckinMutation = { __typename?: 'Mutation', markCheckin: { __typename?: 'Team', id: number, inspectionStatus: Inspection } };
+
 export type RefereeInformationQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -894,6 +902,11 @@ export type QueueDisplayQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type QueueDisplayQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null, onTableSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null } | null }> };
+
+export type GetNotCheckedInTeamsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetNotCheckedInTeamsQuery = { __typename?: 'Query', teams: Array<{ __typename?: 'Team', id: number, name: string, number: string }> };
 
 export type ClearResultsMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -2424,6 +2437,41 @@ export function useCancelTimeoutMutation(baseOptions?: Apollo.MutationHookOption
 export type CancelTimeoutMutationHookResult = ReturnType<typeof useCancelTimeoutMutation>;
 export type CancelTimeoutMutationResult = Apollo.MutationResult<CancelTimeoutMutation>;
 export type CancelTimeoutMutationOptions = Apollo.BaseMutationOptions<CancelTimeoutMutation, CancelTimeoutMutationVariables>;
+export const MarkCheckinDocument = gql`
+    mutation MarkCheckin($teamId: Int!, $status: Inspection!) {
+  markCheckin(teamId: $teamId, status: $status) {
+    id
+    inspectionStatus
+  }
+}
+    `;
+export type MarkCheckinMutationFn = Apollo.MutationFunction<MarkCheckinMutation, MarkCheckinMutationVariables>;
+
+/**
+ * __useMarkCheckinMutation__
+ *
+ * To run a mutation, you first call `useMarkCheckinMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMarkCheckinMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [markCheckinMutation, { data, loading, error }] = useMarkCheckinMutation({
+ *   variables: {
+ *      teamId: // value for 'teamId'
+ *      status: // value for 'status'
+ *   },
+ * });
+ */
+export function useMarkCheckinMutation(baseOptions?: Apollo.MutationHookOptions<MarkCheckinMutation, MarkCheckinMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<MarkCheckinMutation, MarkCheckinMutationVariables>(MarkCheckinDocument, options);
+      }
+export type MarkCheckinMutationHookResult = ReturnType<typeof useMarkCheckinMutation>;
+export type MarkCheckinMutationResult = Apollo.MutationResult<MarkCheckinMutation>;
+export type MarkCheckinMutationOptions = Apollo.BaseMutationOptions<MarkCheckinMutation, MarkCheckinMutationVariables>;
 export const RefereeInformationDocument = gql`
     query RefereeInformation {
   competitionInformation {
@@ -2916,6 +2964,47 @@ export type QueueDisplayQueryHookResult = ReturnType<typeof useQueueDisplayQuery
 export type QueueDisplayLazyQueryHookResult = ReturnType<typeof useQueueDisplayLazyQuery>;
 export type QueueDisplaySuspenseQueryHookResult = ReturnType<typeof useQueueDisplaySuspenseQuery>;
 export type QueueDisplayQueryResult = Apollo.QueryResult<QueueDisplayQuery, QueueDisplayQueryVariables>;
+export const GetNotCheckedInTeamsDocument = gql`
+    query GetNotCheckedInTeams {
+  teams(inspectionStatus: NOT_HERE) {
+    id
+    name
+    number
+  }
+}
+    `;
+
+/**
+ * __useGetNotCheckedInTeamsQuery__
+ *
+ * To run a query within a React component, call `useGetNotCheckedInTeamsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetNotCheckedInTeamsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetNotCheckedInTeamsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetNotCheckedInTeamsQuery(baseOptions?: Apollo.QueryHookOptions<GetNotCheckedInTeamsQuery, GetNotCheckedInTeamsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetNotCheckedInTeamsQuery, GetNotCheckedInTeamsQueryVariables>(GetNotCheckedInTeamsDocument, options);
+      }
+export function useGetNotCheckedInTeamsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetNotCheckedInTeamsQuery, GetNotCheckedInTeamsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetNotCheckedInTeamsQuery, GetNotCheckedInTeamsQueryVariables>(GetNotCheckedInTeamsDocument, options);
+        }
+export function useGetNotCheckedInTeamsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetNotCheckedInTeamsQuery, GetNotCheckedInTeamsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetNotCheckedInTeamsQuery, GetNotCheckedInTeamsQueryVariables>(GetNotCheckedInTeamsDocument, options);
+        }
+export type GetNotCheckedInTeamsQueryHookResult = ReturnType<typeof useGetNotCheckedInTeamsQuery>;
+export type GetNotCheckedInTeamsLazyQueryHookResult = ReturnType<typeof useGetNotCheckedInTeamsLazyQuery>;
+export type GetNotCheckedInTeamsSuspenseQueryHookResult = ReturnType<typeof useGetNotCheckedInTeamsSuspenseQuery>;
+export type GetNotCheckedInTeamsQueryResult = Apollo.QueryResult<GetNotCheckedInTeamsQuery, GetNotCheckedInTeamsQueryVariables>;
 export const ClearResultsDocument = gql`
     mutation ClearResults {
   clearResults {
