@@ -808,6 +808,11 @@ export type SittingWithTeamsFragment = { __typename?: 'Sitting', scheduled: any 
 
 export type BlockInformationFragment = { __typename?: 'Block', id: number, name: string, canConclude: boolean, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, number: number, field: { __typename?: 'Field', id: number, name: string } | null, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } }> };
 
+export type InspectableTeamsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type InspectableTeamsQuery = { __typename?: 'Query', notStarted: Array<{ __typename?: 'Team', id: number, number: string }>, inProgress: Array<{ __typename?: 'Team', id: number, number: string }> };
+
 export type ConfigureTournamentManagerMutationVariables = Exact<{
   settings: TournamentManagerSetup;
 }>;
@@ -2268,6 +2273,50 @@ export function useAddFieldMutation(baseOptions?: Apollo.MutationHookOptions<Add
 export type AddFieldMutationHookResult = ReturnType<typeof useAddFieldMutation>;
 export type AddFieldMutationResult = Apollo.MutationResult<AddFieldMutation>;
 export type AddFieldMutationOptions = Apollo.BaseMutationOptions<AddFieldMutation, AddFieldMutationVariables>;
+export const InspectableTeamsDocument = gql`
+    query InspectableTeams {
+  notStarted: teams(inspectionStatus: CHECKED_IN) {
+    id
+    number
+  }
+  inProgress: teams(inspectionStatus: IN_PROGRESS) {
+    id
+    number
+  }
+}
+    `;
+
+/**
+ * __useInspectableTeamsQuery__
+ *
+ * To run a query within a React component, call `useInspectableTeamsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useInspectableTeamsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useInspectableTeamsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useInspectableTeamsQuery(baseOptions?: Apollo.QueryHookOptions<InspectableTeamsQuery, InspectableTeamsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<InspectableTeamsQuery, InspectableTeamsQueryVariables>(InspectableTeamsDocument, options);
+      }
+export function useInspectableTeamsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<InspectableTeamsQuery, InspectableTeamsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<InspectableTeamsQuery, InspectableTeamsQueryVariables>(InspectableTeamsDocument, options);
+        }
+export function useInspectableTeamsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<InspectableTeamsQuery, InspectableTeamsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<InspectableTeamsQuery, InspectableTeamsQueryVariables>(InspectableTeamsDocument, options);
+        }
+export type InspectableTeamsQueryHookResult = ReturnType<typeof useInspectableTeamsQuery>;
+export type InspectableTeamsLazyQueryHookResult = ReturnType<typeof useInspectableTeamsLazyQuery>;
+export type InspectableTeamsSuspenseQueryHookResult = ReturnType<typeof useInspectableTeamsSuspenseQuery>;
+export type InspectableTeamsQueryResult = Apollo.QueryResult<InspectableTeamsQuery, InspectableTeamsQueryVariables>;
 export const ConfigureTournamentManagerDocument = gql`
     mutation configureTournamentManager($settings: TournamentManagerSetup!) {
   configureTournamentManager(settings: $settings) {

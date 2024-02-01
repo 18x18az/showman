@@ -1,0 +1,10 @@
+query InspectableTeams {
+    notStarted: teams(inspectionStatus: CHECKED_IN) {
+        id
+        number
+    }
+    inProgress: teams(inspectionStatus: IN_PROGRESS) {
+        id
+        number
+    }
+}

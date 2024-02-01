@@ -1,20 +1,26 @@
 'use client'
 
+import Link from 'next/link'
+import { useInspectableTeamsQuery } from '../../../__generated__/graphql'
+
+interface Team {
+  id: number
+  number: string
+}
+
 export function InspectionSelector (): JSX.Element {
-  // const checkedIn = JsonTopic<InspectionStage>('inspection/stage/CHECKED_IN')
-  // const partial = JsonTopic<InspectionStage>('inspection/stage/PARTIAL')
+  const { data } = useInspectableTeamsQuery({ pollInterval: 500 })
 
-  // if (checkedIn === undefined || partial === undefined) {
-  //   return <div>Loading...</div>
-  // }
+  if (data === undefined) {
+    return <></>
+  }
 
-  // // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-  // const allTeams = [...checkedIn.teams, ...partial.teams].sort(function (a, b) { return a.length - b.length || a.localeCompare(b) })
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+  const allTeams: Team[] = [...data.inProgress, ...data.notStarted].sort(function (a, b) { return a.number.length - b.number.length || a.number.localeCompare(b.number) })
 
-  // const teamLinks = allTeams.map((team) => {
-  //   return <div key={team} className='text-3xl bg-zinc-900 m-2 p-2 w-44 text-center rounded-md'><a href={`/inspection/${team}`}>{team}</a></div>
-  // })
+  const teamLinks = allTeams.map((team) => {
+    return <Link className='bg-slate-3 text-3xl m-2 p-2 w-44 text-center rounded-md text-slate-12' key={team.id} href={`/inspection/${team.id}`}>{team.number}</Link>
+  })
 
-  // return <div className='grid grid-cols-2 xl:grid-cols-4 width-full justify-evenly justify-items-center'>{teamLinks}</div>
-  return <></>
+  return <div className='grid grid-cols-2 xl:grid-cols-4 width-full justify-evenly justify-items-center'>{teamLinks}</div>
 }
