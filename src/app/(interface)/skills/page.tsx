@@ -81,7 +81,7 @@ function SkillsMenu (props: { fields: FieldInfo[] }): JSX.Element {
   if (fullField === undefined) return <></>
 
   return (
-    <div className='w-full h-screen flex flex-col items-center py-8'>
+    <div className='w-full h-dvh flex flex-col items-center py-8'>
       <Dropdown size='L' options={fieldOptions} value={field} onChange={setField} />
       <SkillsControl field={fullField.id} />
     </div>

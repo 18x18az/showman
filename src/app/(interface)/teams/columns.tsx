@@ -77,7 +77,7 @@ export const Columns: Array<ColumnDef<Team>> = [
           <DialogTrigger>
             {text}
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className='h-96 flex flex-col'>
             <DialogHeader>
               <DialogTitle className='text-center mb-2'>
                 {row.original.number}

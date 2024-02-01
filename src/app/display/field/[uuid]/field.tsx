@@ -171,7 +171,7 @@ export function FieldDisplay (props: FieldDisplayProps): JSX.Element {
   const background = isCurrent ? 'bg-zinc-700' : 'bg-zinc-900'
 
   return (
-    <div className='bg-zinc-950 h-screen text-zinc-100 flex justify-evenly w-full'>
+    <div className='bg-zinc-950 h-dvh text-zinc-100 flex justify-evenly w-full'>
       <div className='flex flex-col justify-evenly w-11/12'>
         <div className={`rounded-2xl ${background} h-5/6 w-full text-center flex flex-col justify-between font-sans p-8`}>
           {body}

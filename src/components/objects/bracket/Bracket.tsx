@@ -24,7 +24,7 @@ export function Bracket (props: BracketProps): JSX.Element {
   const [ref, { width, height }] = useMeasure<HTMLDivElement>()
 
   return (
-    <div ref={ref} className='grid w-full h-screen grid-cols-7 grid-rows-7 bg-gray-1'>
+    <div ref={ref} className='grid w-full h-dvh grid-cols-7 grid-rows-7 bg-gray-1'>
       <Lines width={width} height={height} {...props} />
       <Round pairings={r16Left} side='left' />
       <Round pairings={qfLeft} side='left' />
