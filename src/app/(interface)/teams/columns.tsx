@@ -52,7 +52,7 @@ export const Columns: Array<ColumnDef<Team>> = [
     header: ({ column }) => {
       const filter = column.getFilterValue() as string[] | undefined
       if (filter === undefined) {
-        column.setFilterValue(Object.values(Inspection))
+        column.setFilterValue([Inspection.NotHere, Inspection.InProgress, Inspection.CheckedIn, Inspection.Completed])
         return <></>
       }
 
