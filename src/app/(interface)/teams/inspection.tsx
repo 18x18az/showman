@@ -12,5 +12,4 @@ export function InspectionPopover (props: InspectionPopoverProps): JSX.Element {
   if (data === undefined) return <></>
 
   return <Inspection team={{ id: props.teamId, number: props.teamNumber, inspection: data.team.inspection }} />
-
 }

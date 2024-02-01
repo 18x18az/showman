@@ -813,6 +813,11 @@ export type InspectableTeamsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type InspectableTeamsQuery = { __typename?: 'Query', notStarted: Array<{ __typename?: 'Team', id: number, number: string }>, inProgress: Array<{ __typename?: 'Team', id: number, number: string }> };
 
+export type InspectionGroupsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type InspectionGroupsQuery = { __typename?: 'Query', notCheckedIn: Array<{ __typename?: 'Team', id: number, number: string }>, notStarted: Array<{ __typename?: 'Team', id: number, number: string }>, inProgress: Array<{ __typename?: 'Team', id: number, number: string }>, completed: Array<{ __typename?: 'Team', id: number, number: string }> };
+
 export type InspectionDataQueryVariables = Exact<{
   teamId: Scalars['Int']['input'];
 }>;
@@ -2333,6 +2338,58 @@ export type InspectableTeamsQueryHookResult = ReturnType<typeof useInspectableTe
 export type InspectableTeamsLazyQueryHookResult = ReturnType<typeof useInspectableTeamsLazyQuery>;
 export type InspectableTeamsSuspenseQueryHookResult = ReturnType<typeof useInspectableTeamsSuspenseQuery>;
 export type InspectableTeamsQueryResult = Apollo.QueryResult<InspectableTeamsQuery, InspectableTeamsQueryVariables>;
+export const InspectionGroupsDocument = gql`
+    query InspectionGroups {
+  notCheckedIn: teams(inspectionStatus: NOT_HERE) {
+    id
+    number
+  }
+  notStarted: teams(inspectionStatus: CHECKED_IN) {
+    id
+    number
+  }
+  inProgress: teams(inspectionStatus: IN_PROGRESS) {
+    id
+    number
+  }
+  completed: teams(inspectionStatus: COMPLETED) {
+    id
+    number
+  }
+}
+    `;
+
+/**
+ * __useInspectionGroupsQuery__
+ *
+ * To run a query within a React component, call `useInspectionGroupsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useInspectionGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useInspectionGroupsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useInspectionGroupsQuery(baseOptions?: Apollo.QueryHookOptions<InspectionGroupsQuery, InspectionGroupsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<InspectionGroupsQuery, InspectionGroupsQueryVariables>(InspectionGroupsDocument, options);
+      }
+export function useInspectionGroupsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<InspectionGroupsQuery, InspectionGroupsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<InspectionGroupsQuery, InspectionGroupsQueryVariables>(InspectionGroupsDocument, options);
+        }
+export function useInspectionGroupsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<InspectionGroupsQuery, InspectionGroupsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<InspectionGroupsQuery, InspectionGroupsQueryVariables>(InspectionGroupsDocument, options);
+        }
+export type InspectionGroupsQueryHookResult = ReturnType<typeof useInspectionGroupsQuery>;
+export type InspectionGroupsLazyQueryHookResult = ReturnType<typeof useInspectionGroupsLazyQuery>;
+export type InspectionGroupsSuspenseQueryHookResult = ReturnType<typeof useInspectionGroupsSuspenseQuery>;
+export type InspectionGroupsQueryResult = Apollo.QueryResult<InspectionGroupsQuery, InspectionGroupsQueryVariables>;
 export const InspectionDataDocument = gql`
     query InspectionData($teamId: Int!) {
   team(teamId: $teamId) {

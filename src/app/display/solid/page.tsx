@@ -2,6 +2,7 @@
 import { EventStage, useGetEventStageQuery } from '../../../__generated__/graphql'
 import { AllianceDisplay } from './alliance-display'
 import { LogoFallback } from './fallback'
+import { InspectionDisplay } from './inspection'
 import { ParticlesBg } from './particles'
 import { ResultDisplay } from './results'
 
@@ -12,6 +13,7 @@ function getContent (): JSX.Element {
 
   const stage = data.stage.stage
 
+  if (stage === EventStage.Checkin) return <InspectionDisplay />
   if (stage === EventStage.Qualifications || stage === EventStage.Elims) return <ResultDisplay />
   if (stage === EventStage.AllianceSelection) return <AllianceDisplay />
 

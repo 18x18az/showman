@@ -9,6 +9,25 @@ query InspectableTeams {
     }
 }
 
+query InspectionGroups {
+    notCheckedIn: teams(inspectionStatus: NOT_HERE) {
+        id
+        number
+    }
+    notStarted: teams(inspectionStatus: CHECKED_IN) {
+        id
+        number
+    }
+    inProgress: teams(inspectionStatus: IN_PROGRESS) {
+        id
+        number
+    }
+    completed: teams(inspectionStatus: COMPLETED) {
+        id
+        number
+    }
+}
+
 query InspectionData($teamId: Int!) {
     team(teamId: $teamId) {
         id
