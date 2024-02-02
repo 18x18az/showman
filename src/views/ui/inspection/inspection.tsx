@@ -4,35 +4,35 @@ import { useErrorableMutation } from '@/hooks/useErrorableMutation'
 import { CheckBox } from '@/primitives/check-box/CheckBox'
 
 interface PointInfo {
-  id: number
-  text: string
-  met: boolean
+  readonly id: number
+  readonly text: string
+  readonly met: boolean
 }
 
 interface GroupInfo {
-  id: number
-  text: string
-  points: PointInfo[]
+  readonly id: number
+  readonly text: string
+  readonly points: PointInfo[]
 }
 
 interface InspectionProps {
-  showAll: boolean
-  team: {
-    id: number
-    number: string
-    inspection: GroupInfo[]
+  readonly showAll: boolean
+  readonly team: {
+    readonly id: number
+    readonly number: string
+    readonly inspection: GroupInfo[]
   }
 }
 
 interface GroupProps {
-  teamId: number
-  group: GroupInfo
-  showAll: boolean
+  readonly teamId: number
+  readonly group: GroupInfo
+  readonly showAll: boolean
 }
 
 interface PointProps {
-  teamId: number
-  point: PointInfo
+  readonly teamId: number
+  readonly point: PointInfo
 }
 
 function Point (props: PointProps): JSX.Element {
