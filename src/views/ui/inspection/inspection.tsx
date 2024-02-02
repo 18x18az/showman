@@ -1,7 +1,7 @@
-import { useSetInspectionPointMutation } from '../../../__generated__/graphql'
-import { ScrollArea } from '../../../components/ui/scroll-area'
-import { useErrorableMutation } from '../../../hooks/useErrorableMutation'
-import { CheckBox } from '../../../primitives/check-box/CheckBox'
+import { useSetInspectionPointMutation } from '@/__generated__/graphql'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { useErrorableMutation } from '@/hooks/useErrorableMutation'
+import { CheckBox } from '@/primitives/check-box/CheckBox'
 
 interface PointInfo {
   id: number
@@ -16,6 +16,7 @@ interface GroupInfo {
 }
 
 interface InspectionProps {
+  showAll: boolean
   team: {
     id: number
     number: string
@@ -26,6 +27,7 @@ interface InspectionProps {
 interface GroupProps {
   teamId: number
   group: GroupInfo
+  showAll: boolean
 }
 
 interface PointProps {
@@ -48,7 +50,9 @@ function Point (props: PointProps): JSX.Element {
 }
 
 function Group (props: GroupProps): JSX.Element {
-  const points = props.group.points.map((point) => {
+  const points = props.group.points.flatMap((point) => {
+    if (point.met && !props.showAll) return ([])
+
     return <Point key={point.id} teamId={props.teamId} point={point} />
   })
 
@@ -61,8 +65,10 @@ function Group (props: GroupProps): JSX.Element {
 }
 
 export function Inspection (props: InspectionProps): JSX.Element {
-  const groups = props.team.inspection.map((group) => {
-    return <Group key={group.id} teamId={props.team.id} group={group} />
+  const groups = props.team.inspection.flatMap((group) => {
+    if (group.points.every((point) => point.met) && !props.showAll) return ([])
+
+    return <Group key={group.id} teamId={props.team.id} group={group} showAll={props.showAll} />
   })
   return (
     <ScrollArea className='flex-grow'>

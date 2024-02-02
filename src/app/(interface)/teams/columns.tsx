@@ -62,7 +62,7 @@ export const Columns: Array<ColumnDef<Team>> = [
       const inProgress = filter.includes(Inspection.InProgress)
       const complete = filter.includes(Inspection.Completed)
 
-      const toggleFilter = (key: Inspection) => {
+      const toggleFilter = (key: Inspection): void => {
         const value = !filter.includes(key)
         if (value) {
           filter.push(key)
