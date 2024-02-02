@@ -64,7 +64,7 @@ function Group (props: GroupProps): JSX.Element {
   )
 }
 
-export function Inspection (props: InspectionProps): JSX.Element {
+export function InspectionChecklist (props: InspectionProps): JSX.Element {
   const groups = props.team.inspection.flatMap((group) => {
     if (group.points.every((point) => point.met) && !props.showAll) return ([])
 

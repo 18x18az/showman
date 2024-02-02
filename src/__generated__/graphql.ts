@@ -823,7 +823,7 @@ export type InspectionDataQueryVariables = Exact<{
 }>;
 
 
-export type InspectionDataQuery = { __typename?: 'Query', team: { __typename?: 'Team', id: number, number: string, inspection: Array<{ __typename?: 'TeamInspectionGroup', id: number, text: string, points: Array<{ __typename?: 'TeamInspectionPoint', id: number, text: string, met: boolean }> }> } };
+export type InspectionDataQuery = { __typename?: 'Query', team: { __typename?: 'Team', id: number, number: string, inspectionStatus: Inspection, inspection: Array<{ __typename?: 'TeamInspectionGroup', id: number, text: string, points: Array<{ __typename?: 'TeamInspectionPoint', id: number, text: string, met: boolean }> }> } };
 
 export type SetInspectionPointMutationVariables = Exact<{
   pointId: Scalars['Int']['input'];
@@ -2395,6 +2395,7 @@ export const InspectionDataDocument = gql`
   team(teamId: $teamId) {
     id
     number
+    inspectionStatus
     inspection {
       id
       text

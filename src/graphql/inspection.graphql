@@ -32,6 +32,7 @@ query InspectionData($teamId: Int!) {
     team(teamId: $teamId) {
         id
         number
+        inspectionStatus
         inspection {
             id
             text

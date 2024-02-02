@@ -1,5 +1,5 @@
 import { useInspectionDataQuery } from '@/__generated__/graphql'
-import { Inspection } from '@/views/ui/inspection/inspection'
+import { InspectionChecklist } from '@/views/ui/inspection/inspection'
 
 interface InspectionPopoverProps {
   readonly teamId: number
@@ -11,5 +11,5 @@ export function InspectionPopover (props: InspectionPopoverProps): JSX.Element {
 
   if (data === undefined) return <></>
 
-  return <Inspection showAll team={{ id: props.teamId, number: props.teamNumber, inspection: data.team.inspection }} />
+  return <InspectionChecklist showAll team={{ id: props.teamId, number: props.teamNumber, inspection: data.team.inspection }} />
 }

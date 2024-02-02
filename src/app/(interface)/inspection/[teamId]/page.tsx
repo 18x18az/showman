@@ -1,8 +1,8 @@
 'use client'
 
 import { ArrowBigLeft } from 'lucide-react'
-import { useInspectionDataQuery } from '@/__generated__/graphql'
-import { Inspection } from '@/views/ui/inspection/inspection'
+import { Inspection, useInspectionDataQuery } from '@/__generated__/graphql'
+import { InspectionChecklist } from '@/views/ui/inspection/inspection'
 import Link from 'next/link'
 import { Switch } from '@/primitives/switch/Switch'
 import { useState } from 'react'
@@ -14,6 +14,18 @@ export default function Page ({ params }: { readonly params: { readonly teamId: 
 
   if (data === undefined) {
     return <div>Loading...</div>
+  }
+
+  const status = data.team.inspectionStatus
+
+  if (status === Inspection.Completed) {
+    return (
+      <div className='flex flex-col items-center text-center gap-4'>
+        <h1 className='text-4xl text-slate-12 mt-24'>{data.team.number}</h1>
+        <h2 className='text-2xl text-slate-11'>Inspection Completed</h2>
+        <Link href='/inspection'><ArrowBigLeft size={36} /></Link>
+      </div>
+    )
   }
 
   const team = data.team
@@ -30,7 +42,7 @@ export default function Page ({ params }: { readonly params: { readonly teamId: 
           <Switch checked={showAll} onCheckedChange={(checked) => { setShowAll(checked) }} />
         </div>
       </div>
-      <Inspection showAll={showAll} team={team} />
+      <InspectionChecklist showAll={showAll} team={team} />
     </>
   )
 }
