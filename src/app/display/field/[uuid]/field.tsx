@@ -68,7 +68,7 @@ function SkillsDisplay (props: { fieldName: string, fieldControl: FieldControl, 
 
   const stopTime = props.stopTime
   if (stopTime !== null) {
-    const stopTimeSeconds = Math.ceil(stopTime / 1000)
+    const stopTimeSeconds = Math.ceil(stopTime / 1000).toString().padStart(2, '0')
     content = <h2 className='text-9xl'>0:{stopTimeSeconds}</h2>
   }
 
