@@ -53,7 +53,7 @@ function SkillsControl (props: { field: number }): JSX.Element {
   let stopTimeText = ''
   if (stopTime !== null) {
     const stopTimeSeconds = Math.ceil(stopTime / 1000)
-    stopTimeText = stopTimeSeconds.toString()
+    stopTimeText = stopTimeSeconds.toString().padStart(2, '0')
   }
 
   return (
