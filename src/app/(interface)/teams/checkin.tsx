@@ -1,21 +1,20 @@
 import { Inspection, useMarkCheckinMutation } from '@/__generated__/graphql'
-import ErrorableButton from '../../../components/errorable-button/ErrorableButton'
+import ErrorableButton from '@/components/errorable-button/ErrorableButton'
 
 interface CheckinProps {
-  teamNumber: string
-  status: Inspection
-  teamId: number
+  readonly status: Inspection
+  readonly teamId: number
 }
 
-function MarkCheckedIn (props: { teamId: number }): JSX.Element {
+function MarkCheckedIn (props: { readonly teamId: number }): JSX.Element {
   return <ErrorableButton mutation={useMarkCheckinMutation} options={{ variables: { teamId: props.teamId, status: Inspection.CheckedIn } }}>Checked In</ErrorableButton>
 }
 
-function MarkNotHere (props: { teamId: number }): JSX.Element {
+function MarkNotHere (props: { readonly teamId: number }): JSX.Element {
   return <ErrorableButton mutation={useMarkCheckinMutation} options={{ variables: { teamId: props.teamId, status: Inspection.NotHere } }}>Not Here</ErrorableButton>
 }
 
-function MarkNoShow (props: { teamId: number }): JSX.Element {
+function MarkNoShow (props: { readonly teamId: number }): JSX.Element {
   return <ErrorableButton mutation={useMarkCheckinMutation} options={{ variables: { teamId: props.teamId, status: Inspection.NoShow } }}>No Show</ErrorableButton>
 }
 

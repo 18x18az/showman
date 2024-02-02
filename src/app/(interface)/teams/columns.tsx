@@ -90,10 +90,10 @@ export const Columns: Array<ColumnDef<Team>> = [
     },
     cell: ({ row }) => {
       const status = row.original.inspectionStatus
-      let dialog = <></>
+      let dialog
 
       if (row.original.inspectionStatus === Inspection.NotHere || row.original.inspectionStatus === Inspection.NoShow) {
-        dialog = <Checkin teamId={row.original.id} teamNumber={row.original.number} status={status} />
+        dialog = <Checkin teamId={row.original.id} status={status} />
       } else {
         dialog = <InspectionPopover teamId={row.original.id} teamNumber={row.original.number} />
       }

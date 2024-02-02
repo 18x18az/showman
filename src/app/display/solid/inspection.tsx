@@ -2,10 +2,10 @@ import { useInspectionGroupsQuery } from '../../../__generated__/graphql'
 import { LogoFallback } from './fallback'
 
 interface Team {
-  number: string
+  readonly number: string
 }
 
-function InspectionGroup (props: { title: string, teams: Team[] }): JSX.Element {
+function InspectionGroup (props: { readonly title: string, readonly teams: Team[] }): JSX.Element {
   const teams = props.teams.map((team) => {
     return (
       <div className='text-center text-2xl text-zinc-50' key={team.number}>
