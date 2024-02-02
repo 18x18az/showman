@@ -77,6 +77,8 @@ query Teams {
     id
     name
     number
+    inspectionStatus,
+    rank
   }
 }
 
@@ -154,5 +156,13 @@ query QueueDisplay {
         ...SittingWithTeams
       }
     }
+  }
+}
+
+query GetNotCheckedInTeams {
+  teams(inspectionStatus: NOT_HERE) {
+    id
+    name
+    number
   }
 }

@@ -1,7 +1,8 @@
 'use client'
-import { HeartHandshake, Settings, TowerControl, Users } from 'lucide-react'
+import { ClipboardList, ClipboardPen, HeartHandshake, Settings, TowerControl, Users } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { EventStage, useGetEventStageQuery } from '../../__generated__/graphql'
 
 function Control (): JSX.Element {
   return (
@@ -23,6 +24,22 @@ function AllianceSelection (): JSX.Element {
   return (
     <Link href='/alliance-selection' className='flex text-slate-11 text-lg gap-2 p-2 pb-1 font-semibold'>
       <HeartHandshake className='text-slate-9' /> Alliance Selection
+    </Link>
+  )
+}
+
+function Checkin (): JSX.Element {
+  return (
+    <Link href='/checkin' className='flex text-slate-11 text-lg gap-2 p-2 pb-1 font-semibold'>
+      <ClipboardPen className='text-slate-9' /> Checkin
+    </Link>
+  )
+}
+
+function Inspection (): JSX.Element {
+  return (
+    <Link href='/inspection' className='flex text-slate-11 text-lg gap-2 p-2 pb-1 font-semibold'>
+      <ClipboardList className='text-slate-9' /> Inspection
     </Link>
   )
 }
@@ -50,18 +67,38 @@ export function Navbar (): JSX.Element {
     }
   }, [])
 
+  const { data } = useGetEventStageQuery({ pollInterval: 500 })
+
   const isMobile = width <= 1000
 
   if (isMobile) {
     return <></>
   }
 
+  const items: JSX.Element[] = []
+
+  items.push(<Control key='control' />)
+  items.push(<Teams key='teams' />)
+  items.push(<Config key='config' />)
+  items.push(<Inspection key='inspection' />)
+
+  if (data !== undefined) {
+    switch (data.stage.stage) {
+      case EventStage.Checkin:
+        items.push(<Checkin key='checkin' />)
+        break
+      case EventStage.Qualifications:
+        items.push(<AllianceSelection key='alliance-selection' />)
+        break
+      case EventStage.AllianceSelection:
+        items.push(<AllianceSelection key='alliance-selection' />)
+        break
+    }
+  }
+
   return (
     <div className='flex bg-slate-1 border-b border-slate-6 gap-2'>
-      <Control />
-      <Teams />
-      <Config />
-      <AllianceSelection />
+      {items}
     </div>
   )
 }

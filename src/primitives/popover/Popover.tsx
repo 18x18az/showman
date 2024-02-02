@@ -1,19 +1,19 @@
 import * as Base from '@radix-ui/react-popover'
-import { ExpandButton } from './ExpandButton'
 import { Cross1Icon } from '@radix-ui/react-icons'
+import { Button } from '../button/Button'
 
 interface PopoverPops {
   readonly title: string
   readonly children: React.ReactNode
 }
 
-const CONTENT_STYLE = 'radix-side-top:animate-slide-up radix-side-bottom:animate-slide-down z-50 w-48 rounded-lg p-4 shadow-md md:w-56 bg-slate-5'
+const CONTENT_STYLE = 'radix-side-top:animate-slide-up radix-side-bottom:animate-slide-down z-50 w-fit rounded-lg p-4 shadow-md md:w-56 bg-slate-5'
 
 export function Popover (props: PopoverPops): JSX.Element {
   return (
     <Base.Root>
       <Base.Trigger asChild>
-        <ExpandButton>{props.title}</ExpandButton>
+        <Button variant='ghost' className='w-fit p-0 data-[state=open]:bg-muted'>{props.title}</Button>
       </Base.Trigger>
       <Base.Content align='center' sideOffset={4} className={CONTENT_STYLE}>
         <Base.Arrow className='fill-current text-slate-5' />

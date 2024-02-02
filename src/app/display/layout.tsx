@@ -15,7 +15,7 @@ export default function RootLayout ({
 }): JSX.IntrinsicElements['html'] {
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className={`${inter.className} bg-slate-0`}>
+      <body className={`${inter.className} bg-slate-0 h-dvh`}>
         <Providers>
           {children}
         </Providers>

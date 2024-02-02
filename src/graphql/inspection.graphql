@@ -1,0 +1,52 @@
+query InspectableTeams {
+    notStarted: teams(inspectionStatus: CHECKED_IN) {
+        id
+        number
+    }
+    inProgress: teams(inspectionStatus: IN_PROGRESS) {
+        id
+        number
+    }
+}
+
+query InspectionGroups {
+    notCheckedIn: teams(inspectionStatus: NOT_HERE) {
+        id
+        number
+    }
+    notStarted: teams(inspectionStatus: CHECKED_IN) {
+        id
+        number
+    }
+    inProgress: teams(inspectionStatus: IN_PROGRESS) {
+        id
+        number
+    }
+    completed: teams(inspectionStatus: COMPLETED) {
+        id
+        number
+    }
+}
+
+query InspectionData($teamId: Int!) {
+    team(teamId: $teamId) {
+        id
+        number
+        inspectionStatus
+        inspection {
+            id
+            text
+            points {
+                id
+                text
+                met
+            }
+        }
+    }
+}
+
+mutation SetInspectionPoint($pointId: Int!, $teamId: Int!, $isMet: Boolean!) {
+    setInspectionPoint(pointId: $pointId, teamId: $teamId, isMet: $isMet) {
+        id
+    }
+}

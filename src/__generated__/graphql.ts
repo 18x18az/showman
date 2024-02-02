@@ -33,6 +33,16 @@ export type AllianceSelection = {
   remaining: Array<Team>;
 };
 
+export type Award = {
+  __typename?: 'Award';
+  /** Unique identifier for the award */
+  id: Scalars['Int']['output'];
+  /** Name of the award */
+  name: Scalars['String']['output'];
+  /** The team(s) that won the award */
+  winners: Maybe<Array<Team>>;
+};
+
 /** A block refers to a group of match sittings played in the same stretch of time, e.g. all quals played in the morning before lunch */
 export type Block = {
   __typename?: 'Block';
@@ -64,13 +74,6 @@ export enum BlockStatus {
 export enum Control_Mode {
   Auto = 'AUTO',
   Driver = 'DRIVER'
-}
-
-/** The checkin status of a team */
-export enum Checkin {
-  CheckedIn = 'CHECKED_IN',
-  NotHere = 'NOT_HERE',
-  NoShow = 'NO_SHOW'
 }
 
 export type Competition = {
@@ -184,6 +187,39 @@ export type FieldUpdate = {
   name: InputMaybe<Scalars['String']['input']>;
 };
 
+/** The inspection status of a team */
+export enum Inspection {
+  CheckedIn = 'CHECKED_IN',
+  Completed = 'COMPLETED',
+  InProgress = 'IN_PROGRESS',
+  NotHere = 'NOT_HERE',
+  NoShow = 'NO_SHOW'
+}
+
+export type InspectionGroup = {
+  __typename?: 'InspectionGroup';
+  /** Unique identifier for the inspection group */
+  id: Scalars['Int']['output'];
+  /** All inspection points for the group */
+  points: Array<InspectionPoint>;
+  /** Program the inspection group applies to */
+  program: Program;
+  /** Title of the inspection group */
+  text: Scalars['String']['output'];
+};
+
+export type InspectionPoint = {
+  __typename?: 'InspectionPoint';
+  /** Group the inspection point belongs to */
+  group: InspectionGroup;
+  /** Unique identifier for the inspection point */
+  id: Scalars['Int']['output'];
+  /** Program the inspection point applies to */
+  program: Program;
+  /** Text of the inspection point */
+  text: Scalars['String']['output'];
+};
+
 /** A match refers to a single scored match between two alliances. A match may have multiple sittings if it is replayed e.g. due to a field fault */
 export type Match = {
   __typename?: 'Match';
@@ -233,6 +269,7 @@ export type Mutation = {
   concludeBlock: Block;
   configureTournamentManager: TournamentManager;
   deleteField: Array<Field>;
+  markCheckin: Team;
   promoteResults: Results;
   putLive: Competition;
   putOnDeck: Competition;
@@ -246,6 +283,7 @@ export type Mutation = {
   resetAuton: CompetitionField;
   setAutomationEnabled: Competition;
   setDisplayField: Display;
+  setInspectionPoint: Team;
   setSkillsEnabled: Array<Field>;
   startAllianceSelection: AllianceSelection;
   startField: FieldControl;
@@ -253,6 +291,7 @@ export type Mutation = {
   startTimeout: Timeout;
   stopField: FieldControl;
   unqueue: CompetitionField;
+  updateAwards: Array<Award>;
   updateField: Field;
 };
 
@@ -269,6 +308,12 @@ export type MutationConfigureTournamentManagerArgs = {
 
 export type MutationDeleteFieldArgs = {
   fieldId: Scalars['Int']['input'];
+};
+
+
+export type MutationMarkCheckinArgs = {
+  status: Inspection;
+  teamId: Scalars['Int']['input'];
 };
 
 
@@ -320,6 +365,13 @@ export type MutationSetDisplayFieldArgs = {
 };
 
 
+export type MutationSetInspectionPointArgs = {
+  isMet: Scalars['Boolean']['input'];
+  pointId: Scalars['Int']['input'];
+  teamId: Scalars['Int']['input'];
+};
+
+
 export type MutationSetSkillsEnabledArgs = {
   enabled: Scalars['Boolean']['input'];
 };
@@ -345,9 +397,15 @@ export type MutationUpdateFieldArgs = {
   update: FieldUpdate;
 };
 
+export enum Program {
+  Vexu = 'VEXU',
+  Vrc = 'VRC'
+}
+
 export type Query = {
   __typename?: 'Query';
   allianceSelection: Maybe<AllianceSelection>;
+  awards: Array<Award>;
   blocks: Array<Block>;
   competitionInformation: Competition;
   contests: Array<Contest>;
@@ -356,11 +414,13 @@ export type Query = {
   displays: Array<Display>;
   field: Field;
   fields: Array<Field>;
+  inspectionGroups: Array<InspectionGroup>;
   matches: Array<Match>;
   nextBlock: Maybe<Block>;
   results: Results;
   sittings: Array<Sitting>;
   stage: Stage;
+  team: Team;
   teams: Array<Team>;
   timeout: Timeout;
   tournamentManager: TournamentManager;
@@ -381,6 +441,16 @@ export type QueryFieldsArgs = {
   isCompetition: InputMaybe<Scalars['Boolean']['input']>;
   isEnabled: InputMaybe<Scalars['Boolean']['input']>;
   skillsEnabled: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type QueryTeamArgs = {
+  teamId: Scalars['Int']['input'];
+};
+
+
+export type QueryTeamsArgs = {
+  inspectionStatus: InputMaybe<Inspection>;
 };
 
 export type Results = {
@@ -443,10 +513,12 @@ export type SubscriptionFieldControlArgs = {
 
 export type Team = {
   __typename?: 'Team';
-  /** Checkin status of the team */
-  checkin: Checkin;
   /** Unique identifier for the team */
   id: Scalars['Int']['output'];
+  /** All inspection groups applicable to the team */
+  inspection: Array<TeamInspectionGroup>;
+  /** Inspection status of the team */
+  inspectionStatus: Inspection;
   /** Location of the team */
   location: Scalars['String']['output'];
   /** Name of the team */
@@ -457,6 +529,36 @@ export type Team = {
   rank: Maybe<Scalars['Int']['output']>;
   /** School of the team */
   school: Scalars['String']['output'];
+  /** All inspection groups containing points not met by the team */
+  unmetInspection: Array<TeamInspectionGroup>;
+};
+
+export type TeamInspectionGroup = {
+  __typename?: 'TeamInspectionGroup';
+  /** Unique identifier for the inspection group */
+  id: Scalars['Int']['output'];
+  /** All inspection points applicable to the team */
+  points: Array<TeamInspectionPoint>;
+  /** Program the inspection group applies to */
+  program: Program;
+  /** Title of the inspection group */
+  text: Scalars['String']['output'];
+  /** Unmet inspection points for the team */
+  unmetPoints: Array<TeamInspectionPoint>;
+};
+
+export type TeamInspectionPoint = {
+  __typename?: 'TeamInspectionPoint';
+  /** Group the inspection point belongs to */
+  group: InspectionGroup;
+  /** Unique identifier for the inspection point */
+  id: Scalars['Int']['output'];
+  /** Whether the team has met the inspection point */
+  met: Scalars['Boolean']['output'];
+  /** Program the inspection point applies to */
+  program: Program;
+  /** Text of the inspection point */
+  text: Scalars['String']['output'];
 };
 
 export type Timeout = {
@@ -466,6 +568,7 @@ export type Timeout = {
 };
 
 export enum TmStatus {
+  AuthError = 'AUTH_ERROR',
   Connected = 'CONNECTED',
   Disconnected = 'DISCONNECTED',
   Initializing = 'INITIALIZING',
@@ -474,6 +577,8 @@ export enum TmStatus {
 
 export type TournamentManager = {
   __typename?: 'TournamentManager';
+  /** The password for Tournament Manager */
+  password: Maybe<Scalars['String']['output']>;
   /** The status of the TM server */
   status: TmStatus;
   /** The address of Tournament Manager. IP addresses must start with http e.g. http://192.168.1.42 */
@@ -481,6 +586,8 @@ export type TournamentManager = {
 };
 
 export type TournamentManagerSetup = {
+  /** The password for Tournament Manager */
+  password: Scalars['String']['input'];
   /** The address of Tournament Manager. IP addresses must start with http e.g. http://192.168.1.42 */
   url: Scalars['URL']['input'];
 };
@@ -701,6 +808,32 @@ export type SittingWithTeamsFragment = { __typename?: 'Sitting', scheduled: any 
 
 export type BlockInformationFragment = { __typename?: 'Block', id: number, name: string, canConclude: boolean, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, number: number, field: { __typename?: 'Field', id: number, name: string } | null, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } }> };
 
+export type InspectableTeamsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type InspectableTeamsQuery = { __typename?: 'Query', notStarted: Array<{ __typename?: 'Team', id: number, number: string }>, inProgress: Array<{ __typename?: 'Team', id: number, number: string }> };
+
+export type InspectionGroupsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type InspectionGroupsQuery = { __typename?: 'Query', notCheckedIn: Array<{ __typename?: 'Team', id: number, number: string }>, notStarted: Array<{ __typename?: 'Team', id: number, number: string }>, inProgress: Array<{ __typename?: 'Team', id: number, number: string }>, completed: Array<{ __typename?: 'Team', id: number, number: string }> };
+
+export type InspectionDataQueryVariables = Exact<{
+  teamId: Scalars['Int']['input'];
+}>;
+
+
+export type InspectionDataQuery = { __typename?: 'Query', team: { __typename?: 'Team', id: number, number: string, inspectionStatus: Inspection, inspection: Array<{ __typename?: 'TeamInspectionGroup', id: number, text: string, points: Array<{ __typename?: 'TeamInspectionPoint', id: number, text: string, met: boolean }> }> } };
+
+export type SetInspectionPointMutationVariables = Exact<{
+  pointId: Scalars['Int']['input'];
+  teamId: Scalars['Int']['input'];
+  isMet: Scalars['Boolean']['input'];
+}>;
+
+
+export type SetInspectionPointMutation = { __typename?: 'Mutation', setInspectionPoint: { __typename?: 'Team', id: number } };
+
 export type ConfigureTournamentManagerMutationVariables = Exact<{
   settings: TournamentManagerSetup;
 }>;
@@ -734,6 +867,14 @@ export type CancelTimeoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 export type CancelTimeoutMutation = { __typename?: 'Mutation', cancelTimeout: { __typename?: 'Timeout', endTime: any | null } };
 
+export type MarkCheckinMutationVariables = Exact<{
+  teamId: Scalars['Int']['input'];
+  status: Inspection;
+}>;
+
+
+export type MarkCheckinMutation = { __typename?: 'Mutation', markCheckin: { __typename?: 'Team', id: number, inspectionStatus: Inspection } };
+
 export type RefereeInformationQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -757,7 +898,7 @@ export type MatchOverlayQuery = { __typename?: 'Query', competitionInformation: 
 export type TeamsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type TeamsQuery = { __typename?: 'Query', teams: Array<{ __typename?: 'Team', id: number, name: string, number: string }> };
+export type TeamsQuery = { __typename?: 'Query', teams: Array<{ __typename?: 'Team', id: number, name: string, number: string, inspectionStatus: Inspection, rank: number | null }> };
 
 export type DisplaysQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -787,6 +928,11 @@ export type QueueDisplayQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type QueueDisplayQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null, onTableSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null } | null }> };
+
+export type GetNotCheckedInTeamsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetNotCheckedInTeamsQuery = { __typename?: 'Query', teams: Array<{ __typename?: 'Team', id: number, name: string, number: string }> };
 
 export type ClearResultsMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -2148,6 +2294,188 @@ export function useAddFieldMutation(baseOptions?: Apollo.MutationHookOptions<Add
 export type AddFieldMutationHookResult = ReturnType<typeof useAddFieldMutation>;
 export type AddFieldMutationResult = Apollo.MutationResult<AddFieldMutation>;
 export type AddFieldMutationOptions = Apollo.BaseMutationOptions<AddFieldMutation, AddFieldMutationVariables>;
+export const InspectableTeamsDocument = gql`
+    query InspectableTeams {
+  notStarted: teams(inspectionStatus: CHECKED_IN) {
+    id
+    number
+  }
+  inProgress: teams(inspectionStatus: IN_PROGRESS) {
+    id
+    number
+  }
+}
+    `;
+
+/**
+ * __useInspectableTeamsQuery__
+ *
+ * To run a query within a React component, call `useInspectableTeamsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useInspectableTeamsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useInspectableTeamsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useInspectableTeamsQuery(baseOptions?: Apollo.QueryHookOptions<InspectableTeamsQuery, InspectableTeamsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<InspectableTeamsQuery, InspectableTeamsQueryVariables>(InspectableTeamsDocument, options);
+      }
+export function useInspectableTeamsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<InspectableTeamsQuery, InspectableTeamsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<InspectableTeamsQuery, InspectableTeamsQueryVariables>(InspectableTeamsDocument, options);
+        }
+export function useInspectableTeamsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<InspectableTeamsQuery, InspectableTeamsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<InspectableTeamsQuery, InspectableTeamsQueryVariables>(InspectableTeamsDocument, options);
+        }
+export type InspectableTeamsQueryHookResult = ReturnType<typeof useInspectableTeamsQuery>;
+export type InspectableTeamsLazyQueryHookResult = ReturnType<typeof useInspectableTeamsLazyQuery>;
+export type InspectableTeamsSuspenseQueryHookResult = ReturnType<typeof useInspectableTeamsSuspenseQuery>;
+export type InspectableTeamsQueryResult = Apollo.QueryResult<InspectableTeamsQuery, InspectableTeamsQueryVariables>;
+export const InspectionGroupsDocument = gql`
+    query InspectionGroups {
+  notCheckedIn: teams(inspectionStatus: NOT_HERE) {
+    id
+    number
+  }
+  notStarted: teams(inspectionStatus: CHECKED_IN) {
+    id
+    number
+  }
+  inProgress: teams(inspectionStatus: IN_PROGRESS) {
+    id
+    number
+  }
+  completed: teams(inspectionStatus: COMPLETED) {
+    id
+    number
+  }
+}
+    `;
+
+/**
+ * __useInspectionGroupsQuery__
+ *
+ * To run a query within a React component, call `useInspectionGroupsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useInspectionGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useInspectionGroupsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useInspectionGroupsQuery(baseOptions?: Apollo.QueryHookOptions<InspectionGroupsQuery, InspectionGroupsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<InspectionGroupsQuery, InspectionGroupsQueryVariables>(InspectionGroupsDocument, options);
+      }
+export function useInspectionGroupsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<InspectionGroupsQuery, InspectionGroupsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<InspectionGroupsQuery, InspectionGroupsQueryVariables>(InspectionGroupsDocument, options);
+        }
+export function useInspectionGroupsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<InspectionGroupsQuery, InspectionGroupsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<InspectionGroupsQuery, InspectionGroupsQueryVariables>(InspectionGroupsDocument, options);
+        }
+export type InspectionGroupsQueryHookResult = ReturnType<typeof useInspectionGroupsQuery>;
+export type InspectionGroupsLazyQueryHookResult = ReturnType<typeof useInspectionGroupsLazyQuery>;
+export type InspectionGroupsSuspenseQueryHookResult = ReturnType<typeof useInspectionGroupsSuspenseQuery>;
+export type InspectionGroupsQueryResult = Apollo.QueryResult<InspectionGroupsQuery, InspectionGroupsQueryVariables>;
+export const InspectionDataDocument = gql`
+    query InspectionData($teamId: Int!) {
+  team(teamId: $teamId) {
+    id
+    number
+    inspectionStatus
+    inspection {
+      id
+      text
+      points {
+        id
+        text
+        met
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useInspectionDataQuery__
+ *
+ * To run a query within a React component, call `useInspectionDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useInspectionDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useInspectionDataQuery({
+ *   variables: {
+ *      teamId: // value for 'teamId'
+ *   },
+ * });
+ */
+export function useInspectionDataQuery(baseOptions: Apollo.QueryHookOptions<InspectionDataQuery, InspectionDataQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<InspectionDataQuery, InspectionDataQueryVariables>(InspectionDataDocument, options);
+      }
+export function useInspectionDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<InspectionDataQuery, InspectionDataQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<InspectionDataQuery, InspectionDataQueryVariables>(InspectionDataDocument, options);
+        }
+export function useInspectionDataSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<InspectionDataQuery, InspectionDataQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<InspectionDataQuery, InspectionDataQueryVariables>(InspectionDataDocument, options);
+        }
+export type InspectionDataQueryHookResult = ReturnType<typeof useInspectionDataQuery>;
+export type InspectionDataLazyQueryHookResult = ReturnType<typeof useInspectionDataLazyQuery>;
+export type InspectionDataSuspenseQueryHookResult = ReturnType<typeof useInspectionDataSuspenseQuery>;
+export type InspectionDataQueryResult = Apollo.QueryResult<InspectionDataQuery, InspectionDataQueryVariables>;
+export const SetInspectionPointDocument = gql`
+    mutation SetInspectionPoint($pointId: Int!, $teamId: Int!, $isMet: Boolean!) {
+  setInspectionPoint(pointId: $pointId, teamId: $teamId, isMet: $isMet) {
+    id
+  }
+}
+    `;
+export type SetInspectionPointMutationFn = Apollo.MutationFunction<SetInspectionPointMutation, SetInspectionPointMutationVariables>;
+
+/**
+ * __useSetInspectionPointMutation__
+ *
+ * To run a mutation, you first call `useSetInspectionPointMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetInspectionPointMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setInspectionPointMutation, { data, loading, error }] = useSetInspectionPointMutation({
+ *   variables: {
+ *      pointId: // value for 'pointId'
+ *      teamId: // value for 'teamId'
+ *      isMet: // value for 'isMet'
+ *   },
+ * });
+ */
+export function useSetInspectionPointMutation(baseOptions?: Apollo.MutationHookOptions<SetInspectionPointMutation, SetInspectionPointMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetInspectionPointMutation, SetInspectionPointMutationVariables>(SetInspectionPointDocument, options);
+      }
+export type SetInspectionPointMutationHookResult = ReturnType<typeof useSetInspectionPointMutation>;
+export type SetInspectionPointMutationResult = Apollo.MutationResult<SetInspectionPointMutation>;
+export type SetInspectionPointMutationOptions = Apollo.BaseMutationOptions<SetInspectionPointMutation, SetInspectionPointMutationVariables>;
 export const ConfigureTournamentManagerDocument = gql`
     mutation configureTournamentManager($settings: TournamentManagerSetup!) {
   configureTournamentManager(settings: $settings) {
@@ -2317,6 +2645,41 @@ export function useCancelTimeoutMutation(baseOptions?: Apollo.MutationHookOption
 export type CancelTimeoutMutationHookResult = ReturnType<typeof useCancelTimeoutMutation>;
 export type CancelTimeoutMutationResult = Apollo.MutationResult<CancelTimeoutMutation>;
 export type CancelTimeoutMutationOptions = Apollo.BaseMutationOptions<CancelTimeoutMutation, CancelTimeoutMutationVariables>;
+export const MarkCheckinDocument = gql`
+    mutation MarkCheckin($teamId: Int!, $status: Inspection!) {
+  markCheckin(teamId: $teamId, status: $status) {
+    id
+    inspectionStatus
+  }
+}
+    `;
+export type MarkCheckinMutationFn = Apollo.MutationFunction<MarkCheckinMutation, MarkCheckinMutationVariables>;
+
+/**
+ * __useMarkCheckinMutation__
+ *
+ * To run a mutation, you first call `useMarkCheckinMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMarkCheckinMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [markCheckinMutation, { data, loading, error }] = useMarkCheckinMutation({
+ *   variables: {
+ *      teamId: // value for 'teamId'
+ *      status: // value for 'status'
+ *   },
+ * });
+ */
+export function useMarkCheckinMutation(baseOptions?: Apollo.MutationHookOptions<MarkCheckinMutation, MarkCheckinMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<MarkCheckinMutation, MarkCheckinMutationVariables>(MarkCheckinDocument, options);
+      }
+export type MarkCheckinMutationHookResult = ReturnType<typeof useMarkCheckinMutation>;
+export type MarkCheckinMutationResult = Apollo.MutationResult<MarkCheckinMutation>;
+export type MarkCheckinMutationOptions = Apollo.BaseMutationOptions<MarkCheckinMutation, MarkCheckinMutationVariables>;
 export const RefereeInformationDocument = gql`
     query RefereeInformation {
   competitionInformation {
@@ -2529,6 +2892,8 @@ export const TeamsDocument = gql`
     id
     name
     number
+    inspectionStatus
+    rank
   }
 }
     `;
@@ -2808,6 +3173,47 @@ export type QueueDisplayQueryHookResult = ReturnType<typeof useQueueDisplayQuery
 export type QueueDisplayLazyQueryHookResult = ReturnType<typeof useQueueDisplayLazyQuery>;
 export type QueueDisplaySuspenseQueryHookResult = ReturnType<typeof useQueueDisplaySuspenseQuery>;
 export type QueueDisplayQueryResult = Apollo.QueryResult<QueueDisplayQuery, QueueDisplayQueryVariables>;
+export const GetNotCheckedInTeamsDocument = gql`
+    query GetNotCheckedInTeams {
+  teams(inspectionStatus: NOT_HERE) {
+    id
+    name
+    number
+  }
+}
+    `;
+
+/**
+ * __useGetNotCheckedInTeamsQuery__
+ *
+ * To run a query within a React component, call `useGetNotCheckedInTeamsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetNotCheckedInTeamsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetNotCheckedInTeamsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetNotCheckedInTeamsQuery(baseOptions?: Apollo.QueryHookOptions<GetNotCheckedInTeamsQuery, GetNotCheckedInTeamsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetNotCheckedInTeamsQuery, GetNotCheckedInTeamsQueryVariables>(GetNotCheckedInTeamsDocument, options);
+      }
+export function useGetNotCheckedInTeamsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetNotCheckedInTeamsQuery, GetNotCheckedInTeamsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetNotCheckedInTeamsQuery, GetNotCheckedInTeamsQueryVariables>(GetNotCheckedInTeamsDocument, options);
+        }
+export function useGetNotCheckedInTeamsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetNotCheckedInTeamsQuery, GetNotCheckedInTeamsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetNotCheckedInTeamsQuery, GetNotCheckedInTeamsQueryVariables>(GetNotCheckedInTeamsDocument, options);
+        }
+export type GetNotCheckedInTeamsQueryHookResult = ReturnType<typeof useGetNotCheckedInTeamsQuery>;
+export type GetNotCheckedInTeamsLazyQueryHookResult = ReturnType<typeof useGetNotCheckedInTeamsLazyQuery>;
+export type GetNotCheckedInTeamsSuspenseQueryHookResult = ReturnType<typeof useGetNotCheckedInTeamsSuspenseQuery>;
+export type GetNotCheckedInTeamsQueryResult = Apollo.QueryResult<GetNotCheckedInTeamsQuery, GetNotCheckedInTeamsQueryVariables>;
 export const ClearResultsDocument = gql`
     mutation ClearResults {
   clearResults {

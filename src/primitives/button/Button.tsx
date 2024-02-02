@@ -16,7 +16,7 @@ const buttonVariants = cva(
           'border border-slate-7 bg-slate-9 hover:bg-slate-10 hover:text-slate-11',
         secondary:
           'bg-slate-3 text-indigo-9 hover:bg-slate-4',
-        ghost: 'hover:bg-slate-3 hover:text-slate-12',
+        ghost: 'hover:text-slate-11',
         link: 'text-slate-9 underline-offset-4 hover:underline'
       },
       size: {

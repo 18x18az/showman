@@ -1,5 +1,5 @@
 import { LabelledSection } from '../../primitives/LabelledSection'
-import { Dropdown } from '../../primitives/Dropdown'
+import { Dropdown } from '../../../primitives/dropdown/Dropdown'
 import { InputNumber } from '../../primitives/InputNumber'
 import { Label } from '../../primitives/Label'
 

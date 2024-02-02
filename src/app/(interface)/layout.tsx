@@ -32,9 +32,9 @@ export default function RootLayout ({
 }): JSX.IntrinsicElements['html'] {
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className={`${inter.className} bg-slate-1 h-screen`}>
+      <body className={`${inter.className}`}>
         <Providers>
-          <div className='flex flex-col h-full w-full'>
+          <div className='flex flex-col h-dvh w-full bg-slate-1'>
             <Navbar />
             {children}
           </div>
