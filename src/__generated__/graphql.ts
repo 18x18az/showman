@@ -569,6 +569,8 @@ export type Score = {
   entryString: Scalars['String']['output'];
   /** Whether the score is for an elimination match */
   isElim: Scalars['Boolean']['output'];
+  /** Whether the score can be edited */
+  locked: Scalars['Boolean']['output'];
   /** The match this score is for */
   match: Match;
   red: AllianceScore;
@@ -580,6 +582,8 @@ export type Score = {
 export type ScoreEdit = {
   /** The winner of the autonomous period, empty if auto has not been scored */
   autoWinner: InputMaybe<Winner>;
+  /** Whether the score can be edited */
+  locked: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** A sitting is an instance of a match being played. In case of a replay, another sitting is created for the same match. */
@@ -1120,7 +1124,7 @@ export type WorkingScoreQueryVariables = Exact<{
 }>;
 
 
-export type WorkingScoreQuery = { __typename?: 'Query', match: { __typename?: 'Match', id: number, workingScore: { __typename?: 'Score', autoWinner: Winner | null, isElim: boolean, red: { __typename?: 'AllianceScore', allianceInGoal: number, allianceInZone: number, triballsInGoal: number, triballsInZone: number, robot1Tier: Tier, robot2Tier: Tier, autoWp: boolean | null, score: number, teams: Array<{ __typename?: 'TeamMeta', noShow: boolean, dq: boolean, team: { __typename?: 'Team', id: number, number: string } }> }, blue: { __typename?: 'AllianceScore', allianceInGoal: number, allianceInZone: number, triballsInGoal: number, triballsInZone: number, robot1Tier: Tier, robot2Tier: Tier, autoWp: boolean | null, score: number, teams: Array<{ __typename?: 'TeamMeta', noShow: boolean, dq: boolean, team: { __typename?: 'Team', id: number, number: string } }> } } } };
+export type WorkingScoreQuery = { __typename?: 'Query', match: { __typename?: 'Match', id: number, workingScore: { __typename?: 'Score', autoWinner: Winner | null, isElim: boolean, locked: boolean, red: { __typename?: 'AllianceScore', allianceInGoal: number, allianceInZone: number, triballsInGoal: number, triballsInZone: number, robot1Tier: Tier, robot2Tier: Tier, autoWp: boolean | null, score: number, teams: Array<{ __typename?: 'TeamMeta', noShow: boolean, dq: boolean, team: { __typename?: 'Team', id: number, number: string } }> }, blue: { __typename?: 'AllianceScore', allianceInGoal: number, allianceInZone: number, triballsInGoal: number, triballsInZone: number, robot1Tier: Tier, robot2Tier: Tier, autoWp: boolean | null, score: number, teams: Array<{ __typename?: 'TeamMeta', noShow: boolean, dq: boolean, team: { __typename?: 'Team', id: number, number: string } }> } } } };
 
 export type EditScoreMutationVariables = Exact<{
   matchId: Scalars['Int']['input'];
@@ -3701,6 +3705,7 @@ export const WorkingScoreDocument = gql`
       }
       autoWinner
       isElim
+      locked
     }
   }
 }

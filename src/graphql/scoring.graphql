@@ -10,6 +10,7 @@ query WorkingScore($id: Int!) {
             }
             autoWinner
             isElim
+            locked
         }
     }
 }
