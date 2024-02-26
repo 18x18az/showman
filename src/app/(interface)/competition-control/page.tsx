@@ -1,8 +1,9 @@
 'use client'
-import TmSelector from './tm-connect'
-import UploadMatches from '../upload'
 import { EventStage, useGetEventStageQuery } from '@/__generated__/graphql'
 import { CompetitionControl } from '@/views/ui/competition-control/main'
+import Upload from './upload'
+import { uploadTeams } from '@/contracts/teams'
+import { uploadMatches } from '../../../contracts/matches'
 
 export default function Page (): JSX.Element {
   const { data } = useGetEventStageQuery(
@@ -22,11 +23,11 @@ export default function Page (): JSX.Element {
   }
 
   if (stage === EventStage.WaitingForTeams) {
-    return <TmSelector />
+    return <Upload upload={uploadTeams} text='teams' />
   }
 
   if (stage === EventStage.Checkin) {
-    return <UploadMatches />
+    return <Upload upload={uploadMatches} text='match' />
   }
 
   return (
