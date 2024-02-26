@@ -1,16 +1,20 @@
 'use client'
 
-import { uploadMatches } from '@/contracts/matches'
 import { useState } from 'react'
 import { Button } from '../../../primitives/button/Button'
 import { toast } from '../../../primitives/toast/useToast'
 
-export default function UploadMatches (): JSX.Element {
+interface UploadProps {
+  upload: (file: File) => Promise<void>
+  text: string
+}
+
+export default function Upload (props: UploadProps): JSX.Element {
   const [file, setFile] = useState<File | null>(null)
 
   const handleFileUpload = async (): Promise<void> => {
     if (file != null) {
-      await uploadMatches(file)
+      await props.upload(file)
     } else {
       toast({
         duration: 3000,
@@ -29,7 +33,7 @@ export default function UploadMatches (): JSX.Element {
 
   return (
     <div className='flex flex-col gap-4'>
-      <h1>Upload match CSV</h1>
+      <h1>{`Upload ${props.text} CSV`}</h1>
       <input type='file' accept='.csv' onChange={handleFileChange} />
       <Button className='w-24' size='lg' onClick={() => { void handleFileUpload() }}>Upload</Button>
     </div>
