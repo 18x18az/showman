@@ -30,7 +30,7 @@ export const Columns: Array<ColumnDef<Sitting>> = [
                 {text}
               </DialogTitle>
             </DialogHeader>
-            <MatchScore matchId={row.original.id} />
+            <MatchScore matchId={row.original.match.id} />
           </DialogContent>
         </Dialog>
       )

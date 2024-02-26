@@ -11,6 +11,7 @@ query WorkingScore($id: Int!) {
             autoWinner
             isElim
             locked
+            changed
         }
     }
 }
@@ -23,6 +24,12 @@ mutation EditScore($matchId: Int!, $edit: ScoreEdit!) {
 
 mutation EditAllianceScore($matchId: Int!, $color: Color!, $edit: AllianceScoreEdit!) {
     editAllianceScore(matchId: $matchId, color: $color, edit: $edit) {
+        winner
+    }
+}
+
+mutation SaveScore($matchId: Int!) {
+    saveScore(matchId: $matchId) {
         winner
     }
 }

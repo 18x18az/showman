@@ -22,6 +22,7 @@ export function MatchScore (props: MatchScoreProps): JSX.Element {
 
   const isElim = scoring.isElim
   const locked = scoring.locked
+  const changed = scoring.changed
   const hidden = false
 
   return (
@@ -30,7 +31,7 @@ export function MatchScore (props: MatchScoreProps): JSX.Element {
         <AllianceInput autoWinner={scoring.autoWinner} matchId={matchId} isElim={isElim} alliance='red' locked={locked} hidden={hidden} data={scoring.red} />
         <AllianceInput autoWinner={scoring.autoWinner} matchId={matchId} isElim={isElim} alliance='blue' locked={locked} hidden={hidden} data={scoring.blue} />
       </div>
-      <SaveBar matchId={matchId} locked={locked} hidden={hidden} />
+      <SaveBar matchId={matchId} locked={locked} hidden={hidden} changed={changed} />
     </ScrollArea>
 
   )

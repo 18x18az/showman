@@ -2,10 +2,12 @@ fragment SittingInformation on Sitting {
   id
   number
   contest {
+    id
   	round
   	number
   }
   match {
+    id
     number
   }
 }
