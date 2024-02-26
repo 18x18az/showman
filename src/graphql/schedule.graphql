@@ -19,3 +19,13 @@ query GetUnqueuedSittings {
     name
   }
 }
+
+query GetSchedule {
+  sittings {
+    ...SittingInformation
+    status
+    block {
+      name
+    }
+  }
+}

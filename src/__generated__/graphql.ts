@@ -19,6 +19,29 @@ export type Scalars = {
   URL: { input: any; output: any; }
 };
 
+export type AllianceScore = {
+  __typename?: 'AllianceScore';
+  allianceInGoal: Scalars['Int']['output'];
+  allianceInZone: Scalars['Int']['output'];
+  autoWp: Maybe<Scalars['Boolean']['output']>;
+  robot1Tier: Tier;
+  robot2Tier: Tier;
+  score: Scalars['Int']['output'];
+  teams: Array<TeamMeta>;
+  triballsInGoal: Scalars['Int']['output'];
+  triballsInZone: Scalars['Int']['output'];
+};
+
+export type AllianceScoreEdit = {
+  allianceInGoal: InputMaybe<Scalars['Int']['input']>;
+  allianceInZone: InputMaybe<Scalars['Int']['input']>;
+  autoWp: InputMaybe<Scalars['Boolean']['input']>;
+  robot1Tier: InputMaybe<Tier>;
+  robot2Tier: InputMaybe<Tier>;
+  triballsInGoal: InputMaybe<Scalars['Int']['input']>;
+  triballsInZone: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type AllianceSelection = {
   __typename?: 'AllianceSelection';
   /** The alliances that have been formed */
@@ -42,6 +65,29 @@ export type Award = {
   /** The team(s) that won the award */
   winners: Maybe<Array<Team>>;
 };
+
+export type Backend = {
+  __typename?: 'Backend';
+  /** The password for the backend */
+  password: Maybe<Scalars['String']['output']>;
+  /** The status of the backend */
+  status: BackendStatus;
+  /** The address of the backend. IP addresses must start with http e.g. http://192.168.1.42 */
+  url: Maybe<Scalars['URL']['output']>;
+};
+
+export type BackendSetup = {
+  /** The password for the backend */
+  password: Scalars['String']['input'];
+  /** The address of the backend. IP addresses must start with http e.g. http://192.168.1.42 */
+  url: InputMaybe<Scalars['URL']['input']>;
+};
+
+export enum BackendStatus {
+  AuthError = 'AUTH_ERROR',
+  Connected = 'CONNECTED',
+  NotConfigured = 'NOT_CONFIGURED'
+}
 
 /** A block refers to a group of match sittings played in the same stretch of time, e.g. all quals played in the morning before lunch */
 export type Block = {
@@ -74,6 +120,12 @@ export enum BlockStatus {
 export enum Control_Mode {
   Auto = 'AUTO',
   Driver = 'DRIVER'
+}
+
+/** The color of an alliance */
+export enum Color {
+  Blue = 'BLUE',
+  Red = 'RED'
 }
 
 export type Competition = {
@@ -116,6 +168,8 @@ export type Contest = {
   redTeams: Array<Team>;
   /** The round of the contest */
   round: Round;
+  /** The winner of the contest */
+  winner: Winner;
 };
 
 /** Control of remote displays */
@@ -223,18 +277,22 @@ export type InspectionPoint = {
 /** A match refers to a single scored match between two alliances. A match may have multiple sittings if it is replayed e.g. due to a field fault */
 export type Match = {
   __typename?: 'Match';
-  /** The score of the blue alliance */
-  blueScore: Maybe<Scalars['Int']['output']>;
   /** The contest this match is a part of */
   contest: Contest;
   /** Unique identifier for the match */
   id: Scalars['Int']['output'];
-  /** The number of the match. E.g. SF-2-1 is 2 */
+  /** The number of the match. E.g. SF-2-1 is 1 */
   number: Scalars['Int']['output'];
-  /** The score of the red alliance */
-  redScore: Maybe<Scalars['Int']['output']>;
+  /** The saved result of the match */
+  savedScore: Maybe<Score>;
+  /** The history of match scores */
+  scoreHistory: Array<Score>;
   /** Sittings of the match */
   sittings: Array<Sitting>;
+  /** The winner of the match */
+  winner: Winner;
+  /** The working result of the match */
+  workingScore: Score;
 };
 
 export enum MatchStage {
@@ -267,8 +325,11 @@ export type Mutation = {
   clearLive: Competition;
   clearResults: Results;
   concludeBlock: Block;
+  configureBackend: Backend;
   configureTournamentManager: TournamentManager;
   deleteField: Array<Field>;
+  editAllianceScore: Score;
+  editScore: Score;
   markCheckin: Team;
   promoteResults: Results;
   putLive: Competition;
@@ -281,6 +342,7 @@ export type Mutation = {
   /** Reset the event. Only available in test mode. */
   reset: Stage;
   resetAuton: CompetitionField;
+  saveScore: Match;
   setAutomationEnabled: Competition;
   setDisplayField: Display;
   setInspectionPoint: Team;
@@ -301,6 +363,11 @@ export type MutationAllianceSelectionPickArgs = {
 };
 
 
+export type MutationConfigureBackendArgs = {
+  settings: BackendSetup;
+};
+
+
 export type MutationConfigureTournamentManagerArgs = {
   settings: TournamentManagerSetup;
 };
@@ -308,6 +375,19 @@ export type MutationConfigureTournamentManagerArgs = {
 
 export type MutationDeleteFieldArgs = {
   fieldId: Scalars['Int']['input'];
+};
+
+
+export type MutationEditAllianceScoreArgs = {
+  color: Color;
+  edit: AllianceScoreEdit;
+  matchId: Scalars['Int']['input'];
+};
+
+
+export type MutationEditScoreArgs = {
+  edit: ScoreEdit;
+  matchId: Scalars['Int']['input'];
 };
 
 
@@ -351,6 +431,11 @@ export type MutationReplayArgs = {
 
 export type MutationResetAutonArgs = {
   fieldId: Scalars['Int']['input'];
+};
+
+
+export type MutationSaveScoreArgs = {
+  matchId: Scalars['Int']['input'];
 };
 
 
@@ -406,6 +491,7 @@ export type Query = {
   __typename?: 'Query';
   allianceSelection: Maybe<AllianceSelection>;
   awards: Array<Award>;
+  backend: Backend;
   blocks: Array<Block>;
   competitionInformation: Competition;
   contests: Array<Contest>;
@@ -467,6 +553,28 @@ export enum Round {
   Ro16 = 'Ro16',
   Sf = 'SF'
 }
+
+export type Score = {
+  __typename?: 'Score';
+  /** The winner of the autonomous period, empty if auto has not been scored */
+  autoWinner: Maybe<Winner>;
+  blue: AllianceScore;
+  /** A string representation of the score for entry into TM */
+  entryString: Scalars['String']['output'];
+  /** Whether the score is for an elimination match */
+  isElim: Scalars['Boolean']['output'];
+  /** The match this score is for */
+  match: Match;
+  red: AllianceScore;
+  /** The date the score was saved at. Empty if the score is a working score */
+  savedAt: Maybe<Scalars['DateTime']['output']>;
+  winner: Winner;
+};
+
+export type ScoreEdit = {
+  /** The winner of the autonomous period, empty if auto has not been scored */
+  autoWinner: InputMaybe<Winner>;
+};
 
 /** A sitting is an instance of a match being played. In case of a replay, another sitting is created for the same match. */
 export type Sitting = {
@@ -561,6 +669,28 @@ export type TeamInspectionPoint = {
   text: Scalars['String']['output'];
 };
 
+export type TeamMeta = {
+  __typename?: 'TeamMeta';
+  dq: Scalars['Boolean']['output'];
+  noShow: Scalars['Boolean']['output'];
+  team: Team;
+};
+
+/** Elevation tier of the robot */
+export enum Tier {
+  A = 'A',
+  B = 'B',
+  C = 'C',
+  D = 'D',
+  E = 'E',
+  F = 'F',
+  G = 'G',
+  H = 'H',
+  I = 'I',
+  J = 'J',
+  None = 'NONE'
+}
+
 export type Timeout = {
   __typename?: 'Timeout';
   /** The time that the timeout will end, null if there is no timeout. */
@@ -591,6 +721,14 @@ export type TournamentManagerSetup = {
   /** The address of Tournament Manager. IP addresses must start with http e.g. http://192.168.1.42 */
   url: Scalars['URL']['input'];
 };
+
+/** The winner of a particular contest */
+export enum Winner {
+  Blue = 'BLUE',
+  None = 'NONE',
+  Red = 'RED',
+  Tie = 'TIE'
+}
 
 export type AllianceSelectionControlQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -947,7 +1085,7 @@ export type PromoteResultsMutation = { __typename?: 'Mutation', promoteResults: 
 export type ResultsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ResultsQuery = { __typename?: 'Query', results: { __typename?: 'Results', displayedResults: { __typename?: 'Match', id: number, number: number, redScore: number | null, blueScore: number | null, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> } } | null } };
+export type ResultsQuery = { __typename?: 'Query', results: { __typename?: 'Results', displayedResults: { __typename?: 'Match', id: number, number: number, savedScore: { __typename?: 'Score', red: { __typename?: 'AllianceScore', score: number }, blue: { __typename?: 'AllianceScore', score: number } } | null, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> } } | null } };
 
 export type StartNextBlockMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -963,6 +1101,11 @@ export type GetUnqueuedSittingsQueryVariables = Exact<{ [key: string]: never; }>
 
 
 export type GetUnqueuedSittingsQuery = { __typename?: 'Query', currentBlock: { __typename?: 'Block', id: number, name: string, canConclude: boolean, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, number: number, field: { __typename?: 'Field', id: number, name: string } | null, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } }> } | null, nextBlock: { __typename?: 'Block', id: number, name: string } | null };
+
+export type GetScheduleQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetScheduleQuery = { __typename?: 'Query', sittings: Array<{ __typename?: 'Sitting', status: MatchStatus, id: number, number: number, block: { __typename?: 'Block', name: string }, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } }> };
 
 export const SittingInformationFragmentDoc = gql`
     fragment SittingInformation on Sitting {
@@ -3288,8 +3431,14 @@ export const ResultsDocument = gql`
     displayedResults {
       id
       number
-      redScore
-      blueScore
+      savedScore {
+        red {
+          score
+        }
+        blue {
+          score
+        }
+      }
       contest {
         id
         round
@@ -3444,3 +3593,46 @@ export type GetUnqueuedSittingsQueryHookResult = ReturnType<typeof useGetUnqueue
 export type GetUnqueuedSittingsLazyQueryHookResult = ReturnType<typeof useGetUnqueuedSittingsLazyQuery>;
 export type GetUnqueuedSittingsSuspenseQueryHookResult = ReturnType<typeof useGetUnqueuedSittingsSuspenseQuery>;
 export type GetUnqueuedSittingsQueryResult = Apollo.QueryResult<GetUnqueuedSittingsQuery, GetUnqueuedSittingsQueryVariables>;
+export const GetScheduleDocument = gql`
+    query GetSchedule {
+  sittings {
+    ...SittingInformation
+    status
+    block {
+      name
+    }
+  }
+}
+    ${SittingInformationFragmentDoc}`;
+
+/**
+ * __useGetScheduleQuery__
+ *
+ * To run a query within a React component, call `useGetScheduleQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetScheduleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetScheduleQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetScheduleQuery(baseOptions?: Apollo.QueryHookOptions<GetScheduleQuery, GetScheduleQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetScheduleQuery, GetScheduleQueryVariables>(GetScheduleDocument, options);
+      }
+export function useGetScheduleLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetScheduleQuery, GetScheduleQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetScheduleQuery, GetScheduleQueryVariables>(GetScheduleDocument, options);
+        }
+export function useGetScheduleSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetScheduleQuery, GetScheduleQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetScheduleQuery, GetScheduleQueryVariables>(GetScheduleDocument, options);
+        }
+export type GetScheduleQueryHookResult = ReturnType<typeof useGetScheduleQuery>;
+export type GetScheduleLazyQueryHookResult = ReturnType<typeof useGetScheduleLazyQuery>;
+export type GetScheduleSuspenseQueryHookResult = ReturnType<typeof useGetScheduleSuspenseQuery>;
+export type GetScheduleQueryResult = Apollo.QueryResult<GetScheduleQuery, GetScheduleQueryVariables>;

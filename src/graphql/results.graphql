@@ -19,8 +19,14 @@ query Results {
     displayedResults {
       id
       number
-      redScore
-      blueScore
+      savedScore {
+        red {
+          score
+        }
+        blue {
+          score
+        }
+      }
       contest {
         id
         round

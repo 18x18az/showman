@@ -1,5 +1,5 @@
 'use client'
-import { Calculator, ClipboardList, ClipboardPen, HeartHandshake, Settings, TowerControl, Users } from 'lucide-react'
+import { CalendarFold, ClipboardList, ClipboardPen, HeartHandshake, Settings, TowerControl, Users } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { EventStage, useGetEventStageQuery } from '../../__generated__/graphql'
@@ -16,14 +16,6 @@ function Teams (): JSX.Element {
   return (
     <Link href='/teams' className='flex text-slate-11 text-lg gap-2 p-2 pb-1 font-semibold'>
       <Users className='text-slate-9' /> Teams
-    </Link>
-  )
-}
-
-function Scoring (): JSX.Element {
-  return (
-    <Link href='/scoring' className='flex text-slate-11 text-lg gap-2 p-2 pb-1 font-semibold'>
-      <Calculator className='text-slate-9' /> Scoring
     </Link>
   )
 }
@@ -56,6 +48,14 @@ function Config (): JSX.Element {
   return (
     <Link href='/config' className='flex text-slate-11 text-lg gap-2 p-2 pb-1 font-semibold'>
       <Settings className='text-slate-9' /> Config
+    </Link>
+  )
+}
+
+function Schedule (): JSX.Element {
+  return (
+    <Link href='/schedule' className='flex text-slate-11 text-lg gap-2 p-2 pb-1 font-semibold'>
+      <CalendarFold className='text-slate-9' /> Schedule
     </Link>
   )
 }
@@ -94,14 +94,14 @@ export function Navbar (): JSX.Element {
         items.push(<Checkin key='checkin' />)
         break
       case EventStage.Qualifications:
-        items.push(<Scoring key='scoring' />)
+        items.push(<Schedule key='schedule' />)
         items.push(<AllianceSelection key='alliance-selection' />)
         break
       case EventStage.AllianceSelection:
         items.push(<AllianceSelection key='alliance-selection' />)
         break
       case EventStage.Elims:
-        items.push(<Scoring key='scoring' />)
+        items.push(<Schedule key='schedule' />)
         break
     }
   }

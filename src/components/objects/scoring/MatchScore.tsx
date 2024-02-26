@@ -1,27 +1,31 @@
+import { ScrollArea } from '../../ui/scroll-area'
 import { AllianceInput } from './AllianceInput'
 import { SaveBar } from './SaveBar'
 
 interface MatchScoreProps {
-  readonly matchName: string
-  readonly isElim: boolean
-  readonly alliances: { red: string[], blue: string[] }
-  readonly locked: boolean
-  readonly hidden: boolean
-  readonly score: { red: number, blue: number }
+  readonly matchId: number
 }
 
 export function MatchScore (props: MatchScoreProps): JSX.Element {
+  const isElim = false
+  const alliances = {
+    red: ['127C'],
+    blue: ['5090X']
+  }
+  const locked = false
+  const hidden = false
+  const score = {
+    red: 0,
+    blue: 0
+  }
   return (
-    <div>
-      <div className='flex justify-evenly desktop:m-4 text-slate-12 desktop:mt-8  mt-2 mb-2 tablet:mt-4 tablet:text-lg desktop:text-2xl desktop:font-semibold'>
-        {props.matchName}
-      </div>
+    <ScrollArea className='flex-grow'>
       <div className='flex divide-y-2 divide-gray-6 tablet:divide-y-0 flex-col desktop:flex-row desktop:justify-center gap-8'>
-        <AllianceInput isElim={props.isElim} alliance='red' teams={props.alliances.red} locked={props.locked} hidden={props.hidden} score={props.score.red} />
-        <AllianceInput isElim={props.isElim} alliance='blue' teams={props.alliances.blue} locked={props.locked} hidden={props.hidden} score={props.score.blue} />
+        <AllianceInput isElim={isElim} alliance='red' teams={alliances.red} locked={locked} hidden={hidden} score={score.red} />
+        <AllianceInput isElim={isElim} alliance='blue' teams={alliances.blue} locked={locked} hidden={hidden} score={score.blue} />
       </div>
-      <SaveBar locked={props.locked} hidden={props.hidden} />
-    </div>
+      <SaveBar locked={locked} hidden={hidden} />
+    </ScrollArea>
 
   )
 }
