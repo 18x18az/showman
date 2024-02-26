@@ -33,13 +33,13 @@ export type AllianceScore = {
 };
 
 export type AllianceScoreEdit = {
-  allianceInGoal: InputMaybe<Scalars['Int']['input']>;
-  allianceInZone: InputMaybe<Scalars['Int']['input']>;
-  autoWp: InputMaybe<Scalars['Boolean']['input']>;
-  robot1Tier: InputMaybe<Tier>;
-  robot2Tier: InputMaybe<Tier>;
-  triballsInGoal: InputMaybe<Scalars['Int']['input']>;
-  triballsInZone: InputMaybe<Scalars['Int']['input']>;
+  allianceInGoal?: InputMaybe<Scalars['Int']['input']>;
+  allianceInZone?: InputMaybe<Scalars['Int']['input']>;
+  autoWp?: InputMaybe<Scalars['Boolean']['input']>;
+  robot1Tier?: InputMaybe<Tier>;
+  robot2Tier?: InputMaybe<Tier>;
+  triballsInGoal?: InputMaybe<Scalars['Int']['input']>;
+  triballsInZone?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type AllianceSelection = {
@@ -80,7 +80,7 @@ export type BackendSetup = {
   /** The password for the backend */
   password: Scalars['String']['input'];
   /** The address of the backend. IP addresses must start with http e.g. http://192.168.1.42 */
-  url: InputMaybe<Scalars['URL']['input']>;
+  url?: InputMaybe<Scalars['URL']['input']>;
 };
 
 export enum BackendStatus {
@@ -232,13 +232,13 @@ export type FieldControl = {
 
 export type FieldUpdate = {
   /** Set a competition field to be able to run skills. Meaningless if the field is already a dedicated skills field. */
-  canRunSkills: InputMaybe<Scalars['Boolean']['input']>;
+  canRunSkills?: InputMaybe<Scalars['Boolean']['input']>;
   /** True for a competition field, false for a dedicated skills field */
-  isCompetition: InputMaybe<Scalars['Boolean']['input']>;
+  isCompetition?: InputMaybe<Scalars['Boolean']['input']>;
   /** Whether the field is enabled for use */
-  isEnabled: InputMaybe<Scalars['Boolean']['input']>;
+  isEnabled?: InputMaybe<Scalars['Boolean']['input']>;
   /** Name of the field */
-  name: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** The inspection status of a team */
@@ -593,13 +593,13 @@ export type Score = {
 
 export type ScoreEdit = {
   /** The winner of the autonomous period, empty if auto has not been scored */
-  autoWinner: InputMaybe<Winner>;
+  autoWinner?: InputMaybe<Winner>;
   /** Whether the score has been changed */
-  changed: InputMaybe<Scalars['Boolean']['input']>;
+  changed?: InputMaybe<Scalars['Boolean']['input']>;
   /** Whether the score is hidden in the UI */
-  hidden: InputMaybe<Scalars['Boolean']['input']>;
+  hidden?: InputMaybe<Scalars['Boolean']['input']>;
   /** Whether the score can be edited */
-  locked: InputMaybe<Scalars['Boolean']['input']>;
+  locked?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** A sitting is an instance of a match being played. In case of a replay, another sitting is created for the same match. */
@@ -703,8 +703,8 @@ export type TeamMeta = {
 };
 
 export type TeamMetaEdit = {
-  dq: InputMaybe<Scalars['Boolean']['input']>;
-  noShow: InputMaybe<Scalars['Boolean']['input']>;
+  dq?: InputMaybe<Scalars['Boolean']['input']>;
+  noShow?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** Elevation tier of the robot */
