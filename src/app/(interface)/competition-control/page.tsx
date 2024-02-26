@@ -1,7 +1,8 @@
 'use client'
-import UploadMatches from '../upload'
+import UploadMatches from './upload-matches'
 import { EventStage, useGetEventStageQuery } from '@/__generated__/graphql'
 import { CompetitionControl } from '@/views/ui/competition-control/main'
+import UploadTeams from './upload-teams'
 
 export default function Page (): JSX.Element {
   const { data } = useGetEventStageQuery(
@@ -21,7 +22,7 @@ export default function Page (): JSX.Element {
   }
 
   if (stage === EventStage.WaitingForTeams) {
-    return <div>Waiting for teams</div>
+    return <UploadTeams />
   }
 
   if (stage === EventStage.Checkin) {

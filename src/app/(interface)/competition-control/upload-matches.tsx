@@ -2,8 +2,8 @@
 
 import { uploadMatches } from '@/contracts/matches'
 import { useState } from 'react'
-import { Button } from '../../primitives/button/Button'
-import { toast } from '../../primitives/toast/useToast'
+import { Button } from '../../../primitives/button/Button'
+import { toast } from '../../../primitives/toast/useToast'
 
 export default function UploadMatches (): JSX.Element {
   const [file, setFile] = useState<File | null>(null)
