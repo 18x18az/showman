@@ -1,0 +1,27 @@
+query WorkingScore($id: Int!) {
+    match(id: $id) {
+        id
+        workingScore {
+            red {
+                ...AllianceScoreFull
+            }
+            blue {
+                ...AllianceScoreFull
+            }
+            autoWinner
+            isElim
+        }
+    }
+}
+
+mutation EditScore($matchId: Int!, $edit: ScoreEdit!) {
+    editScore(matchId: $matchId, edit: $edit) {
+        winner
+    }
+}
+
+mutation EditAllianceScore($matchId: Int!, $color: Color!, $edit: AllianceScoreEdit!) {
+    editAllianceScore(matchId: $matchId, color: $color, edit: $edit) {
+        winner
+    }
+}

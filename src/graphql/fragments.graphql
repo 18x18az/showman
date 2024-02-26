@@ -42,3 +42,22 @@ fragment BlockInformation on Block {
     }
   }
 }
+
+fragment AllianceScoreFull on AllianceScore {
+  allianceInGoal
+  allianceInZone
+  triballsInGoal
+  triballsInZone
+  robot1Tier
+  robot2Tier
+  autoWp
+  score
+  teams {
+    team {
+      id
+      number
+    }
+    noShow
+    dq
+  }
+}

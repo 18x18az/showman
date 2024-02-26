@@ -7,8 +7,6 @@ import { useGetScheduleQuery } from '../../../__generated__/graphql'
 export function SittingList (): JSX.Element {
   const { data } = useGetScheduleQuery({ pollInterval: 500 })
 
-  console.log(data)
-
   if (data === undefined) {
     return (
       <div>

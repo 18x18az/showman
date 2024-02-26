@@ -501,6 +501,7 @@ export type Query = {
   field: Field;
   fields: Array<Field>;
   inspectionGroups: Array<InspectionGroup>;
+  match: Match;
   matches: Array<Match>;
   nextBlock: Maybe<Block>;
   results: Results;
@@ -527,6 +528,11 @@ export type QueryFieldsArgs = {
   isCompetition: InputMaybe<Scalars['Boolean']['input']>;
   isEnabled: InputMaybe<Scalars['Boolean']['input']>;
   skillsEnabled: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type QueryMatchArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -946,6 +952,8 @@ export type SittingWithTeamsFragment = { __typename?: 'Sitting', scheduled: any 
 
 export type BlockInformationFragment = { __typename?: 'Block', id: number, name: string, canConclude: boolean, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, number: number, field: { __typename?: 'Field', id: number, name: string } | null, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } }> };
 
+export type AllianceScoreFullFragment = { __typename?: 'AllianceScore', allianceInGoal: number, allianceInZone: number, triballsInGoal: number, triballsInZone: number, robot1Tier: Tier, robot2Tier: Tier, autoWp: boolean | null, score: number, teams: Array<{ __typename?: 'TeamMeta', noShow: boolean, dq: boolean, team: { __typename?: 'Team', id: number, number: string } }> };
+
 export type InspectableTeamsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1107,6 +1115,30 @@ export type GetScheduleQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetScheduleQuery = { __typename?: 'Query', sittings: Array<{ __typename?: 'Sitting', status: MatchStatus, id: number, number: number, block: { __typename?: 'Block', name: string }, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } }> };
 
+export type WorkingScoreQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type WorkingScoreQuery = { __typename?: 'Query', match: { __typename?: 'Match', id: number, workingScore: { __typename?: 'Score', autoWinner: Winner | null, isElim: boolean, red: { __typename?: 'AllianceScore', allianceInGoal: number, allianceInZone: number, triballsInGoal: number, triballsInZone: number, robot1Tier: Tier, robot2Tier: Tier, autoWp: boolean | null, score: number, teams: Array<{ __typename?: 'TeamMeta', noShow: boolean, dq: boolean, team: { __typename?: 'Team', id: number, number: string } }> }, blue: { __typename?: 'AllianceScore', allianceInGoal: number, allianceInZone: number, triballsInGoal: number, triballsInZone: number, robot1Tier: Tier, robot2Tier: Tier, autoWp: boolean | null, score: number, teams: Array<{ __typename?: 'TeamMeta', noShow: boolean, dq: boolean, team: { __typename?: 'Team', id: number, number: string } }> } } } };
+
+export type EditScoreMutationVariables = Exact<{
+  matchId: Scalars['Int']['input'];
+  edit: ScoreEdit;
+}>;
+
+
+export type EditScoreMutation = { __typename?: 'Mutation', editScore: { __typename?: 'Score', winner: Winner } };
+
+export type EditAllianceScoreMutationVariables = Exact<{
+  matchId: Scalars['Int']['input'];
+  color: Color;
+  edit: AllianceScoreEdit;
+}>;
+
+
+export type EditAllianceScoreMutation = { __typename?: 'Mutation', editAllianceScore: { __typename?: 'Score', winner: Winner } };
+
 export const SittingInformationFragmentDoc = gql`
     fragment SittingInformation on Sitting {
   id
@@ -1157,6 +1189,26 @@ export const BlockInformationFragmentDoc = gql`
   }
 }
     ${SittingInformationFragmentDoc}`;
+export const AllianceScoreFullFragmentDoc = gql`
+    fragment AllianceScoreFull on AllianceScore {
+  allianceInGoal
+  allianceInZone
+  triballsInGoal
+  triballsInZone
+  robot1Tier
+  robot2Tier
+  autoWp
+  score
+  teams {
+    team {
+      id
+      number
+    }
+    noShow
+    dq
+  }
+}
+    `;
 export const AllianceSelectionControlDocument = gql`
     query AllianceSelectionControl {
   allianceSelection {
@@ -3636,3 +3688,122 @@ export type GetScheduleQueryHookResult = ReturnType<typeof useGetScheduleQuery>;
 export type GetScheduleLazyQueryHookResult = ReturnType<typeof useGetScheduleLazyQuery>;
 export type GetScheduleSuspenseQueryHookResult = ReturnType<typeof useGetScheduleSuspenseQuery>;
 export type GetScheduleQueryResult = Apollo.QueryResult<GetScheduleQuery, GetScheduleQueryVariables>;
+export const WorkingScoreDocument = gql`
+    query WorkingScore($id: Int!) {
+  match(id: $id) {
+    id
+    workingScore {
+      red {
+        ...AllianceScoreFull
+      }
+      blue {
+        ...AllianceScoreFull
+      }
+      autoWinner
+      isElim
+    }
+  }
+}
+    ${AllianceScoreFullFragmentDoc}`;
+
+/**
+ * __useWorkingScoreQuery__
+ *
+ * To run a query within a React component, call `useWorkingScoreQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWorkingScoreQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWorkingScoreQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useWorkingScoreQuery(baseOptions: Apollo.QueryHookOptions<WorkingScoreQuery, WorkingScoreQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<WorkingScoreQuery, WorkingScoreQueryVariables>(WorkingScoreDocument, options);
+      }
+export function useWorkingScoreLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WorkingScoreQuery, WorkingScoreQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<WorkingScoreQuery, WorkingScoreQueryVariables>(WorkingScoreDocument, options);
+        }
+export function useWorkingScoreSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<WorkingScoreQuery, WorkingScoreQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<WorkingScoreQuery, WorkingScoreQueryVariables>(WorkingScoreDocument, options);
+        }
+export type WorkingScoreQueryHookResult = ReturnType<typeof useWorkingScoreQuery>;
+export type WorkingScoreLazyQueryHookResult = ReturnType<typeof useWorkingScoreLazyQuery>;
+export type WorkingScoreSuspenseQueryHookResult = ReturnType<typeof useWorkingScoreSuspenseQuery>;
+export type WorkingScoreQueryResult = Apollo.QueryResult<WorkingScoreQuery, WorkingScoreQueryVariables>;
+export const EditScoreDocument = gql`
+    mutation EditScore($matchId: Int!, $edit: ScoreEdit!) {
+  editScore(matchId: $matchId, edit: $edit) {
+    winner
+  }
+}
+    `;
+export type EditScoreMutationFn = Apollo.MutationFunction<EditScoreMutation, EditScoreMutationVariables>;
+
+/**
+ * __useEditScoreMutation__
+ *
+ * To run a mutation, you first call `useEditScoreMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditScoreMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editScoreMutation, { data, loading, error }] = useEditScoreMutation({
+ *   variables: {
+ *      matchId: // value for 'matchId'
+ *      edit: // value for 'edit'
+ *   },
+ * });
+ */
+export function useEditScoreMutation(baseOptions?: Apollo.MutationHookOptions<EditScoreMutation, EditScoreMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditScoreMutation, EditScoreMutationVariables>(EditScoreDocument, options);
+      }
+export type EditScoreMutationHookResult = ReturnType<typeof useEditScoreMutation>;
+export type EditScoreMutationResult = Apollo.MutationResult<EditScoreMutation>;
+export type EditScoreMutationOptions = Apollo.BaseMutationOptions<EditScoreMutation, EditScoreMutationVariables>;
+export const EditAllianceScoreDocument = gql`
+    mutation EditAllianceScore($matchId: Int!, $color: Color!, $edit: AllianceScoreEdit!) {
+  editAllianceScore(matchId: $matchId, color: $color, edit: $edit) {
+    winner
+  }
+}
+    `;
+export type EditAllianceScoreMutationFn = Apollo.MutationFunction<EditAllianceScoreMutation, EditAllianceScoreMutationVariables>;
+
+/**
+ * __useEditAllianceScoreMutation__
+ *
+ * To run a mutation, you first call `useEditAllianceScoreMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditAllianceScoreMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editAllianceScoreMutation, { data, loading, error }] = useEditAllianceScoreMutation({
+ *   variables: {
+ *      matchId: // value for 'matchId'
+ *      color: // value for 'color'
+ *      edit: // value for 'edit'
+ *   },
+ * });
+ */
+export function useEditAllianceScoreMutation(baseOptions?: Apollo.MutationHookOptions<EditAllianceScoreMutation, EditAllianceScoreMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditAllianceScoreMutation, EditAllianceScoreMutationVariables>(EditAllianceScoreDocument, options);
+      }
+export type EditAllianceScoreMutationHookResult = ReturnType<typeof useEditAllianceScoreMutation>;
+export type EditAllianceScoreMutationResult = Apollo.MutationResult<EditAllianceScoreMutation>;
+export type EditAllianceScoreMutationOptions = Apollo.BaseMutationOptions<EditAllianceScoreMutation, EditAllianceScoreMutationVariables>;
