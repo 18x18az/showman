@@ -33,7 +33,11 @@ export function SaveBar (props: SaveBarProps): JSX.Element {
       >{lockIcon}
       </IconButton>
       <IconButton locked={!canSave} onClick={() => { void saveAction() }}><CheckCircledIcon className={`${SIZE} ${saveTextColor}`} /></IconButton>
-      <IconButton onClick={() => {}}>{eyeIcon}</IconButton>
+      <IconButton onClick={() => {
+        void updateScore({ variables: { matchId, edit: { hidden: !props.hidden } } })
+      }}
+      >{eyeIcon}
+      </IconButton>
     </div>
   )
 }

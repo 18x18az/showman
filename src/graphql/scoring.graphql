@@ -12,6 +12,7 @@ query WorkingScore($id: Int!) {
             isElim
             locked
             changed
+            hidden
         }
     }
 }

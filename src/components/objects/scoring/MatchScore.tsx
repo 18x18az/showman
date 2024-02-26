@@ -23,7 +23,7 @@ export function MatchScore (props: MatchScoreProps): JSX.Element {
   const isElim = scoring.isElim
   const locked = scoring.locked
   const changed = scoring.changed
-  const hidden = false
+  const hidden = scoring.hidden
 
   return (
     <ScrollArea className='flex-grow'>

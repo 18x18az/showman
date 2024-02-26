@@ -569,6 +569,8 @@ export type Score = {
   changed: Scalars['Boolean']['output'];
   /** A string representation of the score for entry into TM */
   entryString: Scalars['String']['output'];
+  /** Whether the score is hidden in the UI */
+  hidden: Scalars['Boolean']['output'];
   /** Whether the score is for an elimination match */
   isElim: Scalars['Boolean']['output'];
   /** Whether the score can be edited */
@@ -586,6 +588,8 @@ export type ScoreEdit = {
   autoWinner: InputMaybe<Winner>;
   /** Whether the score has been changed */
   changed: InputMaybe<Scalars['Boolean']['input']>;
+  /** Whether the score is hidden in the UI */
+  hidden: InputMaybe<Scalars['Boolean']['input']>;
   /** Whether the score can be edited */
   locked: InputMaybe<Scalars['Boolean']['input']>;
 };
@@ -1128,7 +1132,7 @@ export type WorkingScoreQueryVariables = Exact<{
 }>;
 
 
-export type WorkingScoreQuery = { __typename?: 'Query', match: { __typename?: 'Match', id: number, workingScore: { __typename?: 'Score', autoWinner: Winner | null, isElim: boolean, locked: boolean, changed: boolean, red: { __typename?: 'AllianceScore', allianceInGoal: number, allianceInZone: number, triballsInGoal: number, triballsInZone: number, robot1Tier: Tier, robot2Tier: Tier, autoWp: boolean | null, score: number, teams: Array<{ __typename?: 'TeamMeta', noShow: boolean, dq: boolean, team: { __typename?: 'Team', id: number, number: string } }> }, blue: { __typename?: 'AllianceScore', allianceInGoal: number, allianceInZone: number, triballsInGoal: number, triballsInZone: number, robot1Tier: Tier, robot2Tier: Tier, autoWp: boolean | null, score: number, teams: Array<{ __typename?: 'TeamMeta', noShow: boolean, dq: boolean, team: { __typename?: 'Team', id: number, number: string } }> } } } };
+export type WorkingScoreQuery = { __typename?: 'Query', match: { __typename?: 'Match', id: number, workingScore: { __typename?: 'Score', autoWinner: Winner | null, isElim: boolean, locked: boolean, changed: boolean, hidden: boolean, red: { __typename?: 'AllianceScore', allianceInGoal: number, allianceInZone: number, triballsInGoal: number, triballsInZone: number, robot1Tier: Tier, robot2Tier: Tier, autoWp: boolean | null, score: number, teams: Array<{ __typename?: 'TeamMeta', noShow: boolean, dq: boolean, team: { __typename?: 'Team', id: number, number: string } }> }, blue: { __typename?: 'AllianceScore', allianceInGoal: number, allianceInZone: number, triballsInGoal: number, triballsInZone: number, robot1Tier: Tier, robot2Tier: Tier, autoWp: boolean | null, score: number, teams: Array<{ __typename?: 'TeamMeta', noShow: boolean, dq: boolean, team: { __typename?: 'Team', id: number, number: string } }> } } } };
 
 export type EditScoreMutationVariables = Exact<{
   matchId: Scalars['Int']['input'];
@@ -3720,6 +3724,7 @@ export const WorkingScoreDocument = gql`
       isElim
       locked
       changed
+      hidden
     }
   }
 }
