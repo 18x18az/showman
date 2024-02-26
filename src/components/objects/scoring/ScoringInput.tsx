@@ -61,10 +61,18 @@ export function ScoringInput (props: ScoringInputProps): JSX.Element {
 
       <LabelledSection label='Elevation'>
         <Label title='1'>
-          <Dropdown locked={props.locked} value={data.robot1Tier} options={ELEVATION_OPTIONS} onChange={() => {}} />
+          <Dropdown
+            locked={props.locked} value={data.robot1Tier} options={ELEVATION_OPTIONS} onChange={val => {
+              void updateScore({ variables: { matchId, color, edit: { robot1Tier: val as Tier } } })
+            }}
+          />
         </Label>
         <Label title='2'>
-          <Dropdown locked={props.locked} value={data.robot2Tier} options={ELEVATION_OPTIONS} onChange={() => {}} />
+          <Dropdown
+            locked={props.locked} value={data.robot2Tier} options={ELEVATION_OPTIONS} onChange={val => {
+              void updateScore({ variables: { matchId, color, edit: { robot2Tier: val as Tier } } })
+            }}
+          />
         </Label>
       </LabelledSection>
     </>
