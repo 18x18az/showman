@@ -19,6 +19,29 @@ export type Scalars = {
   URL: { input: any; output: any; }
 };
 
+export type AllianceScore = {
+  __typename?: 'AllianceScore';
+  allianceInGoal: Scalars['Int']['output'];
+  allianceInZone: Scalars['Int']['output'];
+  autoWp: Maybe<Scalars['Boolean']['output']>;
+  robot1Tier: Tier;
+  robot2Tier: Tier;
+  score: Scalars['Int']['output'];
+  teams: Array<TeamMeta>;
+  triballsInGoal: Scalars['Int']['output'];
+  triballsInZone: Scalars['Int']['output'];
+};
+
+export type AllianceScoreEdit = {
+  allianceInGoal?: InputMaybe<Scalars['Int']['input']>;
+  allianceInZone?: InputMaybe<Scalars['Int']['input']>;
+  autoWp?: InputMaybe<Scalars['Boolean']['input']>;
+  robot1Tier?: InputMaybe<Tier>;
+  robot2Tier?: InputMaybe<Tier>;
+  triballsInGoal?: InputMaybe<Scalars['Int']['input']>;
+  triballsInZone?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type AllianceSelection = {
   __typename?: 'AllianceSelection';
   /** The alliances that have been formed */
@@ -42,6 +65,29 @@ export type Award = {
   /** The team(s) that won the award */
   winners: Maybe<Array<Team>>;
 };
+
+export type Backend = {
+  __typename?: 'Backend';
+  /** The password for the backend */
+  password: Maybe<Scalars['String']['output']>;
+  /** The status of the backend */
+  status: BackendStatus;
+  /** The address of the backend. IP addresses must start with http e.g. http://192.168.1.42 */
+  url: Maybe<Scalars['URL']['output']>;
+};
+
+export type BackendSetup = {
+  /** The password for the backend */
+  password: Scalars['String']['input'];
+  /** The address of the backend. IP addresses must start with http e.g. http://192.168.1.42 */
+  url?: InputMaybe<Scalars['URL']['input']>;
+};
+
+export enum BackendStatus {
+  AuthError = 'AUTH_ERROR',
+  Connected = 'CONNECTED',
+  NotConfigured = 'NOT_CONFIGURED'
+}
 
 /** A block refers to a group of match sittings played in the same stretch of time, e.g. all quals played in the morning before lunch */
 export type Block = {
@@ -74,6 +120,12 @@ export enum BlockStatus {
 export enum Control_Mode {
   Auto = 'AUTO',
   Driver = 'DRIVER'
+}
+
+/** The color of an alliance */
+export enum Color {
+  Blue = 'BLUE',
+  Red = 'RED'
 }
 
 export type Competition = {
@@ -116,6 +168,8 @@ export type Contest = {
   redTeams: Array<Team>;
   /** The round of the contest */
   round: Round;
+  /** The winner of the contest */
+  winner: Winner;
 };
 
 /** Control of remote displays */
@@ -178,13 +232,13 @@ export type FieldControl = {
 
 export type FieldUpdate = {
   /** Set a competition field to be able to run skills. Meaningless if the field is already a dedicated skills field. */
-  canRunSkills: InputMaybe<Scalars['Boolean']['input']>;
+  canRunSkills?: InputMaybe<Scalars['Boolean']['input']>;
   /** True for a competition field, false for a dedicated skills field */
-  isCompetition: InputMaybe<Scalars['Boolean']['input']>;
+  isCompetition?: InputMaybe<Scalars['Boolean']['input']>;
   /** Whether the field is enabled for use */
-  isEnabled: InputMaybe<Scalars['Boolean']['input']>;
+  isEnabled?: InputMaybe<Scalars['Boolean']['input']>;
   /** Name of the field */
-  name: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** The inspection status of a team */
@@ -223,18 +277,22 @@ export type InspectionPoint = {
 /** A match refers to a single scored match between two alliances. A match may have multiple sittings if it is replayed e.g. due to a field fault */
 export type Match = {
   __typename?: 'Match';
-  /** The score of the blue alliance */
-  blueScore: Maybe<Scalars['Int']['output']>;
   /** The contest this match is a part of */
   contest: Contest;
   /** Unique identifier for the match */
   id: Scalars['Int']['output'];
-  /** The number of the match. E.g. SF-2-1 is 2 */
+  /** The number of the match. E.g. SF-2-1 is 1 */
   number: Scalars['Int']['output'];
-  /** The score of the red alliance */
-  redScore: Maybe<Scalars['Int']['output']>;
+  /** The saved result of the match */
+  savedScore: Maybe<Score>;
+  /** The history of match scores */
+  scoreHistory: Array<Score>;
   /** Sittings of the match */
   sittings: Array<Sitting>;
+  /** The winner of the match */
+  winner: Winner;
+  /** The working result of the match */
+  workingScore: Score;
 };
 
 export enum MatchStage {
@@ -267,8 +325,12 @@ export type Mutation = {
   clearLive: Competition;
   clearResults: Results;
   concludeBlock: Block;
+  configureBackend: Backend;
   configureTournamentManager: TournamentManager;
   deleteField: Array<Field>;
+  editAllianceScore: Score;
+  editScore: Score;
+  editTeamMeta: Score;
   markCheckin: Team;
   promoteResults: Results;
   putLive: Competition;
@@ -281,6 +343,7 @@ export type Mutation = {
   /** Reset the event. Only available in test mode. */
   reset: Stage;
   resetAuton: CompetitionField;
+  saveScore: Match;
   setAutomationEnabled: Competition;
   setDisplayField: Display;
   setInspectionPoint: Team;
@@ -301,6 +364,11 @@ export type MutationAllianceSelectionPickArgs = {
 };
 
 
+export type MutationConfigureBackendArgs = {
+  settings: BackendSetup;
+};
+
+
 export type MutationConfigureTournamentManagerArgs = {
   settings: TournamentManagerSetup;
 };
@@ -308,6 +376,26 @@ export type MutationConfigureTournamentManagerArgs = {
 
 export type MutationDeleteFieldArgs = {
   fieldId: Scalars['Int']['input'];
+};
+
+
+export type MutationEditAllianceScoreArgs = {
+  color: Color;
+  edit: AllianceScoreEdit;
+  matchId: Scalars['Int']['input'];
+};
+
+
+export type MutationEditScoreArgs = {
+  edit: ScoreEdit;
+  matchId: Scalars['Int']['input'];
+};
+
+
+export type MutationEditTeamMetaArgs = {
+  edit: TeamMetaEdit;
+  matchId: Scalars['Int']['input'];
+  teamId: Scalars['Int']['input'];
 };
 
 
@@ -351,6 +439,11 @@ export type MutationReplayArgs = {
 
 export type MutationResetAutonArgs = {
   fieldId: Scalars['Int']['input'];
+};
+
+
+export type MutationSaveScoreArgs = {
+  matchId: Scalars['Int']['input'];
 };
 
 
@@ -406,6 +499,7 @@ export type Query = {
   __typename?: 'Query';
   allianceSelection: Maybe<AllianceSelection>;
   awards: Array<Award>;
+  backend: Backend;
   blocks: Array<Block>;
   competitionInformation: Competition;
   contests: Array<Contest>;
@@ -415,6 +509,7 @@ export type Query = {
   field: Field;
   fields: Array<Field>;
   inspectionGroups: Array<InspectionGroup>;
+  match: Match;
   matches: Array<Match>;
   nextBlock: Maybe<Block>;
   results: Results;
@@ -444,6 +539,11 @@ export type QueryFieldsArgs = {
 };
 
 
+export type QueryMatchArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
 export type QueryTeamArgs = {
   teamId: Scalars['Int']['input'];
 };
@@ -467,6 +567,40 @@ export enum Round {
   Ro16 = 'Ro16',
   Sf = 'SF'
 }
+
+export type Score = {
+  __typename?: 'Score';
+  /** The winner of the autonomous period, empty if auto has not been scored */
+  autoWinner: Maybe<Winner>;
+  blue: AllianceScore;
+  /** Whether the score has been changed */
+  changed: Scalars['Boolean']['output'];
+  /** A string representation of the score for entry into TM */
+  entryString: Scalars['String']['output'];
+  /** Whether the score is hidden in the UI */
+  hidden: Scalars['Boolean']['output'];
+  /** Whether the score is for an elimination match */
+  isElim: Scalars['Boolean']['output'];
+  /** Whether the score can be edited */
+  locked: Scalars['Boolean']['output'];
+  /** The match this score is for */
+  match: Match;
+  red: AllianceScore;
+  /** The date the score was saved at. Empty if the score is a working score */
+  savedAt: Maybe<Scalars['DateTime']['output']>;
+  winner: Winner;
+};
+
+export type ScoreEdit = {
+  /** The winner of the autonomous period, empty if auto has not been scored */
+  autoWinner?: InputMaybe<Winner>;
+  /** Whether the score has been changed */
+  changed?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Whether the score is hidden in the UI */
+  hidden?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Whether the score can be edited */
+  locked?: InputMaybe<Scalars['Boolean']['input']>;
+};
 
 /** A sitting is an instance of a match being played. In case of a replay, another sitting is created for the same match. */
 export type Sitting = {
@@ -561,6 +695,33 @@ export type TeamInspectionPoint = {
   text: Scalars['String']['output'];
 };
 
+export type TeamMeta = {
+  __typename?: 'TeamMeta';
+  dq: Scalars['Boolean']['output'];
+  noShow: Scalars['Boolean']['output'];
+  team: Team;
+};
+
+export type TeamMetaEdit = {
+  dq?: InputMaybe<Scalars['Boolean']['input']>;
+  noShow?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** Elevation tier of the robot */
+export enum Tier {
+  A = 'A',
+  B = 'B',
+  C = 'C',
+  D = 'D',
+  E = 'E',
+  F = 'F',
+  G = 'G',
+  H = 'H',
+  I = 'I',
+  J = 'J',
+  None = 'NONE'
+}
+
 export type Timeout = {
   __typename?: 'Timeout';
   /** The time that the timeout will end, null if there is no timeout. */
@@ -591,6 +752,14 @@ export type TournamentManagerSetup = {
   /** The address of Tournament Manager. IP addresses must start with http e.g. http://192.168.1.42 */
   url: Scalars['URL']['input'];
 };
+
+/** The winner of a particular contest */
+export enum Winner {
+  Blue = 'BLUE',
+  None = 'NONE',
+  Red = 'RED',
+  Tie = 'TIE'
+}
 
 export type AllianceSelectionControlQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -642,12 +811,12 @@ export type AllianceSelectionCancelMutation = { __typename?: 'Mutation', allianc
 export type LiveFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LiveFieldQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', liveField: { __typename?: 'Field', id: number, fieldControl: { __typename?: 'FieldControl', endTime: any | null } | null, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } } | null } | null } | null } };
+export type LiveFieldQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', liveField: { __typename?: 'Field', id: number, fieldControl: { __typename?: 'FieldControl', endTime: any | null } | null, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number }, match: { __typename?: 'Match', id: number, number: number } } | null } | null } | null } };
 
 export type GetCompetitionFieldsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCompetitionFieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, isLive: boolean, isOnDeck: boolean, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null, onTableSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null } | null, fieldControl: { __typename?: 'FieldControl', fieldId: number, endTime: any | null } | null }> };
+export type GetCompetitionFieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, isLive: boolean, isOnDeck: boolean, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', id: number, number: number } } | null, onTableSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', id: number, number: number } } | null } | null, fieldControl: { __typename?: 'FieldControl', fieldId: number, endTime: any | null } | null }> };
 
 export type GetTableOccupiedQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -788,7 +957,7 @@ export type SetFieldIsCompetitionMutation = { __typename?: 'Mutation', updateFie
 export type OnDeckFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type OnDeckFieldQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', onDeckField: { __typename?: 'Field', id: number, competition: { __typename?: 'CompetitionField', onFieldSitting: { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } } | null } | null } | null, liveField: { __typename?: 'Field', id: number, competition: { __typename?: 'CompetitionField', stage: MatchStage } | null } | null } };
+export type OnDeckFieldQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', onDeckField: { __typename?: 'Field', id: number, competition: { __typename?: 'CompetitionField', onFieldSitting: { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number }, match: { __typename?: 'Match', id: number, number: number } } | null } | null } | null, liveField: { __typename?: 'Field', id: number, competition: { __typename?: 'CompetitionField', stage: MatchStage } | null } | null } };
 
 export type FieldNamesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -800,13 +969,15 @@ export type AddFieldMutationVariables = Exact<{ [key: string]: never; }>;
 
 export type AddFieldMutation = { __typename?: 'Mutation', addField: { __typename?: 'Field', id: number, name: string } };
 
-export type SittingInformationFragment = { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } };
+export type SittingInformationFragment = { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number }, match: { __typename?: 'Match', id: number, number: number } };
 
 export type TeamInformationFragment = { __typename?: 'Team', id: number, number: string, name: string, rank: number | null };
 
-export type SittingWithTeamsFragment = { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } };
+export type SittingWithTeamsFragment = { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', id: number, number: number } };
 
-export type BlockInformationFragment = { __typename?: 'Block', id: number, name: string, canConclude: boolean, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, number: number, field: { __typename?: 'Field', id: number, name: string } | null, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } }> };
+export type BlockInformationFragment = { __typename?: 'Block', id: number, name: string, canConclude: boolean, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, number: number, field: { __typename?: 'Field', id: number, name: string } | null, contest: { __typename?: 'Contest', id: number, round: Round, number: number }, match: { __typename?: 'Match', id: number, number: number } }> };
+
+export type AllianceScoreFullFragment = { __typename?: 'AllianceScore', allianceInGoal: number, allianceInZone: number, triballsInGoal: number, triballsInZone: number, robot1Tier: Tier, robot2Tier: Tier, autoWp: boolean | null, score: number, teams: Array<{ __typename?: 'TeamMeta', noShow: boolean, dq: boolean, team: { __typename?: 'Team', id: number, number: string, name: string, rank: number | null } }> };
 
 export type InspectableTeamsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -878,7 +1049,7 @@ export type MarkCheckinMutation = { __typename?: 'Mutation', markCheckin: { __ty
 export type RefereeInformationQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type RefereeInformationQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', liveField: { __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null } | null } | null, onDeckField: { __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null } | null } | null } };
+export type RefereeInformationQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', liveField: { __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', id: number, number: number } } | null } | null } | null, onDeckField: { __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', id: number, number: number } } | null } | null } | null } };
 
 export type GetEventStageQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -893,7 +1064,7 @@ export type CompetitionMiniSettingsQuery = { __typename?: 'Query', stage: { __ty
 export type MatchOverlayQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MatchOverlayQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', liveField: { __typename?: 'Field', id: number, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null } | null, fieldControl: { __typename?: 'FieldControl', endTime: any | null } | null } | null } };
+export type MatchOverlayQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', liveField: { __typename?: 'Field', id: number, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', id: number, number: number } } | null } | null, fieldControl: { __typename?: 'FieldControl', endTime: any | null } | null } | null } };
 
 export type TeamsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -910,7 +1081,7 @@ export type FieldDisplayQueryVariables = Exact<{
 }>;
 
 
-export type FieldDisplayQuery = { __typename?: 'Query', timeout: { __typename?: 'Timeout', endTime: any | null }, display: { __typename?: 'Display', uuid: string, field: { __typename?: 'Field', id: number, name: string, fieldControl: { __typename?: 'FieldControl', endTime: any | null, mode: Control_Mode | null } | null, competition: { __typename?: 'CompetitionField', stage: MatchStage, isLive: boolean, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null } | null, skills: { __typename?: 'Skills', fieldId: number, stopTime: number | null } | null } | null } };
+export type FieldDisplayQuery = { __typename?: 'Query', timeout: { __typename?: 'Timeout', endTime: any | null }, display: { __typename?: 'Display', uuid: string, field: { __typename?: 'Field', id: number, name: string, fieldControl: { __typename?: 'FieldControl', endTime: any | null, mode: Control_Mode | null } | null, competition: { __typename?: 'CompetitionField', stage: MatchStage, isLive: boolean, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', id: number, number: number } } | null } | null, skills: { __typename?: 'Skills', fieldId: number, stopTime: number | null } | null } | null } };
 
 export type SkillsFieldsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -927,7 +1098,7 @@ export type SkillsFieldQuery = { __typename?: 'Query', field: { __typename?: 'Fi
 export type QueueDisplayQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type QueueDisplayQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null, onTableSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', number: number } } | null } | null }> };
+export type QueueDisplayQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', id: number, number: number } } | null, onTableSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', id: number, number: number } } | null } | null }> };
 
 export type GetNotCheckedInTeamsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -947,7 +1118,7 @@ export type PromoteResultsMutation = { __typename?: 'Mutation', promoteResults: 
 export type ResultsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ResultsQuery = { __typename?: 'Query', results: { __typename?: 'Results', displayedResults: { __typename?: 'Match', id: number, number: number, redScore: number | null, blueScore: number | null, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> } } | null } };
+export type ResultsQuery = { __typename?: 'Query', results: { __typename?: 'Results', displayedResults: { __typename?: 'Match', id: number, number: number, savedScore: { __typename?: 'Score', red: { __typename?: 'AllianceScore', score: number }, blue: { __typename?: 'AllianceScore', score: number } } | null, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> } } | null } };
 
 export type StartNextBlockMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -962,17 +1133,64 @@ export type ConcludeBlockMutation = { __typename?: 'Mutation', concludeBlock: { 
 export type GetUnqueuedSittingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUnqueuedSittingsQuery = { __typename?: 'Query', currentBlock: { __typename?: 'Block', id: number, name: string, canConclude: boolean, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, number: number, field: { __typename?: 'Field', id: number, name: string } | null, contest: { __typename?: 'Contest', round: Round, number: number }, match: { __typename?: 'Match', number: number } }> } | null, nextBlock: { __typename?: 'Block', id: number, name: string } | null };
+export type GetUnqueuedSittingsQuery = { __typename?: 'Query', currentBlock: { __typename?: 'Block', id: number, name: string, canConclude: boolean, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, number: number, field: { __typename?: 'Field', id: number, name: string } | null, contest: { __typename?: 'Contest', id: number, round: Round, number: number }, match: { __typename?: 'Match', id: number, number: number } }> } | null, nextBlock: { __typename?: 'Block', id: number, name: string } | null };
+
+export type GetScheduleQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetScheduleQuery = { __typename?: 'Query', sittings: Array<{ __typename?: 'Sitting', status: MatchStatus, id: number, number: number, block: { __typename?: 'Block', name: string }, contest: { __typename?: 'Contest', id: number, round: Round, number: number }, match: { __typename?: 'Match', id: number, number: number } }> };
+
+export type WorkingScoreQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type WorkingScoreQuery = { __typename?: 'Query', match: { __typename?: 'Match', id: number, workingScore: { __typename?: 'Score', autoWinner: Winner | null, isElim: boolean, locked: boolean, changed: boolean, hidden: boolean, red: { __typename?: 'AllianceScore', allianceInGoal: number, allianceInZone: number, triballsInGoal: number, triballsInZone: number, robot1Tier: Tier, robot2Tier: Tier, autoWp: boolean | null, score: number, teams: Array<{ __typename?: 'TeamMeta', noShow: boolean, dq: boolean, team: { __typename?: 'Team', id: number, number: string, name: string, rank: number | null } }> }, blue: { __typename?: 'AllianceScore', allianceInGoal: number, allianceInZone: number, triballsInGoal: number, triballsInZone: number, robot1Tier: Tier, robot2Tier: Tier, autoWp: boolean | null, score: number, teams: Array<{ __typename?: 'TeamMeta', noShow: boolean, dq: boolean, team: { __typename?: 'Team', id: number, number: string, name: string, rank: number | null } }> } } } };
+
+export type EditScoreMutationVariables = Exact<{
+  matchId: Scalars['Int']['input'];
+  edit: ScoreEdit;
+}>;
+
+
+export type EditScoreMutation = { __typename?: 'Mutation', editScore: { __typename?: 'Score', winner: Winner } };
+
+export type EditAllianceScoreMutationVariables = Exact<{
+  matchId: Scalars['Int']['input'];
+  color: Color;
+  edit: AllianceScoreEdit;
+}>;
+
+
+export type EditAllianceScoreMutation = { __typename?: 'Mutation', editAllianceScore: { __typename?: 'Score', winner: Winner } };
+
+export type EditTeamMetaMutationVariables = Exact<{
+  matchId: Scalars['Int']['input'];
+  teamId: Scalars['Int']['input'];
+  edit: TeamMetaEdit;
+}>;
+
+
+export type EditTeamMetaMutation = { __typename?: 'Mutation', editTeamMeta: { __typename?: 'Score', winner: Winner } };
+
+export type SaveScoreMutationVariables = Exact<{
+  matchId: Scalars['Int']['input'];
+}>;
+
+
+export type SaveScoreMutation = { __typename?: 'Mutation', saveScore: { __typename?: 'Match', winner: Winner } };
 
 export const SittingInformationFragmentDoc = gql`
     fragment SittingInformation on Sitting {
   id
   number
   contest {
+    id
     round
     number
   }
   match {
+    id
     number
   }
 }
@@ -1014,6 +1232,25 @@ export const BlockInformationFragmentDoc = gql`
   }
 }
     ${SittingInformationFragmentDoc}`;
+export const AllianceScoreFullFragmentDoc = gql`
+    fragment AllianceScoreFull on AllianceScore {
+  allianceInGoal
+  allianceInZone
+  triballsInGoal
+  triballsInZone
+  robot1Tier
+  robot2Tier
+  autoWp
+  score
+  teams {
+    team {
+      ...TeamInformation
+    }
+    noShow
+    dq
+  }
+}
+    ${TeamInformationFragmentDoc}`;
 export const AllianceSelectionControlDocument = gql`
     query AllianceSelectionControl {
   allianceSelection {
@@ -3288,8 +3525,14 @@ export const ResultsDocument = gql`
     displayedResults {
       id
       number
-      redScore
-      blueScore
+      savedScore {
+        red {
+          score
+        }
+        blue {
+          score
+        }
+      }
       contest {
         id
         round
@@ -3444,3 +3687,236 @@ export type GetUnqueuedSittingsQueryHookResult = ReturnType<typeof useGetUnqueue
 export type GetUnqueuedSittingsLazyQueryHookResult = ReturnType<typeof useGetUnqueuedSittingsLazyQuery>;
 export type GetUnqueuedSittingsSuspenseQueryHookResult = ReturnType<typeof useGetUnqueuedSittingsSuspenseQuery>;
 export type GetUnqueuedSittingsQueryResult = Apollo.QueryResult<GetUnqueuedSittingsQuery, GetUnqueuedSittingsQueryVariables>;
+export const GetScheduleDocument = gql`
+    query GetSchedule {
+  sittings {
+    ...SittingInformation
+    status
+    block {
+      name
+    }
+  }
+}
+    ${SittingInformationFragmentDoc}`;
+
+/**
+ * __useGetScheduleQuery__
+ *
+ * To run a query within a React component, call `useGetScheduleQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetScheduleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetScheduleQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetScheduleQuery(baseOptions?: Apollo.QueryHookOptions<GetScheduleQuery, GetScheduleQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetScheduleQuery, GetScheduleQueryVariables>(GetScheduleDocument, options);
+      }
+export function useGetScheduleLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetScheduleQuery, GetScheduleQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetScheduleQuery, GetScheduleQueryVariables>(GetScheduleDocument, options);
+        }
+export function useGetScheduleSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetScheduleQuery, GetScheduleQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetScheduleQuery, GetScheduleQueryVariables>(GetScheduleDocument, options);
+        }
+export type GetScheduleQueryHookResult = ReturnType<typeof useGetScheduleQuery>;
+export type GetScheduleLazyQueryHookResult = ReturnType<typeof useGetScheduleLazyQuery>;
+export type GetScheduleSuspenseQueryHookResult = ReturnType<typeof useGetScheduleSuspenseQuery>;
+export type GetScheduleQueryResult = Apollo.QueryResult<GetScheduleQuery, GetScheduleQueryVariables>;
+export const WorkingScoreDocument = gql`
+    query WorkingScore($id: Int!) {
+  match(id: $id) {
+    id
+    workingScore {
+      red {
+        ...AllianceScoreFull
+      }
+      blue {
+        ...AllianceScoreFull
+      }
+      autoWinner
+      isElim
+      locked
+      changed
+      hidden
+    }
+  }
+}
+    ${AllianceScoreFullFragmentDoc}`;
+
+/**
+ * __useWorkingScoreQuery__
+ *
+ * To run a query within a React component, call `useWorkingScoreQuery` and pass it any options that fit your needs.
+ * When your component renders, `useWorkingScoreQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useWorkingScoreQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useWorkingScoreQuery(baseOptions: Apollo.QueryHookOptions<WorkingScoreQuery, WorkingScoreQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<WorkingScoreQuery, WorkingScoreQueryVariables>(WorkingScoreDocument, options);
+      }
+export function useWorkingScoreLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<WorkingScoreQuery, WorkingScoreQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<WorkingScoreQuery, WorkingScoreQueryVariables>(WorkingScoreDocument, options);
+        }
+export function useWorkingScoreSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<WorkingScoreQuery, WorkingScoreQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<WorkingScoreQuery, WorkingScoreQueryVariables>(WorkingScoreDocument, options);
+        }
+export type WorkingScoreQueryHookResult = ReturnType<typeof useWorkingScoreQuery>;
+export type WorkingScoreLazyQueryHookResult = ReturnType<typeof useWorkingScoreLazyQuery>;
+export type WorkingScoreSuspenseQueryHookResult = ReturnType<typeof useWorkingScoreSuspenseQuery>;
+export type WorkingScoreQueryResult = Apollo.QueryResult<WorkingScoreQuery, WorkingScoreQueryVariables>;
+export const EditScoreDocument = gql`
+    mutation EditScore($matchId: Int!, $edit: ScoreEdit!) {
+  editScore(matchId: $matchId, edit: $edit) {
+    winner
+  }
+}
+    `;
+export type EditScoreMutationFn = Apollo.MutationFunction<EditScoreMutation, EditScoreMutationVariables>;
+
+/**
+ * __useEditScoreMutation__
+ *
+ * To run a mutation, you first call `useEditScoreMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditScoreMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editScoreMutation, { data, loading, error }] = useEditScoreMutation({
+ *   variables: {
+ *      matchId: // value for 'matchId'
+ *      edit: // value for 'edit'
+ *   },
+ * });
+ */
+export function useEditScoreMutation(baseOptions?: Apollo.MutationHookOptions<EditScoreMutation, EditScoreMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditScoreMutation, EditScoreMutationVariables>(EditScoreDocument, options);
+      }
+export type EditScoreMutationHookResult = ReturnType<typeof useEditScoreMutation>;
+export type EditScoreMutationResult = Apollo.MutationResult<EditScoreMutation>;
+export type EditScoreMutationOptions = Apollo.BaseMutationOptions<EditScoreMutation, EditScoreMutationVariables>;
+export const EditAllianceScoreDocument = gql`
+    mutation EditAllianceScore($matchId: Int!, $color: Color!, $edit: AllianceScoreEdit!) {
+  editAllianceScore(matchId: $matchId, color: $color, edit: $edit) {
+    winner
+  }
+}
+    `;
+export type EditAllianceScoreMutationFn = Apollo.MutationFunction<EditAllianceScoreMutation, EditAllianceScoreMutationVariables>;
+
+/**
+ * __useEditAllianceScoreMutation__
+ *
+ * To run a mutation, you first call `useEditAllianceScoreMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditAllianceScoreMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editAllianceScoreMutation, { data, loading, error }] = useEditAllianceScoreMutation({
+ *   variables: {
+ *      matchId: // value for 'matchId'
+ *      color: // value for 'color'
+ *      edit: // value for 'edit'
+ *   },
+ * });
+ */
+export function useEditAllianceScoreMutation(baseOptions?: Apollo.MutationHookOptions<EditAllianceScoreMutation, EditAllianceScoreMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditAllianceScoreMutation, EditAllianceScoreMutationVariables>(EditAllianceScoreDocument, options);
+      }
+export type EditAllianceScoreMutationHookResult = ReturnType<typeof useEditAllianceScoreMutation>;
+export type EditAllianceScoreMutationResult = Apollo.MutationResult<EditAllianceScoreMutation>;
+export type EditAllianceScoreMutationOptions = Apollo.BaseMutationOptions<EditAllianceScoreMutation, EditAllianceScoreMutationVariables>;
+export const EditTeamMetaDocument = gql`
+    mutation EditTeamMeta($matchId: Int!, $teamId: Int!, $edit: TeamMetaEdit!) {
+  editTeamMeta(matchId: $matchId, teamId: $teamId, edit: $edit) {
+    winner
+  }
+}
+    `;
+export type EditTeamMetaMutationFn = Apollo.MutationFunction<EditTeamMetaMutation, EditTeamMetaMutationVariables>;
+
+/**
+ * __useEditTeamMetaMutation__
+ *
+ * To run a mutation, you first call `useEditTeamMetaMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditTeamMetaMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editTeamMetaMutation, { data, loading, error }] = useEditTeamMetaMutation({
+ *   variables: {
+ *      matchId: // value for 'matchId'
+ *      teamId: // value for 'teamId'
+ *      edit: // value for 'edit'
+ *   },
+ * });
+ */
+export function useEditTeamMetaMutation(baseOptions?: Apollo.MutationHookOptions<EditTeamMetaMutation, EditTeamMetaMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditTeamMetaMutation, EditTeamMetaMutationVariables>(EditTeamMetaDocument, options);
+      }
+export type EditTeamMetaMutationHookResult = ReturnType<typeof useEditTeamMetaMutation>;
+export type EditTeamMetaMutationResult = Apollo.MutationResult<EditTeamMetaMutation>;
+export type EditTeamMetaMutationOptions = Apollo.BaseMutationOptions<EditTeamMetaMutation, EditTeamMetaMutationVariables>;
+export const SaveScoreDocument = gql`
+    mutation SaveScore($matchId: Int!) {
+  saveScore(matchId: $matchId) {
+    winner
+  }
+}
+    `;
+export type SaveScoreMutationFn = Apollo.MutationFunction<SaveScoreMutation, SaveScoreMutationVariables>;
+
+/**
+ * __useSaveScoreMutation__
+ *
+ * To run a mutation, you first call `useSaveScoreMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSaveScoreMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [saveScoreMutation, { data, loading, error }] = useSaveScoreMutation({
+ *   variables: {
+ *      matchId: // value for 'matchId'
+ *   },
+ * });
+ */
+export function useSaveScoreMutation(baseOptions?: Apollo.MutationHookOptions<SaveScoreMutation, SaveScoreMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SaveScoreMutation, SaveScoreMutationVariables>(SaveScoreDocument, options);
+      }
+export type SaveScoreMutationHookResult = ReturnType<typeof useSaveScoreMutation>;
+export type SaveScoreMutationResult = Apollo.MutationResult<SaveScoreMutation>;
+export type SaveScoreMutationOptions = Apollo.BaseMutationOptions<SaveScoreMutation, SaveScoreMutationVariables>;

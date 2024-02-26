@@ -1,27 +1,38 @@
+import { useWorkingScoreQuery } from '../../../__generated__/graphql'
+import { ScrollArea } from '../../ui/scroll-area'
 import { AllianceInput } from './AllianceInput'
 import { SaveBar } from './SaveBar'
 
 interface MatchScoreProps {
-  readonly matchName: string
-  readonly isElim: boolean
-  readonly alliances: { red: string[], blue: string[] }
-  readonly locked: boolean
-  readonly hidden: boolean
-  readonly score: { red: number, blue: number }
+  readonly matchId: number
 }
 
 export function MatchScore (props: MatchScoreProps): JSX.Element {
+  const matchId = props.matchId
+  const { data } = useWorkingScoreQuery({ variables: { id: matchId }, pollInterval: 500 })
+
+  if (data === undefined) {
+    return (
+      <div>
+        Loading
+      </div>
+    )
+  }
+  const scoring = data.match.workingScore
+
+  const isElim = scoring.isElim
+  const locked = scoring.locked
+  const changed = scoring.changed
+  const hidden = scoring.hidden
+
   return (
-    <div>
-      <div className='flex justify-evenly desktop:m-4 text-slate-12 desktop:mt-8  mt-2 mb-2 tablet:mt-4 tablet:text-lg desktop:text-2xl desktop:font-semibold'>
-        {props.matchName}
-      </div>
+    <ScrollArea className='flex-grow'>
       <div className='flex divide-y-2 divide-gray-6 tablet:divide-y-0 flex-col desktop:flex-row desktop:justify-center gap-8'>
-        <AllianceInput isElim={props.isElim} alliance='red' teams={props.alliances.red} locked={props.locked} hidden={props.hidden} score={props.score.red} />
-        <AllianceInput isElim={props.isElim} alliance='blue' teams={props.alliances.blue} locked={props.locked} hidden={props.hidden} score={props.score.blue} />
+        <AllianceInput autoWinner={scoring.autoWinner} matchId={matchId} isElim={isElim} alliance='red' locked={locked} hidden={hidden} data={scoring.red} />
+        <AllianceInput autoWinner={scoring.autoWinner} matchId={matchId} isElim={isElim} alliance='blue' locked={locked} hidden={hidden} data={scoring.blue} />
       </div>
-      <SaveBar locked={props.locked} hidden={props.hidden} />
-    </div>
+      <SaveBar matchId={matchId} locked={locked} hidden={hidden} changed={changed} />
+    </ScrollArea>
 
   )
 }

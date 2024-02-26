@@ -2,10 +2,12 @@ fragment SittingInformation on Sitting {
   id
   number
   contest {
+    id
   	round
   	number
   }
   match {
+    id
     number
   }
 }
@@ -40,5 +42,23 @@ fragment BlockInformation on Block {
       id
       name
     }
+  }
+}
+
+fragment AllianceScoreFull on AllianceScore {
+  allianceInGoal
+  allianceInZone
+  triballsInGoal
+  triballsInZone
+  robot1Tier
+  robot2Tier
+  autoWp
+  score
+  teams {
+    team {
+      ...TeamInformation
+    }
+    noShow
+    dq
   }
 }

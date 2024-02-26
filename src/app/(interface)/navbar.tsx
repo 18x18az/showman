@@ -1,5 +1,5 @@
 'use client'
-import { ClipboardList, ClipboardPen, HeartHandshake, Settings, TowerControl, Users } from 'lucide-react'
+import { CalendarFold, ClipboardList, ClipboardPen, HeartHandshake, Settings, TowerControl, Users } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { EventStage, useGetEventStageQuery } from '../../__generated__/graphql'
@@ -52,6 +52,14 @@ function Config (): JSX.Element {
   )
 }
 
+function Schedule (): JSX.Element {
+  return (
+    <Link href='/schedule' className='flex text-slate-11 text-lg gap-2 p-2 pb-1 font-semibold'>
+      <CalendarFold className='text-slate-9' /> Schedule
+    </Link>
+  )
+}
+
 export function Navbar (): JSX.Element {
   const [width, setWidth] = useState<number>(0)
 
@@ -79,8 +87,6 @@ export function Navbar (): JSX.Element {
 
   items.push(<Control key='control' />)
   items.push(<Teams key='teams' />)
-  items.push(<Config key='config' />)
-  items.push(<Inspection key='inspection' />)
 
   if (data !== undefined) {
     switch (data.stage.stage) {
@@ -88,13 +94,20 @@ export function Navbar (): JSX.Element {
         items.push(<Checkin key='checkin' />)
         break
       case EventStage.Qualifications:
+        items.push(<Schedule key='schedule' />)
         items.push(<AllianceSelection key='alliance-selection' />)
         break
       case EventStage.AllianceSelection:
         items.push(<AllianceSelection key='alliance-selection' />)
         break
+      case EventStage.Elims:
+        items.push(<Schedule key='schedule' />)
+        break
     }
   }
+
+  items.push(<Inspection key='inspection' />)
+  items.push(<Config key='config' />)
 
   return (
     <div className='flex bg-slate-1 border-b border-slate-6 gap-2'>

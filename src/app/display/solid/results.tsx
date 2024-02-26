@@ -104,10 +104,10 @@ export function ResultDisplay (): JSX.Element {
     return <LogoFallback />
   }
 
-  const redScore = match.redScore
-  const blueScore = match.blueScore
+  const redScore = match.savedScore?.blue.score
+  const blueScore = match.savedScore?.blue.score
 
-  if (redScore === null || blueScore === null) {
+  if (redScore === undefined || blueScore === undefined) {
     return <LogoFallback />
   }
 
