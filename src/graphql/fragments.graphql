@@ -56,8 +56,7 @@ fragment AllianceScoreFull on AllianceScore {
   score
   teams {
     team {
-      id
-      number
+      ...TeamInformation
     }
     noShow
     dq

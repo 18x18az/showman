@@ -38,7 +38,7 @@ export function AllianceInput (props: AllianceInputProps): JSX.Element {
       <AutoScore matchId={props.matchId} isElim={props.isElim} locked={props.locked} alliance={props.alliance} winner={props.autoWinner} gotAwp={data.autoWp} />
       <div className='flex items-center justify-evenly'>
         {data.teams.map((team) => (
-          <TeamMeta key={team.team.number} team={team.team.number} dq={false} noShow={false} locked={props.locked} />
+          <TeamMeta matchId={props.matchId} key={team.team.number} team={team.team} dq={team.dq} noShow={team.noShow} locked={props.locked} />
         ))}
       </div>
     </div>

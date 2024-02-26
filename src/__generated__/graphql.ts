@@ -330,6 +330,7 @@ export type Mutation = {
   deleteField: Array<Field>;
   editAllianceScore: Score;
   editScore: Score;
+  editTeamMeta: Score;
   markCheckin: Team;
   promoteResults: Results;
   putLive: Competition;
@@ -388,6 +389,13 @@ export type MutationEditAllianceScoreArgs = {
 export type MutationEditScoreArgs = {
   edit: ScoreEdit;
   matchId: Scalars['Int']['input'];
+};
+
+
+export type MutationEditTeamMetaArgs = {
+  edit: TeamMetaEdit;
+  matchId: Scalars['Int']['input'];
+  teamId: Scalars['Int']['input'];
 };
 
 
@@ -694,6 +702,11 @@ export type TeamMeta = {
   team: Team;
 };
 
+export type TeamMetaEdit = {
+  dq: InputMaybe<Scalars['Boolean']['input']>;
+  noShow: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 /** Elevation tier of the robot */
 export enum Tier {
   A = 'A',
@@ -964,7 +977,7 @@ export type SittingWithTeamsFragment = { __typename?: 'Sitting', scheduled: any 
 
 export type BlockInformationFragment = { __typename?: 'Block', id: number, name: string, canConclude: boolean, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, number: number, field: { __typename?: 'Field', id: number, name: string } | null, contest: { __typename?: 'Contest', id: number, round: Round, number: number }, match: { __typename?: 'Match', id: number, number: number } }> };
 
-export type AllianceScoreFullFragment = { __typename?: 'AllianceScore', allianceInGoal: number, allianceInZone: number, triballsInGoal: number, triballsInZone: number, robot1Tier: Tier, robot2Tier: Tier, autoWp: boolean | null, score: number, teams: Array<{ __typename?: 'TeamMeta', noShow: boolean, dq: boolean, team: { __typename?: 'Team', id: number, number: string } }> };
+export type AllianceScoreFullFragment = { __typename?: 'AllianceScore', allianceInGoal: number, allianceInZone: number, triballsInGoal: number, triballsInZone: number, robot1Tier: Tier, robot2Tier: Tier, autoWp: boolean | null, score: number, teams: Array<{ __typename?: 'TeamMeta', noShow: boolean, dq: boolean, team: { __typename?: 'Team', id: number, number: string, name: string, rank: number | null } }> };
 
 export type InspectableTeamsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1132,7 +1145,7 @@ export type WorkingScoreQueryVariables = Exact<{
 }>;
 
 
-export type WorkingScoreQuery = { __typename?: 'Query', match: { __typename?: 'Match', id: number, workingScore: { __typename?: 'Score', autoWinner: Winner | null, isElim: boolean, locked: boolean, changed: boolean, hidden: boolean, red: { __typename?: 'AllianceScore', allianceInGoal: number, allianceInZone: number, triballsInGoal: number, triballsInZone: number, robot1Tier: Tier, robot2Tier: Tier, autoWp: boolean | null, score: number, teams: Array<{ __typename?: 'TeamMeta', noShow: boolean, dq: boolean, team: { __typename?: 'Team', id: number, number: string } }> }, blue: { __typename?: 'AllianceScore', allianceInGoal: number, allianceInZone: number, triballsInGoal: number, triballsInZone: number, robot1Tier: Tier, robot2Tier: Tier, autoWp: boolean | null, score: number, teams: Array<{ __typename?: 'TeamMeta', noShow: boolean, dq: boolean, team: { __typename?: 'Team', id: number, number: string } }> } } } };
+export type WorkingScoreQuery = { __typename?: 'Query', match: { __typename?: 'Match', id: number, workingScore: { __typename?: 'Score', autoWinner: Winner | null, isElim: boolean, locked: boolean, changed: boolean, hidden: boolean, red: { __typename?: 'AllianceScore', allianceInGoal: number, allianceInZone: number, triballsInGoal: number, triballsInZone: number, robot1Tier: Tier, robot2Tier: Tier, autoWp: boolean | null, score: number, teams: Array<{ __typename?: 'TeamMeta', noShow: boolean, dq: boolean, team: { __typename?: 'Team', id: number, number: string, name: string, rank: number | null } }> }, blue: { __typename?: 'AllianceScore', allianceInGoal: number, allianceInZone: number, triballsInGoal: number, triballsInZone: number, robot1Tier: Tier, robot2Tier: Tier, autoWp: boolean | null, score: number, teams: Array<{ __typename?: 'TeamMeta', noShow: boolean, dq: boolean, team: { __typename?: 'Team', id: number, number: string, name: string, rank: number | null } }> } } } };
 
 export type EditScoreMutationVariables = Exact<{
   matchId: Scalars['Int']['input'];
@@ -1150,6 +1163,15 @@ export type EditAllianceScoreMutationVariables = Exact<{
 
 
 export type EditAllianceScoreMutation = { __typename?: 'Mutation', editAllianceScore: { __typename?: 'Score', winner: Winner } };
+
+export type EditTeamMetaMutationVariables = Exact<{
+  matchId: Scalars['Int']['input'];
+  teamId: Scalars['Int']['input'];
+  edit: TeamMetaEdit;
+}>;
+
+
+export type EditTeamMetaMutation = { __typename?: 'Mutation', editTeamMeta: { __typename?: 'Score', winner: Winner } };
 
 export type SaveScoreMutationVariables = Exact<{
   matchId: Scalars['Int']['input'];
@@ -1222,14 +1244,13 @@ export const AllianceScoreFullFragmentDoc = gql`
   score
   teams {
     team {
-      id
-      number
+      ...TeamInformation
     }
     noShow
     dq
   }
 }
-    `;
+    ${TeamInformationFragmentDoc}`;
 export const AllianceSelectionControlDocument = gql`
     query AllianceSelectionControl {
   allianceSelection {
@@ -3831,6 +3852,41 @@ export function useEditAllianceScoreMutation(baseOptions?: Apollo.MutationHookOp
 export type EditAllianceScoreMutationHookResult = ReturnType<typeof useEditAllianceScoreMutation>;
 export type EditAllianceScoreMutationResult = Apollo.MutationResult<EditAllianceScoreMutation>;
 export type EditAllianceScoreMutationOptions = Apollo.BaseMutationOptions<EditAllianceScoreMutation, EditAllianceScoreMutationVariables>;
+export const EditTeamMetaDocument = gql`
+    mutation EditTeamMeta($matchId: Int!, $teamId: Int!, $edit: TeamMetaEdit!) {
+  editTeamMeta(matchId: $matchId, teamId: $teamId, edit: $edit) {
+    winner
+  }
+}
+    `;
+export type EditTeamMetaMutationFn = Apollo.MutationFunction<EditTeamMetaMutation, EditTeamMetaMutationVariables>;
+
+/**
+ * __useEditTeamMetaMutation__
+ *
+ * To run a mutation, you first call `useEditTeamMetaMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditTeamMetaMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editTeamMetaMutation, { data, loading, error }] = useEditTeamMetaMutation({
+ *   variables: {
+ *      matchId: // value for 'matchId'
+ *      teamId: // value for 'teamId'
+ *      edit: // value for 'edit'
+ *   },
+ * });
+ */
+export function useEditTeamMetaMutation(baseOptions?: Apollo.MutationHookOptions<EditTeamMetaMutation, EditTeamMetaMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditTeamMetaMutation, EditTeamMetaMutationVariables>(EditTeamMetaDocument, options);
+      }
+export type EditTeamMetaMutationHookResult = ReturnType<typeof useEditTeamMetaMutation>;
+export type EditTeamMetaMutationResult = Apollo.MutationResult<EditTeamMetaMutation>;
+export type EditTeamMetaMutationOptions = Apollo.BaseMutationOptions<EditTeamMetaMutation, EditTeamMetaMutationVariables>;
 export const SaveScoreDocument = gql`
     mutation SaveScore($matchId: Int!) {
   saveScore(matchId: $matchId) {

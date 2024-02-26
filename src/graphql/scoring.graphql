@@ -29,6 +29,12 @@ mutation EditAllianceScore($matchId: Int!, $color: Color!, $edit: AllianceScoreE
     }
 }
 
+mutation EditTeamMeta($matchId: Int!, $teamId: Int!, $edit: TeamMetaEdit!) {
+    editTeamMeta(matchId: $matchId, teamId: $teamId, edit: $edit) {
+        winner
+    }
+}
+
 mutation SaveScore($matchId: Int!) {
     saveScore(matchId: $matchId) {
         winner
