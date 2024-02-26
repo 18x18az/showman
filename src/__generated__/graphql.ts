@@ -326,7 +326,6 @@ export type Mutation = {
   clearResults: Results;
   concludeBlock: Block;
   configureBackend: Backend;
-  configureTournamentManager: TournamentManager;
   deleteField: Array<Field>;
   editAllianceScore: Score;
   editScore: Score;
@@ -366,11 +365,6 @@ export type MutationAllianceSelectionPickArgs = {
 
 export type MutationConfigureBackendArgs = {
   settings: BackendSetup;
-};
-
-
-export type MutationConfigureTournamentManagerArgs = {
-  settings: TournamentManagerSetup;
 };
 
 
@@ -518,7 +512,6 @@ export type Query = {
   team: Team;
   teams: Array<Team>;
   timeout: Timeout;
-  tournamentManager: TournamentManager;
 };
 
 
@@ -726,31 +719,6 @@ export type Timeout = {
   __typename?: 'Timeout';
   /** The time that the timeout will end, null if there is no timeout. */
   endTime: Maybe<Scalars['DateTime']['output']>;
-};
-
-export enum TmStatus {
-  AuthError = 'AUTH_ERROR',
-  Connected = 'CONNECTED',
-  Disconnected = 'DISCONNECTED',
-  Initializing = 'INITIALIZING',
-  NotConfigured = 'NOT_CONFIGURED'
-}
-
-export type TournamentManager = {
-  __typename?: 'TournamentManager';
-  /** The password for Tournament Manager */
-  password: Maybe<Scalars['String']['output']>;
-  /** The status of the TM server */
-  status: TmStatus;
-  /** The address of Tournament Manager. IP addresses must start with http e.g. http://192.168.1.42 */
-  url: Maybe<Scalars['URL']['output']>;
-};
-
-export type TournamentManagerSetup = {
-  /** The password for Tournament Manager */
-  password: Scalars['String']['input'];
-  /** The address of Tournament Manager. IP addresses must start with http e.g. http://192.168.1.42 */
-  url: Scalars['URL']['input'];
 };
 
 /** The winner of a particular contest */
@@ -1004,13 +972,6 @@ export type SetInspectionPointMutationVariables = Exact<{
 
 
 export type SetInspectionPointMutation = { __typename?: 'Mutation', setInspectionPoint: { __typename?: 'Team', id: number } };
-
-export type ConfigureTournamentManagerMutationVariables = Exact<{
-  settings: TournamentManagerSetup;
-}>;
-
-
-export type ConfigureTournamentManagerMutation = { __typename?: 'Mutation', configureTournamentManager: { __typename?: 'TournamentManager', status: TmStatus } };
 
 export type RenameDisplayMutationVariables = Exact<{
   uuid: Scalars['String']['input'];
@@ -2713,39 +2674,6 @@ export function useSetInspectionPointMutation(baseOptions?: Apollo.MutationHookO
 export type SetInspectionPointMutationHookResult = ReturnType<typeof useSetInspectionPointMutation>;
 export type SetInspectionPointMutationResult = Apollo.MutationResult<SetInspectionPointMutation>;
 export type SetInspectionPointMutationOptions = Apollo.BaseMutationOptions<SetInspectionPointMutation, SetInspectionPointMutationVariables>;
-export const ConfigureTournamentManagerDocument = gql`
-    mutation configureTournamentManager($settings: TournamentManagerSetup!) {
-  configureTournamentManager(settings: $settings) {
-    status
-  }
-}
-    `;
-export type ConfigureTournamentManagerMutationFn = Apollo.MutationFunction<ConfigureTournamentManagerMutation, ConfigureTournamentManagerMutationVariables>;
-
-/**
- * __useConfigureTournamentManagerMutation__
- *
- * To run a mutation, you first call `useConfigureTournamentManagerMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useConfigureTournamentManagerMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [configureTournamentManagerMutation, { data, loading, error }] = useConfigureTournamentManagerMutation({
- *   variables: {
- *      settings: // value for 'settings'
- *   },
- * });
- */
-export function useConfigureTournamentManagerMutation(baseOptions?: Apollo.MutationHookOptions<ConfigureTournamentManagerMutation, ConfigureTournamentManagerMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ConfigureTournamentManagerMutation, ConfigureTournamentManagerMutationVariables>(ConfigureTournamentManagerDocument, options);
-      }
-export type ConfigureTournamentManagerMutationHookResult = ReturnType<typeof useConfigureTournamentManagerMutation>;
-export type ConfigureTournamentManagerMutationResult = Apollo.MutationResult<ConfigureTournamentManagerMutation>;
-export type ConfigureTournamentManagerMutationOptions = Apollo.BaseMutationOptions<ConfigureTournamentManagerMutation, ConfigureTournamentManagerMutationVariables>;
 export const RenameDisplayDocument = gql`
     mutation RenameDisplay($uuid: String!, $name: String!) {
   renameDisplay(uuid: $uuid, name: $name) {

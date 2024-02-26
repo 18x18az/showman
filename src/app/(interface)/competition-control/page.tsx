@@ -1,5 +1,4 @@
 'use client'
-import TmSelector from './tm-connect'
 import UploadMatches from '../upload'
 import { EventStage, useGetEventStageQuery } from '@/__generated__/graphql'
 import { CompetitionControl } from '@/views/ui/competition-control/main'
@@ -22,7 +21,7 @@ export default function Page (): JSX.Element {
   }
 
   if (stage === EventStage.WaitingForTeams) {
-    return <TmSelector />
+    return <div>Waiting for teams</div>
   }
 
   if (stage === EventStage.Checkin) {

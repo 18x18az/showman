@@ -1,9 +1,3 @@
-mutation configureTournamentManager($settings: TournamentManagerSetup!) {
-  configureTournamentManager(settings: $settings) {
-  status
-  }
-}
-
 mutation RenameDisplay($uuid: String!, $name: String!) {
   renameDisplay(uuid: $uuid, name: $name) {
     uuid
