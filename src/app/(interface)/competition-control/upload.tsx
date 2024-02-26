@@ -5,8 +5,8 @@ import { Button } from '../../../primitives/button/Button'
 import { toast } from '../../../primitives/toast/useToast'
 
 interface UploadProps {
-  upload: (file: File) => Promise<void>
-  text: string
+  readonly upload: (file: File) => Promise<void>
+  readonly text: string
 }
 
 export default function Upload (props: UploadProps): JSX.Element {
