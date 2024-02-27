@@ -20,7 +20,7 @@ function MatchScoreWrapper (props: MatchScoreWrapperProps): JSX.Element {
   const sitting = data.field.competition?.onFieldSitting
   const match = sitting?.match
 
-  if (match === undefined || sitting === undefined) {
+  if (match === undefined || sitting === undefined || sitting === null) {
     return <>No match</>
   }
 
