@@ -2,6 +2,8 @@
 import { useAllianceSelectionAcceptMutation, useAllianceSelectionCancelMutation, useAllianceSelectionControlQuery, useAllianceSelectionDeclineMutation, useAllianceSelectionPickMutation, useAllianceSelectionUndoMutation } from '@/__generated__/graphql'
 import ErrorableButton from '@/components/errorable-button/ErrorableButton'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import Upload from '../../../app/(interface)/competition-control/upload'
+import { uploadRankings } from '../../../contracts/rankings'
 
 export function AllianceSelectionControl (): JSX.Element {
   const { data } = useAllianceSelectionControlQuery({ pollInterval: 500 })
@@ -9,7 +11,8 @@ export function AllianceSelectionControl (): JSX.Element {
 
   if (data === undefined) return <></>
   const status = data.allianceSelection
-  if (status === null) return <></>
+
+  if (status === null) return <Upload upload={uploadRankings} text='rankings' />
 
   const picking = status.picking?.number ?? ''
   const pickOptions = status.pickable.map((team) => {
