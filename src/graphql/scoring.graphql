@@ -1,18 +1,16 @@
 query WorkingScore($id: Int!) {
     match(id: $id) {
+        ...WorkingScoreInfo
+    }
+}
+
+query FieldWorkingScore($fieldId: Int!) {
+    field(fieldId: $fieldId) {
         id
-        workingScore {
-            red {
-                ...AllianceScoreFull
+        competition {
+            onFieldSitting {
+                ...SittingInformation
             }
-            blue {
-                ...AllianceScoreFull
-            }
-            autoWinner
-            isElim
-            locked
-            changed
-            hidden
         }
     }
 }

@@ -45,6 +45,23 @@ fragment BlockInformation on Block {
   }
 }
 
+fragment WorkingScoreInfo on Match {
+  id
+  workingScore {
+    red {
+      ...AllianceScoreFull
+    }
+    blue {
+      ...AllianceScoreFull
+    }
+    autoWinner
+    isElim
+    locked
+    changed
+    hidden
+  }
+}
+
 fragment AllianceScoreFull on AllianceScore {
   allianceInGoal
   allianceInZone

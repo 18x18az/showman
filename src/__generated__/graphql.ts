@@ -945,6 +945,8 @@ export type SittingWithTeamsFragment = { __typename?: 'Sitting', scheduled: any 
 
 export type BlockInformationFragment = { __typename?: 'Block', id: number, name: string, canConclude: boolean, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, number: number, field: { __typename?: 'Field', id: number, name: string } | null, contest: { __typename?: 'Contest', id: number, round: Round, number: number }, match: { __typename?: 'Match', id: number, number: number } }> };
 
+export type WorkingScoreInfoFragment = { __typename?: 'Match', id: number, workingScore: { __typename?: 'Score', autoWinner: Winner | null, isElim: boolean, locked: boolean, changed: boolean, hidden: boolean, red: { __typename?: 'AllianceScore', allianceInGoal: number, allianceInZone: number, triballsInGoal: number, triballsInZone: number, robot1Tier: Tier, robot2Tier: Tier, autoWp: boolean | null, score: number, teams: Array<{ __typename?: 'TeamMeta', noShow: boolean, dq: boolean, team: { __typename?: 'Team', id: number, number: string, name: string, rank: number | null } }> }, blue: { __typename?: 'AllianceScore', allianceInGoal: number, allianceInZone: number, triballsInGoal: number, triballsInZone: number, robot1Tier: Tier, robot2Tier: Tier, autoWp: boolean | null, score: number, teams: Array<{ __typename?: 'TeamMeta', noShow: boolean, dq: boolean, team: { __typename?: 'Team', id: number, number: string, name: string, rank: number | null } }> } } };
+
 export type AllianceScoreFullFragment = { __typename?: 'AllianceScore', allianceInGoal: number, allianceInZone: number, triballsInGoal: number, triballsInZone: number, robot1Tier: Tier, robot2Tier: Tier, autoWp: boolean | null, score: number, teams: Array<{ __typename?: 'TeamMeta', noShow: boolean, dq: boolean, team: { __typename?: 'Team', id: number, number: string, name: string, rank: number | null } }> };
 
 export type InspectableTeamsQueryVariables = Exact<{ [key: string]: never; }>;
@@ -1049,6 +1051,11 @@ export type SkillsFieldsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type SkillsFieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string }> };
 
+export type CompetitionFieldsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CompetitionFieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string }> };
+
 export type SkillsFieldQueryVariables = Exact<{
   fieldId: Scalars['Int']['input'];
 }>;
@@ -1107,6 +1114,13 @@ export type WorkingScoreQueryVariables = Exact<{
 
 
 export type WorkingScoreQuery = { __typename?: 'Query', match: { __typename?: 'Match', id: number, workingScore: { __typename?: 'Score', autoWinner: Winner | null, isElim: boolean, locked: boolean, changed: boolean, hidden: boolean, red: { __typename?: 'AllianceScore', allianceInGoal: number, allianceInZone: number, triballsInGoal: number, triballsInZone: number, robot1Tier: Tier, robot2Tier: Tier, autoWp: boolean | null, score: number, teams: Array<{ __typename?: 'TeamMeta', noShow: boolean, dq: boolean, team: { __typename?: 'Team', id: number, number: string, name: string, rank: number | null } }> }, blue: { __typename?: 'AllianceScore', allianceInGoal: number, allianceInZone: number, triballsInGoal: number, triballsInZone: number, robot1Tier: Tier, robot2Tier: Tier, autoWp: boolean | null, score: number, teams: Array<{ __typename?: 'TeamMeta', noShow: boolean, dq: boolean, team: { __typename?: 'Team', id: number, number: string, name: string, rank: number | null } }> } } } };
+
+export type FieldWorkingScoreQueryVariables = Exact<{
+  fieldId: Scalars['Int']['input'];
+}>;
+
+
+export type FieldWorkingScoreQuery = { __typename?: 'Query', field: { __typename?: 'Field', id: number, competition: { __typename?: 'CompetitionField', onFieldSitting: { __typename?: 'Sitting', id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number }, match: { __typename?: 'Match', id: number, number: number } } | null } | null } };
 
 export type EditScoreMutationVariables = Exact<{
   matchId: Scalars['Int']['input'];
@@ -1212,6 +1226,24 @@ export const AllianceScoreFullFragmentDoc = gql`
   }
 }
     ${TeamInformationFragmentDoc}`;
+export const WorkingScoreInfoFragmentDoc = gql`
+    fragment WorkingScoreInfo on Match {
+  id
+  workingScore {
+    red {
+      ...AllianceScoreFull
+    }
+    blue {
+      ...AllianceScoreFull
+    }
+    autoWinner
+    isElim
+    locked
+    changed
+    hidden
+  }
+}
+    ${AllianceScoreFullFragmentDoc}`;
 export const AllianceSelectionControlDocument = gql`
     query AllianceSelectionControl {
   allianceSelection {
@@ -3240,6 +3272,46 @@ export type SkillsFieldsQueryHookResult = ReturnType<typeof useSkillsFieldsQuery
 export type SkillsFieldsLazyQueryHookResult = ReturnType<typeof useSkillsFieldsLazyQuery>;
 export type SkillsFieldsSuspenseQueryHookResult = ReturnType<typeof useSkillsFieldsSuspenseQuery>;
 export type SkillsFieldsQueryResult = Apollo.QueryResult<SkillsFieldsQuery, SkillsFieldsQueryVariables>;
+export const CompetitionFieldsDocument = gql`
+    query CompetitionFields {
+  fields(isCompetition: true) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useCompetitionFieldsQuery__
+ *
+ * To run a query within a React component, call `useCompetitionFieldsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCompetitionFieldsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCompetitionFieldsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCompetitionFieldsQuery(baseOptions?: Apollo.QueryHookOptions<CompetitionFieldsQuery, CompetitionFieldsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CompetitionFieldsQuery, CompetitionFieldsQueryVariables>(CompetitionFieldsDocument, options);
+      }
+export function useCompetitionFieldsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CompetitionFieldsQuery, CompetitionFieldsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CompetitionFieldsQuery, CompetitionFieldsQueryVariables>(CompetitionFieldsDocument, options);
+        }
+export function useCompetitionFieldsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CompetitionFieldsQuery, CompetitionFieldsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CompetitionFieldsQuery, CompetitionFieldsQueryVariables>(CompetitionFieldsDocument, options);
+        }
+export type CompetitionFieldsQueryHookResult = ReturnType<typeof useCompetitionFieldsQuery>;
+export type CompetitionFieldsLazyQueryHookResult = ReturnType<typeof useCompetitionFieldsLazyQuery>;
+export type CompetitionFieldsSuspenseQueryHookResult = ReturnType<typeof useCompetitionFieldsSuspenseQuery>;
+export type CompetitionFieldsQueryResult = Apollo.QueryResult<CompetitionFieldsQuery, CompetitionFieldsQueryVariables>;
 export const SkillsFieldDocument = gql`
     query SkillsField($fieldId: Int!) {
   field(fieldId: $fieldId) {
@@ -3661,23 +3733,10 @@ export type GetScheduleQueryResult = Apollo.QueryResult<GetScheduleQuery, GetSch
 export const WorkingScoreDocument = gql`
     query WorkingScore($id: Int!) {
   match(id: $id) {
-    id
-    workingScore {
-      red {
-        ...AllianceScoreFull
-      }
-      blue {
-        ...AllianceScoreFull
-      }
-      autoWinner
-      isElim
-      locked
-      changed
-      hidden
-    }
+    ...WorkingScoreInfo
   }
 }
-    ${AllianceScoreFullFragmentDoc}`;
+    ${WorkingScoreInfoFragmentDoc}`;
 
 /**
  * __useWorkingScoreQuery__
@@ -3711,6 +3770,51 @@ export type WorkingScoreQueryHookResult = ReturnType<typeof useWorkingScoreQuery
 export type WorkingScoreLazyQueryHookResult = ReturnType<typeof useWorkingScoreLazyQuery>;
 export type WorkingScoreSuspenseQueryHookResult = ReturnType<typeof useWorkingScoreSuspenseQuery>;
 export type WorkingScoreQueryResult = Apollo.QueryResult<WorkingScoreQuery, WorkingScoreQueryVariables>;
+export const FieldWorkingScoreDocument = gql`
+    query FieldWorkingScore($fieldId: Int!) {
+  field(fieldId: $fieldId) {
+    id
+    competition {
+      onFieldSitting {
+        ...SittingInformation
+      }
+    }
+  }
+}
+    ${SittingInformationFragmentDoc}`;
+
+/**
+ * __useFieldWorkingScoreQuery__
+ *
+ * To run a query within a React component, call `useFieldWorkingScoreQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFieldWorkingScoreQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFieldWorkingScoreQuery({
+ *   variables: {
+ *      fieldId: // value for 'fieldId'
+ *   },
+ * });
+ */
+export function useFieldWorkingScoreQuery(baseOptions: Apollo.QueryHookOptions<FieldWorkingScoreQuery, FieldWorkingScoreQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FieldWorkingScoreQuery, FieldWorkingScoreQueryVariables>(FieldWorkingScoreDocument, options);
+      }
+export function useFieldWorkingScoreLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FieldWorkingScoreQuery, FieldWorkingScoreQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FieldWorkingScoreQuery, FieldWorkingScoreQueryVariables>(FieldWorkingScoreDocument, options);
+        }
+export function useFieldWorkingScoreSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<FieldWorkingScoreQuery, FieldWorkingScoreQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FieldWorkingScoreQuery, FieldWorkingScoreQueryVariables>(FieldWorkingScoreDocument, options);
+        }
+export type FieldWorkingScoreQueryHookResult = ReturnType<typeof useFieldWorkingScoreQuery>;
+export type FieldWorkingScoreLazyQueryHookResult = ReturnType<typeof useFieldWorkingScoreLazyQuery>;
+export type FieldWorkingScoreSuspenseQueryHookResult = ReturnType<typeof useFieldWorkingScoreSuspenseQuery>;
+export type FieldWorkingScoreQueryResult = Apollo.QueryResult<FieldWorkingScoreQuery, FieldWorkingScoreQueryVariables>;
 export const EditScoreDocument = gql`
     mutation EditScore($matchId: Int!, $edit: ScoreEdit!) {
   editScore(matchId: $matchId, edit: $edit) {
