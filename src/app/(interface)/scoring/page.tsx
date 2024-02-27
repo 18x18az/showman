@@ -7,7 +7,7 @@ import { MatchScore } from '../../../components/objects/scoring/MatchScore'
 import { makeShortMatchName } from '../../../utils/strings/match'
 
 interface MatchScoreWrapperProps {
-  fieldId: number
+  readonly fieldId: number
 }
 
 function MatchScoreWrapper (props: MatchScoreWrapperProps): JSX.Element {
@@ -32,7 +32,7 @@ function MatchScoreWrapper (props: MatchScoreWrapperProps): JSX.Element {
   )
 }
 interface ScoringMenuProps {
-  fields: Array<{ id: number, name: string }>
+  readonly fields: Array<{ id: number, name: string }>
 }
 
 function ScoringMenu (props: ScoringMenuProps): JSX.Element {
