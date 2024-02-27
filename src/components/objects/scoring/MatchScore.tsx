@@ -9,7 +9,7 @@ interface MatchScoreProps {
 
 export function MatchScore (props: MatchScoreProps): JSX.Element {
   const matchId = props.matchId
-  const { data } = useWorkingScoreQuery({ variables: { id: matchId }, pollInterval: 500 })
+  const { data } = useWorkingScoreQuery({ variables: { id: matchId }, pollInterval: 250 })
 
   if (data === undefined) {
     return (

@@ -128,6 +128,13 @@ query SkillsFields {
   }
 }
 
+query CompetitionFields {
+  fields(isCompetition: true) {
+    id
+    name
+  }
+}
+
 query SkillsField($fieldId: Int!) {
   field(fieldId: $fieldId) {
     id

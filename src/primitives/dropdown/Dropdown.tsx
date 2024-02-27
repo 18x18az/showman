@@ -48,7 +48,7 @@ export function Dropdown (props: DropdownProps): JSX.Element {
         <Select.Viewport className={VIEWPORT_STYLE}>
           <Select.Group>
             {props.options.map((option) => (
-              <Select.Item key={option} value={option} className={`${ITEM_STYLE} ${sizeStyle}`}>
+              <Select.Item key={option} value={option} className={`mx-4 ${ITEM_STYLE} ${sizeStyle}`}>
                 <Select.ItemText>{option}</Select.ItemText>
                 <Select.ItemIndicator className='absolute left-2 inline-flex items-cetner'>
                   <CheckIcon />
