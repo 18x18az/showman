@@ -99,12 +99,13 @@ export function ResultDisplay (): JSX.Element {
   }
 
   const match = data.results.displayedResults
+  const results = match?.savedScore
 
-  if (match === null) {
+  if (match === null || results === null) {
     return <LogoFallback />
   }
 
-  const redScore = match.savedScore?.blue.score
+  const redScore = match.savedScore?.red.score
   const blueScore = match.savedScore?.blue.score
 
   if (redScore === undefined || blueScore === undefined) {
