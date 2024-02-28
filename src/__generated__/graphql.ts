@@ -157,7 +157,7 @@ export type CompetitionField = {
 export type Contest = {
   __typename?: 'Contest';
   /** The blue alliance */
-  blueTeams: Array<Team>;
+  blueTeams: Maybe<Array<Team>>;
   /** Unique identifier for the contest */
   id: Scalars['Float']['output'];
   /** The matches in this contest */
@@ -165,7 +165,7 @@ export type Contest = {
   /** The number of the contest */
   number: Scalars['Float']['output'];
   /** The red alliance */
-  redTeams: Array<Team>;
+  redTeams: Maybe<Array<Team>>;
   /** The round of the contest */
   round: Round;
   /** The winner of the contest */
@@ -784,7 +784,7 @@ export type LiveFieldQuery = { __typename?: 'Query', competitionInformation: { _
 export type GetCompetitionFieldsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCompetitionFieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, isLive: boolean, isOnDeck: boolean, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', id: number, number: number } } | null, onTableSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', id: number, number: number } } | null } | null, fieldControl: { __typename?: 'FieldControl', fieldId: number, endTime: any | null } | null }> };
+export type GetCompetitionFieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, isLive: boolean, isOnDeck: boolean, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> | null, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> | null }, match: { __typename?: 'Match', id: number, number: number } } | null, onTableSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> | null, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> | null }, match: { __typename?: 'Match', id: number, number: number } } | null } | null, fieldControl: { __typename?: 'FieldControl', fieldId: number, endTime: any | null } | null }> };
 
 export type GetTableOccupiedQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -941,7 +941,7 @@ export type SittingInformationFragment = { __typename?: 'Sitting', id: number, n
 
 export type TeamInformationFragment = { __typename?: 'Team', id: number, number: string, name: string, rank: number | null };
 
-export type SittingWithTeamsFragment = { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', id: number, number: number } };
+export type SittingWithTeamsFragment = { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> | null, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> | null }, match: { __typename?: 'Match', id: number, number: number } };
 
 export type BlockInformationFragment = { __typename?: 'Block', id: number, name: string, canConclude: boolean, unqueuedSittings: Array<{ __typename?: 'Sitting', id: number, number: number, field: { __typename?: 'Field', id: number, name: string } | null, contest: { __typename?: 'Contest', id: number, round: Round, number: number }, match: { __typename?: 'Match', id: number, number: number } }> };
 
@@ -1012,7 +1012,7 @@ export type MarkCheckinMutation = { __typename?: 'Mutation', markCheckin: { __ty
 export type RefereeInformationQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type RefereeInformationQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', liveField: { __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', id: number, number: number } } | null } | null } | null, onDeckField: { __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', id: number, number: number } } | null } | null } | null } };
+export type RefereeInformationQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', liveField: { __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> | null, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> | null }, match: { __typename?: 'Match', id: number, number: number } } | null } | null } | null, onDeckField: { __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> | null, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> | null }, match: { __typename?: 'Match', id: number, number: number } } | null } | null } | null } };
 
 export type GetEventStageQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1027,7 +1027,7 @@ export type CompetitionMiniSettingsQuery = { __typename?: 'Query', stage: { __ty
 export type MatchOverlayQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MatchOverlayQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', liveField: { __typename?: 'Field', id: number, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', id: number, number: number } } | null } | null, fieldControl: { __typename?: 'FieldControl', endTime: any | null } | null } | null } };
+export type MatchOverlayQuery = { __typename?: 'Query', competitionInformation: { __typename?: 'Competition', liveField: { __typename?: 'Field', id: number, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> | null, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> | null }, match: { __typename?: 'Match', id: number, number: number } } | null } | null, fieldControl: { __typename?: 'FieldControl', endTime: any | null } | null } | null } };
 
 export type TeamsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1044,7 +1044,7 @@ export type FieldDisplayQueryVariables = Exact<{
 }>;
 
 
-export type FieldDisplayQuery = { __typename?: 'Query', timeout: { __typename?: 'Timeout', endTime: any | null }, display: { __typename?: 'Display', uuid: string, field: { __typename?: 'Field', id: number, name: string, fieldControl: { __typename?: 'FieldControl', endTime: any | null, mode: Control_Mode | null } | null, competition: { __typename?: 'CompetitionField', stage: MatchStage, isLive: boolean, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', id: number, number: number } } | null } | null, skills: { __typename?: 'Skills', fieldId: number, stopTime: number | null } | null } | null } };
+export type FieldDisplayQuery = { __typename?: 'Query', timeout: { __typename?: 'Timeout', endTime: any | null }, display: { __typename?: 'Display', uuid: string, field: { __typename?: 'Field', id: number, name: string, fieldControl: { __typename?: 'FieldControl', endTime: any | null, mode: Control_Mode | null } | null, competition: { __typename?: 'CompetitionField', stage: MatchStage, isLive: boolean, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> | null, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> | null }, match: { __typename?: 'Match', id: number, number: number } } | null } | null, skills: { __typename?: 'Skills', fieldId: number, stopTime: number | null } | null } | null } };
 
 export type SkillsFieldsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1066,7 +1066,7 @@ export type SkillsFieldQuery = { __typename?: 'Query', field: { __typename?: 'Fi
 export type QueueDisplayQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type QueueDisplayQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', id: number, number: number } } | null, onTableSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> }, match: { __typename?: 'Match', id: number, number: number } } | null } | null }> };
+export type QueueDisplayQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, competition: { __typename?: 'CompetitionField', stage: MatchStage, onFieldSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> | null, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> | null }, match: { __typename?: 'Match', id: number, number: number } } | null, onTableSitting: { __typename?: 'Sitting', scheduled: any | null, id: number, number: number, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> | null, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> | null }, match: { __typename?: 'Match', id: number, number: number } } | null } | null }> };
 
 export type GetNotCheckedInTeamsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1086,7 +1086,7 @@ export type PromoteResultsMutation = { __typename?: 'Mutation', promoteResults: 
 export type ResultsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ResultsQuery = { __typename?: 'Query', results: { __typename?: 'Results', displayedResults: { __typename?: 'Match', id: number, number: number, savedScore: { __typename?: 'Score', red: { __typename?: 'AllianceScore', score: number }, blue: { __typename?: 'AllianceScore', score: number } } | null, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> } } | null } };
+export type ResultsQuery = { __typename?: 'Query', results: { __typename?: 'Results', displayedResults: { __typename?: 'Match', id: number, number: number, savedScore: { __typename?: 'Score', red: { __typename?: 'AllianceScore', score: number }, blue: { __typename?: 'AllianceScore', score: number } } | null, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> | null, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> | null } } | null } };
 
 export type StartNextBlockMutationVariables = Exact<{ [key: string]: never; }>;
 

@@ -30,10 +30,12 @@ function Alliance (props: { teams: Array<{ id: number, number: string }>, color:
 }
 
 function Alliances (props: { sitting: SittingWithTeamsFragment }): JSX.Element {
+  const redTeams = props.sitting.contest.redTeams ?? []
+  const blueTeams = props.sitting.contest.blueTeams ?? []
   return (
     <div className='flex justify-between'>
-      <Alliance teams={props.sitting.contest.redTeams} color='red' />
-      <Alliance teams={props.sitting.contest.blueTeams} color='blue' />
+      <Alliance teams={redTeams} color='red' />
+      <Alliance teams={blueTeams} color='blue' />
     </div>
   )
 }
