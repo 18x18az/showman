@@ -4,6 +4,7 @@ import { CompetitionControl } from '@/views/ui/competition-control/main'
 import Upload from './upload'
 import { uploadTeams } from '@/contracts/teams'
 import { uploadMatches } from '../../../contracts/matches'
+import { uploadElims } from '../../../contracts/elims'
 
 export default function Page (): JSX.Element {
   const { data } = useGetEventStageQuery(
@@ -28,6 +29,10 @@ export default function Page (): JSX.Element {
 
   if (stage === EventStage.Checkin) {
     return <Upload upload={uploadMatches} text='match' />
+  }
+
+  if (stage === EventStage.AllianceSelection) {
+    return <Upload upload={uploadElims} text='elims match' />
   }
 
   return (
