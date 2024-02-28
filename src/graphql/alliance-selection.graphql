@@ -40,14 +40,6 @@ query AllianceSelectionResults {
   }
 }
 
-mutation StartAllianceSelection {
-  startAllianceSelection {
-    picking {
-      id
-    }
-  }
-}
-
 mutation AllianceSelectionPick($teamId: Int!) {
   allianceSelectionPick(teamId: $teamId) {
     picking {
@@ -82,6 +74,14 @@ mutation AllianceSelectionUndo {
 
 mutation AllianceSelectionCancel {
   allianceSelectionCancel {
+    picking {
+      id
+    }
+  }
+}
+
+mutation AllianceSelectionFinalize {
+  finalizeAlliances {
     picking {
       id
     }

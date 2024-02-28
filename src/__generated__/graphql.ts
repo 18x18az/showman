@@ -330,6 +330,7 @@ export type Mutation = {
   editAllianceScore: Score;
   editScore: Score;
   editTeamMeta: Score;
+  finalizeAlliances: Maybe<AllianceSelection>;
   markCheckin: Team;
   promoteResults: Results;
   putLive: Competition;
@@ -347,7 +348,6 @@ export type Mutation = {
   setDisplayField: Display;
   setInspectionPoint: Team;
   setSkillsEnabled: Array<Field>;
-  startAllianceSelection: AllianceSelection;
   startField: FieldControl;
   startNextBlock: Block;
   startTimeout: Timeout;
@@ -744,11 +744,6 @@ export type AllianceSelectionResultsQueryVariables = Exact<{ [key: string]: neve
 
 export type AllianceSelectionResultsQuery = { __typename?: 'Query', allianceSelection: { __typename?: 'AllianceSelection', alliances: Array<Array<{ __typename?: 'Team', id: number, number: string }>> } | null };
 
-export type StartAllianceSelectionMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type StartAllianceSelectionMutation = { __typename?: 'Mutation', startAllianceSelection: { __typename?: 'AllianceSelection', picking: { __typename?: 'Team', id: number } | null } };
-
 export type AllianceSelectionPickMutationVariables = Exact<{
   teamId: Scalars['Int']['input'];
 }>;
@@ -775,6 +770,11 @@ export type AllianceSelectionCancelMutationVariables = Exact<{ [key: string]: ne
 
 
 export type AllianceSelectionCancelMutation = { __typename?: 'Mutation', allianceSelectionCancel: { __typename?: 'AllianceSelection', picking: { __typename?: 'Team', id: number } | null } };
+
+export type AllianceSelectionFinalizeMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllianceSelectionFinalizeMutation = { __typename?: 'Mutation', finalizeAlliances: { __typename?: 'AllianceSelection', picking: { __typename?: 'Team', id: number } | null } | null };
 
 export type LiveFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1385,40 +1385,6 @@ export type AllianceSelectionResultsQueryHookResult = ReturnType<typeof useAllia
 export type AllianceSelectionResultsLazyQueryHookResult = ReturnType<typeof useAllianceSelectionResultsLazyQuery>;
 export type AllianceSelectionResultsSuspenseQueryHookResult = ReturnType<typeof useAllianceSelectionResultsSuspenseQuery>;
 export type AllianceSelectionResultsQueryResult = Apollo.QueryResult<AllianceSelectionResultsQuery, AllianceSelectionResultsQueryVariables>;
-export const StartAllianceSelectionDocument = gql`
-    mutation StartAllianceSelection {
-  startAllianceSelection {
-    picking {
-      id
-    }
-  }
-}
-    `;
-export type StartAllianceSelectionMutationFn = Apollo.MutationFunction<StartAllianceSelectionMutation, StartAllianceSelectionMutationVariables>;
-
-/**
- * __useStartAllianceSelectionMutation__
- *
- * To run a mutation, you first call `useStartAllianceSelectionMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useStartAllianceSelectionMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [startAllianceSelectionMutation, { data, loading, error }] = useStartAllianceSelectionMutation({
- *   variables: {
- *   },
- * });
- */
-export function useStartAllianceSelectionMutation(baseOptions?: Apollo.MutationHookOptions<StartAllianceSelectionMutation, StartAllianceSelectionMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<StartAllianceSelectionMutation, StartAllianceSelectionMutationVariables>(StartAllianceSelectionDocument, options);
-      }
-export type StartAllianceSelectionMutationHookResult = ReturnType<typeof useStartAllianceSelectionMutation>;
-export type StartAllianceSelectionMutationResult = Apollo.MutationResult<StartAllianceSelectionMutation>;
-export type StartAllianceSelectionMutationOptions = Apollo.BaseMutationOptions<StartAllianceSelectionMutation, StartAllianceSelectionMutationVariables>;
 export const AllianceSelectionPickDocument = gql`
     mutation AllianceSelectionPick($teamId: Int!) {
   allianceSelectionPick(teamId: $teamId) {
@@ -1590,6 +1556,40 @@ export function useAllianceSelectionCancelMutation(baseOptions?: Apollo.Mutation
 export type AllianceSelectionCancelMutationHookResult = ReturnType<typeof useAllianceSelectionCancelMutation>;
 export type AllianceSelectionCancelMutationResult = Apollo.MutationResult<AllianceSelectionCancelMutation>;
 export type AllianceSelectionCancelMutationOptions = Apollo.BaseMutationOptions<AllianceSelectionCancelMutation, AllianceSelectionCancelMutationVariables>;
+export const AllianceSelectionFinalizeDocument = gql`
+    mutation AllianceSelectionFinalize {
+  finalizeAlliances {
+    picking {
+      id
+    }
+  }
+}
+    `;
+export type AllianceSelectionFinalizeMutationFn = Apollo.MutationFunction<AllianceSelectionFinalizeMutation, AllianceSelectionFinalizeMutationVariables>;
+
+/**
+ * __useAllianceSelectionFinalizeMutation__
+ *
+ * To run a mutation, you first call `useAllianceSelectionFinalizeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAllianceSelectionFinalizeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [allianceSelectionFinalizeMutation, { data, loading, error }] = useAllianceSelectionFinalizeMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAllianceSelectionFinalizeMutation(baseOptions?: Apollo.MutationHookOptions<AllianceSelectionFinalizeMutation, AllianceSelectionFinalizeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AllianceSelectionFinalizeMutation, AllianceSelectionFinalizeMutationVariables>(AllianceSelectionFinalizeDocument, options);
+      }
+export type AllianceSelectionFinalizeMutationHookResult = ReturnType<typeof useAllianceSelectionFinalizeMutation>;
+export type AllianceSelectionFinalizeMutationResult = Apollo.MutationResult<AllianceSelectionFinalizeMutation>;
+export type AllianceSelectionFinalizeMutationOptions = Apollo.BaseMutationOptions<AllianceSelectionFinalizeMutation, AllianceSelectionFinalizeMutationVariables>;
 export const LiveFieldDocument = gql`
     query LiveField {
   competitionInformation {

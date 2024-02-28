@@ -1,9 +1,9 @@
 'use client'
-import { useAllianceSelectionAcceptMutation, useAllianceSelectionCancelMutation, useAllianceSelectionControlQuery, useAllianceSelectionDeclineMutation, useAllianceSelectionPickMutation, useAllianceSelectionUndoMutation } from '@/__generated__/graphql'
+import { useAllianceSelectionAcceptMutation, useAllianceSelectionCancelMutation, useAllianceSelectionControlQuery, useAllianceSelectionDeclineMutation, useAllianceSelectionFinalizeMutation, useAllianceSelectionPickMutation, useAllianceSelectionUndoMutation } from '@/__generated__/graphql'
 import ErrorableButton from '@/components/errorable-button/ErrorableButton'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import Upload from '../../../app/(interface)/competition-control/upload'
-import { uploadRankings } from '../../../contracts/rankings'
+import Upload from '@/app/(interface)/competition-control/upload'
+import { uploadRankings } from '@/contracts/rankings'
 
 export function AllianceSelectionControl (): JSX.Element {
   const { data } = useAllianceSelectionControlQuery({ pollInterval: 500 })
@@ -39,15 +39,22 @@ export function AllianceSelectionControl (): JSX.Element {
   const pickingTeamString = status.picking?.number ?? ''
   const pickedTeamString = status.picked?.number ?? ''
 
+  let finalizeButton = <></>
+
+  if (status.picking === null) {
+    finalizeButton = <ErrorableButton mutation={useAllianceSelectionFinalizeMutation} options={{ refetchQueries: ['AllianceSelectionControl'] }}>Finalize</ErrorableButton>
+  }
+
   return (
     <>
       <div className='flex justify-center'><h1 className='text-lg'>Alliance Selection</h1></div>
       <div className='flex justify-center text-2xl'><h2>{picking}</h2></div>
       <div className='grid grid-cols-4 gap-4'>{pickOptions}</div>
-      <div>
-        <ErrorableButton mutation={useAllianceSelectionUndoMutation} options={{ refetchQueries: ['AllianceSelectionControl'] }} disabled={status.picking === null}>
+      <div className='flex gap-4 m-4'>
+        <ErrorableButton mutation={useAllianceSelectionUndoMutation} options={{ refetchQueries: ['AllianceSelectionControl'] }}>
           Undo
         </ErrorableButton>
+        {finalizeButton}
       </div>
       <div className='grid grid-cols-4 gap-4'>{alliances}</div>
 
