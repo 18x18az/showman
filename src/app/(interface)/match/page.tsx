@@ -84,20 +84,20 @@ function NextFieldControl (props: FieldControlInformation): JSX.Element {
   return <PageContent sitting={props.sitting} field={props.field} stage={MatchStage.Queued} isLive={false} />
 }
 
+function makeTeamInformation (teams: Array<{ number: string, name: string }> | null): TeamInformation[] {
+  if (teams === null) return []
+  return teams.map((team) => {
+    return {
+      number: team.number,
+      name: team.name
+    }
+  })
+}
+
 function makeSittingInformation (sitting: SittingWithTeamsFragment): SittingInformation {
   const identifier = sitting
-  const red = sitting.contest.redTeams.map((team) => {
-    return {
-      number: team.number,
-      name: team.name
-    }
-  })
-  const blue = sitting.contest.blueTeams.map((team) => {
-    return {
-      number: team.number,
-      name: team.name
-    }
-  })
+  const red = makeTeamInformation(sitting.contest.redTeams)
+  const blue = makeTeamInformation(sitting.contest.blueTeams)
   return {
     identifier,
     red,

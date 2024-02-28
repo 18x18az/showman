@@ -3,7 +3,7 @@ import { EventStage, useGetEventStageQuery } from '@/__generated__/graphql'
 import { CompetitionControl } from '@/views/ui/competition-control/main'
 import Upload from './upload'
 import { uploadTeams } from '@/contracts/teams'
-import { uploadMatches } from '../../../contracts/matches'
+import { uploadMatches } from '@/contracts/matches'
 
 export default function Page (): JSX.Element {
   const { data } = useGetEventStageQuery(

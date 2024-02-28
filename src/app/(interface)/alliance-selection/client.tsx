@@ -1,8 +1,9 @@
 'use client'
 
-import { EventStage, useCanStartAllianceSelectionQuery, useStartAllianceSelectionMutation } from '@/__generated__/graphql'
-import ErrorableButton from '@/components/errorable-button/ErrorableButton'
+import { EventStage, useCanStartAllianceSelectionQuery } from '@/__generated__/graphql'
 import { AllianceSelectionControl } from '@/views/ui/alliance-selection/alliance-selection'
+import Upload from '../competition-control/upload'
+import { uploadRankings } from '../../../contracts/rankings'
 
 export function AllianceSelection (): JSX.Element {
   const { data } = useCanStartAllianceSelectionQuery({ pollInterval: 500 })
@@ -21,9 +22,7 @@ export function AllianceSelection (): JSX.Element {
 
   if (canStartAllianceSelection) {
     return (
-      <div className='p-8'>
-        <ErrorableButton mutation={useStartAllianceSelectionMutation} options={{ refetchQueries: ['AllianceSelectionAdmin'] }}>Begin Alliance Selection</ErrorableButton>
-      </div>
+      <Upload upload={uploadRankings} text='rankings' />
     )
   }
 

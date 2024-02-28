@@ -28,6 +28,8 @@ export function MatchDisplay (): JSX.Element {
   const redTeams = sitting.contest.redTeams
   const blueTeams = sitting.contest.blueTeams
 
+  if (redTeams === null || blueTeams === null) return <></>
+
   let time: string | undefined
 
   if (fieldControl.endTime !== null) {

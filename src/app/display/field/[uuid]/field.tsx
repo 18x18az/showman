@@ -28,8 +28,11 @@ function FieldContent (props: { content: JSX.Element, sitting?: SittingWithTeams
   let blue = <></>
   let red = <></>
 
-  blue = sitting !== undefined ? <AllianceDisplay alliance={sitting.contest.blueTeams} color='blue' /> : <></>
-  red = sitting !== undefined ? <AllianceDisplay alliance={sitting.contest.redTeams} color='red' /> : <></>
+  const blueTeams = sitting?.contest.blueTeams
+  const redTeams = sitting?.contest.redTeams
+
+  blue = blueTeams !== undefined && blueTeams !== null ? <AllianceDisplay alliance={blueTeams} color='blue' /> : <></>
+  red = redTeams !== undefined && redTeams !== null ? <AllianceDisplay alliance={redTeams} color='red' /> : <></>
 
   return (
     <>
