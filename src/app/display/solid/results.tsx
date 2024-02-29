@@ -1,5 +1,6 @@
 'use client'
 import { Round, TeamInformationFragment, useResultsQuery } from '../../../__generated__/graphql'
+import { LogoReelCorner } from '../../../components/logo-reel/logo-reel'
 import { roundName } from '../../../utils/strings/match'
 import { LogoFallback } from './fallback'
 
@@ -125,7 +126,8 @@ export function ResultDisplay (): JSX.Element {
 
   return (
     <div className='flex flex-col text-center items-center w-full gap-8 text-zinc-200 mt-4'>
-      <h1 className='bg-zinc-900 w-10/12 text-7xl py-6 mt-16 rounded-lg font-sans mb-20 opacity-[0.97]'>{matchName} Results</h1>
+      <LogoReelCorner />
+      <h1 className='bg-zinc-900 w-3/4 text-7xl py-6 mt-5 rounded-lg font-sans mb-36 opacity-[0.97]'>{matchName} Results</h1>
       <AlliancesInfo redTeams={redTeams} blueTeams={blueTeams} />
       <Scores redScore={redScore} blueScore={blueScore} />
     </div>

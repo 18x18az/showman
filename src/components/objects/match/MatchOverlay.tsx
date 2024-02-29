@@ -1,4 +1,5 @@
 import { TeamInformationFragment } from '../../../__generated__/graphql'
+import { LogoReelCorner } from '../../logo-reel/logo-reel'
 import { AllianceIndicator } from './AllianceIndicator'
 import { MatchName } from './MatchName'
 import { PeriodIndicator } from './PeriodIndicator'
@@ -26,6 +27,7 @@ export function MatchOverlay (props: MatchOverlayProps): JSX.Element {
       <AllianceIndicator alliance='blue' teams={props.blueTeams} />
       <Timer time={props.time} period={props.period} />
       <PeriodIndicator period={props.period} />
+      <LogoReelCorner />
     </>
   )
 }
