@@ -38,11 +38,13 @@ export function LogoReel (): JSX.Element {
   const sponsor = sponsors[sponsorIndex]
   const logoPath = `/sponsors/${sponsor}`
 
-  console.log(logoPath)
+  return <Image src={logoPath} alt='sponsor' objectFit='contain' fill />
+}
 
+export function LogoReelCorner (): JSX.Element {
   return (
-    <div className='w-36 h-36 absolute bg-slate-0 rounded-md top-6 left-6'>
-      <Image src={logoPath} alt='sponsor' objectFit='contain' fill />
+    <div className='w-36 h-36 absolute bg-white rounded-md top-6 left-6'>
+      <LogoReel />
     </div>
   )
 }
