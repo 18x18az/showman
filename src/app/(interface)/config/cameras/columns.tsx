@@ -32,7 +32,7 @@ export const Columns: Array<ColumnDef<Camera>> = [
     cell: ({ row }) => {
       const rename = useErrorableMutation(useEditSceneMutation, { refetchQueries: ['Cameras'] })
       return (
-        <TextInput value={row.original.scene.name} updateValue={(name) => { void rename({ variables: { id: row.original.id, data: { name } } }) }} />
+        <TextInput value={row.original.scene.name} updateValue={(name) => { void rename({ variables: { id: row.original.scene.id, data: { name } } }) }} />
       )
     }
   },
