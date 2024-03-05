@@ -16,6 +16,7 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   DateTime: { input: any; output: any; }
+  IP: { input: any; output: any; }
   URL: { input: any; output: any; }
 };
 
@@ -42,6 +43,29 @@ export type Award = {
   /** The team(s) that won the award */
   winners: Maybe<Array<Team>>;
 };
+
+export type Backend = {
+  __typename?: 'Backend';
+  /** The password for the backend */
+  password: Maybe<Scalars['String']['output']>;
+  /** The status of the backend */
+  status: BackendStatus;
+  /** The address of the backend. IP addresses must start with http e.g. http://192.168.1.42 */
+  url: Maybe<Scalars['URL']['output']>;
+};
+
+export type BackendSetup = {
+  /** The password for the backend */
+  password: Scalars['String']['input'];
+  /** The address of the backend. IP addresses must start with http e.g. http://192.168.1.42 */
+  url?: InputMaybe<Scalars['URL']['input']>;
+};
+
+export enum BackendStatus {
+  AuthError = 'AUTH_ERROR',
+  Connected = 'CONNECTED',
+  NotConfigured = 'NOT_CONFIGURED'
+}
 
 /** A block refers to a group of match sittings played in the same stretch of time, e.g. all quals played in the morning before lunch */
 export type Block = {
@@ -75,6 +99,20 @@ export enum Control_Mode {
   Auto = 'AUTO',
   Driver = 'DRIVER'
 }
+
+export type Camera = {
+  __typename?: 'Camera';
+  currentPreset: Maybe<Preset>;
+  id: Scalars['Int']['output'];
+  ip: Scalars['IP']['output'];
+  name: Scalars['String']['output'];
+  presets: Array<Preset>;
+};
+
+export type CameraEdit = {
+  ip?: InputMaybe<Scalars['IP']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+};
 
 export type Competition = {
   __typename?: 'Competition';
@@ -178,13 +216,13 @@ export type FieldControl = {
 
 export type FieldUpdate = {
   /** Set a competition field to be able to run skills. Meaningless if the field is already a dedicated skills field. */
-  canRunSkills: InputMaybe<Scalars['Boolean']['input']>;
+  canRunSkills?: InputMaybe<Scalars['Boolean']['input']>;
   /** True for a competition field, false for a dedicated skills field */
-  isCompetition: InputMaybe<Scalars['Boolean']['input']>;
+  isCompetition?: InputMaybe<Scalars['Boolean']['input']>;
   /** Whether the field is enabled for use */
-  isEnabled: InputMaybe<Scalars['Boolean']['input']>;
+  isEnabled?: InputMaybe<Scalars['Boolean']['input']>;
   /** Name of the field */
-  name: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** The inspection status of a team */
@@ -257,6 +295,7 @@ export enum MatchStatus {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addCamera: Array<Camera>;
   addField: Field;
   allianceSelectionAccept: AllianceSelection;
   allianceSelectionCancel: AllianceSelection;
@@ -267,8 +306,10 @@ export type Mutation = {
   clearLive: Competition;
   clearResults: Results;
   concludeBlock: Block;
+  configureBackend: Backend;
   configureTournamentManager: TournamentManager;
   deleteField: Array<Field>;
+  editCamera: Camera;
   markCheckin: Team;
   promoteResults: Results;
   putLive: Competition;
@@ -301,6 +342,11 @@ export type MutationAllianceSelectionPickArgs = {
 };
 
 
+export type MutationConfigureBackendArgs = {
+  settings: BackendSetup;
+};
+
+
 export type MutationConfigureTournamentManagerArgs = {
   settings: TournamentManagerSetup;
 };
@@ -308,6 +354,12 @@ export type MutationConfigureTournamentManagerArgs = {
 
 export type MutationDeleteFieldArgs = {
   fieldId: Scalars['Int']['input'];
+};
+
+
+export type MutationEditCameraArgs = {
+  data: CameraEdit;
+  id: Scalars['Int']['input'];
 };
 
 
@@ -397,6 +449,12 @@ export type MutationUpdateFieldArgs = {
   update: FieldUpdate;
 };
 
+export type Preset = {
+  __typename?: 'Preset';
+  id: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+};
+
 export enum Program {
   Vexu = 'VEXU',
   Vrc = 'VRC'
@@ -406,7 +464,10 @@ export type Query = {
   __typename?: 'Query';
   allianceSelection: Maybe<AllianceSelection>;
   awards: Array<Award>;
+  backend: Backend;
   blocks: Array<Block>;
+  camera: Camera;
+  cameras: Array<Camera>;
   competitionInformation: Competition;
   contests: Array<Contest>;
   currentBlock: Maybe<Block>;
@@ -424,6 +485,11 @@ export type Query = {
   teams: Array<Team>;
   timeout: Timeout;
   tournamentManager: TournamentManager;
+};
+
+
+export type QueryCameraArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -638,6 +704,24 @@ export type AllianceSelectionCancelMutationVariables = Exact<{ [key: string]: ne
 
 
 export type AllianceSelectionCancelMutation = { __typename?: 'Mutation', allianceSelectionCancel: { __typename?: 'AllianceSelection', picking: { __typename?: 'Team', id: number } | null } };
+
+export type CamerasQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CamerasQuery = { __typename?: 'Query', cameras: Array<{ __typename?: 'Camera', id: number, name: string, ip: any }> };
+
+export type AddCameraMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AddCameraMutation = { __typename?: 'Mutation', addCamera: Array<{ __typename?: 'Camera', id: number, name: string, ip: any }> };
+
+export type EditCameraMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  data: CameraEdit;
+}>;
+
+
+export type EditCameraMutation = { __typename?: 'Mutation', editCamera: { __typename?: 'Camera', id: number, name: string, ip: any } };
 
 export type LiveFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1360,6 +1444,117 @@ export function useAllianceSelectionCancelMutation(baseOptions?: Apollo.Mutation
 export type AllianceSelectionCancelMutationHookResult = ReturnType<typeof useAllianceSelectionCancelMutation>;
 export type AllianceSelectionCancelMutationResult = Apollo.MutationResult<AllianceSelectionCancelMutation>;
 export type AllianceSelectionCancelMutationOptions = Apollo.BaseMutationOptions<AllianceSelectionCancelMutation, AllianceSelectionCancelMutationVariables>;
+export const CamerasDocument = gql`
+    query Cameras {
+  cameras {
+    id
+    name
+    ip
+  }
+}
+    `;
+
+/**
+ * __useCamerasQuery__
+ *
+ * To run a query within a React component, call `useCamerasQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCamerasQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCamerasQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCamerasQuery(baseOptions?: Apollo.QueryHookOptions<CamerasQuery, CamerasQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CamerasQuery, CamerasQueryVariables>(CamerasDocument, options);
+      }
+export function useCamerasLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CamerasQuery, CamerasQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CamerasQuery, CamerasQueryVariables>(CamerasDocument, options);
+        }
+export function useCamerasSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CamerasQuery, CamerasQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CamerasQuery, CamerasQueryVariables>(CamerasDocument, options);
+        }
+export type CamerasQueryHookResult = ReturnType<typeof useCamerasQuery>;
+export type CamerasLazyQueryHookResult = ReturnType<typeof useCamerasLazyQuery>;
+export type CamerasSuspenseQueryHookResult = ReturnType<typeof useCamerasSuspenseQuery>;
+export type CamerasQueryResult = Apollo.QueryResult<CamerasQuery, CamerasQueryVariables>;
+export const AddCameraDocument = gql`
+    mutation AddCamera {
+  addCamera {
+    id
+    name
+    ip
+  }
+}
+    `;
+export type AddCameraMutationFn = Apollo.MutationFunction<AddCameraMutation, AddCameraMutationVariables>;
+
+/**
+ * __useAddCameraMutation__
+ *
+ * To run a mutation, you first call `useAddCameraMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddCameraMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addCameraMutation, { data, loading, error }] = useAddCameraMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAddCameraMutation(baseOptions?: Apollo.MutationHookOptions<AddCameraMutation, AddCameraMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddCameraMutation, AddCameraMutationVariables>(AddCameraDocument, options);
+      }
+export type AddCameraMutationHookResult = ReturnType<typeof useAddCameraMutation>;
+export type AddCameraMutationResult = Apollo.MutationResult<AddCameraMutation>;
+export type AddCameraMutationOptions = Apollo.BaseMutationOptions<AddCameraMutation, AddCameraMutationVariables>;
+export const EditCameraDocument = gql`
+    mutation EditCamera($id: Int!, $data: CameraEdit!) {
+  editCamera(id: $id, data: $data) {
+    id
+    name
+    ip
+  }
+}
+    `;
+export type EditCameraMutationFn = Apollo.MutationFunction<EditCameraMutation, EditCameraMutationVariables>;
+
+/**
+ * __useEditCameraMutation__
+ *
+ * To run a mutation, you first call `useEditCameraMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditCameraMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editCameraMutation, { data, loading, error }] = useEditCameraMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useEditCameraMutation(baseOptions?: Apollo.MutationHookOptions<EditCameraMutation, EditCameraMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditCameraMutation, EditCameraMutationVariables>(EditCameraDocument, options);
+      }
+export type EditCameraMutationHookResult = ReturnType<typeof useEditCameraMutation>;
+export type EditCameraMutationResult = Apollo.MutationResult<EditCameraMutation>;
+export type EditCameraMutationOptions = Apollo.BaseMutationOptions<EditCameraMutation, EditCameraMutationVariables>;
 export const LiveFieldDocument = gql`
     query LiveField {
   competitionInformation {

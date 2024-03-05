@@ -9,9 +9,8 @@ import {
   useReactTable
 } from '@tanstack/react-table'
 
-import { DataTable } from '@/components/ui/data-table'
-
 import { useState } from 'react'
+import { DataTable } from '.'
 
 interface DisplayTableProps<TData, TValue> {
   readonly columns: Array<ColumnDef<TData, TValue>>

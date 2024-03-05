@@ -1,0 +1,23 @@
+query Cameras {
+    cameras {
+        id
+        name
+        ip
+    }
+}
+
+mutation AddCamera {
+    addCamera {
+        id
+        name
+        ip
+    }
+}
+
+mutation EditCamera ($id: Int!, $data: CameraEdit!) {
+    editCamera(id: $id, data: $data) {
+        id
+        name
+        ip
+    }
+}

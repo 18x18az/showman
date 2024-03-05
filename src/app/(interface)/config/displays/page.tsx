@@ -1,8 +1,8 @@
 'use client'
 
-import { useDisplaysQuery } from '../../../../__generated__/graphql'
+import { useDisplaysQuery } from '@/__generated__/graphql'
 import { Columns } from './columns'
-import { DisplayTable } from './display-table'
+import { DisplayTable } from '@/components/ui/data-table/display-table'
 
 export default function Page (): JSX.Element {
   const { data } = useDisplaysQuery({ pollInterval: 500 })
