@@ -1,7 +1,9 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { useEditCameraMutation } from '@/__generated__/graphql'
+import { useEditCameraMutation, useRemoveCameraMutation } from '@/__generated__/graphql'
 import { TextInput } from '@/components/ui/data-table'
 import { useErrorableMutation } from '@/hooks/useErrorableMutation'
+import ErrorableButton from '@/components/errorable-button/ErrorableButton'
+import { Trash2 } from 'lucide-react'
 
 interface Camera {
   readonly id: number
@@ -29,6 +31,11 @@ export const Columns: Array<ColumnDef<Camera>> = [
         <TextInput value={row.original.ip} updateValue={(ip) => { void changeIp({ variables: { id: row.original.id, data: { ip } } }) }} />
       )
     }
+  },
+  {
+    id: 'actions',
+    cell: ({ row }) => {
+      return <ErrorableButton tooltip='Delete Field' variant='ghost' mutation={useRemoveCameraMutation} options={{ variables: { id: row.original.id }, refetchQueries: ['Cameras'] }}><Trash2 /></ErrorableButton>
+    }
   }
-
 ]

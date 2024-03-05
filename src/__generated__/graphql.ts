@@ -107,6 +107,7 @@ export type Camera = {
   ip: Scalars['IP']['output'];
   name: Scalars['String']['output'];
   presets: Array<Preset>;
+  scene: Scene;
 };
 
 export type CameraEdit = {
@@ -317,6 +318,7 @@ export type Mutation = {
   queueDriverSkills: Skills;
   queueProgrammingSkills: Skills;
   queueSitting: Sitting;
+  removeCamera: Array<Camera>;
   renameDisplay: Display;
   replay: CompetitionField;
   /** Reset the event. Only available in test mode. */
@@ -387,6 +389,11 @@ export type MutationQueueProgrammingSkillsArgs = {
 export type MutationQueueSittingArgs = {
   fieldId: Scalars['Int']['input'];
   sittingId: Scalars['Int']['input'];
+};
+
+
+export type MutationRemoveCameraArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -533,6 +540,13 @@ export enum Round {
   Ro16 = 'Ro16',
   Sf = 'SF'
 }
+
+export type Scene = {
+  __typename?: 'Scene';
+  id: Scalars['Int']['output'];
+  key: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+};
 
 /** A sitting is an instance of a match being played. In case of a replay, another sitting is created for the same match. */
 export type Sitting = {
@@ -714,6 +728,13 @@ export type AddCameraMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type AddCameraMutation = { __typename?: 'Mutation', addCamera: Array<{ __typename?: 'Camera', id: number, name: string, ip: any }> };
+
+export type RemoveCameraMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type RemoveCameraMutation = { __typename?: 'Mutation', removeCamera: Array<{ __typename?: 'Camera', id: number, name: string, ip: any }> };
 
 export type EditCameraMutationVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -1519,6 +1540,41 @@ export function useAddCameraMutation(baseOptions?: Apollo.MutationHookOptions<Ad
 export type AddCameraMutationHookResult = ReturnType<typeof useAddCameraMutation>;
 export type AddCameraMutationResult = Apollo.MutationResult<AddCameraMutation>;
 export type AddCameraMutationOptions = Apollo.BaseMutationOptions<AddCameraMutation, AddCameraMutationVariables>;
+export const RemoveCameraDocument = gql`
+    mutation RemoveCamera($id: Int!) {
+  removeCamera(id: $id) {
+    id
+    name
+    ip
+  }
+}
+    `;
+export type RemoveCameraMutationFn = Apollo.MutationFunction<RemoveCameraMutation, RemoveCameraMutationVariables>;
+
+/**
+ * __useRemoveCameraMutation__
+ *
+ * To run a mutation, you first call `useRemoveCameraMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveCameraMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeCameraMutation, { data, loading, error }] = useRemoveCameraMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useRemoveCameraMutation(baseOptions?: Apollo.MutationHookOptions<RemoveCameraMutation, RemoveCameraMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveCameraMutation, RemoveCameraMutationVariables>(RemoveCameraDocument, options);
+      }
+export type RemoveCameraMutationHookResult = ReturnType<typeof useRemoveCameraMutation>;
+export type RemoveCameraMutationResult = Apollo.MutationResult<RemoveCameraMutation>;
+export type RemoveCameraMutationOptions = Apollo.BaseMutationOptions<RemoveCameraMutation, RemoveCameraMutationVariables>;
 export const EditCameraDocument = gql`
     mutation EditCamera($id: Int!, $data: CameraEdit!) {
   editCamera(id: $id, data: $data) {

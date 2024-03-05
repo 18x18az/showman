@@ -14,6 +14,14 @@ mutation AddCamera {
     }
 }
 
+mutation RemoveCamera ($id: Int!) {
+    removeCamera(id: $id) {
+        id
+        name
+        ip
+    }
+}
+
 mutation EditCamera ($id: Int!, $data: CameraEdit!) {
     editCamera(id: $id, data: $data) {
         id
