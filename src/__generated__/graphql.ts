@@ -311,6 +311,7 @@ export type Mutation = {
   configureTournamentManager: TournamentManager;
   deleteField: Array<Field>;
   editCamera: Camera;
+  editScene: Scene;
   markCheckin: Team;
   promoteResults: Results;
   putLive: Competition;
@@ -361,6 +362,12 @@ export type MutationDeleteFieldArgs = {
 
 export type MutationEditCameraArgs = {
   data: CameraEdit;
+  id: Scalars['Int']['input'];
+};
+
+
+export type MutationEditSceneArgs = {
+  data: SceneEdit;
   id: Scalars['Int']['input'];
 };
 
@@ -486,6 +493,8 @@ export type Query = {
   matches: Array<Match>;
   nextBlock: Maybe<Block>;
   results: Results;
+  scene: Scene;
+  scenes: Array<Scene>;
   sittings: Array<Sitting>;
   stage: Stage;
   team: Team;
@@ -546,6 +555,11 @@ export type Scene = {
   id: Scalars['Int']['output'];
   key: Scalars['String']['output'];
   name: Scalars['String']['output'];
+};
+
+export type SceneEdit = {
+  key?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** A sitting is an instance of a match being played. In case of a replay, another sitting is created for the same match. */
@@ -722,7 +736,7 @@ export type AllianceSelectionCancelMutation = { __typename?: 'Mutation', allianc
 export type CamerasQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CamerasQuery = { __typename?: 'Query', cameras: Array<{ __typename?: 'Camera', id: number, name: string, ip: any }> };
+export type CamerasQuery = { __typename?: 'Query', cameras: Array<{ __typename?: 'Camera', id: number, name: string, ip: any, scene: { __typename?: 'Scene', id: number, name: string } }> };
 
 export type AddCameraMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -1053,6 +1067,14 @@ export type ResultsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ResultsQuery = { __typename?: 'Query', results: { __typename?: 'Results', displayedResults: { __typename?: 'Match', id: number, number: number, redScore: number | null, blueScore: number | null, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> } } | null } };
+
+export type EditSceneMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  data: SceneEdit;
+}>;
+
+
+export type EditSceneMutation = { __typename?: 'Mutation', editScene: { __typename?: 'Scene', id: number, name: string } };
 
 export type StartNextBlockMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -1471,6 +1493,10 @@ export const CamerasDocument = gql`
     id
     name
     ip
+    scene {
+      id
+      name
+    }
   }
 }
     `;
@@ -3588,6 +3614,41 @@ export type ResultsQueryHookResult = ReturnType<typeof useResultsQuery>;
 export type ResultsLazyQueryHookResult = ReturnType<typeof useResultsLazyQuery>;
 export type ResultsSuspenseQueryHookResult = ReturnType<typeof useResultsSuspenseQuery>;
 export type ResultsQueryResult = Apollo.QueryResult<ResultsQuery, ResultsQueryVariables>;
+export const EditSceneDocument = gql`
+    mutation EditScene($id: Int!, $data: SceneEdit!) {
+  editScene(id: $id, data: $data) {
+    id
+    name
+  }
+}
+    `;
+export type EditSceneMutationFn = Apollo.MutationFunction<EditSceneMutation, EditSceneMutationVariables>;
+
+/**
+ * __useEditSceneMutation__
+ *
+ * To run a mutation, you first call `useEditSceneMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditSceneMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editSceneMutation, { data, loading, error }] = useEditSceneMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useEditSceneMutation(baseOptions?: Apollo.MutationHookOptions<EditSceneMutation, EditSceneMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditSceneMutation, EditSceneMutationVariables>(EditSceneDocument, options);
+      }
+export type EditSceneMutationHookResult = ReturnType<typeof useEditSceneMutation>;
+export type EditSceneMutationResult = Apollo.MutationResult<EditSceneMutation>;
+export type EditSceneMutationOptions = Apollo.BaseMutationOptions<EditSceneMutation, EditSceneMutationVariables>;
 export const StartNextBlockDocument = gql`
     mutation StartNextBlock {
   startNextBlock {

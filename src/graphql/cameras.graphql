@@ -3,6 +3,10 @@ query Cameras {
         id
         name
         ip
+        scene {
+            id
+            name
+        }
     }
 }
 

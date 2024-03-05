@@ -1,0 +1,6 @@
+mutation EditScene($id: Int!, $data: SceneEdit!) {
+    editScene(id: $id, data: $data) {
+        id
+        name
+    }
+}
