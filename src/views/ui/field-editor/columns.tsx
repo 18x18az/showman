@@ -1,16 +1,21 @@
 import { TextInput } from '@/components/ui/data-table'
 import { ColumnDef } from '@tanstack/react-table'
 import { Trash2 } from 'lucide-react'
-import { useDeleteFieldMutation, useSetFieldEnabledMutation, useSetFieldIsCompetitionMutation, useUpdateFieldNameMutation } from '@/__generated__/graphql'
+import { useDeleteFieldMutation, useEditFieldMutation, useScenesQuery, useSetFieldEnabledMutation, useSetFieldIsCompetitionMutation, useUpdateFieldNameMutation } from '@/__generated__/graphql'
 import ErrorableButton from '@/components/errorable-button/ErrorableButton'
 import { Switch } from '@/primitives/switch/Switch'
 import { useErrorableMutation } from '@/hooks/useErrorableMutation'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
 interface Field {
   readonly id: number
   readonly name: string
   readonly isCompetition: boolean
   readonly isEnabled: boolean
+  readonly scene: {
+    readonly id: number
+    readonly name: string
+  } | null
 }
 
 export const Columns: Array<ColumnDef<Field>> = [
@@ -45,6 +50,37 @@ export const Columns: Array<ColumnDef<Field>> = [
         <div>
           <Switch checked={row.original.isCompetition} onCheckedChange={(checked: boolean) => { void setIsCompetition({ variables: { isCompetition: checked, fieldId: row.original.id } }) }} />
         </div>
+      )
+    }
+  },
+  {
+    accessorKey: 'scene',
+    header: 'Scene',
+    cell: ({ row }) => {
+      if (!row.original.isCompetition) return <></>
+
+      const { data } = useScenesQuery({ pollInterval: 500 })
+      const editField = useErrorableMutation(useEditFieldMutation, { refetchQueries: ['Fields'] })
+
+      if (data === undefined) return <></>
+
+      const scene = row.original.scene
+      const name = scene === null ? 'None' : scene.name
+
+      const dropDownMenuItems = [<DropdownMenuItem key={0} onClick={() => { }}>None</DropdownMenuItem>]
+
+      data.scenes.forEach(option => {
+        dropDownMenuItems.push(<DropdownMenuItem key={option.id} onClick={() => { void editField({ variables: { fieldId: row.original.id, update: { sceneId: option.id } } }) }}>{option.name}</DropdownMenuItem>)
+      })
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger>{name}</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            {dropDownMenuItems}
+          </DropdownMenuContent>
+        </DropdownMenu>
+
       )
     }
   },

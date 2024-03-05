@@ -4,11 +4,24 @@ query Fields {
     name
     isEnabled
     isCompetition
+    scene {
+      id
+      name
+    }
   }
 }
 
 mutation UpdateFieldName($fieldId: Int!, $name: String) {
   updateField(fieldId: $fieldId, update: {name: $name}) {
+    id
+    name
+    isEnabled
+    isCompetition
+  }
+}
+
+mutation EditField($fieldId: Int!, $update: FieldUpdate!) {
+  updateField(fieldId: $fieldId, update: $update) {
     id
     name
     isEnabled

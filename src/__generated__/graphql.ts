@@ -197,6 +197,8 @@ export type Field = {
   isSkills: Scalars['Boolean']['output'];
   /** Name of the field */
   name: Scalars['String']['output'];
+  /** The scene which displays the field */
+  scene: Maybe<Scene>;
   /** Information about skills matches associated with this field. Null if the field is not being used for skills matches. */
   skills: Maybe<Skills>;
 };
@@ -224,6 +226,8 @@ export type FieldUpdate = {
   isEnabled?: InputMaybe<Scalars['Boolean']['input']>;
   /** Name of the field */
   name?: InputMaybe<Scalars['String']['input']>;
+  /** ID of the scene associated with the field */
+  sceneId?: InputMaybe<Scalars['Float']['input']>;
 };
 
 /** The inspection status of a team */
@@ -878,7 +882,7 @@ export type FieldControlSubscription = { __typename?: 'Subscription', fieldContr
 export type FieldsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, isEnabled: boolean, isCompetition: boolean }> };
+export type FieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, isEnabled: boolean, isCompetition: boolean, scene: { __typename?: 'Scene', id: number, name: string } | null }> };
 
 export type UpdateFieldNameMutationVariables = Exact<{
   fieldId: Scalars['Int']['input'];
@@ -887,6 +891,14 @@ export type UpdateFieldNameMutationVariables = Exact<{
 
 
 export type UpdateFieldNameMutation = { __typename?: 'Mutation', updateField: { __typename?: 'Field', id: number, name: string, isEnabled: boolean, isCompetition: boolean } };
+
+export type EditFieldMutationVariables = Exact<{
+  fieldId: Scalars['Int']['input'];
+  update: FieldUpdate;
+}>;
+
+
+export type EditFieldMutation = { __typename?: 'Mutation', updateField: { __typename?: 'Field', id: number, name: string, isEnabled: boolean, isCompetition: boolean } };
 
 export type DeleteFieldMutationVariables = Exact<{
   fieldId: Scalars['Int']['input'];
@@ -2295,6 +2307,10 @@ export const FieldsDocument = gql`
     name
     isEnabled
     isCompetition
+    scene {
+      id
+      name
+    }
   }
 }
     `;
@@ -2367,6 +2383,43 @@ export function useUpdateFieldNameMutation(baseOptions?: Apollo.MutationHookOpti
 export type UpdateFieldNameMutationHookResult = ReturnType<typeof useUpdateFieldNameMutation>;
 export type UpdateFieldNameMutationResult = Apollo.MutationResult<UpdateFieldNameMutation>;
 export type UpdateFieldNameMutationOptions = Apollo.BaseMutationOptions<UpdateFieldNameMutation, UpdateFieldNameMutationVariables>;
+export const EditFieldDocument = gql`
+    mutation EditField($fieldId: Int!, $update: FieldUpdate!) {
+  updateField(fieldId: $fieldId, update: $update) {
+    id
+    name
+    isEnabled
+    isCompetition
+  }
+}
+    `;
+export type EditFieldMutationFn = Apollo.MutationFunction<EditFieldMutation, EditFieldMutationVariables>;
+
+/**
+ * __useEditFieldMutation__
+ *
+ * To run a mutation, you first call `useEditFieldMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditFieldMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editFieldMutation, { data, loading, error }] = useEditFieldMutation({
+ *   variables: {
+ *      fieldId: // value for 'fieldId'
+ *      update: // value for 'update'
+ *   },
+ * });
+ */
+export function useEditFieldMutation(baseOptions?: Apollo.MutationHookOptions<EditFieldMutation, EditFieldMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditFieldMutation, EditFieldMutationVariables>(EditFieldDocument, options);
+      }
+export type EditFieldMutationHookResult = ReturnType<typeof useEditFieldMutation>;
+export type EditFieldMutationResult = Apollo.MutationResult<EditFieldMutation>;
+export type EditFieldMutationOptions = Apollo.BaseMutationOptions<EditFieldMutation, EditFieldMutationVariables>;
 export const DeleteFieldDocument = gql`
     mutation DeleteField($fieldId: Int!) {
   deleteField(fieldId: $fieldId) {
