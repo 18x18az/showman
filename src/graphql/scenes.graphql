@@ -1,5 +1,20 @@
+query Scenes {
+    scenes {
+        id
+        name
+        key
+    }
+}
+
 mutation EditScene($id: Int!, $data: SceneEdit!) {
     editScene(id: $id, data: $data) {
+        id
+        name
+    }
+}
+
+mutation AddScene {
+    addScene {
         id
         name
     }

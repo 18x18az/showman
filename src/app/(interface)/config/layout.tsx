@@ -16,6 +16,10 @@ const sidebarNavItems = [
     href: '/config/fields'
   },
   {
+    title: 'Scenes',
+    href: '/config/scenes'
+  },
+  {
     title: 'Cameras',
     href: '/config/cameras'
   },

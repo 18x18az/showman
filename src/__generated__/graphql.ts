@@ -298,6 +298,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   addCamera: Array<Camera>;
   addField: Field;
+  addScene: Array<Scene>;
   allianceSelectionAccept: AllianceSelection;
   allianceSelectionCancel: AllianceSelection;
   allianceSelectionDecline: AllianceSelection;
@@ -1068,6 +1069,11 @@ export type ResultsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type ResultsQuery = { __typename?: 'Query', results: { __typename?: 'Results', displayedResults: { __typename?: 'Match', id: number, number: number, redScore: number | null, blueScore: number | null, contest: { __typename?: 'Contest', id: number, round: Round, number: number, redTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }>, blueTeams: Array<{ __typename?: 'Team', id: number, number: string, name: string, rank: number | null }> } } | null } };
 
+export type ScenesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ScenesQuery = { __typename?: 'Query', scenes: Array<{ __typename?: 'Scene', id: number, name: string, key: string }> };
+
 export type EditSceneMutationVariables = Exact<{
   id: Scalars['Int']['input'];
   data: SceneEdit;
@@ -1075,6 +1081,11 @@ export type EditSceneMutationVariables = Exact<{
 
 
 export type EditSceneMutation = { __typename?: 'Mutation', editScene: { __typename?: 'Scene', id: number, name: string } };
+
+export type AddSceneMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AddSceneMutation = { __typename?: 'Mutation', addScene: Array<{ __typename?: 'Scene', id: number, name: string }> };
 
 export type StartNextBlockMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -3614,6 +3625,47 @@ export type ResultsQueryHookResult = ReturnType<typeof useResultsQuery>;
 export type ResultsLazyQueryHookResult = ReturnType<typeof useResultsLazyQuery>;
 export type ResultsSuspenseQueryHookResult = ReturnType<typeof useResultsSuspenseQuery>;
 export type ResultsQueryResult = Apollo.QueryResult<ResultsQuery, ResultsQueryVariables>;
+export const ScenesDocument = gql`
+    query Scenes {
+  scenes {
+    id
+    name
+    key
+  }
+}
+    `;
+
+/**
+ * __useScenesQuery__
+ *
+ * To run a query within a React component, call `useScenesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useScenesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useScenesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useScenesQuery(baseOptions?: Apollo.QueryHookOptions<ScenesQuery, ScenesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ScenesQuery, ScenesQueryVariables>(ScenesDocument, options);
+      }
+export function useScenesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ScenesQuery, ScenesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ScenesQuery, ScenesQueryVariables>(ScenesDocument, options);
+        }
+export function useScenesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ScenesQuery, ScenesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ScenesQuery, ScenesQueryVariables>(ScenesDocument, options);
+        }
+export type ScenesQueryHookResult = ReturnType<typeof useScenesQuery>;
+export type ScenesLazyQueryHookResult = ReturnType<typeof useScenesLazyQuery>;
+export type ScenesSuspenseQueryHookResult = ReturnType<typeof useScenesSuspenseQuery>;
+export type ScenesQueryResult = Apollo.QueryResult<ScenesQuery, ScenesQueryVariables>;
 export const EditSceneDocument = gql`
     mutation EditScene($id: Int!, $data: SceneEdit!) {
   editScene(id: $id, data: $data) {
@@ -3649,6 +3701,39 @@ export function useEditSceneMutation(baseOptions?: Apollo.MutationHookOptions<Ed
 export type EditSceneMutationHookResult = ReturnType<typeof useEditSceneMutation>;
 export type EditSceneMutationResult = Apollo.MutationResult<EditSceneMutation>;
 export type EditSceneMutationOptions = Apollo.BaseMutationOptions<EditSceneMutation, EditSceneMutationVariables>;
+export const AddSceneDocument = gql`
+    mutation AddScene {
+  addScene {
+    id
+    name
+  }
+}
+    `;
+export type AddSceneMutationFn = Apollo.MutationFunction<AddSceneMutation, AddSceneMutationVariables>;
+
+/**
+ * __useAddSceneMutation__
+ *
+ * To run a mutation, you first call `useAddSceneMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddSceneMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addSceneMutation, { data, loading, error }] = useAddSceneMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAddSceneMutation(baseOptions?: Apollo.MutationHookOptions<AddSceneMutation, AddSceneMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddSceneMutation, AddSceneMutationVariables>(AddSceneDocument, options);
+      }
+export type AddSceneMutationHookResult = ReturnType<typeof useAddSceneMutation>;
+export type AddSceneMutationResult = Apollo.MutationResult<AddSceneMutation>;
+export type AddSceneMutationOptions = Apollo.BaseMutationOptions<AddSceneMutation, AddSceneMutationVariables>;
 export const StartNextBlockDocument = gql`
     mutation StartNextBlock {
   startNextBlock {
