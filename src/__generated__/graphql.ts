@@ -321,6 +321,7 @@ export type Mutation = {
   queueProgrammingSkills: Skills;
   queueSitting: Sitting;
   removeCamera: Array<Camera>;
+  removeScene: Array<Scene>;
   renameDisplay: Display;
   replay: CompetitionField;
   /** Reset the event. Only available in test mode. */
@@ -401,6 +402,11 @@ export type MutationQueueSittingArgs = {
 
 
 export type MutationRemoveCameraArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
+export type MutationRemoveSceneArgs = {
   id: Scalars['Int']['input'];
 };
 
@@ -1086,6 +1092,13 @@ export type AddSceneMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type AddSceneMutation = { __typename?: 'Mutation', addScene: Array<{ __typename?: 'Scene', id: number, name: string }> };
+
+export type RemoveSceneMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type RemoveSceneMutation = { __typename?: 'Mutation', removeScene: Array<{ __typename?: 'Scene', id: number, name: string }> };
 
 export type StartNextBlockMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -3734,6 +3747,40 @@ export function useAddSceneMutation(baseOptions?: Apollo.MutationHookOptions<Add
 export type AddSceneMutationHookResult = ReturnType<typeof useAddSceneMutation>;
 export type AddSceneMutationResult = Apollo.MutationResult<AddSceneMutation>;
 export type AddSceneMutationOptions = Apollo.BaseMutationOptions<AddSceneMutation, AddSceneMutationVariables>;
+export const RemoveSceneDocument = gql`
+    mutation RemoveScene($id: Int!) {
+  removeScene(id: $id) {
+    id
+    name
+  }
+}
+    `;
+export type RemoveSceneMutationFn = Apollo.MutationFunction<RemoveSceneMutation, RemoveSceneMutationVariables>;
+
+/**
+ * __useRemoveSceneMutation__
+ *
+ * To run a mutation, you first call `useRemoveSceneMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveSceneMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeSceneMutation, { data, loading, error }] = useRemoveSceneMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useRemoveSceneMutation(baseOptions?: Apollo.MutationHookOptions<RemoveSceneMutation, RemoveSceneMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveSceneMutation, RemoveSceneMutationVariables>(RemoveSceneDocument, options);
+      }
+export type RemoveSceneMutationHookResult = ReturnType<typeof useRemoveSceneMutation>;
+export type RemoveSceneMutationResult = Apollo.MutationResult<RemoveSceneMutation>;
+export type RemoveSceneMutationOptions = Apollo.BaseMutationOptions<RemoveSceneMutation, RemoveSceneMutationVariables>;
 export const StartNextBlockDocument = gql`
     mutation StartNextBlock {
   startNextBlock {

@@ -1,5 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { useEditSceneMutation, useRemoveCameraMutation } from '@/__generated__/graphql'
+import { useEditSceneMutation, useRemoveSceneMutation } from '@/__generated__/graphql'
 import { TextInput } from '@/components/ui/data-table'
 import { useErrorableMutation } from '@/hooks/useErrorableMutation'
 import ErrorableButton from '@/components/errorable-button/ErrorableButton'
@@ -35,7 +35,7 @@ export const Columns: Array<ColumnDef<Scene>> = [
   {
     id: 'actions',
     cell: ({ row }) => {
-      return <ErrorableButton tooltip='Delete Field' variant='ghost' mutation={useRemoveCameraMutation} options={{ variables: { id: row.original.id }, refetchQueries: ['Cameras'] }}><Trash2 /></ErrorableButton>
+      return <ErrorableButton tooltip='Delete Field' variant='ghost' mutation={useRemoveSceneMutation} options={{ variables: { id: row.original.id }, refetchQueries: ['Cameras'] }}><Trash2 /></ErrorableButton>
     }
   }
 ]
