@@ -67,7 +67,7 @@ export const Columns: Array<ColumnDef<Field>> = [
       const scene = row.original.scene
       const name = scene === null ? 'None' : scene.name
 
-      const dropDownMenuItems = [<DropdownMenuItem key={0} onClick={() => { }}>None</DropdownMenuItem>]
+      const dropDownMenuItems = [<DropdownMenuItem key={0} onClick={() => { void editField({ variables: { fieldId: row.original.id, update: { sceneId: null } } }) }}>None</DropdownMenuItem>]
 
       data.scenes.forEach(option => {
         dropDownMenuItems.push(<DropdownMenuItem key={option.id} onClick={() => { void editField({ variables: { fieldId: row.original.id, update: { sceneId: option.id } } }) }}>{option.name}</DropdownMenuItem>)
