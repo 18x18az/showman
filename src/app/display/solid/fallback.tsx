@@ -1,9 +1,11 @@
-import { LogoReel } from '../../../components/ui/logos/logo-reel'
+import Logo from '@/components/primitives/logo'
 
 export function LogoFallback (): JSX.Element {
   return (
-    <div className='size-5/6 bg-white rounded-xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
-      <LogoReel />
+    <div className='flex flex-col justify-evenly h-full w-full'>
+      <div className='flex justify-evenly'>
+        <Logo className='bg-zinc-900 rounded-2xl' viewBox='0 0 350.417 279.405' style={{ width: '65%', height: '100%' }} />
+      </div>
     </div>
   )
 }
