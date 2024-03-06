@@ -10,6 +10,20 @@ query Cameras {
     }
 }
 
+query CameraControlInfo {
+    cameras {
+        id
+        name
+        currentPreset {
+            id
+        }
+        presets {
+            id
+            name
+        }
+    }
+}
+
 mutation AddCamera {
     addCamera {
         id
@@ -31,5 +45,19 @@ mutation EditCamera ($id: Int!, $data: CameraEdit!) {
         id
         name
         ip
+    }
+}
+
+mutation CreatePreset ($id: Int!) {
+    createPreset(id: $id) {
+        id
+        name
+    }
+}
+
+mutation UpdatePreset ($id: Int!, $update: PresetUpdate!) {
+    updatePreset(id: $id, update: $update) {
+        id
+        name
     }
 }

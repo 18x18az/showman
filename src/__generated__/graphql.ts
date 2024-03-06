@@ -314,6 +314,7 @@ export type Mutation = {
   concludeBlock: Block;
   configureBackend: Backend;
   configureTournamentManager: TournamentManager;
+  createPreset: Camera;
   deleteField: Array<Field>;
   editCamera: Camera;
   editScene: Scene;
@@ -343,6 +344,7 @@ export type Mutation = {
   unqueue: CompetitionField;
   updateAwards: Array<Award>;
   updateField: Field;
+  updatePreset: Preset;
 };
 
 
@@ -358,6 +360,11 @@ export type MutationConfigureBackendArgs = {
 
 export type MutationConfigureTournamentManagerArgs = {
   settings: TournamentManagerSetup;
+};
+
+
+export type MutationCreatePresetArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -474,10 +481,20 @@ export type MutationUpdateFieldArgs = {
   update: FieldUpdate;
 };
 
+
+export type MutationUpdatePresetArgs = {
+  id: Scalars['Int']['input'];
+  update: PresetUpdate;
+};
+
 export type Preset = {
   __typename?: 'Preset';
   id: Scalars['Int']['output'];
   name: Scalars['String']['output'];
+};
+
+export type PresetUpdate = {
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 export enum Program {
@@ -749,6 +766,11 @@ export type CamerasQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type CamerasQuery = { __typename?: 'Query', cameras: Array<{ __typename?: 'Camera', id: number, name: string, ip: any, scene: { __typename?: 'Scene', id: number, name: string } }> };
 
+export type CameraControlInfoQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CameraControlInfoQuery = { __typename?: 'Query', cameras: Array<{ __typename?: 'Camera', id: number, name: string, currentPreset: { __typename?: 'Preset', id: number } | null, presets: Array<{ __typename?: 'Preset', id: number, name: string }> }> };
+
 export type AddCameraMutationVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -768,6 +790,21 @@ export type EditCameraMutationVariables = Exact<{
 
 
 export type EditCameraMutation = { __typename?: 'Mutation', editCamera: { __typename?: 'Camera', id: number, name: string, ip: any } };
+
+export type CreatePresetMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type CreatePresetMutation = { __typename?: 'Mutation', createPreset: { __typename?: 'Camera', id: number, name: string } };
+
+export type UpdatePresetMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  update: PresetUpdate;
+}>;
+
+
+export type UpdatePresetMutation = { __typename?: 'Mutation', updatePreset: { __typename?: 'Preset', id: number, name: string } };
 
 export type LiveFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1568,6 +1605,53 @@ export type CamerasQueryHookResult = ReturnType<typeof useCamerasQuery>;
 export type CamerasLazyQueryHookResult = ReturnType<typeof useCamerasLazyQuery>;
 export type CamerasSuspenseQueryHookResult = ReturnType<typeof useCamerasSuspenseQuery>;
 export type CamerasQueryResult = Apollo.QueryResult<CamerasQuery, CamerasQueryVariables>;
+export const CameraControlInfoDocument = gql`
+    query CameraControlInfo {
+  cameras {
+    id
+    name
+    currentPreset {
+      id
+    }
+    presets {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useCameraControlInfoQuery__
+ *
+ * To run a query within a React component, call `useCameraControlInfoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCameraControlInfoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCameraControlInfoQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCameraControlInfoQuery(baseOptions?: Apollo.QueryHookOptions<CameraControlInfoQuery, CameraControlInfoQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CameraControlInfoQuery, CameraControlInfoQueryVariables>(CameraControlInfoDocument, options);
+      }
+export function useCameraControlInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CameraControlInfoQuery, CameraControlInfoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CameraControlInfoQuery, CameraControlInfoQueryVariables>(CameraControlInfoDocument, options);
+        }
+export function useCameraControlInfoSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CameraControlInfoQuery, CameraControlInfoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CameraControlInfoQuery, CameraControlInfoQueryVariables>(CameraControlInfoDocument, options);
+        }
+export type CameraControlInfoQueryHookResult = ReturnType<typeof useCameraControlInfoQuery>;
+export type CameraControlInfoLazyQueryHookResult = ReturnType<typeof useCameraControlInfoLazyQuery>;
+export type CameraControlInfoSuspenseQueryHookResult = ReturnType<typeof useCameraControlInfoSuspenseQuery>;
+export type CameraControlInfoQueryResult = Apollo.QueryResult<CameraControlInfoQuery, CameraControlInfoQueryVariables>;
 export const AddCameraDocument = gql`
     mutation AddCamera {
   addCamera {
@@ -1673,6 +1757,75 @@ export function useEditCameraMutation(baseOptions?: Apollo.MutationHookOptions<E
 export type EditCameraMutationHookResult = ReturnType<typeof useEditCameraMutation>;
 export type EditCameraMutationResult = Apollo.MutationResult<EditCameraMutation>;
 export type EditCameraMutationOptions = Apollo.BaseMutationOptions<EditCameraMutation, EditCameraMutationVariables>;
+export const CreatePresetDocument = gql`
+    mutation CreatePreset($id: Int!) {
+  createPreset(id: $id) {
+    id
+    name
+  }
+}
+    `;
+export type CreatePresetMutationFn = Apollo.MutationFunction<CreatePresetMutation, CreatePresetMutationVariables>;
+
+/**
+ * __useCreatePresetMutation__
+ *
+ * To run a mutation, you first call `useCreatePresetMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePresetMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPresetMutation, { data, loading, error }] = useCreatePresetMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useCreatePresetMutation(baseOptions?: Apollo.MutationHookOptions<CreatePresetMutation, CreatePresetMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePresetMutation, CreatePresetMutationVariables>(CreatePresetDocument, options);
+      }
+export type CreatePresetMutationHookResult = ReturnType<typeof useCreatePresetMutation>;
+export type CreatePresetMutationResult = Apollo.MutationResult<CreatePresetMutation>;
+export type CreatePresetMutationOptions = Apollo.BaseMutationOptions<CreatePresetMutation, CreatePresetMutationVariables>;
+export const UpdatePresetDocument = gql`
+    mutation UpdatePreset($id: Int!, $update: PresetUpdate!) {
+  updatePreset(id: $id, update: $update) {
+    id
+    name
+  }
+}
+    `;
+export type UpdatePresetMutationFn = Apollo.MutationFunction<UpdatePresetMutation, UpdatePresetMutationVariables>;
+
+/**
+ * __useUpdatePresetMutation__
+ *
+ * To run a mutation, you first call `useUpdatePresetMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdatePresetMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updatePresetMutation, { data, loading, error }] = useUpdatePresetMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      update: // value for 'update'
+ *   },
+ * });
+ */
+export function useUpdatePresetMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePresetMutation, UpdatePresetMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdatePresetMutation, UpdatePresetMutationVariables>(UpdatePresetDocument, options);
+      }
+export type UpdatePresetMutationHookResult = ReturnType<typeof useUpdatePresetMutation>;
+export type UpdatePresetMutationResult = Apollo.MutationResult<UpdatePresetMutation>;
+export type UpdatePresetMutationOptions = Apollo.BaseMutationOptions<UpdatePresetMutation, UpdatePresetMutationVariables>;
 export const LiveFieldDocument = gql`
     query LiveField {
   competitionInformation {

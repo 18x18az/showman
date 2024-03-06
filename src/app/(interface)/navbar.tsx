@@ -1,8 +1,16 @@
 'use client'
-import { ClipboardList, ClipboardPen, HeartHandshake, Settings, TowerControl, Users } from 'lucide-react'
+import { ClipboardList, ClipboardPen, HeartHandshake, Settings, TowerControl, Users, Video } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { EventStage, useGetEventStageQuery } from '../../__generated__/graphql'
+
+function Stream (): JSX.Element {
+  return (
+    <Link href='/stream' className='flex text-slate-11 text-lg gap-2 p-2 pb-1 font-semibold'>
+      <Video className='text-slate-9' /> Stream
+    </Link>
+  )
+}
 
 function Control (): JSX.Element {
   return (
@@ -78,6 +86,7 @@ export function Navbar (): JSX.Element {
   const items: JSX.Element[] = []
 
   items.push(<Control key='control' />)
+  items.push(<Stream key='stream' />)
   items.push(<Teams key='teams' />)
   items.push(<Config key='config' />)
   items.push(<Inspection key='inspection' />)
