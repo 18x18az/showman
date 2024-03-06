@@ -61,3 +61,23 @@ mutation UpdatePreset ($id: Int!, $update: PresetUpdate!) {
         name
     }
 }
+
+mutation CallPreset ($cameraId: Int!, $presetId: Int!) {
+    callPreset(cameraId: $cameraId, presetId: $presetId) {
+        id
+        name
+        currentPreset {
+            id
+        }
+    }
+}
+
+mutation SavePreset ($id: Int!) {
+    savePreset(id: $id) {
+        id
+        name
+        currentPreset {
+            id
+        }
+    }
+}

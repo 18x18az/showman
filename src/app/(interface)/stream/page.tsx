@@ -1,9 +1,9 @@
 'use client'
-import { useCameraControlInfoQuery, useCreatePresetMutation, useUpdatePresetMutation } from '@/__generated__/graphql'
+import { useCallPresetMutation, useCameraControlInfoQuery, useCreatePresetMutation, useSavePresetMutation, useUpdatePresetMutation } from '@/__generated__/graphql'
 import ErrorableButton from '@/components/errorable-button/ErrorableButton'
 import { useState } from 'react'
 import { Button } from '../../../primitives/button/Button'
-import { Pencil } from 'lucide-react'
+import { Pencil, Save } from 'lucide-react'
 import { TextInput } from '@/components/ui/data-table'
 import { useErrorableMutation } from '@/hooks/useErrorableMutation'
 
@@ -14,15 +14,16 @@ interface PresetProps {
   }
   current: number | null
   isEditMode: boolean
+  cameraId: number
 }
 
 function Preset (props: PresetProps): JSX.Element {
   const edit = useErrorableMutation(useUpdatePresetMutation, { refetchQueries: ['CameraControlInfo'] })
-  const { preset, current, isEditMode } = props
+  const { preset, current, isEditMode, cameraId } = props
 
   const isCurrent = current === preset.id
 
-  const color = isCurrent ? 'text-indigo-9' : 'text-slate-11'
+  const color = isCurrent ? 'bg-indigo-9 hover:bg-indigo-10' : 'bg-slate-2'
 
   if (isEditMode) {
     return (
@@ -30,7 +31,11 @@ function Preset (props: PresetProps): JSX.Element {
     )
   }
 
-  return <div className={color}>{preset.name}</div>
+  return (
+    <ErrorableButton size='lg' className={`${color} text-2xl w-64 h-16`} mutation={useCallPresetMutation} options={{ variables: { cameraId, presetId: preset.id }, refetchQueries: ['CameraControlInfo'] }}>
+      {preset.name}
+    </ErrorableButton>
+  )
 }
 
 interface CameraControlProps {
@@ -54,14 +59,18 @@ function CameraControl (props: CameraControlProps): JSX.Element {
   const current = camera.currentPreset?.id ?? null
 
   const presets = camera.presets.map((preset) => {
-    return <Preset key={preset.id} preset={preset} current={current} isEditMode={isEditMode} />
+    return <Preset key={preset.id} preset={preset} current={current} isEditMode={isEditMode} cameraId={camera.id} />
   })
 
+  const actionButton = isEditMode
+    ? <ErrorableButton options={{ variables: { id: camera.id }, refetchQueries: ['CameraControlInfo'] }} mutation={useCreatePresetMutation}>Create Preset</ErrorableButton>
+    : <ErrorableButton className='bg-slate-2 w-64 h-16 mt-4' options={{ variables: { id: camera.id }, refetchQueries: ['CameraControlInfo'] }} mutation={useSavePresetMutation}><Save /></ErrorableButton>
+
   return (
-    <div className='flex flex-col'>
+    <div className='flex flex-col gap-4'>
       <h1 className='text-4xl text-slate-11'>{camera.name}</h1>
       {presets}
-      <ErrorableButton options={{ variables: { id: camera.id }, refetchQueries: ['CameraControlInfo'] }} mutation={useCreatePresetMutation}>Create Preset</ErrorableButton>
+      {actionButton}
     </div>
   )
 }
