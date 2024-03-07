@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { LogoReelCorner } from '../../../components/ui/logos/logo-reel-corner'
+import { AwardStage } from '../../../__generated__/graphql'
 
 interface Winner {
   number: string
@@ -11,6 +12,7 @@ interface AwardOverlayProps {
     name: string
     winners: Winner[] | null
   } | null
+  stage: AwardStage
 }
 
 function AwardTitle (props: { readonly title: string }): JSX.Element {
@@ -85,19 +87,30 @@ function WinnerDisplay (props: { readonly winners: Winner[] }): JSX.Element {
 }
 
 export function AwardOverlay (props: AwardOverlayProps): JSX.Element {
-  const { award } = props
+  const { award, stage } = props
 
-  if (award === null) return <></>
+  if (award === null) return <LogoReelCorner />
 
   const winners = award.winners
 
-  if (winners === null) return <></>
+  if (winners === null) return <LogoReelCorner />
+
+  let title = <></>
+  let winner = <></>
+
+  if (stage === AwardStage.Intro || stage === AwardStage.Revealed) {
+    title = <AwardTitle title={award.name} />
+  }
+
+  if (stage === AwardStage.Revealed) {
+    winner = <WinnerDisplay winners={winners} />
+  }
 
   return (
     <div>
       <LogoReelCorner />
-      <AwardTitle title={award.name} />
-      <WinnerDisplay winners={winners} />
+      {title}
+      {winner}
     </div>
   )
 }

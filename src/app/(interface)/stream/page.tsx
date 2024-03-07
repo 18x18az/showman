@@ -1,5 +1,5 @@
 'use client'
-import { OverlayDisplayed, SolidDisplayDisplayed, useCallPresetMutation, useCameraControlInfoQuery, useCreatePresetMutation, useCutToSceneMutation, useSavePresetMutation, useSetDisplayedAwardMutation, useSetOverlayDisplayMutation, useSetPreviewSceneMutation, useSetSolidDisplayMutation, useSetSolidDisplaySceneMutation, useStreamSidebarQuery, useTransitionToSceneMutation, useUpdateAwardsMutation, useUpdatePresetMutation } from '@/__generated__/graphql'
+import { AwardStage, OverlayDisplayed, SolidDisplayDisplayed, useAdvanceAwardStageMutation, useCallPresetMutation, useCameraControlInfoQuery, useCreatePresetMutation, useCutToSceneMutation, useSavePresetMutation, useSetDisplayedAwardMutation, useSetOverlayDisplayMutation, useSetPreviewSceneMutation, useSetSolidDisplayMutation, useSetSolidDisplaySceneMutation, useStreamSidebarQuery, useTransitionToSceneMutation, useUpdateAwardsMutation, useUpdatePresetMutation } from '@/__generated__/graphql'
 import ErrorableButton from '@/components/errorable-button/ErrorableButton'
 import { useState } from 'react'
 import { Button } from '../../../primitives/button/Button'
@@ -261,10 +261,34 @@ function SolidDisplayed (props: { displayed: SolidDisplayDisplayed }): JSX.Eleme
 interface AwardControlProps {
   awards: Array< { id: number, name: string, winners: any[] | null }>
   selectedAwardId: number | null
+  stage: AwardStage
 }
 
 function AwardControl (props: AwardControlProps): JSX.Element {
   const selectAward = useErrorableMutation(useSetDisplayedAwardMutation, { refetchQueries: ['StreamSidebar'] })
+
+  const { stage, selectedAwardId } = props
+
+  let button = <Button disabled />
+
+  if (selectedAwardId !== null) {
+    let text: string
+
+    switch (stage) {
+      case AwardStage.None:
+        text = 'Intro'
+        break
+      case AwardStage.Intro:
+        text = 'Reveal'
+        break
+      case AwardStage.Revealed:
+        text = 'Clear'
+        break
+    }
+
+    button = <ErrorableButton mutation={useAdvanceAwardStageMutation} options={{ refetchQueries: ['StreamSidebar'] }}>{text}</ErrorableButton>
+  }
+
   const awardsWithWinners = props.awards.filter((award) => award.winners !== null)
 
   const selectedAwardName = props.selectedAwardId !== null ? props.awards.find((award) => award.id === props.selectedAwardId)?.name : undefined
@@ -286,6 +310,7 @@ function AwardControl (props: AwardControlProps): JSX.Element {
       >
         {awardOptions}
       </RadioGroup>
+      {button}
       <ErrorableButton variant='ghost' mutation={useUpdateAwardsMutation} options={{ refetchQueries: ['StreamSidebar'] }}><RefreshCcw /></ErrorableButton>
     </>
   )
@@ -301,7 +326,7 @@ function Side (): JSX.Element {
   return (
     <div className='bg-slate-2 border-l border-slate-6 p-4 w-42 text-center flex flex-col gap-4'>
       <ControlOverlayDisplayed displayed={overlay.displayed} />
-      <AwardControl awards={awards} selectedAwardId={overlay.award?.id ?? null} />
+      <AwardControl awards={awards} selectedAwardId={overlay.award?.id ?? null} stage={overlay.stage} />
       <SolidDisplayed displayed={solidDisplay.displayed} />
       <SolidSceneSelect scenes={scenes} solidDisplay={solidDisplay} />
     </div>

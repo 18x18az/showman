@@ -44,6 +44,12 @@ export type Award = {
   winners: Maybe<Array<Team>>;
 };
 
+export enum AwardStage {
+  Intro = 'INTRO',
+  None = 'NONE',
+  Revealed = 'REVEALED'
+}
+
 export type Backend = {
   __typename?: 'Backend';
   /** The password for the backend */
@@ -307,6 +313,7 @@ export type Mutation = {
   addCamera: Array<Camera>;
   addField: Field;
   addScene: Array<Scene>;
+  advanceAwardStage: Overlay;
   allianceSelectionAccept: AllianceSelection;
   allianceSelectionCancel: AllianceSelection;
   allianceSelectionDecline: AllianceSelection;
@@ -540,6 +547,7 @@ export type Overlay = {
   __typename?: 'Overlay';
   award: Maybe<Award>;
   displayed: OverlayDisplayed;
+  stage: AwardStage;
 };
 
 export enum OverlayDisplayed {
@@ -932,7 +940,7 @@ export type TransitionToSceneMutation = { __typename?: 'Mutation', transitionToS
 export type StreamSidebarQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StreamSidebarQuery = { __typename?: 'Query', scenes: Array<{ __typename?: 'Scene', id: number, name: string }>, solidDisplay: { __typename?: 'SolidDisplay', displayed: SolidDisplayDisplayed, scene: { __typename?: 'Scene', id: number, name: string } | null }, overlay: { __typename?: 'Overlay', displayed: OverlayDisplayed, award: { __typename?: 'Award', id: number, name: string } | null }, awards: Array<{ __typename?: 'Award', id: number, name: string, winners: Array<{ __typename?: 'Team', id: number }> | null }> };
+export type StreamSidebarQuery = { __typename?: 'Query', scenes: Array<{ __typename?: 'Scene', id: number, name: string }>, solidDisplay: { __typename?: 'SolidDisplay', displayed: SolidDisplayDisplayed, scene: { __typename?: 'Scene', id: number, name: string } | null }, overlay: { __typename?: 'Overlay', displayed: OverlayDisplayed, stage: AwardStage, award: { __typename?: 'Award', id: number, name: string } | null }, awards: Array<{ __typename?: 'Award', id: number, name: string, winners: Array<{ __typename?: 'Team', id: number }> | null }> };
 
 export type SetSolidDisplaySceneMutationVariables = Exact<{
   sceneId: Scalars['Int']['input'];
@@ -956,7 +964,7 @@ export type GetSolidDisplayViewQuery = { __typename?: 'Query', solidDisplay: { _
 export type GetOverlayDisplayControlQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetOverlayDisplayControlQuery = { __typename?: 'Query', overlay: { __typename?: 'Overlay', displayed: OverlayDisplayed, award: { __typename?: 'Award', id: number, name: string, winners: Array<{ __typename?: 'Team', id: number, number: string, name: string, location: string }> | null } | null }, stage: { __typename?: 'Stage', stage: EventStage } };
+export type GetOverlayDisplayControlQuery = { __typename?: 'Query', overlay: { __typename?: 'Overlay', displayed: OverlayDisplayed, stage: AwardStage, award: { __typename?: 'Award', id: number, name: string, winners: Array<{ __typename?: 'Team', id: number, number: string, name: string, location: string }> | null } | null }, stage: { __typename?: 'Stage', stage: EventStage } };
 
 export type SetOverlayDisplayMutationVariables = Exact<{
   displayed: OverlayDisplayed;
@@ -981,6 +989,11 @@ export type SetDisplayedAwardMutationVariables = Exact<{
 
 
 export type SetDisplayedAwardMutation = { __typename?: 'Mutation', setDisplayedAward: { __typename?: 'Overlay', award: { __typename?: 'Award', id: number, name: string } | null } };
+
+export type AdvanceAwardStageMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AdvanceAwardStageMutation = { __typename?: 'Mutation', advanceAwardStage: { __typename?: 'Overlay', award: { __typename?: 'Award', id: number, name: string } | null } };
 
 export type LiveFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2255,6 +2268,7 @@ export const StreamSidebarDocument = gql`
       id
       name
     }
+    stage
   }
   awards {
     id
@@ -2413,6 +2427,7 @@ export const GetOverlayDisplayControlDocument = gql`
     query GetOverlayDisplayControl {
   overlay {
     displayed
+    stage
     award {
       id
       name
@@ -2601,6 +2616,41 @@ export function useSetDisplayedAwardMutation(baseOptions?: Apollo.MutationHookOp
 export type SetDisplayedAwardMutationHookResult = ReturnType<typeof useSetDisplayedAwardMutation>;
 export type SetDisplayedAwardMutationResult = Apollo.MutationResult<SetDisplayedAwardMutation>;
 export type SetDisplayedAwardMutationOptions = Apollo.BaseMutationOptions<SetDisplayedAwardMutation, SetDisplayedAwardMutationVariables>;
+export const AdvanceAwardStageDocument = gql`
+    mutation advanceAwardStage {
+  advanceAwardStage {
+    award {
+      id
+      name
+    }
+  }
+}
+    `;
+export type AdvanceAwardStageMutationFn = Apollo.MutationFunction<AdvanceAwardStageMutation, AdvanceAwardStageMutationVariables>;
+
+/**
+ * __useAdvanceAwardStageMutation__
+ *
+ * To run a mutation, you first call `useAdvanceAwardStageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAdvanceAwardStageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [advanceAwardStageMutation, { data, loading, error }] = useAdvanceAwardStageMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAdvanceAwardStageMutation(baseOptions?: Apollo.MutationHookOptions<AdvanceAwardStageMutation, AdvanceAwardStageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AdvanceAwardStageMutation, AdvanceAwardStageMutationVariables>(AdvanceAwardStageDocument, options);
+      }
+export type AdvanceAwardStageMutationHookResult = ReturnType<typeof useAdvanceAwardStageMutation>;
+export type AdvanceAwardStageMutationResult = Apollo.MutationResult<AdvanceAwardStageMutation>;
+export type AdvanceAwardStageMutationOptions = Apollo.BaseMutationOptions<AdvanceAwardStageMutation, AdvanceAwardStageMutationVariables>;
 export const LiveFieldDocument = gql`
     query LiveField {
   competitionInformation {

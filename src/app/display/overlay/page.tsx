@@ -13,7 +13,7 @@ export default function Page ({ params }: { readonly params: { readonly field: s
   const displayed = data.overlay.displayed
 
   if (displayed === OverlayDisplayed.None) return <></>
-  if (displayed === OverlayDisplayed.Card) return <AwardOverlay award={data.overlay.award} />
+  if (displayed === OverlayDisplayed.Card) return <AwardOverlay award={data.overlay.award} stage={data.overlay.stage} />
 
   if (stage === EventStage.Qualifications || stage === EventStage.Elims) {
     return <MatchDisplay />
