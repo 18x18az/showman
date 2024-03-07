@@ -923,6 +923,11 @@ export type SetSolidDisplayMutationVariables = Exact<{
 
 export type SetSolidDisplayMutation = { __typename?: 'Mutation', setSolidDisplayed: { __typename?: 'SolidDisplay', displayed: SolidDisplayDisplayed } };
 
+export type GetSolidDisplayViewQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetSolidDisplayViewQuery = { __typename?: 'Query', solidDisplay: { __typename?: 'SolidDisplay', displayed: SolidDisplayDisplayed }, stage: { __typename?: 'Stage', stage: EventStage } };
+
 export type LiveFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -2294,6 +2299,48 @@ export function useSetSolidDisplayMutation(baseOptions?: Apollo.MutationHookOpti
 export type SetSolidDisplayMutationHookResult = ReturnType<typeof useSetSolidDisplayMutation>;
 export type SetSolidDisplayMutationResult = Apollo.MutationResult<SetSolidDisplayMutation>;
 export type SetSolidDisplayMutationOptions = Apollo.BaseMutationOptions<SetSolidDisplayMutation, SetSolidDisplayMutationVariables>;
+export const GetSolidDisplayViewDocument = gql`
+    query GetSolidDisplayView {
+  solidDisplay {
+    displayed
+  }
+  stage {
+    stage
+  }
+}
+    `;
+
+/**
+ * __useGetSolidDisplayViewQuery__
+ *
+ * To run a query within a React component, call `useGetSolidDisplayViewQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSolidDisplayViewQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSolidDisplayViewQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetSolidDisplayViewQuery(baseOptions?: Apollo.QueryHookOptions<GetSolidDisplayViewQuery, GetSolidDisplayViewQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetSolidDisplayViewQuery, GetSolidDisplayViewQueryVariables>(GetSolidDisplayViewDocument, options);
+      }
+export function useGetSolidDisplayViewLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSolidDisplayViewQuery, GetSolidDisplayViewQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetSolidDisplayViewQuery, GetSolidDisplayViewQueryVariables>(GetSolidDisplayViewDocument, options);
+        }
+export function useGetSolidDisplayViewSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetSolidDisplayViewQuery, GetSolidDisplayViewQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetSolidDisplayViewQuery, GetSolidDisplayViewQueryVariables>(GetSolidDisplayViewDocument, options);
+        }
+export type GetSolidDisplayViewQueryHookResult = ReturnType<typeof useGetSolidDisplayViewQuery>;
+export type GetSolidDisplayViewLazyQueryHookResult = ReturnType<typeof useGetSolidDisplayViewLazyQuery>;
+export type GetSolidDisplayViewSuspenseQueryHookResult = ReturnType<typeof useGetSolidDisplayViewSuspenseQuery>;
+export type GetSolidDisplayViewQueryResult = Apollo.QueryResult<GetSolidDisplayViewQuery, GetSolidDisplayViewQueryVariables>;
 export const LiveFieldDocument = gql`
     query LiveField {
   competitionInformation {

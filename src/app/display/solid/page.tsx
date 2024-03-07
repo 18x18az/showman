@@ -1,5 +1,5 @@
 'use client'
-import { EventStage, useGetEventStageQuery } from '../../../__generated__/graphql'
+import { EventStage, SolidDisplayDisplayed, useGetSolidDisplayViewQuery } from '../../../__generated__/graphql'
 import { AllianceDisplay } from './alliance-display'
 import { LogoFallback } from './fallback'
 import { InspectionDisplay } from './inspection'
@@ -7,13 +7,16 @@ import { ParticlesBg } from './particles'
 import { ResultDisplay } from './results'
 
 function getContent (): JSX.Element {
-  const { data } = useGetEventStageQuery({ pollInterval: 500 })
+  const { data } = useGetSolidDisplayViewQuery({ pollInterval: 250 })
 
   if (data === undefined) return <LogoFallback />
 
+  const displayed = data.solidDisplay.displayed
   const stage = data.stage.stage
 
-  if (stage === EventStage.Checkin) return <InspectionDisplay />
+  if (displayed === SolidDisplayDisplayed.Logo) return <LogoFallback />
+  if (displayed === SolidDisplayDisplayed.Inspection) return <InspectionDisplay />
+
   if (stage === EventStage.Qualifications || stage === EventStage.Elims) return <ResultDisplay />
   if (stage === EventStage.AllianceSelection) return <AllianceDisplay />
 

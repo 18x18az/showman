@@ -157,3 +157,12 @@ mutation setSolidDisplay ($displayed: SolidDisplayDisplayed!) {
         displayed
     }
 }
+
+query GetSolidDisplayView {
+    solidDisplay {
+        displayed
+    }
+    stage {
+        stage
+    }
+}
