@@ -956,7 +956,7 @@ export type GetSolidDisplayViewQuery = { __typename?: 'Query', solidDisplay: { _
 export type GetOverlayDisplayControlQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetOverlayDisplayControlQuery = { __typename?: 'Query', overlay: { __typename?: 'Overlay', displayed: OverlayDisplayed, award: { __typename?: 'Award', id: number, name: string, winners: Array<{ __typename?: 'Team', id: number, number: string, name: string }> | null } | null }, stage: { __typename?: 'Stage', stage: EventStage } };
+export type GetOverlayDisplayControlQuery = { __typename?: 'Query', overlay: { __typename?: 'Overlay', displayed: OverlayDisplayed, award: { __typename?: 'Award', id: number, name: string, winners: Array<{ __typename?: 'Team', id: number, number: string, name: string, location: string }> | null } | null }, stage: { __typename?: 'Stage', stage: EventStage } };
 
 export type SetOverlayDisplayMutationVariables = Exact<{
   displayed: OverlayDisplayed;
@@ -2420,6 +2420,7 @@ export const GetOverlayDisplayControlDocument = gql`
         id
         number
         name
+        location
       }
     }
   }

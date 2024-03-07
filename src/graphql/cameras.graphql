@@ -191,6 +191,7 @@ query GetOverlayDisplayControl {
                 id
                 number
                 name
+                location
             }
         }
     }
