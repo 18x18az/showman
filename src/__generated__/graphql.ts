@@ -342,6 +342,7 @@ export type Mutation = {
   setAutomationEnabled: Competition;
   setDisplayField: Display;
   setInspectionPoint: Team;
+  setOverlayDisplayed: Overlay;
   setPreviewScene: Scene;
   setSkillsEnabled: Array<Field>;
   setSolidDisplayScene: SolidDisplay;
@@ -478,6 +479,11 @@ export type MutationSetInspectionPointArgs = {
 };
 
 
+export type MutationSetOverlayDisplayedArgs = {
+  displayed: OverlayDisplayed;
+};
+
+
 export type MutationSetPreviewSceneArgs = {
   id: Scalars['Int']['input'];
 };
@@ -524,6 +530,17 @@ export type MutationUpdatePresetArgs = {
   update: PresetUpdate;
 };
 
+export type Overlay = {
+  __typename?: 'Overlay';
+  displayed: OverlayDisplayed;
+};
+
+export enum OverlayDisplayed {
+  Card = 'CARD',
+  Match = 'MATCH',
+  None = 'NONE'
+}
+
 export type Preset = {
   __typename?: 'Preset';
   id: Scalars['Int']['output'];
@@ -557,6 +574,7 @@ export type Query = {
   inspectionGroups: Array<InspectionGroup>;
   matches: Array<Match>;
   nextBlock: Maybe<Block>;
+  overlay: Overlay;
   previewScene: Maybe<Scene>;
   programScene: Maybe<Scene>;
   results: Results;
@@ -907,7 +925,7 @@ export type TransitionToSceneMutation = { __typename?: 'Mutation', transitionToS
 export type StreamSidebarQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StreamSidebarQuery = { __typename?: 'Query', scenes: Array<{ __typename?: 'Scene', id: number, name: string }>, solidDisplay: { __typename?: 'SolidDisplay', displayed: SolidDisplayDisplayed, scene: { __typename?: 'Scene', id: number, name: string } | null } };
+export type StreamSidebarQuery = { __typename?: 'Query', scenes: Array<{ __typename?: 'Scene', id: number, name: string }>, solidDisplay: { __typename?: 'SolidDisplay', displayed: SolidDisplayDisplayed, scene: { __typename?: 'Scene', id: number, name: string } | null }, overlay: { __typename?: 'Overlay', displayed: OverlayDisplayed } };
 
 export type SetSolidDisplaySceneMutationVariables = Exact<{
   sceneId: Scalars['Int']['input'];
@@ -927,6 +945,18 @@ export type GetSolidDisplayViewQueryVariables = Exact<{ [key: string]: never; }>
 
 
 export type GetSolidDisplayViewQuery = { __typename?: 'Query', solidDisplay: { __typename?: 'SolidDisplay', displayed: SolidDisplayDisplayed }, stage: { __typename?: 'Stage', stage: EventStage } };
+
+export type SetOverlayDisplayMutationVariables = Exact<{
+  displayed: OverlayDisplayed;
+}>;
+
+
+export type SetOverlayDisplayMutation = { __typename?: 'Mutation', setOverlayDisplayed: { __typename?: 'Overlay', displayed: OverlayDisplayed } };
+
+export type GetOverlayDisplayViewQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetOverlayDisplayViewQuery = { __typename?: 'Query', overlay: { __typename?: 'Overlay', displayed: OverlayDisplayed } };
 
 export type LiveFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2195,6 +2225,9 @@ export const StreamSidebarDocument = gql`
     }
     displayed
   }
+  overlay {
+    displayed
+  }
 }
     `;
 
@@ -2341,6 +2374,78 @@ export type GetSolidDisplayViewQueryHookResult = ReturnType<typeof useGetSolidDi
 export type GetSolidDisplayViewLazyQueryHookResult = ReturnType<typeof useGetSolidDisplayViewLazyQuery>;
 export type GetSolidDisplayViewSuspenseQueryHookResult = ReturnType<typeof useGetSolidDisplayViewSuspenseQuery>;
 export type GetSolidDisplayViewQueryResult = Apollo.QueryResult<GetSolidDisplayViewQuery, GetSolidDisplayViewQueryVariables>;
+export const SetOverlayDisplayDocument = gql`
+    mutation setOverlayDisplay($displayed: OverlayDisplayed!) {
+  setOverlayDisplayed(displayed: $displayed) {
+    displayed
+  }
+}
+    `;
+export type SetOverlayDisplayMutationFn = Apollo.MutationFunction<SetOverlayDisplayMutation, SetOverlayDisplayMutationVariables>;
+
+/**
+ * __useSetOverlayDisplayMutation__
+ *
+ * To run a mutation, you first call `useSetOverlayDisplayMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetOverlayDisplayMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setOverlayDisplayMutation, { data, loading, error }] = useSetOverlayDisplayMutation({
+ *   variables: {
+ *      displayed: // value for 'displayed'
+ *   },
+ * });
+ */
+export function useSetOverlayDisplayMutation(baseOptions?: Apollo.MutationHookOptions<SetOverlayDisplayMutation, SetOverlayDisplayMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetOverlayDisplayMutation, SetOverlayDisplayMutationVariables>(SetOverlayDisplayDocument, options);
+      }
+export type SetOverlayDisplayMutationHookResult = ReturnType<typeof useSetOverlayDisplayMutation>;
+export type SetOverlayDisplayMutationResult = Apollo.MutationResult<SetOverlayDisplayMutation>;
+export type SetOverlayDisplayMutationOptions = Apollo.BaseMutationOptions<SetOverlayDisplayMutation, SetOverlayDisplayMutationVariables>;
+export const GetOverlayDisplayViewDocument = gql`
+    query GetOverlayDisplayView {
+  overlay {
+    displayed
+  }
+}
+    `;
+
+/**
+ * __useGetOverlayDisplayViewQuery__
+ *
+ * To run a query within a React component, call `useGetOverlayDisplayViewQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOverlayDisplayViewQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOverlayDisplayViewQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetOverlayDisplayViewQuery(baseOptions?: Apollo.QueryHookOptions<GetOverlayDisplayViewQuery, GetOverlayDisplayViewQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOverlayDisplayViewQuery, GetOverlayDisplayViewQueryVariables>(GetOverlayDisplayViewDocument, options);
+      }
+export function useGetOverlayDisplayViewLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOverlayDisplayViewQuery, GetOverlayDisplayViewQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOverlayDisplayViewQuery, GetOverlayDisplayViewQueryVariables>(GetOverlayDisplayViewDocument, options);
+        }
+export function useGetOverlayDisplayViewSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetOverlayDisplayViewQuery, GetOverlayDisplayViewQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetOverlayDisplayViewQuery, GetOverlayDisplayViewQueryVariables>(GetOverlayDisplayViewDocument, options);
+        }
+export type GetOverlayDisplayViewQueryHookResult = ReturnType<typeof useGetOverlayDisplayViewQuery>;
+export type GetOverlayDisplayViewLazyQueryHookResult = ReturnType<typeof useGetOverlayDisplayViewLazyQuery>;
+export type GetOverlayDisplayViewSuspenseQueryHookResult = ReturnType<typeof useGetOverlayDisplayViewSuspenseQuery>;
+export type GetOverlayDisplayViewQueryResult = Apollo.QueryResult<GetOverlayDisplayViewQuery, GetOverlayDisplayViewQueryVariables>;
 export const LiveFieldDocument = gql`
     query LiveField {
   competitionInformation {

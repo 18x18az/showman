@@ -1,5 +1,5 @@
 'use client'
-import { SolidDisplayDisplayed, useCallPresetMutation, useCameraControlInfoQuery, useCreatePresetMutation, useCutToSceneMutation, useSavePresetMutation, useSetPreviewSceneMutation, useSetSolidDisplayMutation, useSetSolidDisplaySceneMutation, useStreamSidebarQuery, useTransitionToSceneMutation, useUpdatePresetMutation } from '@/__generated__/graphql'
+import { OverlayDisplayed, SolidDisplayDisplayed, useCallPresetMutation, useCameraControlInfoQuery, useCreatePresetMutation, useCutToSceneMutation, useSavePresetMutation, useSetOverlayDisplayMutation, useSetPreviewSceneMutation, useSetSolidDisplayMutation, useSetSolidDisplaySceneMutation, useStreamSidebarQuery, useTransitionToSceneMutation, useUpdatePresetMutation } from '@/__generated__/graphql'
 import ErrorableButton from '@/components/errorable-button/ErrorableButton'
 import { useState } from 'react'
 import { Button } from '../../../primitives/button/Button'
@@ -212,6 +212,29 @@ function SolidSceneSelect (props: SolidSceneSelectProps): JSX.Element {
   )
 }
 
+function ControlOverlayDisplayed (props: { displayed: OverlayDisplayed }): JSX.Element {
+  const setDisplayed = useErrorableMutation(useSetOverlayDisplayMutation, { refetchQueries: ['StreamSidebar'] })
+
+  const displayOptions = [
+    { label: 'None', value: OverlayDisplayed.None },
+    { label: 'Match', value: OverlayDisplayed.Match },
+    { label: 'Card', value: OverlayDisplayed.Card }
+  ]
+
+  const items = displayOptions.map((option) => {
+    return <RadioGroupItem key={option.value} value={option.value} label={option.label} />
+  })
+
+  return (
+    <>
+      <h2>Overlay Display</h2>
+      <RadioGroup className='mb-4' value={props.displayed} onValueChange={(value) => { void setDisplayed({ variables: { displayed: value as OverlayDisplayed } }) }}>
+        {items}
+      </RadioGroup>
+    </>
+  )
+}
+
 function SolidDisplayed (props: { displayed: SolidDisplayDisplayed }): JSX.Element {
   const setDisplayed = useErrorableMutation(useSetSolidDisplayMutation, { refetchQueries: ['StreamSidebar'] })
 
@@ -227,8 +250,8 @@ function SolidDisplayed (props: { displayed: SolidDisplayDisplayed }): JSX.Eleme
 
   return (
     <>
-      <h2>Solid Displayed</h2>
-      <RadioGroup value={props.displayed} onValueChange={(value) => { void setDisplayed({ variables: { displayed: value as SolidDisplayDisplayed } }) }}>
+      <h2>Solid Display</h2>
+      <RadioGroup className='mb-4' value={props.displayed} onValueChange={(value) => { void setDisplayed({ variables: { displayed: value as SolidDisplayDisplayed } }) }}>
         {items}
       </RadioGroup>
     </>
@@ -240,11 +263,11 @@ function Side (): JSX.Element {
 
   if (data === undefined) return <></>
 
-  const { scenes, solidDisplay } = data
+  const { scenes, solidDisplay, overlay } = data
 
   return (
     <div className='bg-slate-2 border-l border-slate-6 p-4 w-42 text-center flex flex-col gap-4'>
-      <h1 className='text-4xl text-slate-11'>Stream</h1>
+      <ControlOverlayDisplayed displayed={overlay.displayed} />
       <SolidDisplayed displayed={solidDisplay.displayed} />
       <SolidSceneSelect scenes={scenes} solidDisplay={solidDisplay} />
     </div>
