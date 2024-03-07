@@ -23,6 +23,13 @@ query Presets ($sceneId: Int!) {
 }
 
 query CameraControlInfo {
+    scenes {
+        id
+        name
+        camera {
+            id
+        }
+    }
     cameras {
         id
         name
@@ -100,5 +107,11 @@ mutation SavePreset ($id: Int!) {
         currentPreset {
             id
         }
+    }
+}
+
+mutation SetPreviewScene ($id: Int!) {
+    setPreviewScene(id: $id) {
+        id
     }
 }

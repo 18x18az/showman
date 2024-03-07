@@ -1,5 +1,5 @@
 'use client'
-import { useCallPresetMutation, useCameraControlInfoQuery, useCreatePresetMutation, useSavePresetMutation, useUpdatePresetMutation } from '@/__generated__/graphql'
+import { useCallPresetMutation, useCameraControlInfoQuery, useCreatePresetMutation, useSavePresetMutation, useSetPreviewSceneMutation, useUpdatePresetMutation } from '@/__generated__/graphql'
 import ErrorableButton from '@/components/errorable-button/ErrorableButton'
 import { useState } from 'react'
 import { Button } from '../../../primitives/button/Button'
@@ -97,6 +97,53 @@ function CameraControl (props: CameraControlProps): JSX.Element {
   )
 }
 
+interface SceneButtonProps {
+  scene: {
+    id: number
+    name: string
+  }
+  programScene: number | undefined
+  previewScene: number | undefined
+}
+
+function SceneButton (props: SceneButtonProps): JSX.Element {
+  const { scene, programScene, previewScene } = props
+
+  const isProgram = programScene === scene.id
+  const isPreview = previewScene === scene.id
+
+  let color = 'bg-slate-2'
+
+  if (isProgram) {
+    color = 'bg-red-9 hover:bg-red-9'
+  } else if (isPreview) {
+    color = 'bg-green-9 hover:bg-green-10'
+  }
+
+  return (
+    <ErrorableButton size='lg' className={`${color} text-2xl w-64 h-16`} mutation={useSetPreviewSceneMutation} options={{ variables: { id: scene.id }, refetchQueries: ['CameraControlInfo'] }}> {scene.name} </ErrorableButton>
+  )
+}
+
+interface SceneControlProps {
+  scenes: Array<{ id: number, name: string }>
+  programScene: number | undefined
+  previewScene: number | undefined
+}
+
+function SceneControl (props: SceneControlProps): JSX.Element {
+  const buttons = props.scenes.map((scene) => {
+    return <SceneButton key={scene.id} scene={scene} programScene={props.programScene} previewScene={props.previewScene} />
+  })
+
+  return (
+    <div className='flex flex-col gap-4'>
+      <h1 className='text-4xl text-slate-11'>Scenes</h1>
+      {buttons}
+    </div>
+  )
+}
+
 export default function Page (): JSX.Element {
   const [isEditMode, setIsEditMode] = useState(false)
   const { data } = useCameraControlInfoQuery({ pollInterval: 500 })
@@ -108,6 +155,8 @@ export default function Page (): JSX.Element {
   const programScene = data.programScene?.id
   const previewScene = data.previewScene?.id
 
+  const scenesWithoutCamera = data.scenes.filter((scene) => { return scene.camera === null })
+
   const cameras = data.cameras.map((camera) => {
     return <CameraControl key={camera.id} camera={camera} isEditMode={isEditMode} previewScene={previewScene} programScene={programScene} />
   })
@@ -117,6 +166,7 @@ export default function Page (): JSX.Element {
       <Button className={editColor} variant='ghost' onClick={() => setIsEditMode(!isEditMode)}><Pencil /></Button>
       <div className='flex w-full justify-evenly text-center p-8'>
         {cameras}
+        <SceneControl scenes={scenesWithoutCamera} previewScene={previewScene} programScene={programScene} />
       </div>
     </div>
   )

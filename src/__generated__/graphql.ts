@@ -320,6 +320,7 @@ export type Mutation = {
   configureBackend: Backend;
   configureTournamentManager: TournamentManager;
   createPreset: Camera;
+  cutToScene: Scene;
   deleteField: Array<Field>;
   editCamera: Camera;
   editScene: Scene;
@@ -341,12 +342,14 @@ export type Mutation = {
   setAutomationEnabled: Competition;
   setDisplayField: Display;
   setInspectionPoint: Team;
+  setPreviewScene: Scene;
   setSkillsEnabled: Array<Field>;
   startAllianceSelection: AllianceSelection;
   startField: FieldControl;
   startNextBlock: Block;
   startTimeout: Timeout;
   stopField: FieldControl;
+  transitionToScene: Scene;
   unqueue: CompetitionField;
   updateAwards: Array<Award>;
   updateField: Field;
@@ -470,6 +473,11 @@ export type MutationSetInspectionPointArgs = {
   isMet: Scalars['Boolean']['input'];
   pointId: Scalars['Int']['input'];
   teamId: Scalars['Int']['input'];
+};
+
+
+export type MutationSetPreviewSceneArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -801,7 +809,7 @@ export type PresetsQuery = { __typename?: 'Query', scene: { __typename?: 'Scene'
 export type CameraControlInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CameraControlInfoQuery = { __typename?: 'Query', cameras: Array<{ __typename?: 'Camera', id: number, name: string, currentPreset: { __typename?: 'Preset', id: number } | null, presets: Array<{ __typename?: 'Preset', id: number, name: string }>, scene: { __typename?: 'Scene', id: number } }>, previewScene: { __typename?: 'Scene', id: number } | null, programScene: { __typename?: 'Scene', id: number } | null };
+export type CameraControlInfoQuery = { __typename?: 'Query', scenes: Array<{ __typename?: 'Scene', id: number, name: string, camera: { __typename?: 'Camera', id: number } | null }>, cameras: Array<{ __typename?: 'Camera', id: number, name: string, currentPreset: { __typename?: 'Preset', id: number } | null, presets: Array<{ __typename?: 'Preset', id: number, name: string }>, scene: { __typename?: 'Scene', id: number } }>, previewScene: { __typename?: 'Scene', id: number } | null, programScene: { __typename?: 'Scene', id: number } | null };
 
 export type AddCameraMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -852,6 +860,13 @@ export type SavePresetMutationVariables = Exact<{
 
 
 export type SavePresetMutation = { __typename?: 'Mutation', savePreset: { __typename?: 'Camera', id: number, name: string, currentPreset: { __typename?: 'Preset', id: number } | null } };
+
+export type SetPreviewSceneMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type SetPreviewSceneMutation = { __typename?: 'Mutation', setPreviewScene: { __typename?: 'Scene', id: number } };
 
 export type LiveFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1700,6 +1715,13 @@ export type PresetsSuspenseQueryHookResult = ReturnType<typeof usePresetsSuspens
 export type PresetsQueryResult = Apollo.QueryResult<PresetsQuery, PresetsQueryVariables>;
 export const CameraControlInfoDocument = gql`
     query CameraControlInfo {
+  scenes {
+    id
+    name
+    camera {
+      id
+    }
+  }
   cameras {
     id
     name
@@ -2003,6 +2025,39 @@ export function useSavePresetMutation(baseOptions?: Apollo.MutationHookOptions<S
 export type SavePresetMutationHookResult = ReturnType<typeof useSavePresetMutation>;
 export type SavePresetMutationResult = Apollo.MutationResult<SavePresetMutation>;
 export type SavePresetMutationOptions = Apollo.BaseMutationOptions<SavePresetMutation, SavePresetMutationVariables>;
+export const SetPreviewSceneDocument = gql`
+    mutation SetPreviewScene($id: Int!) {
+  setPreviewScene(id: $id) {
+    id
+  }
+}
+    `;
+export type SetPreviewSceneMutationFn = Apollo.MutationFunction<SetPreviewSceneMutation, SetPreviewSceneMutationVariables>;
+
+/**
+ * __useSetPreviewSceneMutation__
+ *
+ * To run a mutation, you first call `useSetPreviewSceneMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetPreviewSceneMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setPreviewSceneMutation, { data, loading, error }] = useSetPreviewSceneMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useSetPreviewSceneMutation(baseOptions?: Apollo.MutationHookOptions<SetPreviewSceneMutation, SetPreviewSceneMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetPreviewSceneMutation, SetPreviewSceneMutationVariables>(SetPreviewSceneDocument, options);
+      }
+export type SetPreviewSceneMutationHookResult = ReturnType<typeof useSetPreviewSceneMutation>;
+export type SetPreviewSceneMutationResult = Apollo.MutationResult<SetPreviewSceneMutation>;
+export type SetPreviewSceneMutationOptions = Apollo.BaseMutationOptions<SetPreviewSceneMutation, SetPreviewSceneMutationVariables>;
 export const LiveFieldDocument = gql`
     query LiveField {
   competitionInformation {
