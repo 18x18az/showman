@@ -158,7 +158,7 @@ function Main (): JSX.Element {
 
   const editColor = isEditMode ? 'text-indigo-9 hover:text-indigo-10' : 'text-slate-11 hover:text-slate-10'
 
-  if (data === undefined) return <></>
+  if (data === undefined) return <div className='grow' />
 
   const programScene = data.programScene?.id
   const previewScene = data.previewScene?.id
