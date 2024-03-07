@@ -142,6 +142,17 @@ query StreamSidebar {
     }
     overlay {
         displayed
+        award {
+            id
+            name
+        }
+    }
+    awards {
+        id
+        name
+        winners {
+            id
+        }
     }
 }
 
@@ -173,6 +184,15 @@ query GetSolidDisplayView {
 query GetOverlayDisplayControl {
     overlay {
         displayed
+        award {
+            id
+            name
+            winners {
+                id
+                number
+                name
+            }
+        }
     }
     stage {
         stage
@@ -188,5 +208,20 @@ mutation setOverlayDisplay ($displayed: OverlayDisplayed!) {
 query GetOverlayDisplayView {
     overlay {
         displayed
+    }
+}
+
+mutation updateAwards {
+    updateAwards {
+        id
+    }
+}
+
+mutation setDisplayedAward ($awardId: Int!) {
+    setDisplayedAward(awardId: $awardId) {
+        award {
+            id
+            name
+        }
     }
 }

@@ -341,6 +341,7 @@ export type Mutation = {
   savePreset: Camera;
   setAutomationEnabled: Competition;
   setDisplayField: Display;
+  setDisplayedAward: Overlay;
   setInspectionPoint: Team;
   setOverlayDisplayed: Overlay;
   setPreviewScene: Scene;
@@ -472,6 +473,11 @@ export type MutationSetDisplayFieldArgs = {
 };
 
 
+export type MutationSetDisplayedAwardArgs = {
+  awardId: Scalars['Int']['input'];
+};
+
+
 export type MutationSetInspectionPointArgs = {
   isMet: Scalars['Boolean']['input'];
   pointId: Scalars['Int']['input'];
@@ -532,6 +538,7 @@ export type MutationUpdatePresetArgs = {
 
 export type Overlay = {
   __typename?: 'Overlay';
+  award: Maybe<Award>;
   displayed: OverlayDisplayed;
 };
 
@@ -925,7 +932,7 @@ export type TransitionToSceneMutation = { __typename?: 'Mutation', transitionToS
 export type StreamSidebarQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StreamSidebarQuery = { __typename?: 'Query', scenes: Array<{ __typename?: 'Scene', id: number, name: string }>, solidDisplay: { __typename?: 'SolidDisplay', displayed: SolidDisplayDisplayed, scene: { __typename?: 'Scene', id: number, name: string } | null }, overlay: { __typename?: 'Overlay', displayed: OverlayDisplayed } };
+export type StreamSidebarQuery = { __typename?: 'Query', scenes: Array<{ __typename?: 'Scene', id: number, name: string }>, solidDisplay: { __typename?: 'SolidDisplay', displayed: SolidDisplayDisplayed, scene: { __typename?: 'Scene', id: number, name: string } | null }, overlay: { __typename?: 'Overlay', displayed: OverlayDisplayed, award: { __typename?: 'Award', id: number, name: string } | null }, awards: Array<{ __typename?: 'Award', id: number, name: string, winners: Array<{ __typename?: 'Team', id: number }> | null }> };
 
 export type SetSolidDisplaySceneMutationVariables = Exact<{
   sceneId: Scalars['Int']['input'];
@@ -949,7 +956,7 @@ export type GetSolidDisplayViewQuery = { __typename?: 'Query', solidDisplay: { _
 export type GetOverlayDisplayControlQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetOverlayDisplayControlQuery = { __typename?: 'Query', overlay: { __typename?: 'Overlay', displayed: OverlayDisplayed }, stage: { __typename?: 'Stage', stage: EventStage } };
+export type GetOverlayDisplayControlQuery = { __typename?: 'Query', overlay: { __typename?: 'Overlay', displayed: OverlayDisplayed, award: { __typename?: 'Award', id: number, name: string, winners: Array<{ __typename?: 'Team', id: number, number: string, name: string }> | null } | null }, stage: { __typename?: 'Stage', stage: EventStage } };
 
 export type SetOverlayDisplayMutationVariables = Exact<{
   displayed: OverlayDisplayed;
@@ -962,6 +969,18 @@ export type GetOverlayDisplayViewQueryVariables = Exact<{ [key: string]: never; 
 
 
 export type GetOverlayDisplayViewQuery = { __typename?: 'Query', overlay: { __typename?: 'Overlay', displayed: OverlayDisplayed } };
+
+export type UpdateAwardsMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UpdateAwardsMutation = { __typename?: 'Mutation', updateAwards: Array<{ __typename?: 'Award', id: number }> };
+
+export type SetDisplayedAwardMutationVariables = Exact<{
+  awardId: Scalars['Int']['input'];
+}>;
+
+
+export type SetDisplayedAwardMutation = { __typename?: 'Mutation', setDisplayedAward: { __typename?: 'Overlay', award: { __typename?: 'Award', id: number, name: string } | null } };
 
 export type LiveFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2232,6 +2251,17 @@ export const StreamSidebarDocument = gql`
   }
   overlay {
     displayed
+    award {
+      id
+      name
+    }
+  }
+  awards {
+    id
+    name
+    winners {
+      id
+    }
   }
 }
     `;
@@ -2383,6 +2413,15 @@ export const GetOverlayDisplayControlDocument = gql`
     query GetOverlayDisplayControl {
   overlay {
     displayed
+    award {
+      id
+      name
+      winners {
+        id
+        number
+        name
+      }
+    }
   }
   stage {
     stage
@@ -2493,6 +2532,74 @@ export type GetOverlayDisplayViewQueryHookResult = ReturnType<typeof useGetOverl
 export type GetOverlayDisplayViewLazyQueryHookResult = ReturnType<typeof useGetOverlayDisplayViewLazyQuery>;
 export type GetOverlayDisplayViewSuspenseQueryHookResult = ReturnType<typeof useGetOverlayDisplayViewSuspenseQuery>;
 export type GetOverlayDisplayViewQueryResult = Apollo.QueryResult<GetOverlayDisplayViewQuery, GetOverlayDisplayViewQueryVariables>;
+export const UpdateAwardsDocument = gql`
+    mutation updateAwards {
+  updateAwards {
+    id
+  }
+}
+    `;
+export type UpdateAwardsMutationFn = Apollo.MutationFunction<UpdateAwardsMutation, UpdateAwardsMutationVariables>;
+
+/**
+ * __useUpdateAwardsMutation__
+ *
+ * To run a mutation, you first call `useUpdateAwardsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAwardsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAwardsMutation, { data, loading, error }] = useUpdateAwardsMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUpdateAwardsMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAwardsMutation, UpdateAwardsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateAwardsMutation, UpdateAwardsMutationVariables>(UpdateAwardsDocument, options);
+      }
+export type UpdateAwardsMutationHookResult = ReturnType<typeof useUpdateAwardsMutation>;
+export type UpdateAwardsMutationResult = Apollo.MutationResult<UpdateAwardsMutation>;
+export type UpdateAwardsMutationOptions = Apollo.BaseMutationOptions<UpdateAwardsMutation, UpdateAwardsMutationVariables>;
+export const SetDisplayedAwardDocument = gql`
+    mutation setDisplayedAward($awardId: Int!) {
+  setDisplayedAward(awardId: $awardId) {
+    award {
+      id
+      name
+    }
+  }
+}
+    `;
+export type SetDisplayedAwardMutationFn = Apollo.MutationFunction<SetDisplayedAwardMutation, SetDisplayedAwardMutationVariables>;
+
+/**
+ * __useSetDisplayedAwardMutation__
+ *
+ * To run a mutation, you first call `useSetDisplayedAwardMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetDisplayedAwardMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setDisplayedAwardMutation, { data, loading, error }] = useSetDisplayedAwardMutation({
+ *   variables: {
+ *      awardId: // value for 'awardId'
+ *   },
+ * });
+ */
+export function useSetDisplayedAwardMutation(baseOptions?: Apollo.MutationHookOptions<SetDisplayedAwardMutation, SetDisplayedAwardMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetDisplayedAwardMutation, SetDisplayedAwardMutationVariables>(SetDisplayedAwardDocument, options);
+      }
+export type SetDisplayedAwardMutationHookResult = ReturnType<typeof useSetDisplayedAwardMutation>;
+export type SetDisplayedAwardMutationResult = Apollo.MutationResult<SetDisplayedAwardMutation>;
+export type SetDisplayedAwardMutationOptions = Apollo.BaseMutationOptions<SetDisplayedAwardMutation, SetDisplayedAwardMutationVariables>;
 export const LiveFieldDocument = gql`
     query LiveField {
   competitionInformation {

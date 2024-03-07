@@ -1,9 +1,9 @@
 'use client'
-import { OverlayDisplayed, SolidDisplayDisplayed, useCallPresetMutation, useCameraControlInfoQuery, useCreatePresetMutation, useCutToSceneMutation, useSavePresetMutation, useSetOverlayDisplayMutation, useSetPreviewSceneMutation, useSetSolidDisplayMutation, useSetSolidDisplaySceneMutation, useStreamSidebarQuery, useTransitionToSceneMutation, useUpdatePresetMutation } from '@/__generated__/graphql'
+import { OverlayDisplayed, SolidDisplayDisplayed, useCallPresetMutation, useCameraControlInfoQuery, useCreatePresetMutation, useCutToSceneMutation, useSavePresetMutation, useSetDisplayedAwardMutation, useSetOverlayDisplayMutation, useSetPreviewSceneMutation, useSetSolidDisplayMutation, useSetSolidDisplaySceneMutation, useStreamSidebarQuery, useTransitionToSceneMutation, useUpdateAwardsMutation, useUpdatePresetMutation } from '@/__generated__/graphql'
 import ErrorableButton from '@/components/errorable-button/ErrorableButton'
 import { useState } from 'react'
 import { Button } from '../../../primitives/button/Button'
-import { Pencil, Save } from 'lucide-react'
+import { Pencil, RefreshCcw, Save } from 'lucide-react'
 import { TextInput } from '@/components/ui/data-table'
 import { useErrorableMutation } from '@/hooks/useErrorableMutation'
 import { Dropdown } from '../../../primitives/dropdown/Dropdown'
@@ -258,16 +258,50 @@ function SolidDisplayed (props: { displayed: SolidDisplayDisplayed }): JSX.Eleme
   )
 }
 
+interface AwardControlProps {
+  awards: Array< { id: number, name: string, winners: any[] | null }>
+  selectedAwardId: number | null
+}
+
+function AwardControl (props: AwardControlProps): JSX.Element {
+  const selectAward = useErrorableMutation(useSetDisplayedAwardMutation, { refetchQueries: ['StreamSidebar'] })
+  const awardsWithWinners = props.awards.filter((award) => award.winners !== null)
+
+  const selectedAwardName = props.selectedAwardId !== null ? props.awards.find((award) => award.id === props.selectedAwardId)?.name : undefined
+
+  const awardOptions = awardsWithWinners.map((award) => {
+    return <RadioGroupItem key={award.id} value={award.name} label={award.name} />
+  })
+
+  return (
+    <>
+      <h2>Award Control</h2>
+      <RadioGroup
+        value={selectedAwardName}
+        onValueChange={(awardName) => {
+          const selectedAward = props.awards.find((award) => award.name === awardName)
+          if (selectedAward === undefined) return
+          void selectAward({ variables: { awardId: selectedAward.id } })
+        }}
+      >
+        {awardOptions}
+      </RadioGroup>
+      <ErrorableButton variant='ghost' mutation={useUpdateAwardsMutation} options={{ refetchQueries: ['StreamSidebar'] }}><RefreshCcw /></ErrorableButton>
+    </>
+  )
+}
+
 function Side (): JSX.Element {
   const { data } = useStreamSidebarQuery({ pollInterval: 500 })
 
   if (data === undefined) return <></>
 
-  const { scenes, solidDisplay, overlay } = data
+  const { scenes, solidDisplay, overlay, awards } = data
 
   return (
     <div className='bg-slate-2 border-l border-slate-6 p-4 w-42 text-center flex flex-col gap-4'>
       <ControlOverlayDisplayed displayed={overlay.displayed} />
+      <AwardControl awards={awards} selectedAwardId={overlay.award?.id ?? null} />
       <SolidDisplayed displayed={solidDisplay.displayed} />
       <SolidSceneSelect scenes={scenes} solidDisplay={solidDisplay} />
     </div>
