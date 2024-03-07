@@ -170,6 +170,15 @@ query GetSolidDisplayView {
     }
 }
 
+query GetOverlayDisplayControl {
+    overlay {
+        displayed
+    }
+    stage {
+        stage
+    }
+}
+
 mutation setOverlayDisplay ($displayed: OverlayDisplayed!) {
     setOverlayDisplayed(displayed: $displayed) {
         displayed

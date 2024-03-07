@@ -946,6 +946,11 @@ export type GetSolidDisplayViewQueryVariables = Exact<{ [key: string]: never; }>
 
 export type GetSolidDisplayViewQuery = { __typename?: 'Query', solidDisplay: { __typename?: 'SolidDisplay', displayed: SolidDisplayDisplayed }, stage: { __typename?: 'Stage', stage: EventStage } };
 
+export type GetOverlayDisplayControlQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetOverlayDisplayControlQuery = { __typename?: 'Query', overlay: { __typename?: 'Overlay', displayed: OverlayDisplayed }, stage: { __typename?: 'Stage', stage: EventStage } };
+
 export type SetOverlayDisplayMutationVariables = Exact<{
   displayed: OverlayDisplayed;
 }>;
@@ -2374,6 +2379,48 @@ export type GetSolidDisplayViewQueryHookResult = ReturnType<typeof useGetSolidDi
 export type GetSolidDisplayViewLazyQueryHookResult = ReturnType<typeof useGetSolidDisplayViewLazyQuery>;
 export type GetSolidDisplayViewSuspenseQueryHookResult = ReturnType<typeof useGetSolidDisplayViewSuspenseQuery>;
 export type GetSolidDisplayViewQueryResult = Apollo.QueryResult<GetSolidDisplayViewQuery, GetSolidDisplayViewQueryVariables>;
+export const GetOverlayDisplayControlDocument = gql`
+    query GetOverlayDisplayControl {
+  overlay {
+    displayed
+  }
+  stage {
+    stage
+  }
+}
+    `;
+
+/**
+ * __useGetOverlayDisplayControlQuery__
+ *
+ * To run a query within a React component, call `useGetOverlayDisplayControlQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOverlayDisplayControlQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOverlayDisplayControlQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetOverlayDisplayControlQuery(baseOptions?: Apollo.QueryHookOptions<GetOverlayDisplayControlQuery, GetOverlayDisplayControlQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOverlayDisplayControlQuery, GetOverlayDisplayControlQueryVariables>(GetOverlayDisplayControlDocument, options);
+      }
+export function useGetOverlayDisplayControlLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOverlayDisplayControlQuery, GetOverlayDisplayControlQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOverlayDisplayControlQuery, GetOverlayDisplayControlQueryVariables>(GetOverlayDisplayControlDocument, options);
+        }
+export function useGetOverlayDisplayControlSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetOverlayDisplayControlQuery, GetOverlayDisplayControlQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetOverlayDisplayControlQuery, GetOverlayDisplayControlQueryVariables>(GetOverlayDisplayControlDocument, options);
+        }
+export type GetOverlayDisplayControlQueryHookResult = ReturnType<typeof useGetOverlayDisplayControlQuery>;
+export type GetOverlayDisplayControlLazyQueryHookResult = ReturnType<typeof useGetOverlayDisplayControlLazyQuery>;
+export type GetOverlayDisplayControlSuspenseQueryHookResult = ReturnType<typeof useGetOverlayDisplayControlSuspenseQuery>;
+export type GetOverlayDisplayControlQueryResult = Apollo.QueryResult<GetOverlayDisplayControlQuery, GetOverlayDisplayControlQueryVariables>;
 export const SetOverlayDisplayDocument = gql`
     mutation setOverlayDisplay($displayed: OverlayDisplayed!) {
   setOverlayDisplayed(displayed: $displayed) {
