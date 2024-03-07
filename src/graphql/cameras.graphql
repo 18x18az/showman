@@ -127,3 +127,25 @@ mutation TransitionToScene {
         id
     }
 }
+
+query StreamSidebar {
+    scenes {
+        id
+        name
+    }
+    solidDisplay {
+        scene {
+            id
+            name
+        }
+    }
+}
+
+mutation setSolidDisplayScene ($sceneId: Int!) {
+    setSolidDisplayScene(sceneId: $sceneId) {
+        scene {
+            id
+            name
+        }
+    }
+}

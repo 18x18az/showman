@@ -344,6 +344,7 @@ export type Mutation = {
   setInspectionPoint: Team;
   setPreviewScene: Scene;
   setSkillsEnabled: Array<Field>;
+  setSolidDisplayScene: SolidDisplay;
   startAllianceSelection: AllianceSelection;
   startField: FieldControl;
   startNextBlock: Block;
@@ -486,6 +487,11 @@ export type MutationSetSkillsEnabledArgs = {
 };
 
 
+export type MutationSetSolidDisplaySceneArgs = {
+  sceneId: Scalars['Int']['input'];
+};
+
+
 export type MutationStartFieldArgs = {
   fieldId: Scalars['Int']['input'];
 };
@@ -551,6 +557,7 @@ export type Query = {
   scene: Scene;
   scenes: Array<Scene>;
   sittings: Array<Sitting>;
+  solidDisplay: SolidDisplay;
   stage: Stage;
   team: Team;
   teams: Array<Team>;
@@ -648,6 +655,11 @@ export type Skills = {
   __typename?: 'Skills';
   fieldId: Scalars['Float']['output'];
   stopTime: Maybe<Scalars['Float']['output']>;
+};
+
+export type SolidDisplay = {
+  __typename?: 'SolidDisplay';
+  scene: Maybe<Scene>;
 };
 
 export type Stage = {
@@ -877,6 +889,18 @@ export type TransitionToSceneMutationVariables = Exact<{ [key: string]: never; }
 
 
 export type TransitionToSceneMutation = { __typename?: 'Mutation', transitionToScene: { __typename?: 'Scene', id: number } };
+
+export type StreamSidebarQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type StreamSidebarQuery = { __typename?: 'Query', scenes: Array<{ __typename?: 'Scene', id: number, name: string }>, solidDisplay: { __typename?: 'SolidDisplay', scene: { __typename?: 'Scene', id: number, name: string } | null } };
+
+export type SetSolidDisplaySceneMutationVariables = Exact<{
+  sceneId: Scalars['Int']['input'];
+}>;
+
+
+export type SetSolidDisplaySceneMutation = { __typename?: 'Mutation', setSolidDisplayScene: { __typename?: 'SolidDisplay', scene: { __typename?: 'Scene', id: number, name: string } | null } };
 
 export type LiveFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2132,6 +2156,88 @@ export function useTransitionToSceneMutation(baseOptions?: Apollo.MutationHookOp
 export type TransitionToSceneMutationHookResult = ReturnType<typeof useTransitionToSceneMutation>;
 export type TransitionToSceneMutationResult = Apollo.MutationResult<TransitionToSceneMutation>;
 export type TransitionToSceneMutationOptions = Apollo.BaseMutationOptions<TransitionToSceneMutation, TransitionToSceneMutationVariables>;
+export const StreamSidebarDocument = gql`
+    query StreamSidebar {
+  scenes {
+    id
+    name
+  }
+  solidDisplay {
+    scene {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useStreamSidebarQuery__
+ *
+ * To run a query within a React component, call `useStreamSidebarQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStreamSidebarQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStreamSidebarQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useStreamSidebarQuery(baseOptions?: Apollo.QueryHookOptions<StreamSidebarQuery, StreamSidebarQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StreamSidebarQuery, StreamSidebarQueryVariables>(StreamSidebarDocument, options);
+      }
+export function useStreamSidebarLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StreamSidebarQuery, StreamSidebarQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StreamSidebarQuery, StreamSidebarQueryVariables>(StreamSidebarDocument, options);
+        }
+export function useStreamSidebarSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<StreamSidebarQuery, StreamSidebarQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<StreamSidebarQuery, StreamSidebarQueryVariables>(StreamSidebarDocument, options);
+        }
+export type StreamSidebarQueryHookResult = ReturnType<typeof useStreamSidebarQuery>;
+export type StreamSidebarLazyQueryHookResult = ReturnType<typeof useStreamSidebarLazyQuery>;
+export type StreamSidebarSuspenseQueryHookResult = ReturnType<typeof useStreamSidebarSuspenseQuery>;
+export type StreamSidebarQueryResult = Apollo.QueryResult<StreamSidebarQuery, StreamSidebarQueryVariables>;
+export const SetSolidDisplaySceneDocument = gql`
+    mutation setSolidDisplayScene($sceneId: Int!) {
+  setSolidDisplayScene(sceneId: $sceneId) {
+    scene {
+      id
+      name
+    }
+  }
+}
+    `;
+export type SetSolidDisplaySceneMutationFn = Apollo.MutationFunction<SetSolidDisplaySceneMutation, SetSolidDisplaySceneMutationVariables>;
+
+/**
+ * __useSetSolidDisplaySceneMutation__
+ *
+ * To run a mutation, you first call `useSetSolidDisplaySceneMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetSolidDisplaySceneMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setSolidDisplaySceneMutation, { data, loading, error }] = useSetSolidDisplaySceneMutation({
+ *   variables: {
+ *      sceneId: // value for 'sceneId'
+ *   },
+ * });
+ */
+export function useSetSolidDisplaySceneMutation(baseOptions?: Apollo.MutationHookOptions<SetSolidDisplaySceneMutation, SetSolidDisplaySceneMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetSolidDisplaySceneMutation, SetSolidDisplaySceneMutationVariables>(SetSolidDisplaySceneDocument, options);
+      }
+export type SetSolidDisplaySceneMutationHookResult = ReturnType<typeof useSetSolidDisplaySceneMutation>;
+export type SetSolidDisplaySceneMutationResult = Apollo.MutationResult<SetSolidDisplaySceneMutation>;
+export type SetSolidDisplaySceneMutationOptions = Apollo.BaseMutationOptions<SetSolidDisplaySceneMutation, SetSolidDisplaySceneMutationVariables>;
 export const LiveFieldDocument = gql`
     query LiveField {
   competitionInformation {

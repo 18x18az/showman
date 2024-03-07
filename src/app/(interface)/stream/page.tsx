@@ -1,11 +1,12 @@
 'use client'
-import { useCallPresetMutation, useCameraControlInfoQuery, useCreatePresetMutation, useCutToSceneMutation, useSavePresetMutation, useSetPreviewSceneMutation, useTransitionToSceneMutation, useUpdatePresetMutation } from '@/__generated__/graphql'
+import { useCallPresetMutation, useCameraControlInfoQuery, useCreatePresetMutation, useCutToSceneMutation, useSavePresetMutation, useSetPreviewSceneMutation, useSetSolidDisplaySceneMutation, useStreamSidebarQuery, useTransitionToSceneMutation, useUpdatePresetMutation } from '@/__generated__/graphql'
 import ErrorableButton from '@/components/errorable-button/ErrorableButton'
 import { useState } from 'react'
 import { Button } from '../../../primitives/button/Button'
 import { Pencil, Save } from 'lucide-react'
 import { TextInput } from '@/components/ui/data-table'
 import { useErrorableMutation } from '@/hooks/useErrorableMutation'
+import { Dropdown } from '../../../primitives/dropdown/Dropdown'
 
 const PROGRAM_BUTTON_COLOR = 'bg-red-9 hover:bg-red-9 text-red-1'
 const PREVIEW_BUTTON_COLOR = 'bg-green-9 hover:bg-green-10 text-green-1'
@@ -149,9 +150,9 @@ function SceneControl (props: SceneControlProps): JSX.Element {
   )
 }
 
-export default function Page (): JSX.Element {
+function Main (): JSX.Element {
   const [isEditMode, setIsEditMode] = useState(false)
-  const { data } = useCameraControlInfoQuery({ pollInterval: 500 })
+  const { data } = useCameraControlInfoQuery({ pollInterval: 250 })
 
   const editColor = isEditMode ? 'text-indigo-9 hover:text-indigo-10' : 'text-slate-11 hover:text-slate-10'
 
@@ -167,7 +168,7 @@ export default function Page (): JSX.Element {
   })
 
   return (
-    <div className='flex flex-col h-full m-8'>
+    <div className='flex flex-col h-full p-8 grow'>
       <Button className={editColor} variant='ghost' onClick={() => setIsEditMode(!isEditMode)}><Pencil /></Button>
       <div className='flex w-full justify-evenly text-center p-8 grow grow-1'>
         {cameras}
@@ -177,6 +178,42 @@ export default function Page (): JSX.Element {
         <ErrorableButton mutation={useCutToSceneMutation} options={{ refetchQueries: ['CameraControlInfo'] }} className='hover:bg-red-10 hover:text-red-1 w-64 h-16 text-2xl'>Cut</ErrorableButton>
         <ErrorableButton mutation={useTransitionToSceneMutation} options={{ refetchQueries: ['CameraControlInfo'] }} className='hover:bg-red-10 hover:text-red-1 w-64 h-16 text-2xl'>Transition</ErrorableButton>
       </div>
+    </div>
+  )
+}
+
+function Side (): JSX.Element {
+  const { data } = useStreamSidebarQuery({ pollInterval: 500 })
+  const setSolid = useErrorableMutation(useSetSolidDisplaySceneMutation, { refetchQueries: ['StreamSidebar'] })
+
+  if (data === undefined) return <></>
+
+  const { scenes, solidDisplay } = data
+
+  const solidDisplaySceneOptions = scenes.map((scene) => { return scene.name })
+  solidDisplaySceneOptions.push('None')
+  const solidDisplaySceneName = solidDisplay?.scene?.name ?? 'None'
+
+  return (
+    <div className='bg-slate-2 border-l border-slate-6 p-4 w-42 items-center text-center flex flex-col gap-4'>
+      <h1 className='text-4xl text-slate-11'>Stream</h1>
+      <h2>Solid Scene</h2>
+      <Dropdown
+        options={solidDisplaySceneOptions} value={solidDisplaySceneName} onChange={(sceneName) => {
+          const scene = scenes.find((scene) => scene.name === sceneName)
+          if (scene === undefined) return
+          void setSolid({ variables: { sceneId: scene.id } })
+        }}
+      />
+    </div>
+  )
+}
+
+export default function Page (): JSX.Element {
+  return (
+    <div className='h-full w-full flex'>
+      <Main />
+      <Side />
     </div>
   )
 }
