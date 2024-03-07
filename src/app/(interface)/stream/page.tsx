@@ -1,5 +1,5 @@
 'use client'
-import { useCallPresetMutation, useCameraControlInfoQuery, useCreatePresetMutation, useCutToSceneMutation, useSavePresetMutation, useSetPreviewSceneMutation, useSetSolidDisplaySceneMutation, useStreamSidebarQuery, useTransitionToSceneMutation, useUpdatePresetMutation } from '@/__generated__/graphql'
+import { SolidDisplayDisplayed, useCallPresetMutation, useCameraControlInfoQuery, useCreatePresetMutation, useCutToSceneMutation, useSavePresetMutation, useSetPreviewSceneMutation, useSetSolidDisplayMutation, useSetSolidDisplaySceneMutation, useStreamSidebarQuery, useTransitionToSceneMutation, useUpdatePresetMutation } from '@/__generated__/graphql'
 import ErrorableButton from '@/components/errorable-button/ErrorableButton'
 import { useState } from 'react'
 import { Button } from '../../../primitives/button/Button'
@@ -7,6 +7,8 @@ import { Pencil, Save } from 'lucide-react'
 import { TextInput } from '@/components/ui/data-table'
 import { useErrorableMutation } from '@/hooks/useErrorableMutation'
 import { Dropdown } from '../../../primitives/dropdown/Dropdown'
+import { RadioGroup } from '../../../components/ui/radio-group'
+import { RadioGroupItem } from '../../../components/ui/better-radio'
 
 const PROGRAM_BUTTON_COLOR = 'bg-red-9 hover:bg-red-9 text-red-1'
 const PREVIEW_BUTTON_COLOR = 'bg-green-9 hover:bg-green-10 text-green-1'
@@ -182,29 +184,69 @@ function Main (): JSX.Element {
   )
 }
 
+interface SolidSceneSelectProps {
+  scenes: Array<{ id: number, name: string }>
+  solidDisplay: {
+    scene: {
+      id: number
+      name: string
+    } | null
+  }
+}
+
+function SolidSceneSelect (props: SolidSceneSelectProps): JSX.Element {
+  const setSolid = useErrorableMutation(useSetSolidDisplaySceneMutation, { refetchQueries: ['StreamSidebar'] })
+  const options = props.scenes.map((scene) => { return scene.name })
+  options.push('None')
+  return (
+    <>
+      <h2>Solid Scene</h2>
+      <Dropdown
+        options={props.scenes.map((scene) => { return scene.name })} value={props.solidDisplay.scene?.name ?? 'None'} onChange={(sceneName) => {
+          const scene = props.scenes.find((scene) => scene.name === sceneName)
+          if (scene === undefined) return
+          void setSolid({ variables: { sceneId: scene.id } })
+        }}
+      />
+    </>
+  )
+}
+
+function SolidDisplayed (props: { displayed: SolidDisplayDisplayed }): JSX.Element {
+  const setDisplayed = useErrorableMutation(useSetSolidDisplayMutation, { refetchQueries: ['StreamSidebar'] })
+
+  const displayOptions = [
+    { label: 'Inspection', value: SolidDisplayDisplayed.Inspection },
+    { label: 'Results', value: SolidDisplayDisplayed.Results },
+    { label: 'Logo', value: SolidDisplayDisplayed.Logo }
+  ]
+
+  const items = displayOptions.map((option) => {
+    return <RadioGroupItem key={option.value} value={option.value} label={option.label} />
+  })
+
+  return (
+    <>
+      <h2>Solid Displayed</h2>
+      <RadioGroup value={props.displayed} onValueChange={(value) => { void setDisplayed({ variables: { displayed: value as SolidDisplayDisplayed } }) }}>
+        {items}
+      </RadioGroup>
+    </>
+  )
+}
+
 function Side (): JSX.Element {
   const { data } = useStreamSidebarQuery({ pollInterval: 500 })
-  const setSolid = useErrorableMutation(useSetSolidDisplaySceneMutation, { refetchQueries: ['StreamSidebar'] })
 
   if (data === undefined) return <></>
 
   const { scenes, solidDisplay } = data
 
-  const solidDisplaySceneOptions = scenes.map((scene) => { return scene.name })
-  solidDisplaySceneOptions.push('None')
-  const solidDisplaySceneName = solidDisplay?.scene?.name ?? 'None'
-
   return (
-    <div className='bg-slate-2 border-l border-slate-6 p-4 w-42 items-center text-center flex flex-col gap-4'>
+    <div className='bg-slate-2 border-l border-slate-6 p-4 w-42 text-center flex flex-col gap-4'>
       <h1 className='text-4xl text-slate-11'>Stream</h1>
-      <h2>Solid Scene</h2>
-      <Dropdown
-        options={solidDisplaySceneOptions} value={solidDisplaySceneName} onChange={(sceneName) => {
-          const scene = scenes.find((scene) => scene.name === sceneName)
-          if (scene === undefined) return
-          void setSolid({ variables: { sceneId: scene.id } })
-        }}
-      />
+      <SolidDisplayed displayed={solidDisplay.displayed} />
+      <SolidSceneSelect scenes={scenes} solidDisplay={solidDisplay} />
     </div>
   )
 }

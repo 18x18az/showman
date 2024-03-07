@@ -138,6 +138,7 @@ query StreamSidebar {
             id
             name
         }
+        displayed
     }
 }
 
@@ -147,5 +148,12 @@ mutation setSolidDisplayScene ($sceneId: Int!) {
             id
             name
         }
+        displayed
+    }
+}
+
+mutation setSolidDisplay ($displayed: SolidDisplayDisplayed!) {
+    setSolidDisplayed(displayed: $displayed) {
+        displayed
     }
 }

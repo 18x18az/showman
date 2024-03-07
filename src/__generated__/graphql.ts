@@ -345,6 +345,7 @@ export type Mutation = {
   setPreviewScene: Scene;
   setSkillsEnabled: Array<Field>;
   setSolidDisplayScene: SolidDisplay;
+  setSolidDisplayed: SolidDisplay;
   startAllianceSelection: AllianceSelection;
   startField: FieldControl;
   startNextBlock: Block;
@@ -489,6 +490,11 @@ export type MutationSetSkillsEnabledArgs = {
 
 export type MutationSetSolidDisplaySceneArgs = {
   sceneId: Scalars['Int']['input'];
+};
+
+
+export type MutationSetSolidDisplayedArgs = {
+  displayed: SolidDisplayDisplayed;
 };
 
 
@@ -659,8 +665,16 @@ export type Skills = {
 
 export type SolidDisplay = {
   __typename?: 'SolidDisplay';
+  displayed: SolidDisplayDisplayed;
   scene: Maybe<Scene>;
 };
+
+/** The currently displayed view on the solid display */
+export enum SolidDisplayDisplayed {
+  Inspection = 'INSPECTION',
+  Logo = 'LOGO',
+  Results = 'RESULTS'
+}
 
 export type Stage = {
   __typename?: 'Stage';
@@ -893,14 +907,21 @@ export type TransitionToSceneMutation = { __typename?: 'Mutation', transitionToS
 export type StreamSidebarQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StreamSidebarQuery = { __typename?: 'Query', scenes: Array<{ __typename?: 'Scene', id: number, name: string }>, solidDisplay: { __typename?: 'SolidDisplay', scene: { __typename?: 'Scene', id: number, name: string } | null } };
+export type StreamSidebarQuery = { __typename?: 'Query', scenes: Array<{ __typename?: 'Scene', id: number, name: string }>, solidDisplay: { __typename?: 'SolidDisplay', displayed: SolidDisplayDisplayed, scene: { __typename?: 'Scene', id: number, name: string } | null } };
 
 export type SetSolidDisplaySceneMutationVariables = Exact<{
   sceneId: Scalars['Int']['input'];
 }>;
 
 
-export type SetSolidDisplaySceneMutation = { __typename?: 'Mutation', setSolidDisplayScene: { __typename?: 'SolidDisplay', scene: { __typename?: 'Scene', id: number, name: string } | null } };
+export type SetSolidDisplaySceneMutation = { __typename?: 'Mutation', setSolidDisplayScene: { __typename?: 'SolidDisplay', displayed: SolidDisplayDisplayed, scene: { __typename?: 'Scene', id: number, name: string } | null } };
+
+export type SetSolidDisplayMutationVariables = Exact<{
+  displayed: SolidDisplayDisplayed;
+}>;
+
+
+export type SetSolidDisplayMutation = { __typename?: 'Mutation', setSolidDisplayed: { __typename?: 'SolidDisplay', displayed: SolidDisplayDisplayed } };
 
 export type LiveFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1731,7 +1752,7 @@ export const PresetsDocument = gql`
  *   },
  * });
  */
-export function usePresetsQuery(baseOptions: Apollo.QueryHookOptions<PresetsQuery, PresetsQueryVariables>) {
+export function usePresetsQuery(baseOptions: Apollo.QueryHookOptions<PresetsQuery, PresetsQueryVariables> & ({ variables: PresetsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<PresetsQuery, PresetsQueryVariables>(PresetsDocument, options);
       }
@@ -2167,6 +2188,7 @@ export const StreamSidebarDocument = gql`
       id
       name
     }
+    displayed
   }
 }
     `;
@@ -2209,6 +2231,7 @@ export const SetSolidDisplaySceneDocument = gql`
       id
       name
     }
+    displayed
   }
 }
     `;
@@ -2238,6 +2261,39 @@ export function useSetSolidDisplaySceneMutation(baseOptions?: Apollo.MutationHoo
 export type SetSolidDisplaySceneMutationHookResult = ReturnType<typeof useSetSolidDisplaySceneMutation>;
 export type SetSolidDisplaySceneMutationResult = Apollo.MutationResult<SetSolidDisplaySceneMutation>;
 export type SetSolidDisplaySceneMutationOptions = Apollo.BaseMutationOptions<SetSolidDisplaySceneMutation, SetSolidDisplaySceneMutationVariables>;
+export const SetSolidDisplayDocument = gql`
+    mutation setSolidDisplay($displayed: SolidDisplayDisplayed!) {
+  setSolidDisplayed(displayed: $displayed) {
+    displayed
+  }
+}
+    `;
+export type SetSolidDisplayMutationFn = Apollo.MutationFunction<SetSolidDisplayMutation, SetSolidDisplayMutationVariables>;
+
+/**
+ * __useSetSolidDisplayMutation__
+ *
+ * To run a mutation, you first call `useSetSolidDisplayMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetSolidDisplayMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setSolidDisplayMutation, { data, loading, error }] = useSetSolidDisplayMutation({
+ *   variables: {
+ *      displayed: // value for 'displayed'
+ *   },
+ * });
+ */
+export function useSetSolidDisplayMutation(baseOptions?: Apollo.MutationHookOptions<SetSolidDisplayMutation, SetSolidDisplayMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetSolidDisplayMutation, SetSolidDisplayMutationVariables>(SetSolidDisplayDocument, options);
+      }
+export type SetSolidDisplayMutationHookResult = ReturnType<typeof useSetSolidDisplayMutation>;
+export type SetSolidDisplayMutationResult = Apollo.MutationResult<SetSolidDisplayMutation>;
+export type SetSolidDisplayMutationOptions = Apollo.BaseMutationOptions<SetSolidDisplayMutation, SetSolidDisplayMutationVariables>;
 export const LiveFieldDocument = gql`
     query LiveField {
   competitionInformation {
@@ -2859,7 +2915,7 @@ export const FieldControlDocument = gql`
  *   },
  * });
  */
-export function useFieldControlSubscription(baseOptions: Apollo.SubscriptionHookOptions<FieldControlSubscription, FieldControlSubscriptionVariables>) {
+export function useFieldControlSubscription(baseOptions: Apollo.SubscriptionHookOptions<FieldControlSubscription, FieldControlSubscriptionVariables> & ({ variables: FieldControlSubscriptionVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useSubscription<FieldControlSubscription, FieldControlSubscriptionVariables>(FieldControlDocument, options);
       }
@@ -3348,7 +3404,7 @@ export const InspectionDataDocument = gql`
  *   },
  * });
  */
-export function useInspectionDataQuery(baseOptions: Apollo.QueryHookOptions<InspectionDataQuery, InspectionDataQueryVariables>) {
+export function useInspectionDataQuery(baseOptions: Apollo.QueryHookOptions<InspectionDataQuery, InspectionDataQueryVariables> & ({ variables: InspectionDataQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<InspectionDataQuery, InspectionDataQueryVariables>(InspectionDataDocument, options);
       }
@@ -3942,7 +3998,7 @@ export const FieldDisplayDocument = gql`
  *   },
  * });
  */
-export function useFieldDisplayQuery(baseOptions: Apollo.QueryHookOptions<FieldDisplayQuery, FieldDisplayQueryVariables>) {
+export function useFieldDisplayQuery(baseOptions: Apollo.QueryHookOptions<FieldDisplayQuery, FieldDisplayQueryVariables> & ({ variables: FieldDisplayQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<FieldDisplayQuery, FieldDisplayQueryVariables>(FieldDisplayDocument, options);
       }
@@ -4031,7 +4087,7 @@ export const SkillsFieldDocument = gql`
  *   },
  * });
  */
-export function useSkillsFieldQuery(baseOptions: Apollo.QueryHookOptions<SkillsFieldQuery, SkillsFieldQueryVariables>) {
+export function useSkillsFieldQuery(baseOptions: Apollo.QueryHookOptions<SkillsFieldQuery, SkillsFieldQueryVariables> & ({ variables: SkillsFieldQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<SkillsFieldQuery, SkillsFieldQueryVariables>(SkillsFieldDocument, options);
       }
