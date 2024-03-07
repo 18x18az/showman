@@ -34,6 +34,7 @@ query CompetitionMiniSettings {
   }
   competitionInformation {
     automationEnabled
+    autoAdvance
   }
   currentBlock {
     id

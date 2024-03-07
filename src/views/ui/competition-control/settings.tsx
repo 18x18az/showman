@@ -1,5 +1,5 @@
 import { ArrowUpFromLine, Eraser, TimerIcon } from 'lucide-react'
-import { EventStage, useCancelTimeoutMutation, useClearResultsMutation, useCompetitionMiniSettingsQuery, usePromoteResultsMutation, useSetAutomationEnabledMutation, useSetSkillsEnabledMutation, useStartTimeoutMutation } from '@/__generated__/graphql'
+import { EventStage, useCancelTimeoutMutation, useClearResultsMutation, useCompetitionMiniSettingsQuery, usePromoteResultsMutation, useSetAutoAdvanceMutation, useSetAutomationEnabledMutation, useSetSkillsEnabledMutation, useStartTimeoutMutation } from '@/__generated__/graphql'
 import { StopIcon } from '@radix-ui/react-icons'
 import ErrorableButton from '@/components/errorable-button/ErrorableButton'
 import { Switch } from '@/primitives/switch/Switch'
@@ -8,6 +8,7 @@ import { useErrorableMutation } from '@/hooks/useErrorableMutation'
 export function Settings (): JSX.Element {
   const { data: compData } = useCompetitionMiniSettingsQuery({ pollInterval: 500 })
   const setAutomationEnabled = useErrorableMutation(useSetAutomationEnabledMutation, { refetchQueries: ['CompetitionMiniSettings'] })
+  const setAutoAdvance = useErrorableMutation(useSetAutoAdvanceMutation, { refetchQueries: ['CompetitionMiniSettings'] })
   const setSkillsEnabled = useErrorableMutation(useSetSkillsEnabledMutation, { refetchQueries: ['CompetitionMiniSettings'] })
 
   const refetch = { refetchQueries: ['CompetitionMiniSettings'] }
@@ -19,6 +20,7 @@ export function Settings (): JSX.Element {
   const stage = compData.stage.stage
 
   const automation = compData.competitionInformation.automationEnabled
+  const autoAdvance = compData.competitionInformation.autoAdvance
   const inBlock = compData.currentBlock !== null
   const resultsShowing = compData.results.displayedResults !== null
   const resultsReady = compData.results.nextResults !== null
@@ -45,6 +47,14 @@ export function Settings (): JSX.Element {
           }} checked={automation}
         />
       </div>
+      <div className='flex align-center gap-4 justify-between'>
+          <div>Auto Results</div>
+          <Switch
+            onCheckedChange={(checked: boolean) => {
+              void setAutoAdvance({ variables: { enabled: checked } })
+            }} checked={autoAdvance} disabled={!automation}
+          />
+        </div>
       <div className='flex align-center gap-4 justify-between'>
         <div>Skills</div>
         <Switch onCheckedChange={(checked: boolean) => { void setSkillsEnabled({ variables: { enabled: checked } }) }} checked={isSkillsEnabled} disabled={!canEnableSkills} />

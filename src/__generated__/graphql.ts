@@ -123,6 +123,8 @@ export type CameraEdit = {
 
 export type Competition = {
   __typename?: 'Competition';
+  /** Whether to automatically go to the match results */
+  autoAdvance: Scalars['Boolean']['output'];
   /** Whether automation is currently enabled for match queueing */
   automationEnabled: Scalars['Boolean']['output'];
   /** The field that is currently live */
@@ -346,6 +348,7 @@ export type Mutation = {
   reset: Stage;
   resetAuton: CompetitionField;
   savePreset: Camera;
+  setAutoAdvance: Competition;
   setAutomationEnabled: Competition;
   setDisplayField: Display;
   setDisplayedAward: Overlay;
@@ -466,6 +469,11 @@ export type MutationResetAutonArgs = {
 
 export type MutationSavePresetArgs = {
   id: Scalars['Int']['input'];
+};
+
+
+export type MutationSetAutoAdvanceArgs = {
+  enabled: Scalars['Boolean']['input'];
 };
 
 
@@ -1049,6 +1057,13 @@ export type SetAutomationEnabledMutationVariables = Exact<{
 
 export type SetAutomationEnabledMutation = { __typename?: 'Mutation', setAutomationEnabled: { __typename?: 'Competition', automationEnabled: boolean } };
 
+export type SetAutoAdvanceMutationVariables = Exact<{
+  enabled: Scalars['Boolean']['input'];
+}>;
+
+
+export type SetAutoAdvanceMutation = { __typename?: 'Mutation', setAutoAdvance: { __typename?: 'Competition', autoAdvance: boolean } };
+
 export type SetSkillsEnabledMutationVariables = Exact<{
   enabled: Scalars['Boolean']['input'];
 }>;
@@ -1252,7 +1267,7 @@ export type GetEventStageQuery = { __typename?: 'Query', stage: { __typename?: '
 export type CompetitionMiniSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CompetitionMiniSettingsQuery = { __typename?: 'Query', stage: { __typename?: 'Stage', stage: EventStage }, competitionInformation: { __typename?: 'Competition', automationEnabled: boolean }, currentBlock: { __typename?: 'Block', id: number } | null, results: { __typename?: 'Results', displayedResults: { __typename?: 'Match', id: number } | null, nextResults: { __typename?: 'Match', id: number } | null }, fields: Array<{ __typename?: 'Field', id: number, canRunSkills: boolean }>, timeout: { __typename?: 'Timeout', endTime: any | null } };
+export type CompetitionMiniSettingsQuery = { __typename?: 'Query', stage: { __typename?: 'Stage', stage: EventStage }, competitionInformation: { __typename?: 'Competition', automationEnabled: boolean, autoAdvance: boolean }, currentBlock: { __typename?: 'Block', id: number } | null, results: { __typename?: 'Results', displayedResults: { __typename?: 'Match', id: number } | null, nextResults: { __typename?: 'Match', id: number } | null }, fields: Array<{ __typename?: 'Field', id: number, canRunSkills: boolean }>, timeout: { __typename?: 'Timeout', endTime: any | null } };
 
 export type MatchOverlayQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -3009,6 +3024,39 @@ export function useSetAutomationEnabledMutation(baseOptions?: Apollo.MutationHoo
 export type SetAutomationEnabledMutationHookResult = ReturnType<typeof useSetAutomationEnabledMutation>;
 export type SetAutomationEnabledMutationResult = Apollo.MutationResult<SetAutomationEnabledMutation>;
 export type SetAutomationEnabledMutationOptions = Apollo.BaseMutationOptions<SetAutomationEnabledMutation, SetAutomationEnabledMutationVariables>;
+export const SetAutoAdvanceDocument = gql`
+    mutation SetAutoAdvance($enabled: Boolean!) {
+  setAutoAdvance(enabled: $enabled) {
+    autoAdvance
+  }
+}
+    `;
+export type SetAutoAdvanceMutationFn = Apollo.MutationFunction<SetAutoAdvanceMutation, SetAutoAdvanceMutationVariables>;
+
+/**
+ * __useSetAutoAdvanceMutation__
+ *
+ * To run a mutation, you first call `useSetAutoAdvanceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetAutoAdvanceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setAutoAdvanceMutation, { data, loading, error }] = useSetAutoAdvanceMutation({
+ *   variables: {
+ *      enabled: // value for 'enabled'
+ *   },
+ * });
+ */
+export function useSetAutoAdvanceMutation(baseOptions?: Apollo.MutationHookOptions<SetAutoAdvanceMutation, SetAutoAdvanceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SetAutoAdvanceMutation, SetAutoAdvanceMutationVariables>(SetAutoAdvanceDocument, options);
+      }
+export type SetAutoAdvanceMutationHookResult = ReturnType<typeof useSetAutoAdvanceMutation>;
+export type SetAutoAdvanceMutationResult = Apollo.MutationResult<SetAutoAdvanceMutation>;
+export type SetAutoAdvanceMutationOptions = Apollo.BaseMutationOptions<SetAutoAdvanceMutation, SetAutoAdvanceMutationVariables>;
 export const SetSkillsEnabledDocument = gql`
     mutation SetSkillsEnabled($enabled: Boolean!) {
   setSkillsEnabled(enabled: $enabled) {
@@ -4119,6 +4167,7 @@ export const CompetitionMiniSettingsDocument = gql`
   }
   competitionInformation {
     automationEnabled
+    autoAdvance
   }
   currentBlock {
     id

@@ -96,6 +96,12 @@ mutation SetAutomationEnabled($enabled : Boolean!) {
   }
 }
 
+mutation SetAutoAdvance ($enabled: Boolean!) {
+  setAutoAdvance(enabled: $enabled) {
+    autoAdvance
+  }
+}
+
 mutation SetSkillsEnabled($enabled: Boolean!) {
   setSkillsEnabled(enabled: $enabled) {
     id
