@@ -868,6 +868,16 @@ export type SetPreviewSceneMutationVariables = Exact<{
 
 export type SetPreviewSceneMutation = { __typename?: 'Mutation', setPreviewScene: { __typename?: 'Scene', id: number } };
 
+export type CutToSceneMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CutToSceneMutation = { __typename?: 'Mutation', cutToScene: { __typename?: 'Scene', id: number } };
+
+export type TransitionToSceneMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TransitionToSceneMutation = { __typename?: 'Mutation', transitionToScene: { __typename?: 'Scene', id: number } };
+
 export type LiveFieldQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -2058,6 +2068,70 @@ export function useSetPreviewSceneMutation(baseOptions?: Apollo.MutationHookOpti
 export type SetPreviewSceneMutationHookResult = ReturnType<typeof useSetPreviewSceneMutation>;
 export type SetPreviewSceneMutationResult = Apollo.MutationResult<SetPreviewSceneMutation>;
 export type SetPreviewSceneMutationOptions = Apollo.BaseMutationOptions<SetPreviewSceneMutation, SetPreviewSceneMutationVariables>;
+export const CutToSceneDocument = gql`
+    mutation CutToScene {
+  cutToScene {
+    id
+  }
+}
+    `;
+export type CutToSceneMutationFn = Apollo.MutationFunction<CutToSceneMutation, CutToSceneMutationVariables>;
+
+/**
+ * __useCutToSceneMutation__
+ *
+ * To run a mutation, you first call `useCutToSceneMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCutToSceneMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [cutToSceneMutation, { data, loading, error }] = useCutToSceneMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCutToSceneMutation(baseOptions?: Apollo.MutationHookOptions<CutToSceneMutation, CutToSceneMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CutToSceneMutation, CutToSceneMutationVariables>(CutToSceneDocument, options);
+      }
+export type CutToSceneMutationHookResult = ReturnType<typeof useCutToSceneMutation>;
+export type CutToSceneMutationResult = Apollo.MutationResult<CutToSceneMutation>;
+export type CutToSceneMutationOptions = Apollo.BaseMutationOptions<CutToSceneMutation, CutToSceneMutationVariables>;
+export const TransitionToSceneDocument = gql`
+    mutation TransitionToScene {
+  transitionToScene {
+    id
+  }
+}
+    `;
+export type TransitionToSceneMutationFn = Apollo.MutationFunction<TransitionToSceneMutation, TransitionToSceneMutationVariables>;
+
+/**
+ * __useTransitionToSceneMutation__
+ *
+ * To run a mutation, you first call `useTransitionToSceneMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useTransitionToSceneMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [transitionToSceneMutation, { data, loading, error }] = useTransitionToSceneMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useTransitionToSceneMutation(baseOptions?: Apollo.MutationHookOptions<TransitionToSceneMutation, TransitionToSceneMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<TransitionToSceneMutation, TransitionToSceneMutationVariables>(TransitionToSceneDocument, options);
+      }
+export type TransitionToSceneMutationHookResult = ReturnType<typeof useTransitionToSceneMutation>;
+export type TransitionToSceneMutationResult = Apollo.MutationResult<TransitionToSceneMutation>;
+export type TransitionToSceneMutationOptions = Apollo.BaseMutationOptions<TransitionToSceneMutation, TransitionToSceneMutationVariables>;
 export const LiveFieldDocument = gql`
     query LiveField {
   competitionInformation {

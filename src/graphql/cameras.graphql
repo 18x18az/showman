@@ -115,3 +115,15 @@ mutation SetPreviewScene ($id: Int!) {
         id
     }
 }
+
+mutation CutToScene {
+    cutToScene {
+        id
+    }
+}
+
+mutation TransitionToScene {
+    transitionToScene {
+        id
+    }
+}
