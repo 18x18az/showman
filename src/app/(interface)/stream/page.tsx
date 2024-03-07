@@ -317,7 +317,7 @@ function AwardControl (props: AwardControlProps): JSX.Element {
 }
 
 function Side (): JSX.Element {
-  const { data } = useStreamSidebarQuery({ pollInterval: 500 })
+  const { data } = useStreamSidebarQuery({ pollInterval: 250 })
 
   if (data === undefined) return <></>
 

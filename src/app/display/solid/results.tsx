@@ -117,9 +117,9 @@ export function ResultDisplay (): JSX.Element {
   const matchName = makeMatchName(contest.round, contest.number, match.number)
 
   return (
-    <div className='flex flex-col text-center items-center w-full gap-8 text-zinc-200 mt-4'>
+    <div className='flex flex-col text-center items-center w-full gap-8 text-zinc-200 pt-4'>
       <LogoReelCorner />
-      <h1 className='bg-zinc-900 w-3/4 text-7xl py-6 mt-5 rounded-lg font-sans mb-36 opacity-[0.97]'>{matchName} Results</h1>
+      <h1 className='bg-zinc-900 w-3/4 text-7xl py-6 mt-5 rounded-lg font-sans mb-32 opacity-[0.97]'>{matchName} Results</h1>
       <AlliancesInfo redTeams={contest.redTeams} blueTeams={contest.blueTeams} />
       <Scores redScore={redScore} blueScore={blueScore} />
     </div>
