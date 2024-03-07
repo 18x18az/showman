@@ -52,7 +52,7 @@ export function Settings (): JSX.Element {
           <Switch
             onCheckedChange={(checked: boolean) => {
               void setAutoAdvance({ variables: { enabled: checked } })
-            }} checked={autoAdvance} disabled={!automation}
+            }} checked={autoAdvance}
           />
         </div>
       <div className='flex align-center gap-4 justify-between'>
