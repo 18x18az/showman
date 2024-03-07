@@ -8,6 +8,10 @@ query Fields {
       id
       name
     }
+    preset {
+      id
+      name
+    }
   }
 }
 

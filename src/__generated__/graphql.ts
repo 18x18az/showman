@@ -197,6 +197,8 @@ export type Field = {
   isSkills: Scalars['Boolean']['output'];
   /** Name of the field */
   name: Scalars['String']['output'];
+  /** The camera preset which displays the field */
+  preset: Maybe<Preset>;
   /** The scene which displays the field */
   scene: Maybe<Scene>;
   /** Information about skills matches associated with this field. Null if the field is not being used for skills matches. */
@@ -226,6 +228,8 @@ export type FieldUpdate = {
   isEnabled?: InputMaybe<Scalars['Boolean']['input']>;
   /** Name of the field */
   name?: InputMaybe<Scalars['String']['input']>;
+  /** ID of the camera preset associated with the field */
+  presetId?: InputMaybe<Scalars['Float']['input']>;
   /** ID of the scene associated with the field */
   sceneId?: InputMaybe<Scalars['Float']['input']>;
 };
@@ -567,6 +571,11 @@ export type QueryFieldsArgs = {
 };
 
 
+export type QuerySceneArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
 export type QueryTeamArgs = {
   teamId: Scalars['Int']['input'];
 };
@@ -593,6 +602,7 @@ export enum Round {
 
 export type Scene = {
   __typename?: 'Scene';
+  camera: Maybe<Camera>;
   id: Scalars['Int']['output'];
   key: Scalars['String']['output'];
   name: Scalars['String']['output'];
@@ -779,6 +789,13 @@ export type CamerasQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type CamerasQuery = { __typename?: 'Query', cameras: Array<{ __typename?: 'Camera', id: number, name: string, ip: any, scene: { __typename?: 'Scene', id: number, name: string } }> };
 
+export type PresetsQueryVariables = Exact<{
+  sceneId: Scalars['Int']['input'];
+}>;
+
+
+export type PresetsQuery = { __typename?: 'Query', scene: { __typename?: 'Scene', id: number, camera: { __typename?: 'Camera', presets: Array<{ __typename?: 'Preset', id: number, name: string }> } | null } };
+
 export type CameraControlInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -947,7 +964,7 @@ export type FieldControlSubscription = { __typename?: 'Subscription', fieldContr
 export type FieldsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, isEnabled: boolean, isCompetition: boolean, scene: { __typename?: 'Scene', id: number, name: string } | null }> };
+export type FieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, isEnabled: boolean, isCompetition: boolean, scene: { __typename?: 'Scene', id: number, name: string } | null, preset: { __typename?: 'Preset', id: number, name: string } | null }> };
 
 export type UpdateFieldNameMutationVariables = Exact<{
   fieldId: Scalars['Int']['input'];
@@ -1633,6 +1650,52 @@ export type CamerasQueryHookResult = ReturnType<typeof useCamerasQuery>;
 export type CamerasLazyQueryHookResult = ReturnType<typeof useCamerasLazyQuery>;
 export type CamerasSuspenseQueryHookResult = ReturnType<typeof useCamerasSuspenseQuery>;
 export type CamerasQueryResult = Apollo.QueryResult<CamerasQuery, CamerasQueryVariables>;
+export const PresetsDocument = gql`
+    query Presets($sceneId: Int!) {
+  scene(id: $sceneId) {
+    id
+    camera {
+      presets {
+        id
+        name
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __usePresetsQuery__
+ *
+ * To run a query within a React component, call `usePresetsQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePresetsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePresetsQuery({
+ *   variables: {
+ *      sceneId: // value for 'sceneId'
+ *   },
+ * });
+ */
+export function usePresetsQuery(baseOptions: Apollo.QueryHookOptions<PresetsQuery, PresetsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PresetsQuery, PresetsQueryVariables>(PresetsDocument, options);
+      }
+export function usePresetsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PresetsQuery, PresetsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PresetsQuery, PresetsQueryVariables>(PresetsDocument, options);
+        }
+export function usePresetsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<PresetsQuery, PresetsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PresetsQuery, PresetsQueryVariables>(PresetsDocument, options);
+        }
+export type PresetsQueryHookResult = ReturnType<typeof usePresetsQuery>;
+export type PresetsLazyQueryHookResult = ReturnType<typeof usePresetsLazyQuery>;
+export type PresetsSuspenseQueryHookResult = ReturnType<typeof usePresetsSuspenseQuery>;
+export type PresetsQueryResult = Apollo.QueryResult<PresetsQuery, PresetsQueryVariables>;
 export const CameraControlInfoDocument = gql`
     query CameraControlInfo {
   cameras {
@@ -2564,6 +2627,10 @@ export const FieldsDocument = gql`
     isEnabled
     isCompetition
     scene {
+      id
+      name
+    }
+    preset {
       id
       name
     }

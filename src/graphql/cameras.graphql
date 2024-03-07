@@ -10,6 +10,18 @@ query Cameras {
     }
 }
 
+query Presets ($sceneId: Int!) {
+    scene(id: $sceneId) {
+        id
+        camera {
+            presets {
+                id
+                name
+            }
+        }
+    }
+}
+
 query CameraControlInfo {
     cameras {
         id

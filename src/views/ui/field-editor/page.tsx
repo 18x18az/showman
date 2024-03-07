@@ -20,7 +20,7 @@ export function FieldEditor (): JSX.Element {
   const fields = data.fields
 
   return (
-    <div>
+    <div className='w-full'>
       <FieldTable columns={Columns} data={fields} />
       <ErrorableButton mutation={useAddFieldMutation} options={{ refetchQueries: ['Fields'] }}>Add</ErrorableButton>
     </div>
