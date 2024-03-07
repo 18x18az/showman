@@ -72,12 +72,14 @@ function SkillsControl (props: { field: number }): JSX.Element {
 interface FieldInfo {
   id: number
   name: string
+  canRunSkills: boolean
 }
 
 function SkillsMenu (props: { fields: FieldInfo[] }): JSX.Element {
-  const fieldOptions = props.fields.map((field) => field.name)
+  const skillsFields = props.fields.filter((field) => { return field.canRunSkills })
+  const fieldOptions = skillsFields.map((field) => field.name)
   const [field, setField] = useState(fieldOptions[0])
-  const fullField = props.fields.find(option => { return option.name === field })
+  const fullField = skillsFields.find(option => { return option.name === field })
   if (fullField === undefined) return <></>
 
   return (

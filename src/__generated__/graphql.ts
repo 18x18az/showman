@@ -1279,7 +1279,7 @@ export type FieldDisplayQuery = { __typename?: 'Query', timeout: { __typename?: 
 export type SkillsFieldsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SkillsFieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string }> };
+export type SkillsFieldsQuery = { __typename?: 'Query', fields: Array<{ __typename?: 'Field', id: number, name: string, canRunSkills: boolean }> };
 
 export type SkillsFieldQueryVariables = Exact<{
   fieldId: Scalars['Int']['input'];
@@ -4373,9 +4373,10 @@ export type FieldDisplaySuspenseQueryHookResult = ReturnType<typeof useFieldDisp
 export type FieldDisplayQueryResult = Apollo.QueryResult<FieldDisplayQuery, FieldDisplayQueryVariables>;
 export const SkillsFieldsDocument = gql`
     query SkillsFields {
-  fields(isEnabled: true, skillsEnabled: true) {
+  fields(isEnabled: true) {
     id
     name
+    canRunSkills
   }
 }
     `;

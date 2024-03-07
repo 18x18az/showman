@@ -122,9 +122,10 @@ query FieldDisplay($uuid: String!) {
 }
 
 query SkillsFields {
-  fields(isEnabled: true, skillsEnabled: true) {
+  fields(isEnabled: true) {
     id
     name
+    canRunSkills
   }
 }
 
