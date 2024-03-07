@@ -13,17 +13,29 @@ interface PresetProps {
     name: string
   }
   current: number | null
+  isProgram: boolean
+  isPreview: boolean
   isEditMode: boolean
   cameraId: number
 }
 
 function Preset (props: PresetProps): JSX.Element {
   const edit = useErrorableMutation(useUpdatePresetMutation, { refetchQueries: ['CameraControlInfo'] })
-  const { preset, current, isEditMode, cameraId } = props
+  const { preset, current, isEditMode, cameraId, isProgram, isPreview } = props
 
   const isCurrent = current === preset.id
 
-  const color = isCurrent ? 'bg-indigo-9 hover:bg-indigo-10' : 'bg-slate-2'
+  let color = 'bg-slate-2'
+
+  if (isCurrent) {
+    if (isProgram) {
+      color = 'bg-red-9 hover:bg-red-9'
+    } else if (isPreview) {
+      color = 'bg-green-9 hover:bg-green-10'
+    } else {
+      color = 'bg-indigo-3 hover:bg-indigo-4'
+    }
+  }
 
   if (isEditMode) {
     return (
@@ -32,7 +44,7 @@ function Preset (props: PresetProps): JSX.Element {
   }
 
   return (
-    <ErrorableButton size='lg' className={`${color} text-2xl w-64 h-16`} mutation={useCallPresetMutation} options={{ variables: { cameraId, presetId: preset.id }, refetchQueries: ['CameraControlInfo'] }}>
+    <ErrorableButton disabled={isProgram} size='lg' className={`${color} text-2xl w-64 h-16`} mutation={useCallPresetMutation} options={{ variables: { cameraId, presetId: preset.id }, refetchQueries: ['CameraControlInfo'] }}>
       {preset.name}
     </ErrorableButton>
   )
@@ -41,6 +53,9 @@ function Preset (props: PresetProps): JSX.Element {
 interface CameraControlProps {
   camera: {
     id: number
+    scene: {
+      id: number
+    }
     name: string
     currentPreset: {
       id: number
@@ -50,16 +65,23 @@ interface CameraControlProps {
       name: string
     }>
   }
+  previewScene?: number
+  programScene?: number
   isEditMode: boolean
 }
 
 function CameraControl (props: CameraControlProps): JSX.Element {
-  const { camera, isEditMode } = props
+  const { camera, isEditMode, previewScene, programScene } = props
+
+  const sceneId = camera.scene.id
 
   const current = camera.currentPreset?.id ?? null
 
+  const isProgram = programScene === sceneId
+  const isPreview = previewScene === sceneId
+
   const presets = camera.presets.map((preset) => {
-    return <Preset key={preset.id} preset={preset} current={current} isEditMode={isEditMode} cameraId={camera.id} />
+    return <Preset isProgram={isProgram} isPreview={isPreview} key={preset.id} preset={preset} current={current} isEditMode={isEditMode} cameraId={camera.id} />
   })
 
   const actionButton = isEditMode
@@ -83,8 +105,11 @@ export default function Page (): JSX.Element {
 
   if (data === undefined) return <></>
 
+  const programScene = data.programScene?.id
+  const previewScene = data.previewScene?.id
+
   const cameras = data.cameras.map((camera) => {
-    return <CameraControl key={camera.id} camera={camera} isEditMode={isEditMode} />
+    return <CameraControl key={camera.id} camera={camera} isEditMode={isEditMode} previewScene={previewScene} programScene={programScene} />
   })
 
   return (

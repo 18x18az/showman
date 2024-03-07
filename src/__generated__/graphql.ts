@@ -537,6 +537,8 @@ export type Query = {
   inspectionGroups: Array<InspectionGroup>;
   matches: Array<Match>;
   nextBlock: Maybe<Block>;
+  previewScene: Maybe<Scene>;
+  programScene: Maybe<Scene>;
   results: Results;
   scene: Scene;
   scenes: Array<Scene>;
@@ -799,7 +801,7 @@ export type PresetsQuery = { __typename?: 'Query', scene: { __typename?: 'Scene'
 export type CameraControlInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CameraControlInfoQuery = { __typename?: 'Query', cameras: Array<{ __typename?: 'Camera', id: number, name: string, currentPreset: { __typename?: 'Preset', id: number } | null, presets: Array<{ __typename?: 'Preset', id: number, name: string }> }> };
+export type CameraControlInfoQuery = { __typename?: 'Query', cameras: Array<{ __typename?: 'Camera', id: number, name: string, currentPreset: { __typename?: 'Preset', id: number } | null, presets: Array<{ __typename?: 'Preset', id: number, name: string }>, scene: { __typename?: 'Scene', id: number } }>, previewScene: { __typename?: 'Scene', id: number } | null, programScene: { __typename?: 'Scene', id: number } | null };
 
 export type AddCameraMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -1708,6 +1710,15 @@ export const CameraControlInfoDocument = gql`
       id
       name
     }
+    scene {
+      id
+    }
+  }
+  previewScene {
+    id
+  }
+  programScene {
+    id
   }
 }
     `;

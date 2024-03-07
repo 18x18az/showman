@@ -33,6 +33,15 @@ query CameraControlInfo {
             id
             name
         }
+        scene {
+            id
+        }
+    }
+    previewScene {
+        id
+    }
+    programScene {
+        id
     }
 }
 
